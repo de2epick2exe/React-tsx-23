@@ -21,6 +21,5 @@ export const search = async(id:string, word:string, translate:string)=>{
   console.log('id:',id,'word:',word, 'translate', translate)
   const response = await api.post('/en/search',{id, word, translate})
   console.log('find by id')
-
   return response.data
 }

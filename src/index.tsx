@@ -5,7 +5,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { setupstore } from './store/store';
 import { Provider } from 'react-redux';
-
+import { extendTheme, ChakraProvider } from '@chakra-ui/react';
+import Navbar from './components/Navbar';
+import {
+  BrowserRouter,
+  Routes, // instead of "Switch"
+  Route,
+} from "react-router-dom";
+import Eng_Ua from './components/Eng_Ua';
+import routes from './routes';
+ 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
@@ -14,9 +23,18 @@ const store = setupstore()
 
 root.render(<Provider store={store}>
   <React.StrictMode>
-    
-    <App />
-    
+    <ChakraProvider >
+      <BrowserRouter>
+      <Navbar  />
+      <Routes>
+      {routes.map((route, index) => (
+          <Route key={index} {...route} />
+        ))}
+           
+           
+      </Routes>
+      </BrowserRouter>
+    </ChakraProvider>
   </React.StrictMode></Provider>
 );
 

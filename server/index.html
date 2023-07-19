@@ -1,0 +1,24 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Electron</title>
+</head>
+<body>
+  <button onclick="startServer()">Start Server</button>
+  <script>
+    // Output console messages in the renderer process
+    console.log('Console message from the renderer process.');
+
+    const { contextBridge, ipcRenderer } = require('electron');
+
+    // Expose ipcRenderer to the renderer process via contextBridge
+    contextBridge.exposeInMainWorld('electron', {
+      startServer: () => {
+        ipcRenderer.send('start-server');
+      }
+    });
+  </script>
+</body>
+</html>

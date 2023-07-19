@@ -5,6 +5,35 @@ import { AppDispatch } from "../store"
 import { UserSlice } from "./UserSlice"
 
 
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+export const LOGOUT = 'LOGOUT';
+
+
+export const loginSuccess = (token : string) =>{
+    return {
+        type: LOGIN_SUCCESS,
+        payload: token
+    }
+}
+export const login_Failure=(err:any)=>{
+    return{
+        type: LOGIN_FAILURE,
+        payload: err
+    }
+}
+export const logout = ()=>{
+    return{
+        payload : LOGOUT
+    }
+}
+
+
+
+
+
+
+
 /*
 export const fetchUsers= () =>async(dispatch: AppDispatch)=>{
     try {
