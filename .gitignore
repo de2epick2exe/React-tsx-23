@@ -26,4 +26,4 @@ yarn-error.log*
 server/db.js
 server/.env.server
 server/parseurl.py
-
+pymacr.py
