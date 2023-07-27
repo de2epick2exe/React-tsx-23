@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
+./server/server_ui/__pycache__
+./server/node_modules
 
 # testing
 /coverage
@@ -23,5 +25,6 @@ yarn-debug.log*
 yarn-error.log*
 server/db.js
 server/.env.server
+
 
 
