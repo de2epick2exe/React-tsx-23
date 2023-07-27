@@ -29,4 +29,4 @@ server/db.js
 server/.env.server
 server/node_modules/electron/dist/electron.exe 
 **node_modules/
-
+server_ui/test.py
