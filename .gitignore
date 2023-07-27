@@ -28,3 +28,4 @@ server/.env.server
 server/parseurl.py
 pymacr.py
 server_ui/test.py
+pymacr.py

@@ -7,4 +7,3 @@ print(pyautogui.position())
 pyautogui.click(2352, 205)
 while True:
     pyautogui.keyDown(']')
-#
