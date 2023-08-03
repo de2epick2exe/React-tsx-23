@@ -21,7 +21,7 @@ const root = ReactDOM.createRoot(
 
 const store = setupstore()
 
-root.render(<Provider store={store}>
+root.render(<Provider store={store as any}>
   <React.StrictMode>
     <ChakraProvider >
       <BrowserRouter>

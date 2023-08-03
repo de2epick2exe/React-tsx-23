@@ -54,14 +54,5 @@
   "description": "<<<<<<< HEAD\r # Getting Started with Create React App",
   "main": "index.js",
   "author": "",
-  "license": "ISC",
-  "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/DenisKrivosheev/React-tsx-23.git"
-  },
-  "bugs": {
-    "url": "https://github.com/DenisKrivosheev/React-tsx-23/issues"
-  },
-  "homepage": "https://github.com/DenisKrivosheev/React-tsx-23#readme"
+  "license": "ISC"
 }

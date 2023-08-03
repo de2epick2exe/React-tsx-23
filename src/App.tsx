@@ -8,7 +8,7 @@ function App() {
   return (
     <>
       <div className="App page" >
-        Home page
+        Home page user : {" " + data.username + " "}<br/>
         {" " + data.email + " "}
         {" " + data.username + " "}
         {" " + data.token}
