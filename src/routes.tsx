@@ -5,6 +5,7 @@ import NotFound from './components/NotFound';
 import Streams from './components/Streams';
 import Auth from './components/Auth';
 import Messeger from './components/Messeger';
+import Profile from './components/Profile';
 
 const routes: RouteProps[] = [
   {
@@ -26,6 +27,10 @@ const routes: RouteProps[] = [
   {
     path : '/messager',
     element:<Messeger/>
+  },
+  {
+    path:'/profile',
+    element:<Profile/>
   },
   // Add more routes as needed
   {
