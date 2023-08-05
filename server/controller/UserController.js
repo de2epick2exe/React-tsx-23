@@ -20,7 +20,7 @@ class UserController {
       "INSERT INTO public.users (email, username, password, createdat, updatedat) values ($1, $2, $3, $4, $5) RETURNING *",
       [email, username, hashPassword, createdat, createdat]
     );
- 
+      /*      generate a jwt token in responce */
     res.json(newUser);
   }
 
@@ -33,7 +33,7 @@ class UserController {
     if (email === "") {
       console.log("log with username");
       user = await db.query(
-        "select id, email, username, password, role  from users where username = $1",
+        "select id, email, username, password, role from users where username = $1",
         [username]
       );
       if (user.rows[0] === undefined) {
@@ -43,7 +43,7 @@ class UserController {
     if (username === "") {
       console.log("log with em");
       user = await db.query(
-        "select id, email, username, password from users where email = $1",
+        "select id, email, username, password, role from users where email = $1",
         [email]
       );
     }
@@ -53,10 +53,12 @@ class UserController {
     const token = generate_jwt(createdat, username, secret);
     const log_user = user.rows[0].username;
     const log_email = user.rows[0].email;
+    const role = user.rows[0].role;
     const data = {
       token,
       log_user,
       log_email,
+      role
     };
 
     
@@ -64,7 +66,16 @@ class UserController {
     console.log(user.rows[0].password);
     comparePassword ? res.json(data) : res.json("invalid pass");
   }
-  async check(req, res) {}
+  async check(req, res) {
+    const { token } = req.body;
+    try {
+      const decoded = jwt.verify(token, secret);
+      res.json(decoded);
+    } catch (error) {
+      res.json('Error decoding JWT:', error.message);
+    }
+
+  }
   async getAll(req, res) {
     const users = await db.query("SELECT * FROM public.users");
     res.json(users.rows);

@@ -6,6 +6,7 @@ interface UserState {
   email: string | null;
   token: string | null;
   is_auth: boolean;
+  role:string | null; 
 }
   
 const loadUserState = (): UserState | undefined => {
@@ -25,6 +26,7 @@ const initialState: UserState = loadUserState() || {
   email: "",
   token: null,
   is_auth: false,
+  role: ""
 };
 
 const saveUserState = (state: UserState): void => {
@@ -57,17 +59,22 @@ export const UserSlice = createSlice({
       state.is_auth = action.payload;
       saveUserState(state); // Save state to localStorage
     },
+    setRole: (state, action: PayloadAction<string | null>) => {
+      state.role = action.payload;
+      saveUserState(state); // Save state to localStorage
+    },
     logout: (state) => {
       state.token = null;
       state.is_auth = false;
       state.email = null;
-      state.username = null
+      state.username = null;
+      state.role = null;
       saveUserState(state); // Save state to localStorage
     },
   },
 });
 
-export const { setToken, setUsername, setEmail, setIsAuth, logout } =
+export const { setToken, setUsername, setEmail, setIsAuth, setRole, logout } =
   UserSlice.actions;
 
 export const loginUser =
@@ -79,6 +86,7 @@ export const loginUser =
       dispatch(setToken(data.token));
       dispatch(setEmail(data.log_email));
       dispatch(setUsername(data.log_user));
+      dispatch(setRole(data.role))
       dispatch(setIsAuth(true));
       console.log("user logged in", data.token);
     } catch (err) {
