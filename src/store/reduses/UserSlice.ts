@@ -7,6 +7,8 @@ interface UserState {
   token: string | null;
   is_auth: boolean;
   role:string | null; 
+  /// find securiry ways to load default img
+  photo: any;
 }
   
 const loadUserState = (): UserState | undefined => {
@@ -26,7 +28,8 @@ const initialState: UserState = loadUserState() || {
   email: "",
   token: null,
   is_auth: false,
-  role: ""
+  role: "",
+  photo: ""
 };
 
 const saveUserState = (state: UserState): void => {
