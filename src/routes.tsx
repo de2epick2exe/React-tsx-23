@@ -32,6 +32,8 @@ const routes: RouteProps[] = [
     path:'/profile',
     element:<Profile/>
   },
+  ///
+  
   // Add more routes as needed
   {
     path: '*',

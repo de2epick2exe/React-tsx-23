@@ -14,6 +14,7 @@ import {
 } from "react-router-dom";
 import Eng_Ua from './components/Eng_Ua';
 import routes from './routes';
+
  
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -25,6 +26,7 @@ root.render(<Provider store={store as any}>
   <React.StrictMode>
     <ChakraProvider >
       <BrowserRouter>
+      
       <Navbar  />
       <Routes>
       {routes.map((route, index) => (
