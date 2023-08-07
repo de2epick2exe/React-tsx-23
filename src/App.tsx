@@ -8,26 +8,22 @@ function App() {
   return (
     <>
       <div className="App page" >
-        Home page user : {" " + data.username + " "}<br/>
+        
+        {
+          data.is_auth ? <><p>user authed </p>
+          <p >Home page user : {" " + data.username + " "} </p> 
         {" " + data.email + " "}
         {" " + data.username + " "}
-        {" " + data.token}
-        {
-          data.is_auth ? "user authed" : "user not auth"
+        
+          
+          
+          </>
+          : 
+          "user not auth"
 
-          /*
-      {isLoading && <h1>is loading...</h1>}
-      {error && <h1>{error}</h1>}
-      <h1>{count}</h1>
-      <button onClick={()=>dispatch(increment(1))}>Increment</button>
-      {JSON.stringify(users, null, 2)}
-  */
+         
         }
-        {/*
-    <PostContainer/>
-    <div>---------------------------------------------------------------</div>
-    <PostContainer2/>
-    */}
+        
       </div>
     </>
   );

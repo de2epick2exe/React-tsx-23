@@ -62,7 +62,7 @@ const Navbar = () => {
   };
   return (
     <>
-      <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
+      <Box className=" animate__animated animate__backInDown" bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           
           <Box>
@@ -98,7 +98,7 @@ const Navbar = () => {
                   minW={0}>
                   <Avatar
                     size={'sm'}
-                    src={'https://avatars.dicebear.com/api/male/username.svg'}
+                    src={'http://localhost:8080/imgs/default.jpg'}
                   />
                 </MenuButton>
                 <MenuList alignItems={'center'}>
@@ -106,7 +106,7 @@ const Navbar = () => {
                   <Center>
                     <Avatar
                       size={'2xl'}
-                      src={'https://avatars.dicebear.com/api/male/username.svg'}
+                      src={'http://localhost:8080/imgs/default.jpg'}
                     />
                   </Center>
                   <br />

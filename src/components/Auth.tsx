@@ -4,15 +4,16 @@ import { loginUser, setToken } from '../store/reduses/UserSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../store/store';
-
+import { useNavigate } from "react-router-dom"; // Import useHistory hook
 const Auth = () => {
   const [usern_or_em, setUsern_or_Em] = useState('');
   const [password, setPassword] = useState('');
   const token = useSelector((state: RootState) => state.userReducer.token);
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
-
+  const navigate = useNavigate()
   const login = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (emailRegex.test(usern_or_em)) {
@@ -22,6 +23,7 @@ const Auth = () => {
       console.log('Valid username');
       await dispatch(loginUser(usern_or_em, '', password));
     }
+    navigate('/');
   };
 
   return (

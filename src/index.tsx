@@ -7,12 +7,12 @@ import { setupstore } from './store/store';
 import { Provider } from 'react-redux';
 import { extendTheme, ChakraProvider } from '@chakra-ui/react';
 import Navbar from './components/Navbar';
+import 'animate.css';
 import {
   BrowserRouter,
   Routes, // instead of "Switch"
   Route,
 } from "react-router-dom";
-import Eng_Ua from './components/Eng_Ua';
 import routes from './routes';
 
  
