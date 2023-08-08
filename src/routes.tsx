@@ -6,6 +6,7 @@ import Streams from './components/Streams';
 import Auth from './components/Auth';
 import Messeger from './components/Messeger';
 import Profile from './components/Profile';
+import Admin from './components/Admin';
 
 const routes: RouteProps[] = [
   {
@@ -31,6 +32,9 @@ const routes: RouteProps[] = [
   {
     path:'/profile',
     element:<Profile/>
+  },
+  {path:'/admin',
+  element:<Admin/>    
   },
   ///
   
