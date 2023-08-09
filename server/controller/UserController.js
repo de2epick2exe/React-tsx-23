@@ -4,8 +4,8 @@ const jwt = require("jsonwebtoken");
 const WebSocket = require('ws');
 require("dotenv");
 
-const generate_jwt = (date, username, secret) => {
-  data = { date, username };
+const generate_jwt = (date, username, role, secret) => {
+  data = { date, username, role };
   const token = jwt.sign(data, secret);
   return token;
 };
@@ -29,11 +29,11 @@ class UserController {
     
     console.log(email, username, password);
     let user;
-    const createdat = new Date();
+    
     if (email === "") {
       console.log("log with username");
       user = await db.query(
-        "select id, email, username, password, role from users where username = $1",
+        "select id, email, username, password, role, createdAt from users where username = $1",
         [username]
       );
       if (user.rows[0] === undefined) {
@@ -43,14 +43,16 @@ class UserController {
     if (username === "") {
       console.log("log with em");
       user = await db.query(
-        "select id, email, username, password, role from users where email = $1",
+        "select id, email, username, password, role, createdAt from users where email = $1",
         [email]
       );
     }
-
+ 
     let comparePassword = bcrypt.compareSync(password, user.rows[0].password);
     const secret = process.env.SECRET_JWT;
-    const token = generate_jwt(createdat, username, secret);
+    
+    const token = generate_jwt(user.rows[0].createdat, username,user.rows[0].role, secret);
+    console.log(user.rows[0].createdat)
     const log_user = user.rows[0].username;
     const log_email = user.rows[0].email;
     const role = user.rows[0].role;
@@ -76,9 +78,27 @@ class UserController {
     }
 
   }
-  async getAll(req, res) {
+  async getAll(req, res) {     
+    const {token, username} = req.body
+    const user_db = await db.query("SELECT createdAt, role FROM users WHERE username = $1 ", [username])
+    console.log("user data is", user_db.rows[0])
+    const date = user_db.rows[0].createdat
+    const role = user_db.rows[0].role
+    const data = {
+      date,
+      username,
+      role
+    }
+    const secret = process.env.SECRET_JWT;
+    const decode = jwt.verify(token, secret)
+    const verify = decode.role == "ADMIN"
+    if (verify){
     const users = await db.query("SELECT * FROM public.users");
     res.json(users.rows);
+    }
+    else {res.json('ACCESS DENIED')}
+  
   }
+  
 }
 module.exports = new UserController();
