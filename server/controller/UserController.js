@@ -93,7 +93,8 @@ class UserController {
     const decode = jwt.verify(token, secret)
     const verify = decode.role == "ADMIN"
     if (verify){
-    const users = await db.query("SELECT * FROM public.users");
+    const users = await db.query("SELECT id, email, username, role FROM public.users");
+    
     res.json(users.rows);
     }
     else {res.json('ACCESS DENIED')}

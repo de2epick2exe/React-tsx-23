@@ -7,6 +7,10 @@ const api = axios.create({
 export const auth_login = async(username : string, email : string, password: string)=>{
       
     const response = await api.post('user/login', {username, email, password} )
-    const token = response.data
-    return token
+    return response.data
   }
+
+export const get_all_users = async (username: string, token: string)=>{
+  const response = await api.post('user/geta', {username, token})
+  return response.data
+}
