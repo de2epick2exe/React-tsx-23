@@ -20,8 +20,25 @@ class UserController {
       "INSERT INTO public.users (email, username, password, createdat, updatedat) values ($1, $2, $3, $4, $5) RETURNING *",
       [email, username, hashPassword, createdat, createdat]
     );
-      /*      generate a jwt token in responce */
-    res.json(newUser);
+    
+    const secret = process.env.SECRET_JWT;
+    const user = await db.query("SELECT role, createdAt FROM users WHERE username = $1", [newUser.rows[0].username])
+    
+    const user_date = user.rows[0].createdat
+    const user_role = user.rows[0].role
+    const token = generate_jwt(user_date, username, user_role, secret);
+    
+    console.log(user_date, user_role, token)
+    const data = {
+      token,
+      username,
+      email,
+      user_role
+      
+    };  
+      
+    res.json(data);
+  
   }
 
   async login(req, res, next) {
