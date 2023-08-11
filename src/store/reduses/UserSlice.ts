@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { auth_login } from "../../unite/User_Functions";
+import { auth_login, register } from "../../unite/User_Functions";
 
 interface UserState {
   username: string | null;
@@ -90,6 +90,23 @@ export const loginUser =
       dispatch(setEmail(data.log_email));
       dispatch(setUsername(data.log_user));
       dispatch(setRole(data.role))
+      dispatch(setIsAuth(true));
+      console.log("user logged in", data.token);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  export const register_user =
+  (username: string, email: string, password: string) =>
+  async (dispatch: ThunkDispatch<UserState, any, any>) => {
+    try {
+      const data = await register(username, email, password);
+
+      dispatch(setToken(data.token));
+      dispatch(setEmail(data.email));
+      dispatch(setUsername(data.username));
+      dispatch(setRole(data.user_role))
       dispatch(setIsAuth(true));
       console.log("user logged in", data.token);
     } catch (err) {

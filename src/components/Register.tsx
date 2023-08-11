@@ -1,6 +1,6 @@
 import { Button, Input } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { loginUser, setToken } from '../store/reduses/UserSlice';
+import { loginUser, register_user, setToken } from '../store/reduses/UserSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { ThunkDispatch } from '@reduxjs/toolkit';
 import { RootState } from '../store/store';
@@ -13,12 +13,15 @@ const Register = () => {
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   const navigate = useNavigate()
   const register = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+    e.preventDefault();  
     
-    
-     // await dispatch(loginUser(usern_or_em, '', password));
-    
-    navigate('/');
+    try {
+        await dispatch(register_user(username, email, password))
+        navigate('/');
+    } catch (e) {
+        console.log(e)
+    } 
+     
   };
 
   return (
