@@ -120,7 +120,7 @@ const Navbar = () => {
                   <MenuItem onClick={logout_user} >Logout</MenuItem>
                 </MenuList>
               </Menu>) 
-              : (<Button colorScheme="red" as={Link} to="/authorize">
+              : (<Button colorScheme="red" as={Link} to="/login">
               Login
             </Button>)}
             </Stack>
