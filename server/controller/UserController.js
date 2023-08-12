@@ -97,6 +97,8 @@ class UserController {
   }
   async getAll(req, res) {     
     const {token, username} = req.body
+    if (token == null || username == ""){ }
+    else{
     const user_db = await db.query("SELECT createdAt, role FROM users WHERE username = $1 ", [username])
     console.log("user data is", user_db.rows[0])
     const date = user_db.rows[0].createdat
@@ -115,7 +117,7 @@ class UserController {
     res.json(users.rows);
     }
     else {res.json('ACCESS DENIED')}
-  
+    }
   }
   
 }
