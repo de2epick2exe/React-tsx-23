@@ -56,6 +56,7 @@ const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   const isAuth = useSelector((state: RootState) => state.userReducer.is_auth);
+  const isAdmin = useSelector((state: RootState) => state.userReducer.role) == 'ADMIN';
   const data = useSelector((state: RootState) => state.userReducer);
   const logout_user = async () => {
     dispatch(logout());
@@ -116,6 +117,9 @@ const Navbar = () => {
                   <br />
                   <MenuDivider />
                   <MenuItem as={Link} to="/profile">Profile</MenuItem>
+                  {isAdmin?
+                  <MenuItem as={Link} to="/admin">Admin Panel</MenuItem>
+                  :''}
                   <MenuItem>Account Settings</MenuItem>
                   <MenuItem onClick={logout_user} >Logout</MenuItem>
                 </MenuList>

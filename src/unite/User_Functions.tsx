@@ -15,7 +15,7 @@ export const register = async(username:string, email:string, password:string )=>
   return response.data
 }
 
-export const get_all_users = async (username: string, token: string)=>{
+export const get_all_users = async (username: string | null, token: string | null)=>{
   const response = await api.post('user/geta', {username, token})
   return response.data
 }
