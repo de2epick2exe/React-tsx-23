@@ -15,7 +15,7 @@ interface User{
 const Admin = () => {
     
     const data = useSelector((state: RootState) => state.userReducer);
-    const [users, setUsers] = useState<User[] | null>(null)
+    const [users, setUsers] = useState<User[]>([])
 
     
     const  get_users = async() =>{ 
@@ -23,7 +23,8 @@ const Admin = () => {
         setUsers(response)
     }
     useEffect(()=>{
-       get_users() 
+       get_users()
+       
     },[])        
     
     
@@ -32,7 +33,9 @@ const Admin = () => {
         <> 
         <div>admin panel</div>
         <div>users</div>
-        
+        {users.map(user =>(
+            <span key={user.id}><div>{user.id}|{user.username} | {user.email}| {user.role}</div></span>
+        ))}
         
         </>
         :
