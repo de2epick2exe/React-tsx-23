@@ -9,6 +9,7 @@ import Profile from "./components/Profile";
 import Admin from "./components/Admin";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Settings from "./components/Settings";
 
 const routes: RouteProps[] = [
   {
@@ -38,6 +39,7 @@ const routes: RouteProps[] = [
   { path: "/admin", element: <Admin /> },
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },
+  {path: '/settings', element:<Settings/>},
   ///
 
   // Add more routes as needed

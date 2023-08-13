@@ -120,7 +120,7 @@ const Navbar = () => {
                   {isAdmin?
                   <MenuItem as={Link} to="/admin">Admin Panel</MenuItem>
                   :''}
-                  <MenuItem>Account Settings</MenuItem>
+                  <MenuItem as={Link} to="/settings">Account Settings</MenuItem>
                   <MenuItem onClick={logout_user} >Logout</MenuItem>
                 </MenuList>
               </Menu>) 
