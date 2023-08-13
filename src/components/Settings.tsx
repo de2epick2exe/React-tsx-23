@@ -1,5 +1,5 @@
 import { Button, Input, useDisclosure } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import {
   FormControl,
   FormLabel,
@@ -22,27 +22,19 @@ import {
 
 
 const Settings = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure()
-
-    const handleTypeClick = () => {
-        
-        onOpen()
-      }
-
-    const type  = ['username','password', 'files']
+    
+    const { isOpen : isPasswordOpen , onOpen : OnPasswordOpen, onClose: OnPasswordClose } = useDisclosure()
+    const { isOpen : isUsernameOpen , onOpen : OnUsernameOpen, onClose: OnUsernameClose } = useDisclosure()
+    
+    
 
   return (
     <>
       <div>Settings</div>
       
-      <FormControl>
-        <FormLabel>Change username</FormLabel>
-        <Input />
-        <FormHelperText>changing username</FormHelperText>
-        <Button>submit</Button>
-      </FormControl>
       
-      <Modal onClose={onClose} isOpen={isOpen}>
+      
+      <Modal isOpen={isPasswordOpen} onClose={OnPasswordClose}>
         <ModalOverlay/>   
         <ModalContent>
             <ModalBody>
@@ -57,11 +49,35 @@ const Settings = () => {
 
       </ModalBody>
       <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
+            <Button onClick={() => OnPasswordClose()}>Close</Button>
         </ModalFooter>
       </ModalContent> 
       </Modal>
-      <Button  onClick={() => handleTypeClick()} >ChangePassword</Button>
+      <Button  onClick={() => OnPasswordOpen()} >ChangePassword</Button>
+
+
+      <Modal isOpen={isUsernameOpen} onClose={OnUsernameClose}>
+        <ModalOverlay/>   
+        <ModalContent>
+            <ModalBody>
+                
+            <FormControl>
+        <FormLabel>Change username</FormLabel>
+        <Input />
+        <FormHelperText>changing username</FormHelperText>
+        <Button>submit</Button>
+      </FormControl>
+
+      </ModalBody>
+      <ModalFooter>
+            <Button onClick={() => OnUsernameClose()}>Close</Button>
+        </ModalFooter>
+      </ModalContent> 
+      </Modal>
+      <Button  onClick={() => OnUsernameOpen()} >ChangeUsername</Button>
+
+
+
       <div>change account photo</div>
     </>
   );
