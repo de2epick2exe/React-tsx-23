@@ -8,7 +8,7 @@ interface UserState {
   is_auth: boolean;
   role:string | null; 
   /// find securiry ways to load default img
-  photo: any;
+  photo: string;
 }
   
 const loadUserState = (): UserState | undefined => {
@@ -29,7 +29,7 @@ const initialState: UserState = loadUserState() || {
   token: null,
   is_auth: false,
   role: "",
-  photo: ""
+  photo: "http://localhost:8080/imgs/default.jpg"
 };
 
 const saveUserState = (state: UserState): void => {
@@ -66,6 +66,10 @@ export const UserSlice = createSlice({
       state.role = action.payload;
       saveUserState(state); // Save state to localStorage
     },
+    setPhoto: (state, action: PayloadAction<string>) => {
+      state.photo = action.payload;
+      saveUserState(state); // Save state to localStorage
+    },
     logout: (state) => {
       state.token = null;
       state.is_auth = false;
@@ -77,7 +81,7 @@ export const UserSlice = createSlice({
   },
 });
 
-export const { setToken, setUsername, setEmail, setIsAuth, setRole, logout } =
+export const { setToken, setUsername, setEmail, setIsAuth, setRole,setPhoto, logout } =
   UserSlice.actions;
 
 export const loginUser =
