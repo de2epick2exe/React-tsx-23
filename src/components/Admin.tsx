@@ -46,8 +46,11 @@ const Admin = () => {
     setUsers(response);
   };
 
-  const ban = async (id: number, username: string) => {
+  const ban = async (id: number, username: string, role: string) => {
+    if(role == 'ADMIN'){ console.log( ' u cant ban this user')}
+    else{
     console.log(username, "banned user with id", id);
+  }
   };
 
   useEffect(() => {
@@ -85,14 +88,17 @@ const Admin = () => {
                         <Th>{user.email}</Th>
                         <Th>{user.role}</Th>
                         <Th> Offline</Th>
-                        <Th><Button
+                        <Th>
+                          {user.role == 'ADMIN'? "" :
+                          <Button
                         onClick={() => {
-                          ban(user.id, user.username);
+                          ban(user.id, user.username, user.role);
                         }}
-                        background={"red"}
-                      >
+                        background={"red"}>
+                          
                         <Icon as={LuBan} />
                       </Button>
+                      }
                       </Th> 
                      </Tr>
                  ))}

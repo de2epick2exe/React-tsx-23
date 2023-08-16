@@ -1,4 +1,4 @@
-import { Button, Input } from "@chakra-ui/react";
+import { Button, FormControl, FormErrorMessage, FormHelperText, Input } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import { loginUser, setToken } from "../store/reduses/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
@@ -25,17 +25,17 @@ const Login = () => {
     e.preventDefault();
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (emailRegex.test(usern_or_em)) {
-      console.log("Valid email");
-      await dispatch(loginUser("", usern_or_em, password));
-    } else {
-      console.log("Valid username");
-      await dispatch(loginUser(usern_or_em, "", password));
-    }
-    navigate("/");
-  };
-
+    
+      if (emailRegex.test(usern_or_em)) {
+        console.log("Valid email");
+        await dispatch(loginUser("", usern_or_em, password));
+      } else {
+        console.log("Valid username");
+        await dispatch(loginUser(usern_or_em, "", password));
+      }
+    /// navigate("/");
+   };
+   const isError = usern_or_em === '' || password === ''
 
 
   const InputRef = useRef(null);
@@ -64,12 +64,16 @@ const Login = () => {
                 <Heading size="xs" textTransform="uppercase">
                   Username or Email
                 </Heading>
+                <FormControl>
                 <Input
                   value={usern_or_em}
                   onChange={(e) => setUsern_or_Em(e.target.value)}
                   onKeyDown={(e)=> handleClick(e, passwordInputRef)}
                   ref={InputRef}
                 />
+                {!isError?( <FormHelperText>input your email</FormHelperText> ): (<FormErrorMessage> {isError} </FormErrorMessage>)}
+                </FormControl>
+
               </Box>
 
               <Box>
