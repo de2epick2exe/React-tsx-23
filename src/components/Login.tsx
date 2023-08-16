@@ -1,5 +1,5 @@
 import { Button, Input } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { loginUser, setToken } from "../store/reduses/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -36,6 +36,21 @@ const Login = () => {
     navigate("/");
   };
 
+
+
+  const InputRef = useRef(null);
+  const passwordInputRef = useRef(null);
+  
+  const handleClick = (e: any, ref: any) => {
+    ///ref.current.focus();
+    if(e.key == 'Enter'){
+      if (ref.current){
+        ref.current.focus()
+      }
+    console.log('click')
+      
+    }
+  };
   return (
     <>
       <Center marginTop={window.innerHeight / 7}>
@@ -52,6 +67,8 @@ const Login = () => {
                 <Input
                   value={usern_or_em}
                   onChange={(e) => setUsern_or_Em(e.target.value)}
+                  onKeyDown={(e)=> handleClick(e, passwordInputRef)}
+                  ref={InputRef}
                 />
               </Box>
 
@@ -62,11 +79,13 @@ const Login = () => {
                 <Input
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  
+                  ref={passwordInputRef}
                 />
               </Box>
 
               <Box>
-                <Button onClick={login}>Login</Button>
+                <Button onClick={login} >Login</Button>
 
                 <Button marginLeft={"10"} as={Link} to="/register">
                   To Register

@@ -8,7 +8,7 @@ import {
   Stack,
   StackDivider,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { loginUser, register_user, setToken } from "../store/reduses/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -33,9 +33,23 @@ const Register = () => {
     }
   };
 
+  const usernameInputRef = useRef(null);
+  const emailInputRef = useRef(null);
+  const passwordInputRef = useRef(null);
+  
+  const handleClick = (e: any, ref: any) => {
+    ///ref.current.focus();
+    if(e.key == 'Enter'){
+      if (ref.current){
+        ref.current.focus()
+      }
+          
+    }
+  };
+
   return (
     <Center marginTop={window.innerHeight / 7}>
-      <Card maxW="sm" backgroundColor={"red.800"}>
+      <Card maxW="xl" backgroundColor={"red.800"}>
         <CardHeader>
           <Heading size="md">Register</Heading>
         </CardHeader>
@@ -48,13 +62,18 @@ const Register = () => {
               <Input
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                onKeyDown={(e)=> handleClick(e, emailInputRef)}
+                ref={usernameInputRef}
               />
             </Box>
             <Box>
               <Heading size="xs" textTransform="uppercase">
                 Email
               </Heading>
-              <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input value={email} onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={(e)=> handleClick(e, passwordInputRef)}
+              ref={emailInputRef}
+              />
             </Box>
             <Box>
               <Heading size="xs" textTransform="uppercase">
@@ -63,12 +82,14 @@ const Register = () => {
               <Input
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                
+                ref={passwordInputRef}
               />
             </Box>
 
             <Box>
-              <Button onClick={register}>Register</Button>
-              <Button marginLeft={"10"} as={Link} to="/login">
+              <Button onClick={register} >Register</Button>
+              <Button marginLeft={"10"} as={Link} to="/login" >
                 {" "}
                 To Login
               </Button>
