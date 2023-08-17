@@ -78,12 +78,16 @@ class UserController {
       log_user,
       log_email,
       role
-    };
-
-    
-    
+    };   
     console.log(user.rows[0].password);
     comparePassword ? res.json(data) : res.json("invalid pass");
+
+
+    // need a exception cheker
+    const query = 'UPDATE global_info SET "USERS_PER_DAY" = "USERS_PER_DAY"::integer + 1'
+    const updt_login = await db.query(
+      query
+      )
   }
   async check(req, res) {
     const { token } = req.body;
@@ -118,6 +122,42 @@ class UserController {
     }
     else {res.json('ACCESS DENIED')}
     }
+  }
+  async get_total_users_count(req, res){
+    const {token} = req.body
+    const secret = process.env.SECRET_JWT;
+    const decode = jwt.verify(token, secret)
+
+    const verify = decode.role == "ADMIN"
+    if (verify){
+    const users = await db.query('SELECT "USERS_TOTAL" FROM global_info');
+    
+    res.json(users.rows);
+    }
+    else {res.json('ACCESS DENIED')}
+    
+
+ 
+
+
+  }
+  async get_perday_users_count(req, res){
+    const {token} = req.body
+    const secret = process.env.SECRET_JWT;
+    const decode = jwt.verify(token, secret)
+
+    const verify = decode.role == "ADMIN"
+    if (verify){
+    const users = await db.query('SELECT "USERS_PER_DAY" FROM global_info');
+    
+    res.json(users.rows);
+    }
+    else {res.json('ACCESS DENIED')}
+    
+
+ 
+
+
   }
   
 }
