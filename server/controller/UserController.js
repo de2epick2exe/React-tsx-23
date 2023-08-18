@@ -9,18 +9,19 @@ const generate_jwt = (date, username, role, secret) => {
   const token = jwt.sign(data, secret);
   return token;
 };
-
+ 
 class UserController {
   async registration(req, res) {
     const { email, username, password } = req.body;
     const createdat = new Date();
     console.log(createdat);
     const hashPassword = await bcrypt.hash(password, 5);
+    console.log(hashPassword);
     const newUser = await db.query(
-      "INSERT INTO public.users (email, username, password, createdat, updatedat) values ($1, $2, $3, $4, $5) RETURNING *",
+      'INSERT INTO users (email, username, password, createdat, updatedat) values ($1, $2, $3, $4, $5) RETURNING *',
       [email, username, hashPassword, createdat, createdat]
-    );
-    
+    ); 
+    console.log(newUser)
     const secret = process.env.SECRET_JWT;
     const user = await db.query("SELECT role, createdAt FROM users WHERE username = $1", [newUser.rows[0].username])
     
@@ -54,7 +55,7 @@ class UserController {
         [username]
       );
       if (user.rows[0] === undefined) {
-        return next("user not found");
+        return res.status(404).json("user not found");
       }
     }
     if (username === "") {
@@ -63,9 +64,15 @@ class UserController {
         "select id, email, username, password, role, createdAt from users where email = $1",
         [email]
       );
+      if (user.rows[0] === undefined) {
+        return res.status(404).json({message : "error user not found"});
+      }
     }
- 
+  
     let comparePassword = bcrypt.compareSync(password, user.rows[0].password);
+    if (!comparePassword){
+      return res.status(404).json({message : " incorrect password"});
+    }
     const secret = process.env.SECRET_JWT;
     
     const token = generate_jwt(user.rows[0].createdat, username,user.rows[0].role, secret);
