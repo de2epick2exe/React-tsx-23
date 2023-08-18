@@ -55,7 +55,7 @@ class UserController {
         [username]
       );
       if (user.rows[0] === undefined) {
-        return res.status(404).json("user not found");
+        return res.status(404).json({error:"user not found"});
       }
     }
     if (username === "") {
@@ -65,13 +65,13 @@ class UserController {
         [email]
       );
       if (user.rows[0] === undefined) {
-        return res.status(404).json({message : "error user not found"});
+        return res.status(404).json({error : "error user not found"});
       }
     }
   
     let comparePassword = bcrypt.compareSync(password, user.rows[0].password);
     if (!comparePassword){
-      return res.status(404).json({message : " incorrect password"});
+      return res.status(404).json({error : " incorrect password"});
     }
     const secret = process.env.SECRET_JWT;
     
@@ -87,7 +87,7 @@ class UserController {
       role
     };   
     console.log(user.rows[0].password);
-    comparePassword ? res.json(data) : res.json("invalid pass");
+    res.json(data) 
 
 
     // need a exception cheker
