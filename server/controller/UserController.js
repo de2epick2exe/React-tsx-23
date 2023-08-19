@@ -4,12 +4,26 @@ const jwt = require("jsonwebtoken");
 const WebSocket = require('ws');
 require("dotenv");
 
+
+
+
 const generate_jwt = (date, username, role, secret) => {
   data = { date, username, role };
   const token = jwt.sign(data, secret);
   return token;
 };
+
+
+const test_db_connection = async() =>{
+  const query = await db.query('SELECT * FROM global_info')
+  if(!query){
+    console.log('database error')
+  }
+  console.log(query.rows[0])
+}
  
+test_db_connection()
+
 class UserController {
   async registration(req, res) {
     const { email, username, password } = req.body;
@@ -107,6 +121,7 @@ class UserController {
 
   }
   async getAll(req, res) {     
+    try{
     const {token, username} = req.body
     if (token == null || username == ""){ }
     else{
@@ -129,8 +144,12 @@ class UserController {
     }
     else {res.json('ACCESS DENIED')}
     }
+  }catch(e){
+      res.json({message: e})
+    }
   }
   async get_total_users_count(req, res){
+    try{
     const {token} = req.body
     const secret = process.env.SECRET_JWT;
     const decode = jwt.verify(token, secret)
@@ -142,13 +161,16 @@ class UserController {
     res.json(users.rows);
     }
     else {res.json('ACCESS DENIED')}
-    
-
+  }
+    catch(e){
+      res.json({message: e})
+    }
  
 
 
   }
   async get_perday_users_count(req, res){
+    try{
     const {token} = req.body
     const secret = process.env.SECRET_JWT;
     const decode = jwt.verify(token, secret)
@@ -160,7 +182,10 @@ class UserController {
     res.json(users.rows);
     }
     else {res.json('ACCESS DENIED')}
-    
+  }
+  catch(e){
+    res.json({message: e})
+  }
 
  
 

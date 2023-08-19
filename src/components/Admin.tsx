@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
 
-import { get_all_users } from "../unite/User_Functions";
+import { get_all_users, get_users_count, get_users_per_day } from "../unite/User_Functions";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -39,12 +39,27 @@ const Admin = () => {
   const navigate = useNavigate();
   const data = useSelector((state: RootState) => state.userReducer);
   const [users, setUsers] = useState<User[]>([]);
+  const [total_users, setTotal_users] = useState<{ USERS_TOTAL: number[] }[]>([])
+  const [users_per_day, setUsers_per_day] = useState<{ USERS_PER_DAY: number[] }[]>([])
+  
   const data_role = "" || null;
 
   const get_users = async () => {
     const response = await get_all_users(data.username, data.token);
     setUsers(response);
   };
+  const get_total_count =async () => {
+    const response = await get_users_count(data.token);
+    console.log(response)
+    setTotal_users(response);
+    
+  }
+  const get_perday_count =async () => {
+    const response = await get_users_per_day(data.token);
+    console.log(response)
+    setUsers_per_day(response);
+    console.log("usets", users_per_day[0]?.USERS_PER_DAY)
+  }
 
   const ban = async (id: number, username: string, role: string) => {
     if(role == 'ADMIN'){ console.log( ' u cant ban this user')}
@@ -53,11 +68,16 @@ const Admin = () => {
   }
   };
 
+
+
+
   useEffect(() => {
     if (data.role !== "ADMIN" || data_role) {
       navigate("/");
     } else {
       get_users();
+      get_total_count()
+      get_perday_count()
     }
   }, []);
 
@@ -115,7 +135,7 @@ const Admin = () => {
           <StatGroup>
             <Stat>
               <StatLabel>Users total</StatLabel>
-              <StatNumber>345,670</StatNumber>
+              <StatNumber>{total_users[0]?.USERS_TOTAL}</StatNumber>
               <StatHelpText>
                 <StatArrow type="increase" />
                 23
@@ -124,7 +144,7 @@ const Admin = () => {
 
             <Stat>
               <StatLabel>online per day</StatLabel>
-              <StatNumber>45</StatNumber>
+              <StatNumber>{users_per_day[0]?.USERS_PER_DAY}</StatNumber>
               <StatHelpText>
                 <StatArrow type="decrease" />
                 9.05%

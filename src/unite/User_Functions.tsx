@@ -19,3 +19,12 @@ export const get_all_users = async (username: string | null, token: string | nul
   const response = await api.post('user/geta', {username, token})
   return response.data
 }
+
+export const get_users_count =async (token : string | null) => {
+  const response = await api.post('user/gettotal',{token})
+  return response.data  
+}
+export const get_users_per_day =async (token : string | null) => {
+  const response = await api.post('user/getperday',{token})
+  return response.data  
+}
