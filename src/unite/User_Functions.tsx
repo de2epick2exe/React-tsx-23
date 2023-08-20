@@ -5,9 +5,15 @@ const api = axios.create({
   });
 
 export const auth_login = async(username : string, email : string, password: string)=>{
-      
+      try{
     const response = await api.post('user/login', {username, email, password} )
-    return response.data
+    return response.data}
+    catch(error){
+      if (axios.isAxiosError(error)){
+        console.log(error.response?.data)
+        return error.response?.data
+      }
+    }
   }
 export const register = async(username:string, email:string, password:string )=>{
 
@@ -25,6 +31,7 @@ export const get_users_count =async (token : string | null) => {
   return response.data  
 }
 export const get_users_per_day =async (token : string | null) => {
+  
   const response = await api.post('user/getperday',{token})
   return response.data  
 }

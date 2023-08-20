@@ -16,6 +16,10 @@ import {
 import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
 
 const Login = () => {
+  const data = useSelector((state: RootState) => state.userReducer);
+  console.log(data.error?.error_password)
+
+  
   const [usern_or_em, setUsern_or_Em] = useState("");
   const [password, setPassword] = useState("");
   const token = useSelector((state: RootState) => state.userReducer.token);
@@ -71,7 +75,7 @@ const Login = () => {
                   onKeyDown={(e)=> handleClick(e, passwordInputRef)}
                   ref={InputRef}
                 />
-                {!isError?( <FormHelperText>input your email</FormHelperText> ): (<FormErrorMessage> {isError} </FormErrorMessage>)}
+                
                 </FormControl>
 
               </Box>

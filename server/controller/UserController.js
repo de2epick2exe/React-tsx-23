@@ -19,7 +19,7 @@ const test_db_connection = async() =>{
   if(!query){
     console.log('database error')
   }
-  console.log(query.rows[0])
+  console.log('TESTING DB QUERY is: ',query.rows[0])
 }
  
 test_db_connection()
@@ -69,7 +69,7 @@ class UserController {
         [username]
       );
       if (user.rows[0] === undefined) {
-        return res.status(404).json({error:"user not found"});
+        return res.status(403).json({error_user:"user not found"});
       }
     }
     if (username === "") {
@@ -79,13 +79,13 @@ class UserController {
         [email]
       );
       if (user.rows[0] === undefined) {
-        return res.status(404).json({error : "error user not found"});
+        return res.status(403).json({error_user : "error user not found"});
       }
     }
   
     let comparePassword = bcrypt.compareSync(password, user.rows[0].password);
     if (!comparePassword){
-      return res.status(404).json({error : " incorrect password"});
+      return res.status(403).json({error_password : " incorrect password"});
     }
     const secret = process.env.SECRET_JWT;
     

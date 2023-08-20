@@ -9,6 +9,7 @@ interface UserState {
   role:string | null; 
   /// find securiry ways to load default img
   photo: string;
+  error: string| null;
 }
   
 const loadUserState = (): UserState | undefined => {
@@ -29,7 +30,8 @@ const initialState: UserState = loadUserState() || {
   token: null,
   is_auth: false,
   role: "",
-  photo: "http://localhost:8080/imgs/default.jpg"
+  photo: "http://localhost:8080/imgs/default.jpg",
+  error: ""
 };
 
 const saveUserState = (state: UserState): void => {
@@ -70,6 +72,10 @@ export const UserSlice = createSlice({
       state.photo = action.payload;
       saveUserState(state); // Save state to localStorage
     },
+    setError: (state, action: PayloadAction<string | null>) => {
+      state.error = action.payload;
+      saveUserState(state); // Save state to localStorage
+    },
     logout: (state) => {
       state.token = null;
       state.is_auth = false;
@@ -81,7 +87,7 @@ export const UserSlice = createSlice({
   },
 });
 
-export const { setToken, setUsername, setEmail, setIsAuth, setRole,setPhoto, logout } =
+export const { setToken, setUsername, setEmail, setIsAuth, setRole,setPhoto, setError, logout } =
   UserSlice.actions;
 
 export const loginUser =
@@ -89,15 +95,25 @@ export const loginUser =
   async (dispatch: ThunkDispatch<UserState, any, any>) => {
     try {
       const data = await auth_login(username, email, password);
-
-      dispatch(setToken(data.token));
+      console.log('user slice',data.error_user)
+      if (data?.error_user || data?.error_password){
+        dispatch(setError(data));
+        console.log(data)
+        logout()
+      }
+      else{
+        dispatch(setToken(data.token));
       dispatch(setEmail(data.log_email));
       dispatch(setUsername(data.log_user));
       dispatch(setRole(data.role))
       dispatch(setIsAuth(true));
       console.log("user logged in", data.token);
+
+
+        
+      }
     } catch (err) {
-      console.log(err);
+      console.log( 'login error:', err);
     }
   };
 
