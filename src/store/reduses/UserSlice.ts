@@ -31,7 +31,7 @@ const initialState: UserState = loadUserState() || {
   is_auth: false,
   role: "",
   photo: "http://localhost:8080/imgs/default.jpg",
-  error: ""
+  error: null
 };
 
 const saveUserState = (state: UserState): void => {
@@ -95,25 +95,21 @@ export const loginUser =
   async (dispatch: ThunkDispatch<UserState, any, any>) => {
     try {
       const data = await auth_login(username, email, password);
-      console.log('user slice',data.error_user)
       if (data?.error_user || data?.error_password){
-        dispatch(setError(data));
-        console.log(data)
         logout()
+        dispatch(setError(data.error_user||data.error_password));
+        console.log('US data login erorr:',data)        
       }
       else{
-        dispatch(setToken(data.token));
+      dispatch(setToken(data.token));
       dispatch(setEmail(data.log_email));
       dispatch(setUsername(data.log_user));
       dispatch(setRole(data.role))
       dispatch(setIsAuth(true));
-      console.log("user logged in", data.token);
-
-
-        
+      console.log("user logged in:", data.token);        
       }
     } catch (err) {
-      console.log( 'login error:', err);
+      console.log( 'user slice uncaugh login error:', err);
     }
   };
 

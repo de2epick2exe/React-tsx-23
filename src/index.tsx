@@ -37,7 +37,8 @@ root.render(<Provider store={store as any}>
       </Routes>
       </BrowserRouter>
     </ChakraProvider>
-  </React.StrictMode></Provider>
+  </React.StrictMode>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
