@@ -15,6 +15,7 @@ interface UserState {
 const loadUserState = (): UserState | undefined => {
   try {
     const serializedState = localStorage.getItem("user");
+    setError(null)
     if (serializedState === null) {
       return undefined;
     }
@@ -95,10 +96,10 @@ export const loginUser =
   async (dispatch: ThunkDispatch<UserState, any, any>) => {
     try {
       const data = await auth_login(username, email, password);
-      if (data?.error_user || data?.error_password){
-        logout()
+      if (data?.error_user || data?.error_password){        
         dispatch(setError(data.error_user||data.error_password));
-        console.log('US data login erorr:',data)        
+        console.log('US data login erorr:',data) 
+              
       }
       else{
       dispatch(setToken(data.token));
@@ -106,6 +107,8 @@ export const loginUser =
       dispatch(setUsername(data.log_user));
       dispatch(setRole(data.role))
       dispatch(setIsAuth(true));
+      dispatch(setError(null));
+
       console.log("user logged in:", data.token);        
       }
     } catch (err) {

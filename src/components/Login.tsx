@@ -18,12 +18,16 @@ import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
 
 const Login = () => {
   const data = useSelector((state: RootState) => state.userReducer);
-  const [error, setError] = useState<string|null>(null)
   const [usern_or_em, setUsern_or_Em] = useState("");
   const [password, setPassword] = useState("");
   const token = useSelector((state: RootState) => state.userReducer.token);
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   const navigate = useNavigate();
+
+
+
+
+
   const login = async (e: React.MouseEvent<HTMLButtonElement>) => {
    
     e.preventDefault();
@@ -35,22 +39,10 @@ const Login = () => {
         console.log("Valid username");
         await dispatch(loginUser(usern_or_em, "", password));        
       }
-      if (data.error !== null) {
-        
-        setError(data.error);
-      } else {
-        setError(null); // Clear error state if there's no error
-      }
-     console.log("login page error:",error)
-    
+      
     /// navigate("/");
    };
-   useEffect(() => {
-    setError(null)
-    setError(data.error);
-  }, [usern_or_em || password]);
-
-
+   
   const InputRef = useRef(null);
   const passwordInputRef = useRef(null);
   
@@ -69,7 +61,7 @@ const Login = () => {
       <Center marginTop={window.innerHeight / 7}>
         <Card maxW="sm" backgroundColor={"red.800"}>
           <CardHeader>
-            <Heading size="md">Login {error}</Heading>
+            <Heading size="md">Login </Heading>
           </CardHeader>
           <CardBody>
             <Stack divider={<StackDivider />} spacing="4">
@@ -99,9 +91,9 @@ const Login = () => {
                   
                   ref={passwordInputRef}
                 />
-                {error !== null ? error : ""}
+               
               </Box>
-              
+              {data.error && <p>{data.error}</p>} 
               <Box>
               
                 <Button onClick={login} >Login</Button>
