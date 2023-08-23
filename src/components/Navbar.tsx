@@ -63,7 +63,7 @@ const Navbar = () => {
   };
   return (
     <>
-      <Box className=" animate__animated animate__backInDown" bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
+      <Box className="animate__animated animate__backInDown animate__faster" bg={useColorModeValue('red.800', 'gray.900')} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           
           <Box>
