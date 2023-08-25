@@ -16,9 +16,16 @@ export const auth_login = async(username : string, email : string, password: str
     }
   }
 export const register = async(username:string, email:string, password:string )=>{
-
+ try {
   const response = await api.post('user/registration', {username, email, password})
   return response.data
+ } catch (error) {
+  if(axios.isAxiosError(error)){
+    return error.response?.data
+  }
+
+ }
+  
 }
 
 export const get_all_users = async (username: string | null, token: string | null)=>{

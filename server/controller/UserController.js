@@ -35,13 +35,7 @@ class UserController {
     const newUser = await db.query(
       'INSERT INTO users (email, username, password, createdat, updatedat) values ($1, $2, $3, $4, $5) RETURNING *',
       [email, username, hashPassword, createdat, createdat]
-    );  }
-    catch(e){
-      if (e.code == 23505){
-          return res.json({error: "user already created"})
-      }
-      return console.log(e)
-    }
+    );      
     console.log(newUser)
     const secret = process.env.SECRET_JWT;
     const user = await db.query("SELECT role, createdAt FROM users WHERE username = $1", [newUser.rows[0].username])
@@ -60,7 +54,13 @@ class UserController {
     };  
       
     res.json(data);
-  
+  }
+    catch(e){
+      if (e.code == 23505){
+          return res.json({error: "user already created"})
+      }
+      return console.log(e) 
+    }
   }
 
   async login(req, res, next) {

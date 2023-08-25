@@ -121,13 +121,22 @@ export const loginUser =
   async (dispatch: ThunkDispatch<UserState, any, any>) => {
     try {
       const data = await register(username, email, password);
-
+      
+      if (data?.error){        
+        dispatch(setError(data.error));
+        console.log('US data register erorr:',data.error) 
+              
+      }else{
       dispatch(setToken(data.token));
       dispatch(setEmail(data.email));
       dispatch(setUsername(data.username));
       dispatch(setRole(data.user_role))
       dispatch(setIsAuth(true));
+      dispatch(setError(null))
       console.log("user logged in", data.token);
+    
+    }
+
     } catch (err) {
       console.log(err);
     }

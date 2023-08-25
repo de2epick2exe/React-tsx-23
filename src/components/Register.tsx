@@ -16,6 +16,7 @@ import { RootState } from "../store/store";
 import { Link, useNavigate } from "react-router-dom"; // Import useHistory hook
 import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
 const Register = () => {
+  const data = useSelector((state: RootState) => state.userReducer);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,9 +28,10 @@ const Register = () => {
 
     try {
       await dispatch(register_user(username, email, password));
-      navigate("/");
+     /// navigate("/");
     } catch (e) {
       console.log(e);
+      console.log("register error:",data.error)
     }
   };
 
@@ -86,7 +88,7 @@ const Register = () => {
                 ref={passwordInputRef}
               />
             </Box>
-
+            {data.error && <p>{data.error}</p>} 
             <Box>
               <Button onClick={register} >Register</Button>
               <Button marginLeft={"10"} as={Link} to="/login" >
