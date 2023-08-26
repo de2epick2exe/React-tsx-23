@@ -3,7 +3,35 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const WebSocket = require('ws');
 require("dotenv");
+const Redis = require ('ioredis');
 
+const redis = new Redis({  
+  port: 6379,        
+  // docker run -d --name <CONTAINER_NAME> -p 127.0.0.1:6379:6379 redis
+})
+ 
+const set_new_today = async() =>{
+  const total = await redis.get('users_per_day');
+  await redis.set('users_per_day', total+1)
+}
+
+
+ try {
+   
+  async function set() {
+    await redis.config("SET", "save", "")
+    await redis.set('users_per_day', '0');
+    }
+  async function get() {
+    const val = await redis.get('users_per_day');
+    console.log('get:', val);
+  }
+  set()
+  get()
+ } catch (error) {
+  console.log("error",error) 
+ }
+  
 
 
 
@@ -52,7 +80,7 @@ class UserController {
       user_role
       
     };  
-      
+      set_new_today()
     res.json(data);
   }
     catch(e){
@@ -113,9 +141,8 @@ class UserController {
 
     // need a exception cheker
     const query = 'UPDATE global_info SET "USERS_PER_DAY" = "USERS_PER_DAY"::integer + 1'
-    const updt_login = await db.query(
-      query
-      )
+    const updt_login = await db.query(query)
+    set_new_today()
   }
   async check(req, res) {
     const { token } = req.body;
@@ -184,9 +211,16 @@ class UserController {
 
     const verify = decode.role == "ADMIN"
     if (verify){
-    const users = await db.query('SELECT "USERS_PER_DAY" FROM global_info');
-    
-    res.json(users.rows);
+    const users =  await redis.get('users_per_day');   
+    if (!users){
+      try {
+        const users_pg = await db.query('SELECT "USERS_PER_DAY" FROM global_info');
+        return res.json(users_pg.rows);
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    res.json([{"USERS_PER_DAY" : users}]);
     }
     else {res.json('ACCESS DENIED')}
   }

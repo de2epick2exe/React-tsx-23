@@ -40,7 +40,7 @@ const Admin = () => {
   const data = useSelector((state: RootState) => state.userReducer);
   const [users, setUsers] = useState<User[]>([]);
   const [total_users, setTotal_users] = useState<{ USERS_TOTAL: number[] }[]>([])
-  const [users_per_day, setUsers_per_day] = useState<{ USERS_PER_DAY: number[] }[]>([])
+  const [users_per_day, setUsers_per_day] = useState<{ USERS_PER_DAY: any[] }[]>([])
   
   const data_role = "" || null;
 
@@ -58,7 +58,7 @@ const Admin = () => {
     const response = await get_users_per_day(data.token);
     console.log(response)
     setUsers_per_day(response);
-    console.log("usets", users_per_day[0]?.USERS_PER_DAY)
+    console.log("users per day", users_per_day[0]?.USERS_PER_DAY)
   }
 
   const ban = async (id: number, username: string, role: string) => {
@@ -81,6 +81,20 @@ const Admin = () => {
     }
   }, []);
 
+//////////////////////////////////
+/*
+online per day
+01????????
+
+
+
+SETUP STATUS 
+
+NEED ADD IN GLOBAL INFO TABLE PER WEEK, PER DAY LAST
+
+REDIS ARRAY WITH ID ONLINE 
+*/
+/////////////////////////////////
   return (
     <>
       {data.role == "ADMIN" ? (

@@ -9,28 +9,9 @@ const Redis = require ('ioredis');
 
    
  
- try {
-  const redis = new Redis({  
-    port: 6379,        
-    // docker run -d --name <CONTAINER_NAME> -p 127.0.0.1:6379:6379 redis
-  }) 
-  async function set() {
-    await redis.config("SET", "save", "")
-    await redis.set('users_per_day', '0');
-    await redis.set('users_per_day', '1')
-  }
-  async function get() {
-    const val = await redis.get('1');
-    console.log('get:', val);
-  }
-  set()
-  get()
- } catch (error) {
-  console.log("error",error) 
- }
   
 
-
+ 
 const port = process.env.PORT;
 const server = express();
 function logResponse(req, res, next) {

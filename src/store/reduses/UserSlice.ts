@@ -15,7 +15,7 @@ interface UserState {
 const loadUserState = (): UserState | undefined => {
   try {
     const serializedState = localStorage.getItem("user");
-    setError(null)
+    
     if (serializedState === null) {
       return undefined;
     }
@@ -24,7 +24,7 @@ const loadUserState = (): UserState | undefined => {
     return undefined;
   }
 };
-
+/// ERROR NOT SETTED TO DEFAULT*
 const initialState: UserState = loadUserState() || {
   username: "",
   email: "",
