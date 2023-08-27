@@ -139,13 +139,14 @@ REDIS ARRAY WITH ID ONLINE
               </Tbody>
               </Table>
             </TableContainer>
-            <InputGroup>
+            
+          </Flex>
+          <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon as={IoIosSearch} color="gray.300" />
               </InputLeftElement>
               <Input htmlSize={15} width="auto" placeholder="search user" />
             </InputGroup>
-          </Flex>
           <StatGroup>
             <Stat>
               <StatLabel>Users total</StatLabel>

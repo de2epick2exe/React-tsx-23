@@ -12,7 +12,8 @@ const redis = new Redis({
  
 const set_new_today = async() =>{
   const total = await redis.get('users_per_day');
-  await redis.set('users_per_day', total+1)
+
+  await redis.set('users_per_day', Number(total)+1)
 }
 
 

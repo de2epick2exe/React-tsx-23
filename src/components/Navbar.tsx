@@ -20,7 +20,7 @@ import {
     Image,
 } from '@chakra-ui/react'
 import { MoonIcon, SunIcon } from '@chakra-ui/icons'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -29,6 +29,7 @@ import { logout } from "../store/reduses/UserSlice";
 interface Props {
   children: React.ReactNode
 }
+ 
 
 const NavLink = (props: Props) => {
   const { children } = props
@@ -52,6 +53,7 @@ const NavLink = (props: Props) => {
 
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const { colorMode, toggleColorMode } = useColorMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
@@ -117,9 +119,9 @@ const Navbar = () => {
                   <br />
                   <MenuDivider />
                   <MenuItem as={Link} to="/profile">Profile</MenuItem>
-                  {isAdmin?
-                  <MenuItem as={Link} to="/admin">Admin Panel</MenuItem>
-                  :''}
+                  {isAdmin&&
+                  <MenuItem  onClick={()=>{ navigate('/admin')}}>Admin Panel</MenuItem>
+                  }
                   <MenuItem as={Link} to="/settings">Account Settings</MenuItem>
                   <MenuItem onClick={logout_user} >Logout</MenuItem>
                 </MenuList>
