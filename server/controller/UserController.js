@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const WebSocket = require('ws');
 require("dotenv");
 const Redis = require ('ioredis');
+const { response } = require("express");
 
 const redis = new Redis({  
   port: 6379,        
@@ -25,7 +26,7 @@ const set_new_today = async() =>{
     }
   async function get() {
     const val = await redis.get('users_per_day');
-    console.log('get:', val);
+    console.log('testing users-per-day get:', val);
   }
   set()
   get()
@@ -231,6 +232,29 @@ class UserController {
 
  
 
+
+  }
+/////-------------------------------------------------------------------------
+  async set_status_online(req, res){
+      const {id} = req.body
+      const response = await redis.set(id, 'online')
+      res.json("ok")
+  }
+  async get_status_online(req, res){
+    const [{id}] = req.body
+    try {
+      //// update users from table with only 10 for req
+      const users_online = []
+    id.forEach(ids => {
+        const responce = redis.get(ids.id)
+        users_online.push({ids : responce})
+      });
+
+
+
+    } catch (error) {
+      console.log(error)
+    }
 
   }
   

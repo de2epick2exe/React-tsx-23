@@ -87,7 +87,7 @@ online per day
 01????????
 
 
-
+  
 SETUP STATUS 
 
 NEED ADD IN GLOBAL INFO TABLE PER WEEK, PER DAY LAST
