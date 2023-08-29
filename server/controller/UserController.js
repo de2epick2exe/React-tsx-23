@@ -240,6 +240,7 @@ class UserController {
       const response = await redis.set(id, 'online')
       res.json("ok")
   }
+
   async get_status_online(req, res){
     const [{id}] = req.body
     try {
@@ -254,9 +255,19 @@ class UserController {
 
     } catch (error) {
       console.log(error)
-    }
-
+    }    
   }
+  async get_last_online(req, res){
+      /// set hourly
+      const count = await db.query('SELECT "USERS_ONLINE_LAST_WEEK" FROM global_info')
+      res.json({online_last_week: count[0].rows})
+  }
+  async get_last_registered(req, res){
+    /// set hourly
+    const count = await db.query('SELECT "USERS_REGISTERED_PER_WEEK" FROM global_info')
+    res.json({registered_last_week: count[0].rows})
+}
+
   
 }
 module.exports = new UserController();
