@@ -93,6 +93,7 @@ class UserController {
     }
   }
 
+
   async login(req, res, next) {
     const { email, username, password } = req.body;
     
@@ -146,6 +147,8 @@ class UserController {
     const updt_login = await db.query(query)
     set_new_today()
   }
+
+
   async check(req, res) {
     const { token } = req.body;
     try {
@@ -154,8 +157,9 @@ class UserController {
     } catch (error) {
       res.json('Error decoding JWT:', error.message);
     }
-
   }
+
+
   async getAll(req, res) {     
     try{
     const {token, username} = req.body
@@ -184,6 +188,8 @@ class UserController {
       res.json({message: e})
     }
   }
+
+
   async get_total_users_count(req, res){
     try{
     const {token} = req.body
@@ -192,8 +198,7 @@ class UserController {
 
     const verify = decode.role == "ADMIN"
     if (verify){
-    const users = await db.query('SELECT "USERS_TOTAL" FROM global_info');
-    
+    const users = await db.query('SELECT "USERS_TOTAL" FROM global_info');    
     res.json(users.rows);
     }
     else {res.json('ACCESS DENIED')}
@@ -201,16 +206,13 @@ class UserController {
     catch(e){
       res.json({message: e})
     }
- 
-
-
   }
+
   async get_perday_users_count(req, res){
     try{
     const {token} = req.body
     const secret = process.env.SECRET_JWT;
     const decode = jwt.verify(token, secret)
-
     const verify = decode.role == "ADMIN"
     if (verify){
     const users =  await redis.get('users_per_day');   
@@ -229,11 +231,9 @@ class UserController {
   catch(e){
     res.json({message: e})
   }
-
- 
-
-
   }
+
+
 /////-------------------------------------------------------------------------
   async set_status_online(req, res){
       const {id} = req.body
@@ -241,31 +241,56 @@ class UserController {
       res.json("ok")
   }
 
-  async get_status_online(req, res){
-    const [{id}] = req.body
+
+  async get_status_online(req, res){    
     try {
       //// update users from table with only 10 for req
+      const idList = req.body
       const users_online = []
-    id.forEach(ids => {
-        const responce = redis.get(ids.id)
-        users_online.push({ids : responce})
-      });
-
-
-
+    for(const obj of idList){
+      const id= obj.id
+      const responce = await redis.get(id)
+      if(responce == null){
+        users_online.push({id, responce: "offline"})
+      }
+      else{
+      users_online.push({id, responce})
+      }
+    }
+      res.json(users_online)
     } catch (error) {
-      console.log(error)
+      res.json(error)
     }    
   }
+
+
   async get_last_online(req, res){
+    const {token} = req.body
+    const secret = process.env.SECRET_JWT;
+    const decode = jwt.verify(token, secret)
+    const verify = decode.role == "ADMIN"
+    if (verify){
       /// set hourly
       const count = await db.query('SELECT "USERS_ONLINE_LAST_WEEK" FROM global_info')
-      res.json({online_last_week: count[0].rows})
-  }
+      res.json(count.rows[0])
+    }else{
+      res.json({message: 'access denied'})
+    }
+  } 
+
+
   async get_last_registered(req, res){
+    const {token} = req.body
+    const secret = process.env.SECRET_JWT;
+    const decode = jwt.verify(token, secret)
+    const verify = decode.role == "ADMIN"
+    if (verify){
     /// set hourly
     const count = await db.query('SELECT "USERS_REGISTERED_PER_WEEK" FROM global_info')
-    res.json({registered_last_week: count[0].rows})
+    res.json(count.rows[0])
+    }else{
+      res.json({message: 'access denied'})
+    }
 }
 
   

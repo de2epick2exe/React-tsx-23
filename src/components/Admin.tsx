@@ -84,9 +84,6 @@ const Admin = () => {
 //////////////////////////////////
 /*
 online per day
-01????????
-
-
   
 SETUP STATUS 
 
