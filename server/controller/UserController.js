@@ -65,7 +65,7 @@ class UserController {
     const newUser = await db.query(
       'INSERT INTO users (email, username, password, createdat, updatedat) values ($1, $2, $3, $4, $5) RETURNING *',
       [email, username, hashPassword, createdat, createdat]
-    );      
+    );        
     console.log(newUser)
     const secret = process.env.SECRET_JWT;
     const user = await db.query("SELECT role, createdAt FROM users WHERE username = $1", [newUser.rows[0].username])
@@ -188,7 +188,7 @@ class UserController {
       res.json({message: e})
     }
   }
-
+ 
 
   async get_total_users_count(req, res){
     try{

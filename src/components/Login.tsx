@@ -35,10 +35,16 @@ const Login = () => {
       if (emailRegex.test(usern_or_em)) {
         console.log("Valid email");
         await dispatch(loginUser("", usern_or_em, password));
+        
       } else {
         console.log("Valid username");
-        await dispatch(loginUser(usern_or_em, "", password));        
+        await dispatch(loginUser(usern_or_em, "", password));
+               
       }
+      if (data.error == null){
+        navigate("/");
+      }  
+      console.log("login error", data.error)
       
     /// navigate("/");
    };

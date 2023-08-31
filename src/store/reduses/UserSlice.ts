@@ -13,6 +13,7 @@ interface UserState {
 }
   
 const loadUserState = (): UserState | undefined => {
+  
   try {
     const serializedState = localStorage.getItem("user");
     
@@ -25,6 +26,12 @@ const loadUserState = (): UserState | undefined => {
   }
 };
 /// ERROR NOT SETTED TO DEFAULT*
+/*
+set response online 
+admin panel online statuses
+
+
+*/
 const initialState: UserState = loadUserState() || {
   username: "",
   email: "",
@@ -95,6 +102,7 @@ export const loginUser =
   (username: string, email: string, password: string) =>
   async (dispatch: ThunkDispatch<UserState, any, any>) => {
     try {
+      dispatch(setError(null))
       const data = await auth_login(username, email, password);
       if (data?.error_user || data?.error_password){        
         dispatch(setError(data.error_user||data.error_password));
@@ -120,12 +128,11 @@ export const loginUser =
   (username: string, email: string, password: string) =>
   async (dispatch: ThunkDispatch<UserState, any, any>) => {
     try {
-      const data = await register(username, email, password);
-      
+      dispatch(setError(null))
+      const data = await register(username, email, password);      
       if (data?.error){        
         dispatch(setError(data.error));
-        console.log('US data register erorr:',data.error) 
-              
+        console.log('US data register erorr:',data.error)               
       }else{
       dispatch(setToken(data.token));
       dispatch(setEmail(data.email));
@@ -133,10 +140,8 @@ export const loginUser =
       dispatch(setRole(data.user_role))
       dispatch(setIsAuth(true));
       dispatch(setError(null))
-      console.log("user logged in", data.token);
-    
+      console.log("user logged in", data.token);    
     }
-
     } catch (err) {
       console.log(err);
     }

@@ -42,3 +42,11 @@ export const get_users_per_day =async (token : string | null) => {
   const response = await api.post('user/getperday',{token})
   return response.data  
 }
+export const get_last_online = async (token:string| null) => {
+  const responce = await api.post('user/lo', {token})
+  return responce.data
+}
+export const get_last_registered =async (token:string|null) => {
+  const responce = await api.post('user/lr', {token})
+  return responce.data
+}
