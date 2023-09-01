@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
 
-import { get_all_users, get_users_count, get_users_per_day } from "../unite/User_Functions";
+import { get_all_users, get_last_online, get_last_registered, get_users_count, get_users_per_day } from "../unite/User_Functions";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -40,9 +40,10 @@ const Admin = () => {
   const data = useSelector((state: RootState) => state.userReducer);
   const [users, setUsers] = useState<User[]>([]);
   const [total_users, setTotal_users] = useState<{ USERS_TOTAL: number[] }[]>([])
-  const [users_per_day, setUsers_per_day] = useState<{ USERS_PER_DAY: any[] }[]>([])
-  
+  const [users_per_day, setUsers_per_day] = useState<{ USERS_PER_DAY: any[] }[]>([])  
   const data_role = "" || null;
+ const [last_online, setLast_online] = useState<{ USERS_PER_DAY: any[] }[]>([])  
+ const [last_registered, setLast_registered] = useState<{ USERS_PER_DAY: any[] }[]>([])  
 
   const get_users = async () => {
     const response = await get_all_users(data.username, data.token);
@@ -61,14 +62,23 @@ const Admin = () => {
     console.log("users per day", users_per_day[0]?.USERS_PER_DAY)
   }
 
+  const get_l_o =async () => {
+    const response = await get_last_online(data.token)
+    setLast_online(response)
+  }
+  const get_l_r =async () => {
+    const response = await get_last_registered(data.token)
+    setLast_registered(response)
+  }
+
+
+
   const ban = async (id: number, username: string, role: string) => {
     if(role == 'ADMIN'){ console.log( ' u cant ban this user')}
     else{
     console.log(username, "banned user with id", id);
   }
   };
-
-
 
 
   useEffect(() => {
@@ -78,18 +88,20 @@ const Admin = () => {
       get_users();
       get_total_count()
       get_perday_count()
+      get_l_o()
+      get_l_r()
     }
   }, []);
  
 //////////////////////////////////
 /*
-online per day
-  
 SETUP STATUS 
 
 NEED ADD IN GLOBAL INFO TABLE PER WEEK, PER DAY LAST
-
-REDIS ARRAY WITH ID ONLINE 
+[last online week]/7
+[last online per yesterday]
+[last registered]/7
+ 
 */
 /////////////////////////////////
   return (
