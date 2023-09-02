@@ -68,14 +68,15 @@ class UserController {
     );        
     console.log(newUser)
     const secret = process.env.SECRET_JWT;
-    const user = await db.query("SELECT role, createdAt FROM users WHERE username = $1", [newUser.rows[0].username])
-    
+    const user = await db.query("SELECT id, role, createdAt FROM users WHERE username = $1", [newUser.rows[0].username])
+    const id = user.rows[0].id
     const user_date = user.rows[0].createdat
     const user_role = user.rows[0].role
     const token = generate_jwt(user_date, username, user_role, secret);
     
     console.log(user_date, user_role, token)
     const data = {
+      id,
       token,
       username,
       email,
@@ -129,10 +130,13 @@ class UserController {
     
     const token = generate_jwt(user.rows[0].createdat, username,user.rows[0].role, secret);
     console.log(user.rows[0].createdat)
+    const id = user.rows[0].id
     const log_user = user.rows[0].username;
     const log_email = user.rows[0].email;
     const role = user.rows[0].role;
+
     const data = {
+      id,
       token,
       log_user,
       log_email,
@@ -141,7 +145,7 @@ class UserController {
     console.log(user.rows[0].password);
     res.json(data) 
 
-
+ 
     // need a exception cheker
     const query = 'UPDATE global_info SET "USERS_PER_DAY" = "USERS_PER_DAY"::integer + 1'
     const updt_login = await db.query(query)

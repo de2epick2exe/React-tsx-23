@@ -2,6 +2,7 @@ import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { auth_login, register } from "../../unite/User_Functions";
 
 interface UserState {
+  id: number|null;
   username: string | null;
   email: string | null;
   token: string | null;
@@ -33,6 +34,7 @@ admin panel online statuses
 
 */
 const initialState: UserState = loadUserState() || {
+  id: null,
   username: "",
   email: "",
   token: null,
@@ -55,6 +57,10 @@ export const UserSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    setId:(state, action: PayloadAction<number | null>){
+      state.id = action.payload;
+      saveUserState(state); // Save state to localStorage
+    },
     setToken: (state, action: PayloadAction<string | null>) => {
       state.token = action.payload;
       saveUserState(state); // Save state to localStorage
@@ -95,7 +101,7 @@ export const UserSlice = createSlice({
   },
 });
 
-export const { setToken, setUsername, setEmail, setIsAuth, setRole,setPhoto, setError, logout } =
+export const { setId,setToken, setUsername, setEmail, setIsAuth, setRole,setPhoto, setError, logout } =
   UserSlice.actions;
 
 export const loginUser =
