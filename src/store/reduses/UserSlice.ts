@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { auth_login, register } from "../../unite/User_Functions";
+import { auth_login, register, set_online } from "../../unite/User_Functions";
 
 interface UserState {
   id: number|null;
@@ -13,27 +13,44 @@ interface UserState {
   error: string| null;
 }
   
-const loadUserState = (): UserState | undefined => {
-  
+const loadUserState =  (): UserState | undefined => {  
   try {
-    const serializedState = localStorage.getItem("user");
-    
+    const serializedState = localStorage.getItem("user");    
     if (serializedState === null) {
       return undefined;
     }
-    return JSON.parse(serializedState);
+    
+    loadIsOnline()
+    return JSON.parse(serializedState) ;
   } catch (err) {
     return undefined;
   }
 };
-/// ERROR NOT SETTED TO DEFAULT*
-/*
-set response online 
-admin panel online statuses
+const update_online = (id: number) =>{
+  setInterval(async ()=>{
+    console.log('is online:', id)
+    await set_online(id)
+  }, 1000)
+}
+const loadIsOnline =  (): UserState | undefined => {  
+  try {
+    const serialState = localStorage.getItem("user");    
+    if (serialState !== null){
+       const userData = JSON.parse(serialState);
+      if (userData.is_auth && userData.id) {
+        console.log(userData)
+      update_online(userData.id)
+      }    
+      return 
+    }
+    return
+  } catch (err) {
+    console.log(err)
+  }
+};
 
 
-*/
-const initialState: UserState = loadUserState() || {
+const initialState: UserState = loadUserState()  || {
   id: null,
   username: "",
   email: "",
@@ -44,12 +61,20 @@ const initialState: UserState = loadUserState() || {
   error: null
 };
 
+
+
+
+
+
+
+
+
 const saveUserState = (state: UserState): void => {
   try {
     const serializedState = JSON.stringify(state);
     localStorage.setItem("user", serializedState);
   } catch (err) {
-    // Handle errors while saving state
+    console.log(err)
   }
 };
 
@@ -57,38 +82,38 @@ export const UserSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setId:(state, action: PayloadAction<number | null>){
+    setId:(state, action: PayloadAction< number | null>)=>{
       state.id = action.payload;
-      saveUserState(state); // Save state to localStorage
+      saveUserState(state); // Save state to localStorage*
     },
     setToken: (state, action: PayloadAction<string | null>) => {
       state.token = action.payload;
-      saveUserState(state); // Save state to localStorage
+      saveUserState(state); 
     },
     setUsername: (state, action: PayloadAction<string | null>) => {
       state.username = action.payload;
-      saveUserState(state); // Save state to localStorage
+      saveUserState(state); 
     },
     setEmail: (state, action: PayloadAction<string | null>) => {
       state.email = action.payload;
-      saveUserState(state); // Save state to localStorage
+      saveUserState(state); 
     },
 
     setIsAuth: (state, action: PayloadAction<boolean>) => {
       state.is_auth = action.payload;
-      saveUserState(state); // Save state to localStorage
+      saveUserState(state); 
     },
     setRole: (state, action: PayloadAction<string | null>) => {
       state.role = action.payload;
-      saveUserState(state); // Save state to localStorage
+      saveUserState(state); 
     },
     setPhoto: (state, action: PayloadAction<string>) => {
       state.photo = action.payload;
-      saveUserState(state); // Save state to localStorage
+      saveUserState(state); 
     },
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
-      saveUserState(state); // Save state to localStorage
+      saveUserState(state); 
     },
     logout: (state) => {
       state.token = null;
@@ -96,10 +121,13 @@ export const UserSlice = createSlice({
       state.email = null;
       state.username = null;
       state.role = null;
-      saveUserState(state); // Save state to localStorage
+      saveUserState(state); 
     },
   },
 });
+
+
+
 
 export const { setId,setToken, setUsername, setEmail, setIsAuth, setRole,setPhoto, setError, logout } =
   UserSlice.actions;
@@ -116,12 +144,15 @@ export const loginUser =
               
       }
       else{
+      dispatch(setId(data.id));
       dispatch(setToken(data.token));
       dispatch(setEmail(data.log_email));
       dispatch(setUsername(data.log_user));
       dispatch(setRole(data.role))
       dispatch(setIsAuth(true));
       dispatch(setError(null));
+      update_online(data.id)
+      
 
       console.log("user logged in:", data.token);        
       }
@@ -140,12 +171,14 @@ export const loginUser =
         dispatch(setError(data.error));
         console.log('US data register erorr:',data.error)               
       }else{
+      dispatch(setId(data.id));
       dispatch(setToken(data.token));
       dispatch(setEmail(data.email));
       dispatch(setUsername(data.username));
       dispatch(setRole(data.user_role))
       dispatch(setIsAuth(true));
       dispatch(setError(null))
+      update_online(data.id)
       console.log("user logged in", data.token);    
     }
     } catch (err) {

@@ -62,6 +62,7 @@ const Navbar = () => {
   const data = useSelector((state: RootState) => state.userReducer);
   const logout_user = async () => {
     dispatch(logout());
+    window.location.reload();
   };
   return (
     <>

@@ -27,6 +27,18 @@ export const register = async(username:string, email:string, password:string )=>
  }
   
 }
+export const set_online =async (id:number| null) => {
+  try {
+    const response = await api.post('user/setonline', {id})
+    return
+   } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data
+    }
+  
+   }
+  
+}
 
 export const get_all_users = async (username: string | null, token: string | null)=>{
   const response = await api.post('user/geta', {username, token})
