@@ -33,6 +33,7 @@ interface User {
   email: string;
   username: string;
   role: string;
+  status: string | null;
 }
 
 const Admin = () => {
@@ -74,7 +75,7 @@ const Admin = () => {
 
 
   const ban = async (id: number, username: string, role: string) => {
-    if(role == 'ADMIN'){ console.log( ' u cant ban this user')}
+    if(role == 'ADMIN'){ console.log('u cant ban this user')}
     else{
     console.log(username, "banned user with id", id);
   }
@@ -130,7 +131,7 @@ NEED ADD IN GLOBAL INFO TABLE PER WEEK, PER DAY LAST
                         <Th>{user.username}</Th>
                         <Th>{user.email}</Th>
                         <Th>{user.role}</Th>
-                        <Th> Offline</Th>
+                        <Th> {user.status}</Th>
                         <Th>
                           {user.role == 'ADMIN'? "" :
                           <Button

@@ -12,7 +12,30 @@ interface UserState {
   photo: string;
   error: string| null;
 }
-  
+
+const update_online =async (id: number) =>{
+  await set_online(id)
+  setInterval(async ()=>{
+    console.log('is online:', id)
+    await set_online(id)
+  }, 30000)
+}
+const loadIsOnline =  (): UserState | undefined => {  
+  try {
+    const serialState = localStorage.getItem("user");    
+    if (serialState !== null){
+       const userData = JSON.parse(serialState);
+      if (userData.is_auth && userData.id) {
+        console.log(userData)
+      update_online(userData.id)       
+      }    
+      return 
+    }
+    return
+  } catch (err) {
+    console.log(err)
+  }
+};
 const loadUserState =  (): UserState | undefined => {  
   try {
     const serializedState = localStorage.getItem("user");    
@@ -26,28 +49,7 @@ const loadUserState =  (): UserState | undefined => {
     return undefined;
   }
 };
-const update_online = (id: number) =>{
-  setInterval(async ()=>{
-    console.log('is online:', id)
-    await set_online(id)
-  }, 1000)
-}
-const loadIsOnline =  (): UserState | undefined => {  
-  try {
-    const serialState = localStorage.getItem("user");    
-    if (serialState !== null){
-       const userData = JSON.parse(serialState);
-      if (userData.is_auth && userData.id) {
-        console.log(userData)
-      update_online(userData.id)
-      }    
-      return 
-    }
-    return
-  } catch (err) {
-    console.log(err)
-  }
-};
+
 
 
 const initialState: UserState = loadUserState()  || {

@@ -182,13 +182,23 @@ class UserController {
     const decode = jwt.verify(token, secret)
     const verify = decode.role == "ADMIN"
     if (verify){
-    const users = await db.query("SELECT id, email, username, role FROM public.users");
-    
-    res.json(users.rows);
+    const users = await db.query("SELECT id, email, username, role FROM public.users");        
+    const users_online = []
+    for(const obj of users.rows){
+      const id= obj.id       
+      const status_red = await redis.get(id)
+      if(status_red == null){
+          users_online.push({ ...obj, status: "offline"})
+      }
+      else{
+         users_online.push({ ...obj, status: status_red})
+      }
+    }
+    res.json(users_online);  
     }
     else {res.json('ACCESS DENIED')}
-    }
-  }catch(e){
+    }}
+    catch(e){
       res.json({message: e})
     }
   }
