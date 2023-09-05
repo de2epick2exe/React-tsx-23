@@ -110,13 +110,12 @@ NEED ADD IN GLOBAL INFO TABLE PER WEEK, PER DAY LAST
       {data.role == "ADMIN" ? (
         <>
           <Flex >
-            <div>admin panel</div>
-            <div>users</div>
+            <div>admin panel users</div>
             <TableContainer width={window.innerWidth/1.5}>
             <Table>
                     <Thead>
                       <Tr>
-                        <Th isNumeric>id</Th>
+                        <Th >id</Th>
                         <Th>username</Th>
                         <Th>Email</Th>
                         <Th>Role</Th>

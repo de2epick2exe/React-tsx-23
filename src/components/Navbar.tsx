@@ -19,7 +19,7 @@ import {
   ButtonGroup,  
     Image,
 } from '@chakra-ui/react'
-import { MoonIcon, SunIcon } from '@chakra-ui/icons'
+import { MoonIcon, SunIcon,BellIcon, ChatIcon } from '@chakra-ui/icons'
 import { Link, useNavigate } from "react-router-dom";
 import { RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -80,7 +80,7 @@ const Navbar = () => {
             English game
           </Button>
           <Button colorScheme="red" as={Link} to="/messager">
-            Messeger
+           <ChatIcon/> Messeger
           </Button>
           <Button colorScheme="red" as={Link} to="/streams">
             Streams
@@ -93,6 +93,8 @@ const Navbar = () => {
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
               </Button>
               {isAuth ? (
+                <>
+                <Button><BellIcon/></Button>
               <Menu>
                 <MenuButton
                   as={Button}
@@ -126,7 +128,9 @@ const Navbar = () => {
                   <MenuItem as={Link} to="/settings">Account Settings</MenuItem>
                   <MenuItem onClick={logout_user} >Logout</MenuItem>
                 </MenuList>
-              </Menu>) 
+              </Menu>
+              
+              </>) 
               : (<Button colorScheme="red" as={Link} to="/login">
               Login
             </Button>)}
