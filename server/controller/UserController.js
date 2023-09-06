@@ -16,6 +16,18 @@ const set_new_today = async() =>{
 
   await redis.set('users_per_day', Number(total)+1)
 }
+const set_online = async(id)=>{
+  try{
+    const response = await redis.set(id, 'online')
+    if(response){
+      console.log('new online', id)
+    }
+  }catch(e){
+    console.log(e)
+  }
+  
+  
+}
 
 
  try {
@@ -83,7 +95,7 @@ class UserController {
       user_role
       
     };  
-      set_new_today()
+      set_online(id)
     res.json(data);
   }
     catch(e){
@@ -142,6 +154,7 @@ class UserController {
       log_email,
       role
     };   
+    set_online(id)
     console.log(user.rows[0].password);
     res.json(data) 
 
@@ -162,7 +175,15 @@ class UserController {
       res.json('Error decoding JWT:', error.message);
     }
   }
-
+  async ban(req, res){
+  try {
+    const {id} = req.body
+    const responce = await db.query("UPDATE user_info SET status='BANNED' WHERE users_id = $1;",[id])
+    res.json({status: '200'})
+  } catch (error) {
+    res.json(error)
+  }
+}
 
   async getAll(req, res) {     
     try{
