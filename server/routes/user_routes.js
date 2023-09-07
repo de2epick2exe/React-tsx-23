@@ -13,6 +13,8 @@ router.post('/getonline', UserController.get_status_online)
 router.post('/lo', UserController.get_last_online)
 router.post('/lr', UserController.get_last_registered)
 router.post('/ban', UserController.ban)
+router.post('/room:id', UserController.ban)
+
 
 
 
