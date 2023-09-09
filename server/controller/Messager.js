@@ -33,7 +33,8 @@ class Messager{
             
             const data = {
                 status : 200,
-                room: "created"
+                room: "created",
+                id_room: room_id
             }
             res.json(data)
 
@@ -71,6 +72,15 @@ ON
     AND latest_message.max_date = m.date
 WHERE
     c.user_id = 96; */
+    }
+    async send_message(req, res){
+        try{
+        const {to_id, from_id, message, media_url, room_id} = req.body
+        const res = await db.query("INSERT INTO messages( to_id, from_id, message, media_url, room_id) VALUES($1, $2, $3, $4,$5 RETURNING message_id", [to_id, from_id, message, media_url, room_id])
+        res.json(res)}
+        catch(error){
+            res.json(error)
+        }
     }
 
 }
