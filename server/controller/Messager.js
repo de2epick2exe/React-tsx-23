@@ -82,6 +82,6 @@ WHERE
             res.json(error)
         }
     }
-
+ 
 }
 module.exports = new Messager()

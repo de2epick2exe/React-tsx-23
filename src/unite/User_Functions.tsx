@@ -36,8 +36,7 @@ export const set_online =async (id:number| null) => {
       return error.response?.data
     }
   
-   }
-  
+   }  
 }
 
 export const get_all_users = async (username: string | null, token: string | null)=>{
@@ -61,4 +60,8 @@ export const get_last_online = async (token:string| null) => {
 export const get_last_registered =async (token:string|null) => {
   const responce = await api.post('user/lr', {token})
   return responce.data
+}
+export const ban_user =async (id:number) => {
+  const responce = await axios.post('/ban', {id})
+  return responce.data  
 }
