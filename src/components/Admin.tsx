@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
 
-import { get_all_users, get_last_online, get_last_registered, get_users_count, get_users_per_day } from "../unite/User_Functions";
+import { ban_user, get_all_users, get_last_online, get_last_registered, get_users_count, get_users_per_day } from "../unite/User_Functions";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -77,7 +77,7 @@ const Admin = () => {
   const ban = async (id: number, username: string, role: string) => {
     if(role == 'ADMIN'){ console.log('u cant ban this user')}
     else{
-    console.log(username, "banned user with id", id);
+    await ban_user(id);
   }
   };
 
