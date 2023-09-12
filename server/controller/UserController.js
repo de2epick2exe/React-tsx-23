@@ -175,6 +175,8 @@ class UserController {
       res.json('Error decoding JWT:', error.message);
     }
   }
+
+
   async ban(req, res){
   try {
     const {id} = req.body
@@ -203,19 +205,24 @@ class UserController {
     const decode = jwt.verify(token, secret)
     const verify = decode.role == "ADMIN"
     if (verify){
-    const users = await db.query("SELECT id, email, username, role FROM public.users");        
+    const users = await db.query("SELECT id, email, username, role, status FROM public.users FULL OUTER JOIN public.user_info ON users.id = user_info.users_id;");        
     const users_online = []
     for(const obj of users.rows){
       const id= obj.id       
       const status_red = await redis.get(id)
+      if(obj.status == 'BANNED'){   
+        users_online.push({...obj})
+      }
+      else{
       if(status_red == null){
           users_online.push({ ...obj, status: "offline"})
       }
       else{
          users_online.push({ ...obj, status: status_red})
-      }
+      }}
     }
-    res.json(users_online);  
+    ///res.json(users_online);  
+    res.json(users_online)
     }
     else {res.json('ACCESS DENIED')}
     }}

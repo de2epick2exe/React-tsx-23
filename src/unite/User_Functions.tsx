@@ -62,6 +62,6 @@ export const get_last_registered =async (token:string|null) => {
   return responce.data
 }
 export const ban_user =async (id:number) => {
-  const responce = await axios.post('/ban', {id})
+  const responce = await axios.post('user/ban', {id})
   return responce.data  
 }

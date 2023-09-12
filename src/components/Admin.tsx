@@ -103,6 +103,9 @@ NEED ADD IN GLOBAL INFO TABLE PER WEEK, PER DAY LAST
 [last online per yesterday]
 [last registered]/7
  
+users sort change or add more sorts
+
+
 */
 /////////////////////////////////
   return (
