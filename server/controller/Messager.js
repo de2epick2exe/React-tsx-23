@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const WebSocket = require('ws');
 require("dotenv");
 const Redis = require ('ioredis');
-
+ 
 class Messager{
 
     async get_room(req, res){

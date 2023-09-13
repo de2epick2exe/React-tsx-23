@@ -187,6 +187,20 @@ class UserController {
   }
 }
 
+async unban(req, res){
+  try {
+    const {id} = req.body
+    const responce = await db.query("UPDATE user_info SET status='ACTIVE' WHERE users_id = $1;",[id])
+    res.json({status: '200'})
+  } catch (error) {
+    res.json(error)
+  }
+}
+
+
+
+
+
   async getAll(req, res) {     
     try{
     const {token, username} = req.body
