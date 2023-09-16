@@ -65,3 +65,7 @@ export const ban_user =async (id:number) => {
   const responce = await axios.post('user/ban', {id})
   return responce.data  
 }
+export const unBan_user =async (id:number) => {
+  const responce = await axios.post('user/unban', {id})
+  return responce.data  
+}
