@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
 
-import { ban_user, get_all_users, get_last_online, get_last_registered, get_users_count, get_users_per_day } from "../unite/User_Functions";
+import { ban_user, get_all_users, get_last_online, get_last_registered, get_users_count, get_users_per_day, unBan_user } from "../unite/User_Functions";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -79,6 +79,9 @@ const Admin = () => {
     else{
     await ban_user(id);
   }
+  };
+  const un_ban = async (id: number, username: string, role: string) => {   
+    await unBan_user(id);  
   };
 
 
