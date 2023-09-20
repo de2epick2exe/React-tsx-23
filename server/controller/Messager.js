@@ -73,6 +73,15 @@ ON
 WHERE
     c.user_id = 96; */
     }
+    async rooms_messages(req, res){
+        try{
+            const {id} = req.body
+            const res = await db.query("SELECT * FROM messages WHERE from_id = $1 OR to_id =$1 RETURNING message_id", [id])
+            res.json(res)}
+            catch(error){
+                res.json(error)
+            }
+    }
     async send_message(req, res){
         try{
         const {to_id, from_id, message, media_url, room_id} = req.body
