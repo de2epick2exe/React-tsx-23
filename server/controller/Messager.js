@@ -5,6 +5,16 @@ const WebSocket = require('ws');
 require("dotenv");
 const Redis = require ('ioredis');
  
+
+
+
+/*
+
+db`s tabs:
+|users| <= | conversations| <= |rooms| <= |messages|
+|id   |    |uid    room_id|    | id  |    | room_id|  
+
+*/
 class Messager{
 
     async get_room(req, res){
