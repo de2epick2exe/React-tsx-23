@@ -27,7 +27,16 @@ class Messager{
             console.log(err)
         }
     }
-    
+    async get_rooms_list(req, res){
+        try{
+        const {roomid, id} = req.params
+        const rooms = db.query('SELECT * FROM conversations where uid = $1', [id])
+        res.json(rooms)
+    }
+        catch(err){
+            console.log(err)
+        }
+    }
 
     async create_private_room(req, res){
         try {
