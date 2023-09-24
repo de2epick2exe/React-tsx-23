@@ -16,6 +16,10 @@ db`s tabs:
 
 */
 class Messager{
+    
+
+
+
 
     async get_room(req, res){
         try{
@@ -27,6 +31,7 @@ class Messager{
             console.log(err)
         }
     }
+
     async get_rooms_list(req, res){
         try{
         const {roomid, id} = req.params
@@ -61,6 +66,7 @@ class Messager{
             console.log(error)
         }
     }
+
     async users_messages_tab(req, res){
         /*SELECT
     c.id AS conversation_id,
@@ -92,6 +98,7 @@ ON
 WHERE
     c.user_id = 96; */
     }
+
     async rooms_messages(req, res){
         try{
             const {id} = req.body
@@ -101,6 +108,7 @@ WHERE
                 res.json(error)
             }
     }
+
     async send_message(req, res){
         try{
         const {to_id, from_id, message, media_url, room_id} = req.body
@@ -110,6 +118,7 @@ WHERE
             res.json(error)
         }
     }
+
  
 }
 module.exports = new Messager()
