@@ -23,6 +23,13 @@ class Messager{
         /// may need to create in users_info tab |notify| as arr text and delete 1`s after 3days left cd
         res.json({responce: 200})
     }
+    async target_user_notify(req, res){
+        const {message, id} = req.body
+        const date = new Date()
+        const notify_all = db.query('send to db* return')
+        /// may need to create in users_info tab |notify| as arr text and delete 1`s after 3days left cd
+        res.json({responce: 200})
+    }
 
     async get_room(req, res){
         try{
