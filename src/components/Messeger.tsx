@@ -81,6 +81,12 @@ const Messenger = () => {
         socket.current.close();
       }
     };
+
+    /* add rooms call on init and cached it in store    */
+
+
+
+
   }, []);
 
   useEffect(() => {
