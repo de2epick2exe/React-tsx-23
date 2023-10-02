@@ -3,6 +3,49 @@ import React from 'react';
 const Room = (props: any) => {
 
 
+/*
+////// ---------------------------- connecting to socket room
+  useEffect(() => {
+    const socket = new WebSocket(`ws://localhost:3000`); // Replace with your WebSocket server URL
+    setWs(socket);
+
+    socket.onopen = () => {
+      console.log("WebSocket connection established");
+      console.log("WebSocket connection established");
+
+      // socket.send(JSON.stringify({action : "joinRoom", room: props.data?._id}))
+    };
+    socket.onmessage = (event) => {
+      // Handle incoming messages
+      const message = event;
+      console.log(message.data);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        JSON.parse(message.data),
+      ]);
+      console.log(messages);
+    };
+
+    socket.onclose = () => {
+      console.log("WebSocket connection closed");
+    };
+
+    socket.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    // Clean up the WebSocket connection when the component unmounts
+    return () => {
+      socket.close();
+    };
+  }, [props]);
+
+
+
+*/
+
+
+
     if(!props){
         return(
             <div

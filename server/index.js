@@ -24,9 +24,16 @@ server.use(cors({ origin: "http://localhost:3000" }));
 server.use(express.json());
 server.use("/requests", routes);
 
+
+
+
+
+
+
 const httpServer = http.createServer(server);
 const wss = new WebSocket.Server({ noServer: true });
  
+const setted_rooms = [];
 wss.on("connection", (ws) => {
   console.log('user connected')
   ws.on("message", (message) => {

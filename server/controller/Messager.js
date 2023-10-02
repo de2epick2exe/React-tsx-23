@@ -19,15 +19,15 @@ class Messager{
     async global_notify(req, res){
         const {message} = req.body
         const date = new Date()
-        const notify_all = db.query('send to db* return')
-        /// may need to create in users_info tab |notify| as arr text and delete 1`s after 3days left cd
+        const notify_all = db.query('send to notify tab  return')
+        /// notify tab  |user_id|notification|createdAT|status(boolean)| 
         res.json({responce: 200})
     }
     async target_user_notify(req, res){
         const {message, id} = req.body
         const date = new Date()
         const notify_all = db.query('send to db* return')
-        /// may need to create in users_info tab |notify| as arr text and delete 1`s after 3days left cd
+        /// notify tab  |user_id|notification|createdAT|status(boolean)| 
         res.json({responce: 200})
     }
 
