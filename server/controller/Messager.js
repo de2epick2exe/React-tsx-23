@@ -19,7 +19,9 @@ class Messager{
     async global_notify(req, res){
         const {message} = req.body
         const date = new Date()
-        const notify_all = db.query('send to notify tab  return')
+        const users_id = db.query('SELECT id from public.users')
+        /// can i notify all arr in one query?
+        const notify_all = db.query('INSERT INTO public.notifications (user_id, notification, createdAt, status) values $1, $2,$3,$4',[id, message,date, false])
         /// notify tab  |user_id|notification|createdAT|status(boolean)| 
         res.json({responce: 200})
     }
