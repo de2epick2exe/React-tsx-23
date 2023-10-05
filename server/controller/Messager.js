@@ -32,6 +32,12 @@ class Messager{
         /// notify tab  |user_id|notification|createdAT|status(boolean)| 
         res.json({responce: 200})
     }
+    async get_notifies(req,req){
+        const {id} = req.body
+         const responce = db.query('')
+        res.json(responce[0].rows)
+
+    }
 
     async get_room(req, res){
         try{
