@@ -34,7 +34,7 @@ class Messager{
     }
     async get_notifies(req,req){
         const {id} = req.body
-         const responce = db.query('')
+         const responce = db.query('SELECT (notification) FROM notifications WHERE user_id = $1', [id])
         res.json(responce[0].rows)
 
     }
