@@ -205,6 +205,9 @@ users sort change or add more sorts
               </StatHelpText>
             </Stat>
           </StatGroup>
+          {/* add form field */}
+          <Button>notify all users</Button>
+          <Button>notify user</Button>
         </>
       ) : (
         <div></div>
