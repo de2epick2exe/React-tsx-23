@@ -5,6 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const http = require("http");
 const WebSocket = require("ws");
+const Messager = require('./controller/Messager')
 const Redis = require ('ioredis');
  
 const port = process.env.PORT;
@@ -39,6 +40,12 @@ wss.on("connection", (ws) => {
   ws.on("message", (message) => {
     try {
       const parsedMessage = JSON.parse(message);
+      const { get_rooms_for } = JSON.parse(message);
+      const rooms = Messager.get_rooms_list(get_rooms_for)
+      console.log(rooms)
+
+
+
       console.log("Received message:", parsedMessage);
       ws.send("Server received your message.");
       switch (parsedMessage.event) {

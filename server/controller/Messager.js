@@ -32,7 +32,7 @@ class Messager{
         /// notify tab  |user_id|notification|createdAT|status(boolean)| 
         res.json({responce: 200})
     }
-    async get_notifies(req,req){
+    async get_notifies(req,res){
         const {id} = req.body
          const responce = db.query('SELECT (notification) FROM notifications WHERE user_id = $1', [id])
         res.json(responce[0].rows)
@@ -50,10 +50,10 @@ class Messager{
         }
     }
 
-    async get_rooms_list(req, res){
+    async get_rooms_list(id, req, res){
         try{
-        const {roomid, id} = req.params
-        const rooms = db.query('SELECT * FROM conversations where uid = $1', [id])
+        const {u_id} = req.params || id
+        const rooms = db.query('SELECT * FROM conversations where uid = $1', [u_id])
         res.json(rooms)
     }
         catch(err){

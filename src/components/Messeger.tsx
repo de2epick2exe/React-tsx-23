@@ -45,9 +45,6 @@ const Messenger = () => {
 
     /* add rooms call on init and cached it in store    */
 
-
-
-
   }, []);
 
   useEffect(() => {
@@ -68,6 +65,24 @@ const Messenger = () => {
     }
     setSocket_msg(""); // Clear the input after sending the message
   };
+/// call users init data
+  const get_users_rooms_data = async () => {
+    const message = {
+      rooms_for: data.id,
+      message: socket_msg,
+      event: "message",
+    };
+    if (socket.current) {
+      socket.current.send(JSON.stringify(message));
+    }
+    setSocket_msg(""); // Clear the input after sending the message
+  };
+
+
+
+
+
+
 
   return (
     <>

@@ -56,9 +56,7 @@ const Room = (props: any) => {
             height: "80%", marginLeft: '20vw'     }}
             >
             <p style={{backgroundColor:"red", borderRadius: '10px', padding:"3px", color: 'black'}}> choose someone who you want to sent message </p>
-            
-             
-              
+               
             </div>
           );
     }
