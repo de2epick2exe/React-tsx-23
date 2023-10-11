@@ -14,6 +14,15 @@ const Messenger = () => {
   const socket = useRef<WebSocket | undefined>();
   const [messages, setMessages] = useState<any[]>([]);
   const [socket_msg, setSocket_msg] = useState("");
+  const [rooms, setRooms] = useState<any[]>([])
+
+
+
+
+
+
+
+  
   const data = useSelector((state: RootState) => state.userReducer);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -68,14 +77,12 @@ const Messenger = () => {
 /// call users init data
   const get_users_rooms_data = async () => {
     const message = {
-      rooms_for: data.id,
-      message: socket_msg,
+      rooms_for: data.id,      
       event: "message",
     };
     if (socket.current) {
       socket.current.send(JSON.stringify(message));
-    }
-    setSocket_msg(""); // Clear the input after sending the message
+    }    
   };
 
 
