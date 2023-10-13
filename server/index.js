@@ -52,6 +52,9 @@ wss.on("connection", (ws) => {
         case 'message':
           brodcastMessage(parsedMessage);
           break;
+        case "geting":
+          Messager.get_rooms_list(parsedMessage.id) /// change args in main messager
+          break;
         case "connection":
           brodcastMessage(parsedMessage);
           break;
