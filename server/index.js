@@ -58,7 +58,7 @@ wss.on("connection", (ws) => {
         case "send":
           Messager.send_message(parsedMessage) /// change args in main messager
           break;
-        case "send":
+        case "rooms_messages":
           Messager.rooms_messages(parsedMessage) /// change args in main messager
          break;
         case "connection":
