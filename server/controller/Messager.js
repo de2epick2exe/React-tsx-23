@@ -21,7 +21,7 @@ class Messager{
         const date = new Date()
         const users_id = db.query('SELECT id from public.users')/// add limit 1000
         /// can i notify all arr in one query?
-        const notify_all = db.query('INSERT INTO public.notifications (user_id, notification, createdAt, status) values $1, $2,$3,$4',[id, message,date, false])
+        const notify_all = db.query(`INSERT INTO notify (users_id, notification, createdAT) SELECT id, '${message}', '${date}' FROM users RETURNING *`)
         /// notify tab  |user_id|notification|createdAT|status(boolean)| 
         res.json({responce: 200})
     }
