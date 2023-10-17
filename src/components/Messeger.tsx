@@ -78,7 +78,7 @@ const Messenger = () => {
   const get_users_rooms_data = async () => {
     const message = {
       rooms_for: data.id,      
-      event: "getter",
+      event: "geting_rooms",
     };
     if (socket.current) {
       socket.current.send(JSON.stringify(message));

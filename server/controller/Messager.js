@@ -28,7 +28,7 @@ class Messager{
     async target_user_notify(req, res){
         const {message, id} = req.body
         const date = new Date()
-        const notify_all = db.query('INSERT INTO public.notifications (user_id, notification, createdAt, status) values $1, $2,$3,$4',[id, message,date, false])
+        const notify_all = db.query('INSERT INTO notify (user_id, notification, createdAt, status) values $1, $2,$3,$4',[id, message,date, false])
         /// notify tab  |user_id|notification|createdAT|status(boolean)| 
         res.json({responce: 200})
     }
