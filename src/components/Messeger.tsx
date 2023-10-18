@@ -86,7 +86,9 @@ const Messenger = () => {
   };
 
 
-
+  useEffect(() => {
+    get_users_rooms_data()
+  }, []);
 
 
 
