@@ -44,8 +44,6 @@ wss.on("connection", (ws) => {
       const rooms = Messager.get_rooms_list(get_rooms_for)
       console.log(rooms)
 
-
-
       console.log("Received message:", parsedMessage);
       ws.send("Server received your message.");
       switch (parsedMessage.event) {
@@ -58,6 +56,7 @@ wss.on("connection", (ws) => {
           break;
         case "rooms_messages":
           Messager.rooms_messages(parsedMessage) /// change args in main messager
+
          break;
         case "connection":
           brodcastMessage(parsedMessage);

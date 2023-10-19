@@ -54,18 +54,19 @@ export const get_users_per_day =async (token : string | null) => {
   return response.data  
 }
 export const get_last_online = async (token:string| null) => {
-  const responce = await api.post('user/lo', {token})
-  return responce.data
+  const response = await api.post('user/lo', {token})
+  return response.data
 }
 export const get_last_registered =async (token:string|null) => {
-  const responce = await api.post('user/lr', {token})
-  return responce.data
+  const response = await api.post('user/lr', {token})
+  return response.data
 }
 export const ban_user =async (id:number) => {
-  const responce = await api.post('user/ban', {id})
-  return responce.data  
+  const response = await api.post('user/ban', {id})
+  return response.data  
 }
 export const unBan_user =async (id:number) => {
-  const responce = await api.post('user/unban', {id})
-  return responce.data  
+  const response = await api.post('user/unban', {id})
+  return response.data  
 }
+
