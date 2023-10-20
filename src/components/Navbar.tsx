@@ -56,6 +56,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { colorMode, toggleColorMode } = useColorMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const {isOpen:isNotifyOpen,onOpen:onNotifyOpen, onClose:isNotifyClose}= useDisclosure()
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   const isAuth = useSelector((state: RootState) => state.userReducer.is_auth);
   const isAdmin = useSelector((state: RootState) => state.userReducer.role) == 'ADMIN';
@@ -93,8 +94,26 @@ const Navbar = () => {
                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
               </Button>
               {isAuth ? (
-                <>
-                <Button><BellIcon/></Button>
+                <>                
+                <Menu>
+                <MenuButton
+                  as={Button}                 
+                  cursor={'pointer'}
+                  minW={0}>                  
+                  <BellIcon/>
+                </MenuButton>
+                <MenuList alignItems={'center'}>                  
+                   <p>notify list</p>               
+                  <br />
+                  <MenuDivider />
+                  
+                </MenuList>
+              </Menu>
+
+
+
+
+
               <Menu>
                 <MenuButton
                   as={Button}

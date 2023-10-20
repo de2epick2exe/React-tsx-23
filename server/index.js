@@ -73,8 +73,8 @@ wss.on("connection", (ws) => {
   ws.on("close", () => {
     console.log("WebSocket connection closed.");
   });
-});
-
+}); 
+ 
 const brodcastMessage = (message)=>{
   wss.clients.forEach(client=>{
     client.send(JSON.stringify(message))
