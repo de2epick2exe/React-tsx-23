@@ -61,10 +61,19 @@ const Navbar = () => {
   const isAuth = useSelector((state: RootState) => state.userReducer.is_auth);
   const isAdmin = useSelector((state: RootState) => state.userReducer.role) == 'ADMIN';
   const data = useSelector((state: RootState) => state.userReducer);
+  const [arr_notify, setArr_notify]= useState([])
   const logout_user = async () => {
     dispatch(logout());
     window.location.reload();
   };
+  
+  const call_notify =async()=>{
+
+  }
+
+
+
+
   return (
     <>
       <Box className="animate__animated animate__backInDown animate__faster" bg={useColorModeValue('red.800', 'gray.900')} px={4}>
