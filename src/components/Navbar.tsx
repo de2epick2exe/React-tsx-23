@@ -25,6 +25,7 @@ import { RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { logout } from "../store/reduses/UserSlice";
+import { get_notify } from "../unite/Messager_functions";
 
 interface Props {
   children: React.ReactNode
@@ -68,8 +69,11 @@ const Navbar = () => {
   };
   
   const call_notify =async()=>{
-
+    const res = get_notify(data.id)
   }
+  React.useEffect(() => {
+    call_notify()   
+ }, []);
 
 
 
