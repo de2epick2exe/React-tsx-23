@@ -19,23 +19,23 @@ class Messager{
     async global_notify(req, res){
         const {message} = req.body
         const date = new Date()
-        const users_id = db.query('SELECT id from public.users')/// add limit 1000
+        const users_id = await db.query('SELECT id from public.users')/// add limit 1000
         /// can i notify all arr in one query?
-        const notify_all = db.query(`INSERT INTO notify (users_id, notification, createdAT) SELECT id, '${message}', '${date}' FROM users RETURNING *`)
+        const notify_all = await db.query(`INSERT INTO notify (users_id, notification, createdAT) SELECT id, '${message}', '${date}' FROM users RETURNING *`)
         /// notify tab  |user_id|notification|createdAT|status(boolean)| 
         res.json({responce: 200})
     }
     async target_user_notify(req, res){
         const {message, id} = req.body
         const date = new Date()
-        const notify_all = db.query('INSERT INTO notify (user_id, notification, createdAt, status) values $1, $2,$3,$4',[id, message,date, false])
+        const notify_all = await db.query('INSERT INTO notify (user_id, notification, createdAt, status) values $1, $2,$3,$4',[id, message,date, false])
         /// notify tab  |user_id|notification|createdAT|status(boolean)| 
         res.json({responce: 200})
     }
     async get_notifies(req,res){
         const {id} = req.body
-         const responce = db.query('SELECT (notification) FROM notifications WHERE user_id = $1', [id])
-        res.json(responce[0].rows)
+         const responce = await db.query('SELECT (notification) FROM public.notify WHERE users_id = $1', [id])
+        res.json(responce.rows[0])
     }
 
     async get_room(req, res){
@@ -52,7 +52,7 @@ class Messager{
     async get_rooms_list(id, req, res){
         try{
         const {u_id} = req.params || id
-        const rooms = db.query('SELECT * FROM conversations where uid = $1', [u_id])
+        const rooms = await db.query('SELECT * FROM conversations where uid = $1', [u_id])
         res.json(rooms)
     }
         catch(err){
