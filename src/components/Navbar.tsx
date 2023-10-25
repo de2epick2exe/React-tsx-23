@@ -30,6 +30,12 @@ import { get_notify } from "../unite/Messager_functions";
 interface Props {
   children: React.ReactNode
 }
+interface Notification{
+  id:number;
+  notification:string;
+  createdAt:string;
+  status:boolean;
+}
  
 
 const NavLink = (props: Props) => {
@@ -62,7 +68,7 @@ const Navbar = () => {
   const isAuth = useSelector((state: RootState) => state.userReducer.is_auth);
   const isAdmin = useSelector((state: RootState) => state.userReducer.role) == 'ADMIN';
   const data = useSelector((state: RootState) => state.userReducer);
-  const [arr_notify, setArr_notify]= useState([])
+  const [arr_notify, setArr_notify]= useState<[]>([])
   const logout_user = async () => {
     dispatch(logout());
     window.location.reload();
@@ -70,8 +76,10 @@ const Navbar = () => {
   
   const call_notify =async()=>{
     const res = get_notify(data.id)
+    setArr_notify(res)
   }
   React.useEffect(() => {
+    
     call_notify()   
  }, []);
 
