@@ -33,7 +33,7 @@ interface Props {
 interface Notification{
   id:number;
   notification:string;
-  createdAt:string;
+  created_at:any;
   status:boolean;
 }
  
@@ -68,14 +68,14 @@ const Navbar = () => {
   const isAuth = useSelector((state: RootState) => state.userReducer.is_auth);
   const isAdmin = useSelector((state: RootState) => state.userReducer.role) == 'ADMIN';
   const data = useSelector((state: RootState) => state.userReducer);
-  const [arr_notify, setArr_notify]= useState<[]>([])
+  const [arr_notify, setArr_notify]= useState<Notification[]>([])
   const logout_user = async () => {
     dispatch(logout());
     window.location.reload();
   };
   
   const call_notify =async()=>{
-    const res = get_notify(data.id)
+    const res = await get_notify(data.id)
     setArr_notify(res)
   }
   React.useEffect(() => {
@@ -83,7 +83,7 @@ const Navbar = () => {
     call_notify()   
  }, []);
 
-
+console.log(arr_notify)
 
 
   return (
@@ -123,10 +123,14 @@ const Navbar = () => {
                   minW={0}>                  
                   <BellIcon/>
                 </MenuButton>
-                <MenuList alignItems={'center'}>                  
-                   <p>notify list</p>               
-                  <br />
-                  <MenuDivider />
+                <MenuList alignItems={'center'}>
+                  {arr_notify.map(element => (
+                    <span key={element.id}>
+                    <MenuItem >{element.notification}<br/>{element.created_at}</MenuItem>
+                    <MenuDivider />
+                    </span>
+                  ))}                  
+                   
                   
                 </MenuList>
               </Menu>
