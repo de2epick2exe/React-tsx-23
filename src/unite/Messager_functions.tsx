@@ -9,6 +9,26 @@ export const get_notify=async (id:number| null)=>{
  return responce.data
   } catch (error) {
     console.warn(error)
-  }
+  }}
  
-}
+  export const notify_user=async (id:number| null)=>{
+    try {
+      const responce = await api.post('/notify', {id})
+   return responce.data
+    } catch (error) {
+      console.warn(error)
+    }}
+
+    export const notify_all=async (id:number| null)=>{
+      try {
+        const responce = await api.post('/notify', {id})
+     return responce.data
+      } catch (error) {
+        console.warn(error)
+      }}
+  
+
+
+////notify
+
+

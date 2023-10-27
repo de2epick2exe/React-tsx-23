@@ -99,6 +99,8 @@ const Admin = () => {
     await unBan_user(id);
   };
 
+  
+
   useEffect(() => {
     if (data.role !== "ADMIN" || data_role) {
       navigate("/");
@@ -206,6 +208,7 @@ users sort change or add more sorts
             </Stat>
           </StatGroup>
           {/* add form field */}
+          <Input/>
           <Button>notify all users</Button>
           <Button>notify user</Button>
         </>
