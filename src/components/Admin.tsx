@@ -36,6 +36,7 @@ import {
 import { LuBan } from "react-icons/lu";
 import { IoIosSearch } from "react-icons/io";
 import { PiCaretDoubleUpBold } from "react-icons/pi";
+import { notify_all } from "../unite/Messager_functions";
 
 interface User {
   id: number;
@@ -52,6 +53,7 @@ const Admin = () => {
   const [total_users, setTotal_users] = useState<{ USERS_TOTAL: number[] }[]>(
     []
   );
+  const [notify_value, setNotifyValue]= useState('')
   const [users_per_day, setUsers_per_day] = useState<
     { USERS_PER_DAY: any[] }[]
   >([]);
@@ -98,8 +100,6 @@ const Admin = () => {
   const un_ban = async (id: number, username: string, role: string) => {
     await unBan_user(id);
   };
-
-  
 
   useEffect(() => {
     if (data.role !== "ADMIN" || data_role) {
@@ -161,9 +161,9 @@ users sort change or add more sorts
                             onClick={() => {
                               un_ban(user.id, user.username, user.role);
                             }}
-                            background={'green'}
+                            background={"green"}
                           >
-                            <Icon as={PiCaretDoubleUpBold}  />
+                            <Icon as={PiCaretDoubleUpBold} />
                           </Button>
                         ) : (
                           <Button
@@ -208,8 +208,8 @@ users sort change or add more sorts
             </Stat>
           </StatGroup>
           {/* add form field */}
-          <Input/>
-          <Button>notify all users</Button>
+          <Input value={notify_value} onChange={(e)=> setNotifyValue(e.target.value)} />
+          <Button onClick={Promise.all(notify_all(notify_value))}>notify all users</Button>
           <Button>notify user</Button>
         </>
       ) : (
