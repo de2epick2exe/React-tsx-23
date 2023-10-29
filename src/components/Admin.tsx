@@ -36,7 +36,7 @@ import {
 import { LuBan } from "react-icons/lu";
 import { IoIosSearch } from "react-icons/io";
 import { PiCaretDoubleUpBold } from "react-icons/pi";
-import { notify_all } from "../unite/Messager_functions";
+import { notify_all, notify_user } from "../unite/Messager_functions";
 
 interface User {
   id: number;
@@ -100,6 +100,12 @@ const Admin = () => {
   const un_ban = async (id: number, username: string, role: string) => {
     await unBan_user(id);
   };
+  const global_notify =async () => {
+    await notify_all(notify_value)
+  }
+  const target_notify=async () => {
+    await notify_user(data.id, notify_value)
+  }
 
   useEffect(() => {
     if (data.role !== "ADMIN" || data_role) {

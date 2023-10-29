@@ -11,9 +11,9 @@ export const get_notify=async (id:number| null)=>{
     console.warn(error)
   }}
  
-  export const notify_user=async (id:number| null)=>{
+  export const notify_user=async (id:number| null, message: string|null)=>{
     try {
-      const responce = await api.post('/notify', {id})
+      const responce = await api.post('/notify', {id, message})
    return responce.data
     } catch (error) {
       console.warn(error)
