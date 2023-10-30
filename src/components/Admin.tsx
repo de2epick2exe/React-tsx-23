@@ -215,8 +215,8 @@ users sort change or add more sorts
           </StatGroup>
           {/* add form field */}
           <Input value={notify_value} onChange={(e)=> setNotifyValue(e.target.value)} />
-          <Button onClick={Promise.all(notify_all(notify_value))}>notify all users</Button>
-          <Button>notify user</Button>
+          <Button onClick={global_notify}>notify all users</Button>
+          <Button onClick={target_notify}>notify user</Button>
         </>
       ) : (
         <div></div>
