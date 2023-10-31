@@ -50,10 +50,11 @@ const Messenger = () => {
       if (socket.current) {
         socket.current.close();
       }
+      
     };
 
     /* add rooms call on init and cached it in store    */
-
+    
   }, []);
 
   useEffect(() => {
@@ -75,21 +76,25 @@ const Messenger = () => {
     setSocket_msg(""); // Clear the input after sending the message
   };
 /// call users init data
-  const get_users_rooms_data = async () => {
+const get_users_rooms_data = async () => {
+  if (socket.current && socket.current.readyState === WebSocket.OPEN) {
     const message = {
       rooms_for: data.id,      
       event: "geting_rooms",
     };
-    if (socket.current) {
-      socket.current.send(JSON.stringify(message));
-    }    
-  };
-
+    socket.current.send(JSON.stringify(message));
+  } else {
+    // Wait for the connection to open and then send the message
+    setTimeout(() => {
+      get_users_rooms_data();
+    }, 1000); // You can adjust the timeout value if needed
+  }
+};
+console.log(socket.current)
 
   useEffect(() => {
-     get_users_rooms_data()
-    
-  }, []);
+     get_users_rooms_data()    
+  }, [socket.current]);
 
 
 

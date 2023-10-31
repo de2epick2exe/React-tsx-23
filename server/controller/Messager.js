@@ -12,7 +12,7 @@ const Redis = require ('ioredis');
 
 db`s tabs:
 |users| <= | conversations| <= |rooms| <= |messages|
-|id   |    |uid    room_id|    | id  |    | room_id|  
+|id   |    |id    room_id|    | id  |    | room_id|  
 
 */
 class Messager{
@@ -50,11 +50,10 @@ class Messager{
         }
     }
 
-    async get_rooms_list(id, req, res){
-        try{
-        const {u_id} = req.params || id
-        const rooms = await db.query('SELECT * FROM conversations where uid = $1', [u_id])
-        res.json(rooms)
+    async get_rooms_list(id){
+        try{        
+        const rooms = await db.query('SELECT * FROM conversations where user_id = $1', [id])
+        console.log(rooms.rows)
     }
         catch(err){
             console.log(err)
@@ -78,7 +77,7 @@ class Messager{
                 room: "created",
                 id_room: room_id
             }
-            res.json(data)
+            return JSON.stringify(data)
 
         } catch (error) {
             console.log(error)

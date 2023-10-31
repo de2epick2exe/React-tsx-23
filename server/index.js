@@ -37,26 +37,28 @@ const wss = new WebSocket.Server({ noServer: true });
 const setted_rooms = [];
 wss.on("connection", (ws) => {
   console.log('user connected')
-  ws.on("message", (message) => {
+  ws.on("message", async (message) => {
     try {
       const parsedMessage = JSON.parse(message);
-      const { get_rooms_for } = JSON.parse(message);
-      const rooms = Messager.get_rooms_list(get_rooms_for)
-      console.log(rooms)
+      console.log(parsedMessage)
+      //const { rooms_for } = JSON.parse(message);
+      //const rooms = await Messager.get_rooms_list(rooms_for)
+      //console.log(rooms)
 
       console.log("Received message:", parsedMessage);
       ws.send("Server received your message.");
+      ///DO NOT LOST TO CHANGE MESSAGER FUNCTIONS/ ROUTES
       switch (parsedMessage.event) {
         case 'message':
           brodcastMessage(parsedMessage);
           Messager.send_message(parsedMessage)
           break; 
         case "geting_rooms":
-          Messager.get_rooms_list(parsedMessage.rooms_for) /// change args in main messager
+          await Messager.get_rooms_list(parsedMessage.rooms_for) /// change args in main messager
+          console.log('getted rooms', parsedMessage.rooms_for)
           break;
         case "rooms_messages":
           Messager.rooms_messages(parsedMessage) /// change args in main messager
-
          break;
         case "connection":
           brodcastMessage(parsedMessage);
