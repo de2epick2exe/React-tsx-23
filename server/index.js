@@ -33,10 +33,14 @@ server.use("/requests", routes);
 
 const httpServer = http.createServer(server);
 const wss = new WebSocket.Server({ noServer: true });
- 
+
+const clients = {};
 const setted_rooms = [];
 wss.on("connection", (ws) => {
   console.log('user connected')
+  const clientId = Date.now(); // Implement your own function to generate unique IDs
+  clients[clientId] = ws;
+  console.log(clients[clientId])
   ws.on("message", async (message) => {
     try {
       const parsedMessage = JSON.parse(message);
@@ -56,6 +60,7 @@ wss.on("connection", (ws) => {
         case "geting_rooms":
           await Messager.get_rooms_list(parsedMessage.rooms_for) /// change args in main messager
           console.log('getted rooms', parsedMessage.rooms_for)
+          clients[clientId].send(JSON.stringify({ "data" : "Server received your message."}));
           break;
         case "rooms_messages":
           Messager.rooms_messages(parsedMessage) /// change args in main messager

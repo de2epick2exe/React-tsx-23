@@ -34,6 +34,7 @@ const Messenger = () => {
     socket.current.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
+        console.log(message)
         setMessages((prev) => [message, ...prev]);
       } catch (error) {
         console.error("Error parsing JSON:", error);
