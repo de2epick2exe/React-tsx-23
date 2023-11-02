@@ -40,6 +40,12 @@ wss.on("connection", (ws) => {
   console.log('user connected')
   const clientId = Date.now(); // Implement your own function to generate unique IDs
   clients[clientId] = ws;
+  /*
+  clients[clientId].send(JSON.stringify({"connection_true": "get_id"}))
+  
+  */
+  // ws send to  client get id and repalce this client id 
+  // delete clients[clientId];
   console.log(clients[clientId])
   ws.on("message", async (message) => {
     try {
@@ -58,13 +64,14 @@ wss.on("connection", (ws) => {
           Messager.send_message(parsedMessage)
           break; 
         case "geting_rooms":
-          await Messager.get_rooms_list(parsedMessage.rooms_for) /// change args in main messager
+          const rooms = await Messager.get_rooms_list(parsedMessage.rooms_for) /// change args in main messager
           console.log('getted rooms', parsedMessage.rooms_for)
-          clients[clientId].send(JSON.stringify({ "data" : "Server received your message."}));
+          clients[clientId].send(JSON.stringify(rooms));
           break;
         case "rooms_messages":
-          Messager.rooms_messages(parsedMessage) /// change args in main messager
-         break;
+          const msgs = await Messager.rooms_messages(parsedMessage.room) /// change args in main messager
+          clients[clientId].send(JSON.stringify(msgs));
+          break;
         case "connection":
           brodcastMessage(parsedMessage);
           break;
