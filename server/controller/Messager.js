@@ -52,8 +52,11 @@ class Messager{
 
     async get_rooms_list(id){
         try{        
-        const rooms = await db.query('SELECT * FROM conversations where user_id = $1', [id])
-        console.log(rooms.rows)
+       // const rooms = await db.query('SELECT * FROM conversations where user_id = $1', [id])
+       const rooms = await db.query('SELECT c.id AS conversation_id, c.user_id, c.room_id AS room_name FROM public.conversations c LEFT JOIN public.rooms r ON c.room_id = r.id WHERE c.user_id = $1;', [id])
+        
+       console.log(rooms.rows)
+        return rooms.rows
     }
         catch(err){
             console.log(err)
