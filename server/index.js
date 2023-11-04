@@ -61,7 +61,11 @@ wss.on("connection", (ws) => {
       switch (parsedMessage.event) {
         case 'message':
           brodcastMessage(parsedMessage);
-          Messager.send_message(parsedMessage)
+          //await Messager.send_message(parsedMessage)
+          //add checker
+          if (parsedMessage.room){
+            broadcast_room(message, parsedMessage.room)
+          } 
           break; 
         case "geting_rooms":
           const rooms = await Messager.get_rooms_list(parsedMessage.rooms_for) /// change args in main messager
@@ -95,6 +99,21 @@ const brodcastMessage = (message)=>{
     client.send(JSON.stringify(message))
   })
 }
+
+function broadcast_room(message, roomID) {
+  for (const room_d of setted_rooms) {
+    if (room_d.id === roomID) {
+      room_d.clients.forEach((client) => {
+        client.send(message);
+        console.log(message)
+      });
+      break; // Stop broadcasting to other rooms
+    }
+  }
+}
+
+
+
  /*
  const setted_rooms = [];
 wss.on("connection", (ws) => {

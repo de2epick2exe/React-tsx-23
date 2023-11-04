@@ -129,9 +129,10 @@ WHERE
             }
     }
 
-    async send_message(req, res){
+    async send_message(msg){
         try{
-        const {to_id, from_id, message, media_url, room_id} = req.body
+            
+        const {to_id, from_id, message, media_url, room_id} = msg
         const res = await db.query("INSERT INTO messages( to_id, from_id, message, media_url, room_id) VALUES($1, $2, $3, $4,$5 RETURNING message_id", [to_id, from_id, message, media_url, room_id])
         res.json(res)}
         catch(error){
