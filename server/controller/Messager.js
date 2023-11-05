@@ -39,16 +39,7 @@ class Messager{
         
     }
 
-    async get_room(req, res){
-        try{
-        const {roomid, id} = req.params
-        console.log(roomid)
-        res.json({message:'room chek', roomid})
-    }
-        catch(err){
-            console.log(err)
-        }
-    }
+    
 
     async get_rooms_list(id){
         try{        
@@ -119,10 +110,10 @@ WHERE
     c.user_id = 96; */
     }
 
-    async rooms_messages(req, res){
+    async rooms_messages(data){
         try{
-            const {id} = req.body
-            const res = await db.query("SELECT * FROM messages WHERE from_id = $1 OR to_id =$1 RETURNING message_id", [id])
+            const {room_id} = data
+            const res = await db.query("SELECT * FROM messages WHERE room_id = $1", [room])
             res.json(res)}
             catch(error){
                 res.json(error)
