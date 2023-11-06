@@ -11,8 +11,8 @@ const Redis = require ('ioredis');
 /*
 
 db`s tabs:
-|users| <= | conversations| <= |rooms| <= |messages|
-|id   |    |id    room_id|    | id  |    | room_id|  
+|users| <= | conversations  | <= |rooms| <= |messages|
+|id   |    |id  u_id room_id|    | id  |    | room_id|  
 
 */
 class Messager{
@@ -44,8 +44,20 @@ class Messager{
     async get_rooms_list(id){
         try{        
        // const rooms = await db.query('SELECT * FROM conversations where user_id = $1', [id])
-       const rooms = await db.query('SELECT c.id AS conversation_id, c.user_id, c.room_id AS room_name FROM public.conversations c LEFT JOIN public.rooms r ON c.room_id = r.id WHERE c.user_id = $1;', [id])
-        
+       const rooms = await db.query('SELECT c.id AS conversation_id, c.user_id, c.room_id AS room_id, r.type FROM public.conversations c LEFT JOIN public.rooms r ON c.room_id = r.id WHERE c.user_id = $1', [id])
+       const rooms_data = []
+       rooms.rows.forEach( async r =>{
+            if(r.type == 'private messages'){
+                console.log(r, 'prv||||||||||||||||||||||||||||||')
+                const user = await db.query('WITH subquery AS ( SELECT user_id FROM conversations WHERE room_id = $1 AND user_id != $2 ) SELECT id, username FROM users WHERE id IN (SELECT user_id FROM subquery)', [r.room_id, id])
+                console.log(user.rows)
+            }
+            else{
+                console.log('chat')
+            }
+        })
+       //console.log(rooms.rows)
+       
        console.log(rooms.rows)
         return rooms.rows
     }
