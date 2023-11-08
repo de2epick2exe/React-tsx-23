@@ -44,7 +44,11 @@ class Messager{
     async get_rooms_list(id){
         try{        
        const rooms = await db.query('SELECT c.id AS conversation_id, c.user_id, c.room_id AS room_id, r.type FROM public.conversations c LEFT JOIN public.rooms r ON c.room_id = r.id WHERE c.user_id = $1', [id])
-       const rooms_data = []
+       const rooms_data = [{
+        event: 'chats',
+        rooms:[]
+    }]
+       
        for (const r of rooms.rows) {
             if(r.type == 'private messages'){
                 const user = await db.query('WITH subquery AS ( SELECT user_id FROM conversations WHERE room_id = $1 AND user_id != $2 ) SELECT id, username FROM users WHERE id IN (SELECT user_id FROM subquery)', [r.room_id, id])
@@ -54,9 +58,10 @@ class Messager{
                     username: user.rows[0].username,
                     rooms_id: r.room_id
                 }
-                rooms_data.push( data)
-                }
-            else{
+
+                rooms_data[0].rooms.push(data);
+            
+            }else{
                 console.log('chat')
             }}     
        
@@ -64,7 +69,7 @@ class Messager{
         return rooms_data
     }
         catch(err){
-            console.log(err)
+            console.warn(err)
         }
     }
 

@@ -86,6 +86,17 @@ const Navbar = () => {
 console.log(arr_notify)
 
 
+
+
+
+
+/// global bug when click on somewhich button, calls notify
+
+
+
+
+
+
   return (
     <>
       <Box className="animate__animated animate__backInDown animate__faster" bg={useColorModeValue('red.800', 'gray.900')} px={4}>

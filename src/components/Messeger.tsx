@@ -6,23 +6,23 @@ import {
   Input,
   InputGroup,
   position,
+  Box,
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
+
+interface room_user {
+  id: number;
+  username: string;
+  rooms_id: number;
+}
 
 const Messenger = () => {
   const socket = useRef<WebSocket | undefined>();
   const [messages, setMessages] = useState<any[]>([]);
   const [socket_msg, setSocket_msg] = useState("");
-  const [rooms, setRooms] = useState<any[]>([])
+  const [rooms, setRooms] = useState<room_user[]>([]);
 
-
-
-
-
-
-
-  
   const data = useSelector((state: RootState) => state.userReducer);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -34,8 +34,26 @@ const Messenger = () => {
     socket.current.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
-        console.log(message)
-        setMessages((prev) => [message, ...prev]);
+        console.log(message[0].id); // for in
+        console.log(message); // for in
+
+        switch (message[0].event) {
+          case "message":
+            setMessages((prev) => [message, ...prev]);
+            break;
+          case "chats":
+            console.log("caca");
+            setRooms(message[0].rooms);
+            console.warn(message[0].rooms);
+            console.table(rooms);
+            break;
+          case "rooms_messages":
+            console.log("rmsgss");
+            break;
+
+          default:
+            break;
+        }
       } catch (error) {
         console.error("Error parsing JSON:", error);
       }
@@ -51,11 +69,9 @@ const Messenger = () => {
       if (socket.current) {
         socket.current.close();
       }
-      
     };
 
     /* add rooms call on init and cached it in store    */
-    
   }, []);
 
   useEffect(() => {
@@ -76,29 +92,26 @@ const Messenger = () => {
     }
     setSocket_msg(""); // Clear the input after sending the message
   };
-/// call users init data
-const get_users_rooms_data = async () => {
-  if (socket.current && socket.current.readyState === WebSocket.OPEN) {
-    const message = {
-      rooms_for: data.id,      
-      event: "geting_rooms",
-    };
-    socket.current.send(JSON.stringify(message));
-  } else {
-    // Wait for the connection to open and then send the message
-    setTimeout(() => {
-      get_users_rooms_data();
-    }, 1000); // You can adjust the timeout value if needed
-  }
-};
-console.log(socket.current)
+  /// call users init data
+  const get_users_rooms_data = async () => {
+    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+      const message = {
+        rooms_for: data.id,
+        event: "geting_rooms",
+      };
+      socket.current.send(JSON.stringify(message));
+    } else {
+      // Wait for the connection to open and then send the message
+      setTimeout(() => {
+        get_users_rooms_data();
+      }, 1000); // You can adjust the timeout value if needed
+    }
+  };
+  console.log(socket.current);
 
   useEffect(() => {
-     get_users_rooms_data()    
+    get_users_rooms_data();
   }, [socket.current]);
-
-
-
 
   return (
     <>
@@ -116,6 +129,12 @@ console.log(socket.current)
       >
         <GridItem pl="2" bg="red" area={"all-chats"}>
           All Chats
+          {rooms.map((r) => (
+            <span key={r.id}>
+              <br />
+              <Button bg="black" ml='-1' width='100%' variant='ghost'>{r.username}</Button>
+            </span>
+          ))}
         </GridItem>
         <GridItem pl="2" bg="black" area={"chat"} style={{ overflow: "auto" }}>
           {/* Added overflow and position styles */}
