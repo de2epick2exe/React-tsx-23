@@ -43,8 +43,7 @@ const Messenger = () => {
             break;
           case "chats":
             console.log("caca");
-            setRooms(message[0].rooms);
-            console.warn(message[0].rooms);
+            setRooms(message[0].rooms);            
             console.table(rooms);
             break;
           case "rooms_messages":
@@ -56,6 +55,7 @@ const Messenger = () => {
         }
       } catch (error) {
         console.error("Error parsing JSON:", error);
+        console.warn(event.data)
       }
     };
     socket.current.onclose = () => {
@@ -104,10 +104,28 @@ const Messenger = () => {
       // Wait for the connection to open and then send the message
       setTimeout(() => {
         get_users_rooms_data();
-      }, 1000); // You can adjust the timeout value if needed
+      }, 100); // You can adjust the timeout value if needed
     }
   };
-  console.log(socket.current);
+  //console.log(socket.current);
+
+ const get_room_messages=(id: number) =>{
+  if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+    const message = {
+      room_id: id,
+      event: "rooms_messages",
+    };
+    socket.current.send(JSON.stringify(message));
+  }
+
+ }
+
+
+
+
+
+
+
 
   useEffect(() => {
     get_users_rooms_data();
@@ -132,7 +150,13 @@ const Messenger = () => {
           {rooms.map((r) => (
             <span key={r.id}>
               <br />
-              <Button bg="black" ml='-1' width='100%' variant='ghost'>{r.username}</Button>
+              <Button bg="black" 
+              ml='-1'
+               width='100%'
+                variant='ghost'
+                onClick={e => get_room_messages(r.id)}>
+                {r.username}
+                </Button>
             </span>
           ))}
         </GridItem>

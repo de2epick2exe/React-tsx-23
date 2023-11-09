@@ -46,7 +46,7 @@ wss.on("connection", (ws) => {
   */
   // ws send to  client get id and repalce this client id 
   // delete clients[clientId];
-  console.log(clients[clientId])
+ // console.log(clients[clientId])
   ws.on("message", async (message) => {
     try {
       const parsedMessage = JSON.parse(message);
@@ -56,7 +56,7 @@ wss.on("connection", (ws) => {
       //console.log(rooms)
 
       console.log("Received message:", parsedMessage);
-      ws.send("Server received your message.");
+      //ws.send("Server received your message.");
       ///DO NOT LOST TO CHANGE MESSAGER FUNCTIONS/ ROUTES
       switch (parsedMessage.event) {
         case 'message':
@@ -74,7 +74,7 @@ wss.on("connection", (ws) => {
           clients[clientId].send(JSON.stringify(rooms));//JSON.stringify(rooms)
           break;
         case "rooms_messages":
-          const msgs = await Messager.rooms_messages(parsedMessage.room) /// change args in main messager
+          const msgs = await Messager.rooms_messages(parsedMessage.room_id) /// change args in main messager
           clients[clientId].send(JSON.stringify(msgs));
           break;
         case "connection":

@@ -97,43 +97,20 @@ class Messager{
         }
     }
 
-    async users_messages_tab(req, res){
-        /*SELECT
-    c.id AS conversation_id,
-    r.type AS room_type,
-    m.content AS last_message_content,
-    m.date AS last_message_date
-FROM
-    public.conversations c
-RIGHT JOIN
-    public.rooms r
-ON
-    c.room_id = r.id
-LEFT JOIN (
-    SELECT
-        room_id,
-        MAX(date) AS max_date
-    FROM
-        public.messages
-    GROUP BY
-        room_id
-) AS latest_message
-ON
-    r.id = latest_message.room_id
-LEFT JOIN
-    public.messages m
-ON
-    latest_message.room_id = m.room_id
-    AND latest_message.max_date = m.date
-WHERE
-    c.user_id = 96; */
-    }
+     
 
-    async rooms_messages(data){
-        try{
-            const {room_id} = data
-            const res = await db.query("SELECT * FROM messages WHERE room_id = $1", [room])
-            res.json(res)}
+    async rooms_messages(id){
+        try{            
+            const res = await db.query("SELECT * FROM messages WHERE room_id = $1", [id])
+            console.log(res.rows)
+            const rooms_data = [{
+                event: 'rooms_messages',
+                messages:[]
+            }]
+            rooms_data[0].messages.push(res.rows)
+            console.log(rooms_data)
+            return rooms_data
+        }
             catch(error){
                 res.json(error)
             }
