@@ -72,7 +72,7 @@ wss.on("connection", (ws) => {
           console.log('getted rooms', parsedMessage.rooms_for)
          // console.log(rooms)
           clients[clientId].send(JSON.stringify(rooms));//JSON.stringify(rooms)
-          break;
+          break; 
         case "rooms_messages":
           const msgs = await Messager.rooms_messages(parsedMessage.room_id) /// change args in main messager
           clients[clientId].send(JSON.stringify(msgs));

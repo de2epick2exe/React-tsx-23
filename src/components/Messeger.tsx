@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
+import Room from "./Room";
 
 interface room_user {
   id: number;
@@ -161,7 +162,8 @@ const Messenger = () => {
           ))}
         </GridItem>
         <GridItem pl="2" bg="black" area={"chat"} style={{ overflow: "auto" }}>
-          {/* Added overflow and position styles */}
+          <Room/>
+          {/* Added overflow and position styles 
           <div style={{ position: "sticky", bottom: 0, zIndex: 1 }}>
             {messages
               .slice()
@@ -182,7 +184,7 @@ const Messenger = () => {
                 send
               </Button>
             </InputGroup>
-          </div>
+          </div>*/}
         </GridItem>
       </Grid>
     </>

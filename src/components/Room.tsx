@@ -1,8 +1,10 @@
-import React from 'react';
+import { Center } from "@chakra-ui/react";
+import React from "react";
 
 const Room = (props: any) => {
-
-
+  
+  
+  
 /*
 ////// ---------------------------- connecting to socket room
   useEffect(() => {
@@ -40,36 +42,46 @@ const Room = (props: any) => {
     };
   }, [props]);
 
+*/
+  console.log(props)
+  //// if no props
+  if (Object.keys(props).length == 0) {
+    return (
+      <Center h={window.innerHeight / 1.13} >chs smn</Center>
+    );
+  }
+/*
+
+<div
+        style={{
+          display: "flex",
+          justifyContent: "center", // Center horizontally
+          alignItems: "center",
+          width: "100%",
+          height: "80%",
+          marginLeft: "20vw",
+        }}
+      >
+        <p
+          style={{
+            backgroundColor: "red",
+            borderRadius: "10px",
+            padding: "3px",
+            color: "black",
+          }}
+        >
+          {" "}
+          choose someone who you want to sent message{" "}
+        </p>
+      </div>
 
 
 */
+  else{
+    return <div>main room </div>;
+  }
 
-
-
-    if(!props){
-        return(
-            <div
-            style={{display: "flex",
-            justifyContent: "center", // Center horizontally
-            alignItems: "center",  
-              width: '100%',
-            height: "80%", marginLeft: '20vw'     }}
-            >
-            <p style={{backgroundColor:"red", borderRadius: '10px', padding:"3px", color: 'black'}}> choose someone who you want to sent message </p>
-               
-            </div>
-          );
-    }
-
-
-
-
-
-    return (
-        <div>
-            main room
-        </div>
-    );
+ 
 };
 
 export default Room;
