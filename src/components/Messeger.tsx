@@ -120,13 +120,7 @@ const Messenger = () => {
   }
 
  }
-
-
-
-
-
-
-
+ //get access to the ws from another file or write one big
 
   useEffect(() => {
     get_users_rooms_data();
