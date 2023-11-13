@@ -1,82 +1,67 @@
 import { Center } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-const Room = (props: any) => {
-  
-  
-  
-/*
+interface RoomProps {
+ current_socket: React.MutableRefObject<WebSocket | undefined>;
+ room_id: number|undefined
+ onConnectToRoom: (roomId:number|undefined)=> void;
+}
+
+
+const Room:React.FC<RoomProps> = ({current_socket, room_id, onConnectToRoom}) => {
+  const [room_messages, setRoomMessages]= useState([])
+  const socket = current_socket
 ////// ---------------------------- connecting to socket room
   useEffect(() => {
-    const socket = new WebSocket(`ws://localhost:3000`); // Replace with your WebSocket server URL
-    setWs(socket);
+    if (room_id !== null || undefined){
+      console.log(room_id)
+    onConnectToRoom(room_id)
+  }
+    const get_messages = ()=>{
 
-    socket.onopen = () => {
-      console.log("WebSocket connection established");
-      console.log("WebSocket connection established");
+    }
+if (socket && socket.current){
+  socket.current.onmessage = (event) => {
+    try {
+      const message = JSON.parse(event.data);
+      console.log(message[0].id); // for in
+      console.log(message); // for in
 
-      // socket.send(JSON.stringify({action : "joinRoom", room: props.data?._id}))
-    };
-    socket.onmessage = (event) => {
-      // Handle incoming messages
-      const message = event;
-      console.log(message.data);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        JSON.parse(message.data),
-      ]);
-      console.log(messages);
-    };
+      switch (message[0].event) {
+        case "message":
+          
+          break;
+        case "chats":
+          console.log("caca");          
+          break;
+        case "rooms_messages":
+          console.log("rmSSSSSSSSSSSSS");
+          break;
 
-    socket.onclose = () => {
-      console.log("WebSocket connection closed");
-    };
-
-    socket.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
-
+        default:
+          break;
+      }
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      console.warn(event.data)
+    }
+  }}
     // Clean up the WebSocket connection when the component unmounts
     return () => {
-      socket.close();
-    };
-  }, [props]);
+      if (socket && socket.current) {
+        socket.current.close();
+      }}
+  }, [room_id]);
 
-*/
-  console.log(props)
+
+  console.log(room_id)
   //// if no props
-  if (Object.keys(props).length == 0) {
+  if (room_id == 0) {
     return (
       <Center h={window.innerHeight / 1.13} >chs smn</Center>
     );
   }
-/*
 
-<div
-        style={{
-          display: "flex",
-          justifyContent: "center", // Center horizontally
-          alignItems: "center",
-          width: "100%",
-          height: "80%",
-          marginLeft: "20vw",
-        }}
-      >
-        <p
-          style={{
-            backgroundColor: "red",
-            borderRadius: "10px",
-            padding: "3px",
-            color: "black",
-          }}
-        >
-          {" "}
-          choose someone who you want to sent message{" "}
-        </p>
-      </div>
-
-
-*/
   else{
     return <div>main room </div>;
   }

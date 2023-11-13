@@ -23,6 +23,8 @@ const Messenger = () => {
   const [messages, setMessages] = useState<any[]>([]);
   const [socket_msg, setSocket_msg] = useState("");
   const [rooms, setRooms] = useState<room_user[]>([]);
+  const [room, setRoom] = useState<number|undefined>()
+console.log(room)
 
   const data = useSelector((state: RootState) => state.userReducer);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -110,7 +112,7 @@ const Messenger = () => {
   };
   //console.log(socket.current);
 
- const get_room_messages=(id: number) =>{
+ const get_room_messages=(id: number|undefined) =>{
   if (socket.current && socket.current.readyState === WebSocket.OPEN) {
     const message = {
       room_id: id,
@@ -149,36 +151,15 @@ const Messenger = () => {
               ml='-1'
                width='100%'
                 variant='ghost'
-                onClick={e => get_room_messages(r.id)}>
+                onClick={e =>  setRoom(r.rooms_id)/*get_room_messages(r.id)*/}>
                 {r.username}
                 </Button>
             </span>
           ))}
         </GridItem>
         <GridItem pl="2" bg="black" area={"chat"} style={{ overflow: "auto" }}>
-          <Room/>
-          {/* Added overflow and position styles 
-          <div style={{ position: "sticky", bottom: 0, zIndex: 1 }}>
-            {messages
-              .slice()
-              .reverse()
-              .map((mess, index) => (
-                <div key={index}>
-                  <div>
-                    {mess.username}: {mess.message}
-                  </div>
-                </div>
-              ))}
-            <InputGroup pos="fixed" bottom="0" width="85%" bg="black">
-              <Input
-                value={socket_msg}
-                onChange={(e) => setSocket_msg(e.target.value)}
-              />
-              <Button onClick={sendMessage} colorScheme="red">
-                send
-              </Button>
-            </InputGroup>
-          </div>*/}
+          <Room current_socket={socket.current} room_id={room} onConnectToRoom={get_room_messages}/>
+         
         </GridItem>
       </Grid>
     </>
