@@ -23,8 +23,9 @@ const Messenger = () => {
   const [messages, setMessages] = useState<any[]>([]);
   const [socket_msg, setSocket_msg] = useState("");
   const [rooms, setRooms] = useState<room_user[]>([]);
-  const [room, setRoom] = useState<number|undefined>()
-console.log(room)
+  const [room, setRoom] = useState<number | undefined>();
+  const [selected_room, setSelected_room] = useState("");
+  console.log(room);
 
   const data = useSelector((state: RootState) => state.userReducer);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -46,7 +47,7 @@ console.log(room)
             break;
           case "chats":
             console.log("caca");
-            setRooms(message[0].rooms);            
+            setRooms(message[0].rooms);
             console.table(rooms);
             break;
           case "rooms_messages":
@@ -58,7 +59,7 @@ console.log(room)
         }
       } catch (error) {
         console.error("Error parsing JSON:", error);
-        console.warn(event.data)
+        console.warn(event.data);
       }
     };
     socket.current.onclose = () => {
@@ -112,21 +113,26 @@ console.log(room)
   };
   //console.log(socket.current);
 
- const get_room_messages=(id: number|undefined) =>{
-  if (socket.current && socket.current.readyState === WebSocket.OPEN) {
-    const message = {
-      room_id: id,
-      event: "rooms_messages",
-    };
-    socket.current.send(JSON.stringify(message));
-  }
-
- }
- //get access to the ws from another file or write one big
+  const get_room_messages = (id: number | undefined) => {
+    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+      const message = {
+        room_id: id,
+        event: "rooms_messages",
+      };
+      socket.current.send(JSON.stringify(message));
+    }
+  };
+  //get access to the ws from another file or write one big
 
   useEffect(() => {
     get_users_rooms_data();
   }, [socket.current]);
+
+  const setRoomdata = (r: any) => {
+    setRoom(r?.rooms_id);
+    setSelected_room(r?.username);
+    console.log(r);
+  };
 
   return (
     <>
@@ -147,19 +153,24 @@ console.log(room)
           {rooms.map((r) => (
             <span key={r.id}>
               <br />
-              <Button bg="black" 
-              ml='-1'
-               width='100%'
-                variant='ghost'
-                onClick={e =>  setRoom(r.rooms_id)/*get_room_messages(r.id)*/}>
+              <Button
+                bg="black"
+                ml="-1"
+                width="100%"
+                variant="ghost"
+                onClick={(e) => setRoomdata(r)}
+              >
                 {r.username}
-                </Button>
+              </Button>
             </span>
           ))}
         </GridItem>
         <GridItem pl="2" bg="black" area={"chat"} style={{ overflow: "auto" }}>
-          <Room current_socket={socket.current} room_id={room} onConnectToRoom={get_room_messages}/>
-         
+          <Room
+            room_id={room}
+            room_name={selected_room}
+            onConnectToRoom={get_room_messages}
+          />
         </GridItem>
       </Grid>
     </>

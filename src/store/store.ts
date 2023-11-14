@@ -2,9 +2,10 @@ import { combineReducers ,configureStore, getDefaultMiddleware } from "@reduxjs/
 
 import userReducer from './reduses/UserSlice'
 import { PostApi } from "./service/PostService";
-
+import messagerReducer from "./reduses/MessagerSlice";
 
 const rootReducer = combineReducers({
+    messagerReducer,
     userReducer,
     [PostApi.reducerPath]:PostApi.reducer
 })
