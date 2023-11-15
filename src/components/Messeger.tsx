@@ -8,9 +8,11 @@ import {
   position,
   Box,
 } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store/store";
 import Room from "./Room";
+import { addMessage } from "../store/reduses/MessagerSlice";
 
 interface room_user {
   id: number;
@@ -28,6 +30,7 @@ const Messenger = () => {
   console.log(room);
 
   const data = useSelector((state: RootState) => state.userReducer);
+  const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -51,7 +54,9 @@ const Messenger = () => {
             console.table(rooms);
             break;
           case "rooms_messages":
-            console.log("rmsgss");
+            console.info("rmsgss________");
+            console.table(message[0])
+            dispatch(addMessage(message[0].messages))
             break;
 
           default:
