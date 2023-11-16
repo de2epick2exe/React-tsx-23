@@ -5,9 +5,9 @@ const cors = require("cors");
 const morgan = require("morgan");
 const http = require("http");
 const WebSocket = require("ws");
-const Messager = require('./controller/Messager')
-const Redis = require ('ioredis');
- 
+const Messager = require("./controller/Messager");
+const Redis = require("ioredis");
+
 const port = process.env.PORT;
 const server = express();
 function logResponse(req, res, next) {
@@ -17,19 +17,13 @@ function logResponse(req, res, next) {
     originalJson.apply(res, arguments);
   };
   next();
-} 
-  
+}
+
 server.use(logResponse);
 server.use(morgan("dev"));
 server.use(cors({ origin: "http://localhost:3000" }));
 server.use(express.json());
 server.use("/requests", routes);
-
-
-
-
-
-
 
 const httpServer = http.createServer(server);
 const wss = new WebSocket.Server({ noServer: true });
@@ -37,84 +31,104 @@ const wss = new WebSocket.Server({ noServer: true });
 const clients = {};
 const setted_rooms = [];
 wss.on("connection", (ws) => {
-  console.log('user connected')
-  const clientId = Date.now(); // Implement your own function to generate unique IDs
+  console.log("user connected");
+  const clientId = Date.now(); // neeed to Implement function to generate unique IDs
   clients[clientId] = ws;
   /*
-  clients[clientId].send(JSON.stringify({"connection_true": "get_id"}))
-  
+  clients[clientId].send(JSON.stringify({"connection_true": "get_id"}))  
   */
-  // ws send to  client get id and repalce this client id 
+  // ws send to  client get id and repalce this client id
   // delete clients[clientId];
- // console.log(clients[clientId])
+
   ws.on("message", async (message) => {
     try {
-      const parsedMessage = JSON.parse(message);
-      console.log(parsedMessage)
-      //const { rooms_for } = JSON.parse(message);
-      //const rooms = await Messager.get_rooms_list(rooms_for)
-      //console.log(rooms)
-
+      const parsedMessage = JSON.parse(message); 
       console.log("Received message:", parsedMessage);
-      //ws.send("Server received your message.");
+
       ///DO NOT LOST TO CHANGE MESSAGER FUNCTIONS/ ROUTES
       switch (parsedMessage.event) {
-        case 'message':
-          brodcastMessage(parsedMessage);
-          //await Messager.send_message(parsedMessage)
-          //add checker
-          if (parsedMessage.room){
-            broadcast_room(message, parsedMessage.room)
-          } 
-          break; 
+        case "message":
+          const room = parsedMessage.room;
+          console.log(room); //--------------------
+          if (room) {
+            const exist_room = setted_rooms.find(
+              (room_id) => room_id.id === room
+            );            
+            if (exist_room) {
+              console.log("find room id exist"); ///--------------------
+              exist_room.clients.add(ws);
+              console.log("Client connected to room"); //-----------------
+            } else {
+              const newRoom = {
+                id: room,
+                clients: new Set(),
+              };
+              newRoom.clients.add(ws);
+              setted_rooms.push(newRoom);
+              console.log("Created new room + client joined to room");
+            }
+          
+          for (const live_room of setted_rooms) {
+            if(live_room.clients.has(ws)){
+              live_room.clients.forEach((client)=>{
+                console.log("finded room for user(current ws)");
+                client.send(message);                
+                console.log("Number of clients in room:",live_room.clients.size);
+                
+              })
+              break;
+            }            
+          }
+        }
+        break;
+          
         case "geting_rooms":
-          const rooms = await Messager.get_rooms_list(parsedMessage.rooms_for) /// change args in main messager
-          console.log('getted rooms', parsedMessage.rooms_for)
-         // console.log(rooms)
-          clients[clientId].send(JSON.stringify(rooms));//JSON.stringify(rooms)
-          break; 
+          const rooms = await Messager.get_rooms_list(parsedMessage.rooms_for); /// change args in main messager
+          console.log("getted rooms", parsedMessage.rooms_for);
+
+          clients[clientId].send(JSON.stringify(rooms)); //JSON.stringify(rooms)
+          break;
         case "rooms_messages":
-          const msgs = await Messager.rooms_messages(parsedMessage.room_id) /// change args in main messager
+          const msgs = await Messager.rooms_messages(parsedMessage.room_id); /// change args in main messager
           clients[clientId].send(JSON.stringify(msgs));
           break;
         case "connection":
-          brodcastMessage(parsedMessage);
+          //brodcastMessage(parsedMessage);
+          //add here to create a room
           break;
         default:
           console.log("Unknown event:", parsedMessage.event);
       }
-    } catch  {
-       
-      // Error is caught and ignored, allowing the code to continue execution
+    } catch (e) {
+      console.error("error:____________________________");
+      console.warn(e);
     }
   });
 
   ws.on("close", () => {
     console.log("WebSocket connection closed.");
   });
-}); 
- 
-const brodcastMessage = (message)=>{
-  wss.clients.forEach(client=>{
-    client.send(JSON.stringify(message))
-  })
-}
+});
+
+const brodcastMessage = (message) => {
+  wss.clients.forEach((client) => {
+    client.send(JSON.stringify(message));
+  });
+};
 
 function broadcast_room(message, roomID) {
   for (const room_d of setted_rooms) {
     if (room_d.id === roomID) {
       room_d.clients.forEach((client) => {
         client.send(message);
-        console.log(message)
+        console.log(message);
       });
       break; // Stop broadcasting to other rooms
     }
   }
 }
 
-
-
- /*
+/*
  const setted_rooms = [];
 wss.on("connection", (ws) => {
   console.log("WebSocket client connected");

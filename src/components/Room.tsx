@@ -24,7 +24,7 @@ console.info("mesager",messager.messages)
   }  
 
   }, [room_id]);
-
+/// Do not lost to change the ws userid in server
 
   console.log(room_name)
   //// if no props
