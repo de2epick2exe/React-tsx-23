@@ -48,26 +48,7 @@ wss.on("connection", (ws) => {
       ///DO NOT LOST TO CHANGE MESSAGER FUNCTIONS/ ROUTES
       switch (parsedMessage.event) {
         case "message":
-          const room = parsedMessage.room;
-          console.log(room); //--------------------
-          if (room) {
-            const exist_room = setted_rooms.find(
-              (room_id) => room_id.id === room
-            );            
-            if (exist_room) {
-              console.log("find room id exist"); ///--------------------
-              exist_room.clients.add(ws);
-              console.log("Client connected to room"); //-----------------
-            } else {
-              const newRoom = {
-                id: room,
-                clients: new Set(),
-              };
-              newRoom.clients.add(ws);
-              setted_rooms.push(newRoom);
-              console.log("Created new room + client joined to room");
-            }
-          
+                    
           for (const live_room of setted_rooms) {
             if(live_room.clients.has(ws)){
               live_room.clients.forEach((client)=>{
@@ -95,6 +76,25 @@ wss.on("connection", (ws) => {
         case "connection":
           //brodcastMessage(parsedMessage);
           //add here to create a room
+          const room = parsedMessage.room;
+          console.log(room); //--------------------
+          if (room) {
+            const exist_room = setted_rooms.find(
+              (room_id) => room_id.id === room
+            );            
+            if (exist_room) {
+              console.log("find room id exist"); ///--------------------
+              exist_room.clients.add(ws);
+              console.log("Client connected to room"); //-----------------
+            } else {
+              const newRoom = {
+                id: room,
+                clients: new Set(),
+              };
+              newRoom.clients.add(ws);
+              setted_rooms.push(newRoom);
+              console.log("Created new room + client joined to room");
+            }
           break;
         default:
           console.log("Unknown event:", parsedMessage.event);
