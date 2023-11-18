@@ -55,8 +55,12 @@ const Messenger = () => {
             break;
           case "rooms_messages":
             console.info("rmsgss________");
-            console.table(message[0])
-            dispatch(addMessage(message[0].messages))
+            console.table(message[0]);
+            dispatch(addMessage(message[0].messages));
+            break;
+          case "connection_to_room":
+            console.warn("connected to room________");
+            console.table(message[0]);            
             break;
 
           default:
@@ -120,6 +124,12 @@ const Messenger = () => {
 
   const get_room_messages = (id: number | undefined) => {
     if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+      const connection_to_room = {
+        room: id,
+        event: "connection_to_room",
+      };
+      socket.current.send(JSON.stringify(connection_to_room));
+
       const message = {
         room_id: id,
         event: "rooms_messages",

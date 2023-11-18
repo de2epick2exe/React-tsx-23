@@ -42,50 +42,53 @@ wss.on("connection", (ws) => {
 
   ws.on("message", async (message) => {
     try {
-      const parsedMessage = JSON.parse(message); 
+      const parsedMessage = JSON.parse(message);
       console.log("Received message:", parsedMessage);
 
       ///DO NOT LOST TO CHANGE MESSAGER FUNCTIONS/ ROUTES
       switch (parsedMessage.event) {
         case "message":
-                    
           for (const live_room of setted_rooms) {
-            if(live_room.clients.has(ws)){
-              live_room.clients.forEach((client)=>{
+            if (live_room.clients.has(ws)) {
+              live_room.clients.forEach((client) => {
                 console.log("finded room for user(current ws)");
-                client.send(message);                
-                console.log("Number of clients in room:",live_room.clients.size);
-                
-              })
+                client.send(message);
+                console.log(
+                  "Number of clients in room:",
+                  live_room.clients.size
+                );
+              });
               break;
-            }            
+            }
           }
-        }
-        break;
-          
+
+          break;
         case "geting_rooms":
           const rooms = await Messager.get_rooms_list(parsedMessage.rooms_for); /// change args in main messager
           console.log("getted rooms", parsedMessage.rooms_for);
-
           clients[clientId].send(JSON.stringify(rooms)); //JSON.stringify(rooms)
           break;
         case "rooms_messages":
           const msgs = await Messager.rooms_messages(parsedMessage.room_id); /// change args in main messager
           clients[clientId].send(JSON.stringify(msgs));
           break;
-        case "connection":
-          //brodcastMessage(parsedMessage);
+        case "connection_to_room":
           //add here to create a room
           const room = parsedMessage.room;
           console.log(room); //--------------------
           if (room) {
             const exist_room = setted_rooms.find(
               (room_id) => room_id.id === room
-            );            
+            );
             if (exist_room) {
               console.log("find room id exist"); ///--------------------
               exist_room.clients.add(ws);
               console.log("Client connected to room"); //-----------------
+              clients[clientId].send(
+                JSON.stringify([
+                  { event: "conection_to_room", connected_to: room },
+                ])
+              );
             } else {
               const newRoom = {
                 id: room,
@@ -94,7 +97,13 @@ wss.on("connection", (ws) => {
               newRoom.clients.add(ws);
               setted_rooms.push(newRoom);
               console.log("Created new room + client joined to room");
-            }
+              clients[clientId].send(
+                JSON.stringify([
+                  { event: "connection_to_room", connected_to: room },
+                ])
+              );
+            }          
+          }
           break;
         default:
           console.log("Unknown event:", parsedMessage.event);
