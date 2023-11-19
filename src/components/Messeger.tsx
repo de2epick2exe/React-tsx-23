@@ -27,6 +27,9 @@ const Messenger = () => {
   const [rooms, setRooms] = useState<room_user[]>([]);
   const [room, setRoom] = useState<number | undefined>();
   const [selected_room, setSelected_room] = useState("");
+  const [message, setMessage]=  useState("")
+  const [message_State, setMesage_state] = useState(false)
+  //add send message to room as func * 
   console.log(room);
 
   const data = useSelector((state: RootState) => state.userReducer);
