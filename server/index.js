@@ -46,7 +46,7 @@ wss.on("connection", (ws) => {
       console.log("Received message:", parsedMessage);
 
       ///DO NOT LOST TO CHANGE MESSAGER FUNCTIONS/ ROUTES
-      switch (parsedMessage.event) {
+      switch (parsedMessage.event ) {
         case "message":
           for (const live_room of setted_rooms) {
             if (live_room.clients.has(ws)) {
@@ -57,6 +57,9 @@ wss.on("connection", (ws) => {
                   "Number of clients in room:",
                   live_room.clients.size
                 );
+                console.log('event send message success')
+                console.log('message sended to room')
+
               });
               break;
             }

@@ -8,13 +8,16 @@ interface RoomProps {
   room_name: string | undefined
  room_id: number|undefined
  onConnectToRoom: (roomId:number|undefined)=> void;
+ onSendMessage:(message: any)=>void;
 }
 
 
-const Room:React.FC<RoomProps> = ({room_id, onConnectToRoom, room_name}) => {
+const Room:React.FC<RoomProps> = ({room_id, onConnectToRoom,onSendMessage, room_name}) => {
   const [room_messages, setRoomMessages]= useState([])
   const data = useSelector((state: RootState) => state.userReducer);
   const messager = useSelector((state: RootState) => state.messagerReducer);
+  const [message, setMessage]= useState('')
+  console.log(message)
 console.info("mesager",messager.messages)
 ////// ---------------------------- connecting to socket room
   useEffect(() => {
@@ -39,11 +42,17 @@ console.info("mesager",messager.messages)
     <h1>{room_name}</h1>
   <p></p>
     <div>main room </div>
+    {messager.messages.forEach(message=>{
+      <span key={message.id}>
+        {message.username}{message.message}
+      </span>
+
+    })}
     <InputGroup>
-    <Textarea/>
+    <Textarea onInput={(e)=>setMessage(e.currentTarget.value)}/>
          
     <InputRightElement>
-    <Button>
+    <Button onClick={(e)=>onSendMessage(message)}>
       <ArrowRightIcon  />
     </Button>
     </InputRightElement>

@@ -26,8 +26,7 @@ const Messenger = () => {
   const [socket_msg, setSocket_msg] = useState("");
   const [rooms, setRooms] = useState<room_user[]>([]);
   const [room, setRoom] = useState<number | undefined>();
-  const [selected_room, setSelected_room] = useState("");
-  const [message, setMessage]=  useState("")
+  const [selected_room, setSelected_room] = useState("");  
   const [message_State, setMesage_state] = useState(false)
   //add send message to room as func * 
   console.log(room);
@@ -44,12 +43,14 @@ const Messenger = () => {
     socket.current.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
-        console.log(message[0].id); // for in
+        
         console.log(message); // for in
 
         switch (message[0].event) {
           case "message":
             setMessages((prev) => [message, ...prev]);
+            dispatch(addMessage(message));
+            console.log('recived message', message)
             break;
           case "chats":
             console.log("caca");
@@ -97,14 +98,16 @@ const Messenger = () => {
   }, [messages]);
 
   const username = data.username;
-  const sendMessage = async () => {
-    const message = {
+  const sendMessage = async (message:any) => {
+    const msg = [{
+      id: Date.now(),
       username,
-      message: socket_msg,
+      room,
+      message: message,
       event: "message",
-    };
+    }];
     if (socket.current) {
-      socket.current.send(JSON.stringify(message));
+      socket.current.send(JSON.stringify(msg));
     }
     setSocket_msg(""); // Clear the input after sending the message
   };
@@ -188,6 +191,7 @@ const Messenger = () => {
             room_id={room}
             room_name={selected_room}
             onConnectToRoom={get_room_messages}
+            onSendMessage={sendMessage}
           />
         </GridItem>
       </Grid>
