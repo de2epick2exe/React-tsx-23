@@ -48,22 +48,23 @@ const Messenger = () => {
 
         switch (message[0].event) {
           case "message":
-            setMessages((prev) => [message, ...prev]);
-            dispatch(addMessage(message));
-            console.log('recived message', message)
+            setMessages((prev) => [message, ...prev]);            
+            dispatch(addMessage(message[0]));
+            console.log('recived message________WS', message)
             break;
+          
           case "chats":
-            console.log("caca");
+            console.log("caca________WS");
             setRooms(message[0].rooms);
             console.table(rooms);
             break;
           case "rooms_messages":
-            console.info("rmsgss________");
+            console.info("rmsgss________WS");
             console.table(message[0]);
             dispatch(addMessage(message[0].messages));
             break;
           case "connection_to_room":
-            console.warn("connected to room________");
+            console.warn("connected to room________WS");
             console.table(message[0]);            
             break;
 
@@ -99,13 +100,13 @@ const Messenger = () => {
 
   const username = data.username;
   const sendMessage = async (message:any) => {
-    const msg = [{
+    const msg = {
       id: Date.now(),
       username,
       room,
       message: message,
       event: "message",
-    }];
+    };
     if (socket.current) {
       socket.current.send(JSON.stringify(msg));
     }
