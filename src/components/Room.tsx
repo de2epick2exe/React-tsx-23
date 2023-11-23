@@ -1,4 +1,4 @@
-import { Button, Center, InputGroup, InputRightElement, Textarea } from "@chakra-ui/react";
+import { Button, Center, Input, InputGroup, InputRightElement, Textarea } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -33,6 +33,14 @@ const Room:React.FC<RoomProps> = ({room_id, onConnectToRoom,onSendMessage, room_
 /// Do not lost to change the ws userid in server
 
   console.log(room_name)
+
+
+const send = ()=>{
+  onSendMessage(message)
+  setMessage('')// need to fix
+}
+
+
   //// if no props
   if (room_id == undefined) {
     return (
@@ -48,15 +56,19 @@ const Room:React.FC<RoomProps> = ({room_id, onConnectToRoom,onSendMessage, room_
     <div>
     {messager.messages.map(msg=>(      
     (<span key={msg.id}>
-          <p>{msg.username}:{msg.message}</p>
+      { msg.user_id == data.id ? 
+          (<p style={{backgroundColor: "red"}}>{msg.username}:{msg.message}</p>)
+          :
+          (<p>{msg.username}:{msg.message}</p>)
+      }
       </span>)     
   ))}
 </div>
     <InputGroup>
-    <Textarea onInput={(e)=>setMessage(e.currentTarget.value)}/>
-         
+    <Textarea resize="none" onInput={(e)=>setMessage(e.currentTarget.value)}/>
+        
     <InputRightElement>
-    <Button onClick={(e)=>onSendMessage(message)}>
+    <Button onClick={(e)=>send()}>
       <ArrowRightIcon  />
     </Button>
     </InputRightElement>

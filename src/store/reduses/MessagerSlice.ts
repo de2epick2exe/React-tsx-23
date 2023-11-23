@@ -11,6 +11,7 @@ interface MessagerState {
 */
   interface Message{
     id: number;
+    user_id: number;
     username:string;
     message:any;
   }
@@ -25,7 +26,7 @@ interface MessagerState {
     initialState,
     reducers:{
       addMessage: (state, action: PayloadAction<Message>)=>{
-        state.messages.unshift(action.payload)
+        state.messages.push(action.payload)
       }
     }
     
