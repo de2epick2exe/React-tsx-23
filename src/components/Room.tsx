@@ -57,9 +57,9 @@ const send = ()=>{
     {messager.messages.map(msg=>(      
     (<span key={msg.id}>
       { msg.user_id == data.id ? 
-          (<p style={{backgroundColor: "red"}}>{msg.username}:{msg.message}</p>)
+          (<p style={{backgroundColor: "#7f0000", marginLeft: '50vw', width:'140px', borderRadius:'2px', marginTop:"10px" }}>{msg.username}:{msg.message}</p>)
           :
-          (<p>{msg.username}:{msg.message}</p>)
+          (<p style={{backgroundColor: "red", marginLeft: '30vw', width:'140px', borderRadius:'2px', marginTop:"10px" }}>{msg.username}:{msg.message}</p>)
       }
       </span>)     
   ))}

@@ -48,9 +48,10 @@ const Messenger = () => {
 
         switch (message[0].event) {
           case "message":
-           /// setMessages((prev) => [message, ...prev]);            
+           /// setMessages((prev) => [message, ...prev]);
+          // if (message[0].id !== null){            
             dispatch(addMessage(message[0]));
-            console.log('recived message________WS', message)
+            console.log('recived message________WS', message)//}
             break;
           
           case "chats":
@@ -61,7 +62,11 @@ const Messenger = () => {
           case "rooms_messages":
             console.info("rmsgss________WS");
             console.table(message[0]);
+          //// ---------------------------------------------
+          if(message[0].messages = [])
+          {}else{
             dispatch(addMessage(message[0].messages));
+          }
             break;
           case "connection_to_room":
             console.warn("connected to room________WS");
