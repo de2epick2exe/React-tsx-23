@@ -10,6 +10,7 @@ import Admin from "./components/Admin";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Settings from "./components/Settings";
+import Contacts from "./components/Contacts";
 
 const routes: RouteProps[] = [
   {
@@ -40,6 +41,8 @@ const routes: RouteProps[] = [
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },
   {path: '/settings', element:<Settings/>},
+  {path: '/contacts', element:<Contacts/>},
+
   ///
 
   // Add more routes as needed

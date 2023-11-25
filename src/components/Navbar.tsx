@@ -180,6 +180,7 @@ console.log(arr_notify)
                   {isAdmin&&
                   <MenuItem  onClick={()=>{ navigate('/admin')}}>Admin Panel</MenuItem>
                   }
+                  <MenuItem as={Link} to="/contacts">Contacts</MenuItem>
                   <MenuItem as={Link} to="/settings">Account Settings</MenuItem>
                   <MenuItem onClick={logout_user} >Logout</MenuItem>
                 </MenuList>
