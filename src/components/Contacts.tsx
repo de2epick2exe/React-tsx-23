@@ -1,14 +1,15 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store/store";
 const Contacts = () => {
     const socket = useRef<WebSocket | undefined>();
-    interface room_user {
+    interface user_card {
         id: number;
         username: string;
         rooms_id: number;
       }
+      const [cards, setCards] = useState<user_card[]>([]);
       const data = useSelector((state: RootState) => state.userReducer);
       const dispatch: ThunkDispatch<any, any, any> = useDispatch();
     useEffect(() => {
@@ -18,10 +19,8 @@ const Contacts = () => {
         };
         socket.current.onmessage = (event) => {
           try {
-            const message = JSON.parse(event.data);
-            
-            console.log(message); // for in
-    
+            const message = JSON.parse(event.data);            
+            console.log(message); // for in    
             switch (message[0].event) {                           
               case "contacts_list":
                 console.warn("connected to room________WS");
@@ -46,14 +45,13 @@ const Contacts = () => {
           if (socket.current) {
             socket.current.close();
           }
-        };
-    
-      
-      }, []);
+        };  
+       }, []);
+
     return (
-        <div>
+        <>
             ctct rm
-        </div>
+        </>
     );
 };
 
