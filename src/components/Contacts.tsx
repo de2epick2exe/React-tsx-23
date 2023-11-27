@@ -9,7 +9,7 @@ const Contacts = () => {
         username: string;
         rooms_id: number;
       }
-      const [cards, setCards] = useState<user_card[]>([]);
+      const [friends, setFriends] = useState<user_card[]>([]);
       const data = useSelector((state: RootState) => state.userReducer);
       const dispatch: ThunkDispatch<any, any, any> = useDispatch();
     useEffect(() => {
@@ -48,9 +48,28 @@ const Contacts = () => {
         };  
        }, []);
 
+
+       const get_users_rooms_data = async () => {
+        if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+          const message = {
+            rooms_for: data.id,
+            event: "friends",
+          };
+          socket.current.send(JSON.stringify(message));
+        } else {
+          // Wait for the connection to open and then send the message
+          setTimeout(() => {
+            get_users_rooms_data();
+          }, 100); // You can adjust the timeout value if needed
+        }
+      };
+
+
+
+
     return (
         <>
-            ctct rm
+            <p>friends</p> <p>ctct rm</p>
         </>
     );
 };
