@@ -68,28 +68,27 @@ class WordController {
 
   async getrandom(req, res) {
     try {
-      const id_list = await db.query("SELECT ID FROM public.words");
-
+      const id_list = await db.query("SELECT COUNT(ID) FROM words;"); 
       const word_arr = [];
       let x = 0;
       const test_rand = [];
-      while (x <= 5 && word_arr.length < 5) {
+      while (word_arr.length < 5) {
+        console.table(id_list.rows[0].count)
         let rand = Math.floor(
-          Math.random() * Object.keys(id_list.rows).length + 1
+          Math.random() * id_list.rows[0].count +1
         );
-
-        if (!test_rand.includes(rand) && rand <= 6) {
-          console.log("------------------");
+          console.log(rand,"@!#!@#!@#!@#!@#!@#!@#")
+        
           test_rand.push(rand);
           const word = await db.query(
             "SELECT * FROM public.words where id=$1",
             [rand]
           );
           word_arr.push(word.rows);
-          x++;
-        }
-        console.log(test_rand);
-        console.log(word_arr.length, "=======================");
+          
+        
+       // console.log(test_rand);
+       // console.log(word_arr.length, "=======================");
       }
 
       console.log(word_arr);
