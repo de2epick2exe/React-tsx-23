@@ -2,8 +2,9 @@ import axios from "axios";
 const api = axios.create({
     baseURL: 'http://localhost:3033/requests',
   });
-export const getall = async ()=>{
-    const response = await api.get('/en/allw')
+export const getall = async (ofst:number, lmt:number)=>{
+  
+    const response = await api.get('/en/allw',{params:{offset: ofst, limit:lmt}})
     console.log(response.data)
     return response.data
 }

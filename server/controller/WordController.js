@@ -1,7 +1,8 @@
 const db = require("../db");
 class WordController {
   async select_all(req, res) {
-    const words = await db.query("SELECT * FROM public.words");
+    const {offset, limit} = req.body
+    const words = await db.query("SELECT * FROM public.words OFFSET $1 LIMIT $2",[offset, limit]);
     res.json(words.rows);
   }
   async insert_word(req, res) {
