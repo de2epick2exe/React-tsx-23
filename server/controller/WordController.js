@@ -1,9 +1,20 @@
 const db = require("../db");
 class WordController {
   async select_all(req, res) {
-    const {offset, limit} = req.body
-    const words = await db.query("SELECT * FROM public.words OFFSET $1 LIMIT $2",[offset, limit]);
+    try{
+    const {page, limit, count} = req.query
+    if(count ==true ){
+    const words = await db.query("SELECT COUNT(id) FROM public.words ");
     res.json(words.rows);
+    } 
+    else{
+    const offset = page * limit - limit
+    console.log(offset, "__________________OFSt")
+    const words = await db.query("SELECT * FROM public.words OFFSET $1 LIMIT $2",[offset, limit]);
+    res.json(words.rows);}}
+    catch(e){
+      res.json(e)
+    }
   }
   async insert_word(req, res) {
     try {

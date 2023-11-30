@@ -38,7 +38,8 @@ const Eng_Ua = () => {
   const [returned_word, setReturned_word] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [random_word_id, setRandom_word_id] = useState<string>();
-
+  const [offset, setOffset]= useState(1)
+  const [limit, setLimit] = useState(10)
   console.log(randomWord);
 
   const generateRandomWord = () => {
@@ -52,7 +53,7 @@ const Eng_Ua = () => {
   }, [random_list]);
 
   const wordslist = async () => {
-    const wordli = await getall();
+    const wordli = await getall(offset, limit, false);
     setWordsl(wordli);
   };
 
