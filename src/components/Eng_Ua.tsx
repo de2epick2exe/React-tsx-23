@@ -8,7 +8,11 @@ import {
   FormLabel,
   Input,
   Flex,
-  Box
+  Box,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem
 } from "@chakra-ui/react";
 
 import {
@@ -57,6 +61,15 @@ const Eng_Ua = () => {
     setWordsl(wordli);
   };
 
+ const set_pages_count =async () => {
+  const res = await getall(offset, limit, true);
+
+  return(
+    console.log('test')
+  )
+ }
+
+
   const random_req = async () => {
     setRandom_list([]);
     const randwords = await random_five();
@@ -68,6 +81,9 @@ const Eng_Ua = () => {
     wordslist();
     random_req();
   }, []);
+  useEffect(() => {
+    wordslist();    
+  }, [limit]);
 
   const show_searched = (obj: any) => {
     return (
@@ -198,7 +214,7 @@ const Eng_Ua = () => {
 
       <div>
         <div>----------------------------------------------------------</div>
-
+           
          <Box display='flex' justifyContent='center' width='10rem' 
          ml='12rem' boxShadow='dark-lg' p='6'
           rounded='md' >{randomWord}</Box>
@@ -216,6 +232,17 @@ const Eng_Ua = () => {
       <div>----------------------------------------------------------</div>
 
       <div>
+      <Menu><p>on page :</p>
+      <MenuButton as={Button}>
+        {limit}
+      </MenuButton>
+      <MenuList>
+        {/** add array output withou selected limit */}
+        <MenuItem onClick={e=>setLimit(10)}>10</MenuItem>
+        <MenuItem onClick={e=>setLimit(20)}>20</MenuItem>
+        <MenuItem onClick={e=>setLimit(50)}>50</MenuItem>
+      </MenuList>
+      </Menu>
         <TableContainer width='25%'>
           <Table size="sm" variant="striped" colorScheme="cyan">
             <Thead >
