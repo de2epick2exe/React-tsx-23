@@ -44,6 +44,7 @@ const Eng_Ua = () => {
   const [random_word_id, setRandom_word_id] = useState<string>();
   const [offset, setOffset]= useState(1)
   const [limit, setLimit] = useState(10)
+  const [pages, setPages]=useState<React.ReactNode[]>([])
   console.log(randomWord);
 
   const generateRandomWord = () => {
@@ -62,13 +63,21 @@ const Eng_Ua = () => {
   };
 
  const set_pages_count =async () => {
+  try{
   const res = await getall(offset, limit, true);
+  
+  const number_of_pages = Math.ceil(res[0].count/ limit) // total number of buttons/pages
+  console.log('PAGES COUNT = ', number_of_pages )
+  const pages_arr =[] 
+  for (let i = 1; i<=number_of_pages; i++){
+    pages_arr.push(<Button key={i} onClick={e=>setOffset(offset +10)}>{i}</Button>)
+  }
+  setPages(pages_arr)
+} catch(e){
+  console.log(e)
+}}
 
-  return(
-    console.log('test')
-  )
- }
-
+ console.log(offset)
 
   const random_req = async () => {
     setRandom_list([]);
@@ -80,10 +89,11 @@ const Eng_Ua = () => {
   useEffect(() => {
     wordslist();
     random_req();
+    set_pages_count()
   }, []);
   useEffect(() => {
     wordslist();    
-  }, [limit]);
+  }, [limit || offset]);
 
   const show_searched = (obj: any) => {
     return (
@@ -258,6 +268,15 @@ const Eng_Ua = () => {
           </Table>
         </TableContainer>
       </div>
+      <p>-------------------here pagination----------------------</p>
+      <Flex>{pages.map((e, index) => (
+  <span key={index}>
+    <div>{e}</div>
+  </span>
+))}
+</Flex>
+
+
       <div>----------------------------------------------------------</div>
       <div>
         <FormControl display="flex" justifyContent="start">

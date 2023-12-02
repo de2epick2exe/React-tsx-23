@@ -3,7 +3,8 @@ class WordController {
   async select_all(req, res) {
     try{
     const {page, limit, count} = req.query
-    if(count ==true ){
+    console.log(count, count == true, true)
+    if(count === 'true' ){
     const words = await db.query("SELECT COUNT(id) FROM public.words ");
     res.json(words.rows);
     } 
