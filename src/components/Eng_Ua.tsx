@@ -70,7 +70,7 @@ const Eng_Ua = () => {
   console.log('PAGES COUNT = ', number_of_pages )
   const pages_arr =[] 
   for (let i = 1; i<=number_of_pages; i++){
-    pages_arr.push(<Button key={i} onClick={e=>setOffset(offset +10)}>{i}</Button>)
+    pages_arr.push(<Button key={i} onClick={() => setOffset(i)}>{i}</Button>)
   }
   setPages(pages_arr)
 } catch(e){
@@ -91,9 +91,11 @@ const Eng_Ua = () => {
     random_req();
     set_pages_count()
   }, []);
+
   useEffect(() => {
-    wordslist();    
-  }, [limit || offset]);
+    wordslist();  
+    set_pages_count();  
+  }, [limit , offset]);
 
   const show_searched = (obj: any) => {
     return (
