@@ -62,15 +62,22 @@ const Eng_Ua = () => {
     setWordsl(wordli);
   };
 
+
+
  const set_pages_count =async () => {
   try{
-  const res = await getall(offset, limit, true);
-  
+  const res = await getall(offset, limit, true);  
   const number_of_pages = Math.ceil(res[0].count/ limit) // total number of buttons/pages
   console.log('PAGES COUNT = ', number_of_pages )
+
   const pages_arr =[] 
   for (let i = 1; i<=number_of_pages; i++){
     pages_arr.push(<Button key={i} onClick={() => setOffset(i)}>{i}</Button>)
+    if (i == number_of_pages/2){
+      pages_arr.push(
+      <Input style={{width: '20px', paddingInlineEnd:'0px', textAlign:'center', minWidth:'var(--chakra-sizes-10)'}} placeholder="..."  />
+     )      
+    }
   }
   setPages(pages_arr)
 } catch(e){
@@ -91,7 +98,7 @@ const Eng_Ua = () => {
     random_req();
     set_pages_count()
   }, []);
-
+ 
   useEffect(() => {
     wordslist();  
     set_pages_count();  
@@ -255,7 +262,7 @@ const Eng_Ua = () => {
         <MenuItem onClick={e=>setLimit(50)}>50</MenuItem>
       </MenuList>
       </Menu>
-        <TableContainer width='25%'>
+        <TableContainer width='40%'>
           <Table size="sm" variant="striped" colorScheme="cyan">
             <Thead >
               <Tr>
