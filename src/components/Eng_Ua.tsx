@@ -63,19 +63,34 @@ const Eng_Ua = () => {
   };
 
 
-
+  const [inputoffset, setInputoffset]= useState<number>(NaN)
+  console.log(inputoffset)
  const set_pages_count =async () => {
   try{
   const res = await getall(offset, limit, true);  
   const number_of_pages = Math.ceil(res[0].count/ limit) // total number of buttons/pages
   console.log('PAGES COUNT = ', number_of_pages )
-
+  let page = NaN
   const pages_arr =[] 
   for (let i = 1; i<=number_of_pages; i++){
     pages_arr.push(<Button key={i} onClick={() => setOffset(i)}>{i}</Button>)
     if (i == number_of_pages/2){
       pages_arr.push(
-      <Input style={{width: '20px', paddingInlineEnd:'0px', textAlign:'center', minWidth:'var(--chakra-sizes-10)'}} placeholder="..."  />
+      <Input 
+      style={{width: '20px', paddingInlineEnd:'0px',  minWidth:'var(--chakra-sizes-10)'}}
+       placeholder="..."
+       type="number"               
+       onChange={(e) => {
+        const newOffset = parseFloat(e.target.value);
+        setInputoffset(newOffset)
+        
+      }}      
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {             
+          console.log('offfsetinput', inputoffset)// need to fix
+        }
+      }}
+       />
      )      
     }
   }
