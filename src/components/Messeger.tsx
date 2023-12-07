@@ -202,6 +202,7 @@ const Messenger = () => {
             onSendMessage={sendMessage}
           />
         </GridItem>
+        
       </Grid>
     </>
   );
