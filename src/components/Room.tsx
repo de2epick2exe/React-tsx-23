@@ -1,4 +1,4 @@
-import { Button, Center, Input, InputGroup, InputRightElement, Textarea } from "@chakra-ui/react";
+import { Button, Center, Flex, Input, InputGroup, InputRightElement, Textarea } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -16,7 +16,7 @@ const Room:React.FC<RoomProps> = ({room_id, onConnectToRoom,onSendMessage, room_
   const [room_messages, setRoomMessages]= useState([])
   const data = useSelector((state: RootState) => state.userReducer);
   const messager = useSelector((state: RootState) => state.messagerReducer);
-  const [message, setMessage]= useState('') 
+  const [message, setMessage]= useState("") 
   
   
   
@@ -36,8 +36,11 @@ const Room:React.FC<RoomProps> = ({room_id, onConnectToRoom,onSendMessage, room_
 
 
 const send = ()=>{
+  if (!message.trim().length) {
+    return;
+  }
   onSendMessage(message)
-  setMessage('')// need to fix
+  setMessage("")// need to fix
 }
 
 
@@ -50,6 +53,7 @@ const send = ()=>{
 
   else{
     return (<>
+    <Flex w={["100%", "100%", "40%"]} h="90%" flexDir="column">
     <h1>{room_name}</h1>
   <p></p>
     <div>main room </div>
@@ -64,8 +68,10 @@ const send = ()=>{
       </span>)     
   ))}
 </div>
+  <Flex w="100%" mt="5" >
     <InputGroup>
     <Textarea resize="none" onInput={(e)=>setMessage(e.currentTarget.value)}
+    value={message}
     onKeyDown={(e) => {
       if (e.key === "Enter") {
         send();
@@ -74,11 +80,13 @@ const send = ()=>{
     />
         
     <InputRightElement>
-    <Button onClick={(e)=>send()}>
+    <Button onClick={(e)=>send()} disabled={message.trim().length <= 0}>
       <ArrowRightIcon  />
     </Button>
     </InputRightElement>
     </InputGroup>
+    </Flex>
+    </Flex>
     </>
     )
   }
