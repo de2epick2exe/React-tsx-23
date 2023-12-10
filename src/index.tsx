@@ -27,7 +27,7 @@ root.render(<Provider store={store as any}>
     <ChakraProvider >
       <BrowserRouter>
       
-      <Navbar  />
+      <Navbar   />
       <Routes>
       {routes.map((route, index) => (
           <Route key={index} {...route} />

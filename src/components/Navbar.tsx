@@ -99,8 +99,8 @@ console.log(arr_notify)
 
   return (
     <>
-      <Box className="animate__animated animate__backInDown animate__faster" bg={useColorModeValue('red.800', 'gray.900')} px={4}>
-        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+      <Box  className="animate__animated animate__backInDown animate__faster" bg={useColorModeValue('red.800', 'gray.900')}  px={4}>
+        <Flex  h={16} alignItems={'center'} justifyContent={'space-between'} >
           
           <Box>
           <Button as={Link} colorScheme="red" to="/">

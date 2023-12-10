@@ -162,7 +162,7 @@ const Messenger = () => {
     setSelected_room(r?.username);
     console.log(r);
   };
-
+/// need to fix bottom white line
   return (
     <>
       <Grid
@@ -194,8 +194,8 @@ const Messenger = () => {
             </span>
           ))}
         </GridItem>
-        <GridItem pl="2" bg="black" area={"chat"} style={{ overflow: "auto" }}>
-          <Room
+        <GridItem pl="2" bg="black" area={"chat"}  >
+          <Room 
             room_id={room}
             room_name={selected_room}
             onConnectToRoom={get_room_messages}

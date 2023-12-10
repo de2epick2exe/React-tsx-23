@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Center,
   Flex,
@@ -65,16 +66,15 @@ const Room: React.FC<RoomProps> = ({
   } else {
     return (
       <>
+      <Box  display='block' >
         <h1>{room_name}</h1>
-        <div>main room </div>
-        <Flex justify="center" w="100%" h="100vh" align="center">
-          <Flex w={["100%", "100%", "40%"]} h="90%" flexDir="column">
-            <div>
-              <Flex w="100%" h="80%" overflowY="scroll" flexDirection="column" p="3">
+        <div>main room </div>        
+          <Flex flexDirection="column" >
+            <Flex w='70%' overflowY='scroll' maxHeight='70vh' flexDirection="column" p="3">
               {messager.messages.map((msg) => (
                 <span key={msg.id} >
                   {msg.user_id == data.id ? (
-                    <Flex w="100%" justify="flex-end" >
+                    <Flex justify="flex-end" >
                     <p
                       style={{
                         backgroundColor: "#7f0000",
@@ -87,6 +87,7 @@ const Room: React.FC<RoomProps> = ({
                       {msg.username}:{msg.message}
                     </p></Flex>
                   ) : (
+                    <Flex  ml='45%' >
                     <p
                       style={{
                         backgroundColor: "red",
@@ -96,15 +97,15 @@ const Room: React.FC<RoomProps> = ({
                       }}
                     >
                       {msg.username}:{msg.message}
-                    </p>
+                    </p></Flex>
                   )}
                 </span>
               ))}
               <AlwaysScrollToBottom />
               </Flex>
-            </div>
-            <Flex w="100%" mt="5">
-              <InputGroup>
+            
+            <Flex w="40%" ml='30%' mt="5"  bottom='0' backgroundColor={"black"} >
+              <InputGroup >
                 <Textarea
                   resize="none"
                   onInput={(e) => setMessage(e.currentTarget.value)}
@@ -127,7 +128,8 @@ const Room: React.FC<RoomProps> = ({
               </InputGroup>
             </Flex>
           </Flex>
-        </Flex>
+        
+        </Box>
       </>
     );
   }
