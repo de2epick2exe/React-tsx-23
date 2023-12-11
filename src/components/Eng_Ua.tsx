@@ -73,25 +73,7 @@ const Eng_Ua = () => {
   const pages_arr =[] 
   for (let i = 1; i<=number_of_pages; i++){
     pages_arr.push(<Button key={i} onClick={() => setOffset(i)}>{i}</Button>)
-    if (i == number_of_pages/2){
-      pages_arr.push(
-      <Input 
-      style={{width: '20px', paddingInlineEnd:'0px',  minWidth:'var(--chakra-sizes-10)'}}
-       placeholder="..."
-       type="number" 
-       value={inputoffset}                   
-       onChange={(e) => {setInputoffset(e.target.value)}}
-       onKeyDown={(e) => {
-        if (e.key === 'Enter') {             
-          console.log('offfsetinput', inputoffset)
-          if(inputoffset != undefined){
-          const newOffset = parseFloat(inputoffset); 
-          console.log(newOffset)
-          ///setOffset(newOffset)
-        }}}}
-       />
-     )      
-    }
+   
   }
   setPages(pages_arr)
 } catch(e){
@@ -293,7 +275,23 @@ const Eng_Ua = () => {
       <p>-------------------here pagination----------------------</p>
       <Flex>{pages.map((e, index) => (
   <span key={index}>
-    <div>{e}</div>
+    <div>{index == pages.length/2 ? <Input 
+      style={{width: '20px', paddingInlineEnd:'0px',  minWidth:'var(--chakra-sizes-10)'}}
+       placeholder="..."
+       type="number" 
+       value={inputoffset}                   
+       onChange={(e) => {setInputoffset(e.target.value)}}
+       onKeyDown={(e) => {
+        if (e.key === 'Enter') {             
+          console.log('offfsetinput', inputoffset)
+          if(inputoffset != undefined){
+          const newOffset = parseFloat(inputoffset); 
+          console.log(newOffset)
+          setOffset(newOffset)
+          setInputoffset('')
+        }}}}
+      />: ""}{e} </div>
+    
   </span>
 ))}
 </Flex>

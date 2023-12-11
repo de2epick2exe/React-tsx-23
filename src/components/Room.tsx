@@ -70,7 +70,7 @@ const Room: React.FC<RoomProps> = ({
         <h1>{room_name}</h1>
         <div>main room </div>        
           <Flex flexDirection="column" >
-            <Flex w='70%' overflowY='scroll' maxHeight='70vh' flexDirection="column" p="3">
+            <Flex w='70%' overflowY='scroll' height='70vh' maxHeight='70vh' flexDirection="column" p="3">
               {messager.messages.map((msg) => (
                 <span key={msg.id} >
                   {msg.user_id == data.id ? (
