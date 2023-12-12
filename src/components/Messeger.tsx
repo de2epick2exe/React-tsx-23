@@ -26,9 +26,9 @@ const Messenger = () => {
   const [socket_msg, setSocket_msg] = useState("");
   const [rooms, setRooms] = useState<room_user[]>([]);
   const [room, setRoom] = useState<number | undefined>();
-  const [selected_room, setSelected_room] = useState("");  
-  const [message_State, setMesage_state] = useState(false)
-  //add send message to room as func * 
+  const [selected_room, setSelected_room] = useState("");
+  const [message_State, setMesage_state] = useState(false);
+  //add send message to room as func *
   console.log(room);
 
   const data = useSelector((state: RootState) => state.userReducer);
@@ -43,17 +43,17 @@ const Messenger = () => {
     socket.current.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
-        
+
         console.log(message); // for in
 
         switch (message[0].event) {
           case "message":
-           /// setMessages((prev) => [message, ...prev]);
-          // if (message[0].id !== null){            
+            /// setMessages((prev) => [message, ...prev]);
+            // if (message[0].id !== null){
             dispatch(addMessage(message[0]));
-            console.log('recived message________WS', message)//}
+            console.log("recived message________WS", message); //}
             break;
-          
+
           case "chats":
             console.log("caca________WS");
             setRooms(message[0].rooms);
@@ -62,15 +62,15 @@ const Messenger = () => {
           case "rooms_messages":
             console.info("rmsgss________WS");
             console.table(message[0]);
-          //// ---------------------------------------------
-          if(message[0].messages = [])
-          {}else{
-            dispatch(addMessage(message[0].messages));
-          }
+            //// ---------------------------------------------
+            if ((message[0].messages = [])) {
+            } else {
+              dispatch(addMessage(message[0].messages));
+            }
             break;
           case "connection_to_room":
             console.warn("connected to room________WS");
-            console.table(message[0]);            
+            console.table(message[0]);
             break;
 
           default:
@@ -103,11 +103,10 @@ const Messenger = () => {
     }
   }, [messages]);
 
-  
-  const sendMessage = async (message:any) => {
+  const sendMessage = async (message: any) => {
     const msg = {
       id: Date.now(),
-      user_id : data.id,
+      user_id: data.id,
       username: data.username,
       room,
       message: message,
@@ -117,7 +116,6 @@ const Messenger = () => {
       socket.current.send(JSON.stringify(msg));
     }
     setSocket_msg(""); // Clear the input after sending the message
-    
   };
   /// call users init data
   const get_users_rooms_data = async () => {
@@ -162,21 +160,55 @@ const Messenger = () => {
     setSelected_room(r?.username);
     console.log(r);
   };
-/// need to fix bottom white line
+  /// need to fix bottom white line
+  const ScrollbarStyles = () => {
+    return (
+      <style>
+        {`
+          /* width */
+          ::-webkit-scrollbar {
+            width: 5px;
+          }
+  
+          /* Track */
+          ::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px transparent; 
+            border-radius: 10px;
+          }
+  
+          /* Handle */
+          ::-webkit-scrollbar-thumb {
+            background: red; 
+            border-radius: 10px;
+          }
+  
+          /* Handle on hover */
+          ::-webkit-scrollbar-thumb:hover {
+            background: transparent; 
+          }
+        `}
+      </style>
+    );
+  };
   return (
     <>
+    
       <Grid
         className="page"
         templateAreas={`"all-chats chat"`} /* Updated grid template areas */
         gridTemplateRows={"1fr"} /* Adjusted row sizing */
         gridTemplateColumns={"150px 1fr"}
-        gap="1"
+        
         color="white"
         fontWeight="bold"
+        boxSizing="border-box"
         style={{
-          height: "100vh",
-        }} /* Set the grid height to fill the viewport */
+          overflowY: "hidden",
+          height: "calc(93vh)",
+          margin: "0",
+        }}
       >
+        
         <GridItem pl="2" bg="red" area={"all-chats"}>
           All Chats
           {rooms.map((r) => (
@@ -194,15 +226,15 @@ const Messenger = () => {
             </span>
           ))}
         </GridItem>
-        <GridItem pl="2" bg="black" area={"chat"}  >
-          <Room 
+        
+        <GridItem  bg="black" area={"chat"}>
+          <Room
             room_id={room}
             room_name={selected_room}
             onConnectToRoom={get_room_messages}
             onSendMessage={sendMessage}
           />
         </GridItem>
-        
       </Grid>
     </>
   );
