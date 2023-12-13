@@ -150,7 +150,7 @@ const Room: React.FC<RoomProps> = ({
                 <Button ml="2" borderRadius="20">
                   <SearchIcon />
                 </Button>
-                <Button ml="2" borderRadius="20">
+                <Button ml="2" borderRadius="20" >
                   <DragHandleIcon />
                 </Button>
               </Flex>
@@ -180,7 +180,7 @@ const Room: React.FC<RoomProps> = ({
                           marginTop: "10px",
                         }}
                       >
-                        {msg.username}: {msg.message}
+                       <Avatar/> {msg.username}: {msg.message}
                       </p>
                     </Flex>
                   ) : (
@@ -194,7 +194,7 @@ const Room: React.FC<RoomProps> = ({
                           marginTop: "10px",
                         }}
                       >
-                        {msg.username}: {msg.message}
+                     <Avatar/> {msg.username}: {msg.message} 
                       </p>
                     </Flex>
                   )}

@@ -34,7 +34,7 @@ const routes: RouteProps[] = [
     element: <Messeger />,
   },
   {
-    path: "/profile",
+    path: "/profile/:id",
     element: <Profile />,
   },
   { path: "/admin", element: <Admin /> },

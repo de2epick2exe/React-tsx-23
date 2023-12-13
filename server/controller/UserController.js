@@ -245,6 +245,16 @@ async unban(req, res){
     }
   }
  
+  async get_target_user(req,res){
+    try {
+      
+
+      
+    } catch (e) {
+      res.json({error: e})
+    }
+  }
+
 
   async get_total_users_count(req, res){
     try{

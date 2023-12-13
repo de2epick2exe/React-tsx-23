@@ -176,7 +176,7 @@ console.log(arr_notify)
                   </Center>
                   <br />
                   <MenuDivider />
-                  <MenuItem as={Link} to="/profile">Profile</MenuItem>
+                  <MenuItem as={Link} to={`/profile/${data.id}`}>Profile</MenuItem>
                   {isAdmin&&
                   <MenuItem  onClick={()=>{ navigate('/admin')}}>Admin Panel</MenuItem>
                   }

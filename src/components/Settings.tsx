@@ -1,4 +1,4 @@
-import { Box, Button, Input, useDisclosure } from "@chakra-ui/react";
+import { Avatar, Box, Button, Input, useDisclosure } from "@chakra-ui/react";
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -73,6 +73,7 @@ const Settings = () => {
        <Box boxSize='sm'>
        <Image src={url} alt="user" />
       </Box>
+      <Avatar/>
       <Button onClick={() => OnAvatarOpen()} >Change Avatar</Button><br/>
 
       <Modal isOpen={isAvatarOpen} onClose={OnAvatarClose}>
@@ -101,12 +102,6 @@ const Settings = () => {
       </ModalContent> 
       </Modal>
      
-
-
-
-
-
-
 
       <Modal isOpen={isPasswordOpen} onClose={OnPasswordClose}>
         <ModalOverlay/>   
