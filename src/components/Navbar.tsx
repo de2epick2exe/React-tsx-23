@@ -158,6 +158,7 @@ console.log(arr_notify)
                   cursor={'pointer'}
                   minW={0}>
                   <Avatar
+                    name={data.username ?? undefined}
                     size={'sm'}
                     src={'http://localhost:8080/imgs/default.jpg'}
                   />
@@ -166,6 +167,7 @@ console.log(arr_notify)
                   <br />
                   <Center>
                     <Avatar
+                    name={data.username ?? undefined}
                       size={'2xl'}
                       src={'http://localhost:8080/imgs/default.jpg'}
                     />

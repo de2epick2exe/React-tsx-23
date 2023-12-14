@@ -3,6 +3,10 @@ const router = new Router()
 
 const UserController = require('../controller/UserController')
  
+
+router.get('/profile', UserController.get_target_user)
+
+
 router.post('/registration', UserController.registration)
 router.post('/login', UserController.login)
 router.post('/geta', UserController.getAll)

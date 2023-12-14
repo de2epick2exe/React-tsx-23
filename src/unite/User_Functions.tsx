@@ -70,3 +70,7 @@ export const unBan_user =async (id:number) => {
   return response.data  
 }
 
+export const user_profile = async(uid:number)=>{
+  const response = await api.get('user/profile',{params:{id:uid}})
+  return response.data
+}

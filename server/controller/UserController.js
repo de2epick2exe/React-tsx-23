@@ -247,8 +247,9 @@ async unban(req, res){
  
   async get_target_user(req,res){
     try {
-      
-
+      const {id} = req.query
+      const data = await db.query("SELECT username, role from public.users where id =$1",[id])
+      return res.json(data.rows[0])
       
     } catch (e) {
       res.json({error: e})

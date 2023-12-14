@@ -19,6 +19,13 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,  
+  PopoverHeader,
+  PopoverTrigger,
   SimpleGrid,
   Stat,
   StatArrow,
@@ -29,6 +36,7 @@ import {
   Table,
   TableContainer,
   Tbody,
+  Text,
   Th,
   Thead,
   Tr,
@@ -53,7 +61,7 @@ const Admin = () => {
   const [total_users, setTotal_users] = useState<{ USERS_TOTAL: number[] }[]>(
     []
   );
-  const [notify_value, setNotifyValue]= useState('')
+  const [notify_value, setNotifyValue] = useState("");
   const [users_per_day, setUsers_per_day] = useState<
     { USERS_PER_DAY: any[] }[]
   >([]);
@@ -100,12 +108,12 @@ const Admin = () => {
   const un_ban = async (id: number, username: string, role: string) => {
     await unBan_user(id);
   };
-  const global_notify =async () => {
-    await notify_all(notify_value)
-  }
-  const target_notify=async () => {
-    await notify_user(data.id, notify_value)
-  }
+  const global_notify = async () => {
+    await notify_all(notify_value);
+  };
+  const target_notify = async () => {
+    await notify_user(data.id, notify_value);
+  };
 
   useEffect(() => {
     if (data.role !== "ADMIN" || data_role) {
@@ -155,7 +163,9 @@ users sort change or add more sorts
                   {users.map((user) => (
                     <Tr key={user.id}>
                       <Th>{user.id}</Th>
-                      <Th>{user.username}</Th>
+                      <Th cursor="pointer" onClick={()=>{navigate(`/profile/${user.id}`)}}>
+                        {user.username}
+                      </Th>
                       <Th>{user.email}</Th>
                       <Th>{user.role}</Th>
                       <Th> {user.status}</Th>
@@ -214,7 +224,10 @@ users sort change or add more sorts
             </Stat>
           </StatGroup>
           {/* add form field */}
-          <Input value={notify_value} onChange={(e)=> setNotifyValue(e.target.value)} />
+          <Input
+            value={notify_value}
+            onChange={(e) => setNotifyValue(e.target.value)}
+          />
           <Button onClick={global_notify}>notify all users</Button>
           <Button onClick={target_notify}>notify user</Button>
         </>
