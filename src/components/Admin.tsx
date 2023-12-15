@@ -13,6 +13,7 @@ import {
 } from "../unite/User_Functions";
 import { useNavigate } from "react-router-dom";
 import {
+  Avatar,
   Button,
   Flex,
   Icon,
@@ -164,7 +165,7 @@ users sort change or add more sorts
                     <Tr key={user.id}>
                       <Th>{user.id}</Th>
                       <Th cursor="pointer" onClick={()=>{navigate(`/profile/${user.id}`)}}>
-                        {user.username}
+                       <Avatar size='sm' name={user.username}/> {user.username}
                       </Th>
                       <Th>{user.email}</Th>
                       <Th>{user.role}</Th>

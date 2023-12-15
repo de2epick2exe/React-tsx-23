@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Input, useDisclosure } from "@chakra-ui/react";
+import { Avatar, Box, Button, Center, Flex, Input, Text, useDisclosure } from "@chakra-ui/react";
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -70,10 +70,18 @@ const Settings = () => {
   return (
     <>
       <div>Settings</div> 
-       <Box boxSize='sm'>
-       <Image src={url} alt="user" />
+       <Box m="5" >
+      <Flex flexDir='row' >
+       <Avatar size='2xl' name={data.username ?? undefined}/>
+       <Flex flexDir='column'  justifyContent='space-evenly'>
+        <Box ml='5'>
+        <Text>{data.username}</Text>         
+        <Text> {data.role}</Text>
+        </Box>
+        </Flex>
+        </Flex>
       </Box>
-      <Avatar/>
+      
       <Button onClick={() => OnAvatarOpen()} >Change Avatar</Button><br/>
 
       <Modal isOpen={isAvatarOpen} onClose={OnAvatarClose}>

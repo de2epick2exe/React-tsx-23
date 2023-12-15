@@ -29,13 +29,19 @@ const Profile = () => {
     <Box>
       {data.id === (id ? parseFloat(id) : null) ? (
         <Box>
-          user profile: {data.username}
-          <br />
-          role : "{data.role}" {id}
+          <Box m='5' border="2px solid red" width='13vw' padding='3'>
+          
+          <Center> <Avatar size='2xl' name={data.username?? undefined}/></Center>
+         
+          <Flex flexDir='column' >
+          <Text as='b'>{data.username}</Text>
+            <Text as='kbd'>{data.role}</Text>
+            </Flex >
+          </Box>
         </Box>
       ) : (
         <Box>
-            <Box border="2px solid red" width='13vw' padding='3'>
+            <Box m='5'  border="2px solid red" width='13vw' padding='3'>
             <Center><Avatar size='2xl' name={profile_data?.username}/></Center><br/>
             <Flex flexDir='column' >
             <Text as='b'>{profile_data?.username}</Text>

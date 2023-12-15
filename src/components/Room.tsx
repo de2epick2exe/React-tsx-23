@@ -137,7 +137,7 @@ const Room: React.FC<RoomProps> = ({
           >
             <Flex justifyContent="space-between" padding="2">
               <Flex>
-                <Avatar />
+                <Avatar name={room_name} />
                 <Box ml="2">
                   <Text>{room_name}</Text>
                   <Text fontSize="xs">last seen recently</Text>
@@ -180,7 +180,7 @@ const Room: React.FC<RoomProps> = ({
                           marginTop: "10px",
                         }}
                       >
-                       <Avatar/> {msg.username}: {msg.message}
+                       <Avatar name={msg.username} /> {msg.username}: {msg.message}
                       </p>
                     </Flex>
                   ) : (
@@ -194,7 +194,7 @@ const Room: React.FC<RoomProps> = ({
                           marginTop: "10px",
                         }}
                       >
-                     <Avatar/> {msg.username}: {msg.message} 
+                     <Avatar name={msg.username}  /> {msg.username}: {msg.message} 
                       </p>
                     </Flex>
                   )}
