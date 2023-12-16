@@ -127,6 +127,19 @@ class Messager{
         }
     }
 
+    async save_file(req,res){
+        try {
+                 const file = req.body.file
+                 const file_Buffer = Buffer.from(file, 'base64')
+                               
+                // send to c++ store server
+                res.json({status: 200})
+        } catch (e) {
+            res.json({error: e})
+        }
+
+
+    }
  
 }
 module.exports = new Messager()
