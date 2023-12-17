@@ -129,16 +129,15 @@ class Messager{
 
     async save_file(req,res){
         try {
-                 const file = req.body.file
-                 const file_Buffer = Buffer.from(file, 'base64')
-                               
+                 const img = req.file
+                console.log(img)
+                // const file_Buffer = Buffer.from(img, 'base64')
+              //  console.log(file_Buffer)             
                 // send to c++ store server
-                res.json({status: 200})
+                res.json({status: 200, img})
         } catch (e) {
-            res.json({error: e})
+            res.json({err: e.message})
         }
-
-
     }
  
 }
