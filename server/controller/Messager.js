@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const WebSocket = require('ws');
 require("dotenv");
 const Redis = require ('ioredis');
+const { default: axios } = require("axios");
  
 
 
@@ -128,14 +129,18 @@ class Messager{
     }
 
     async save_file(req,res){
-        try {
+        try { 
                  const img = req.file
-                console.log(img)
-                // const file_Buffer = Buffer.from(img, 'base64')
-              //  console.log(file_Buffer)             
+                          
                 // send to c++ store server
-                res.json({status: 200, img})
+               const data_from_cpp=await axios.post(`http://localhost:${process.env.CDN}/save_file`,{img})
+                //res.json({status: 200, img})
+                const res_dat= data_from_cpp.data
+              console.log(res_dat)
+              
+             res.json({res_dat })
         } catch (e) {
+            console.log(e)
             res.json({err: e.message})
         }
     }
