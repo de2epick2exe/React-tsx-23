@@ -23,34 +23,9 @@ import {
   import {useDropzone} from 'react-dropzone'
 
 
-  function MyDropzone() {
-    const onDrop = useCallback((acceptedFiles: any)  => {
-      // Do something with the files
-    }, [])
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
-    const styles = {
-      width: "400px",
-      height: "300px",
-      background: "#8B0000",
-      display: "flex",
-      'align-items': 'center',
-      'justify-content': 'center',
-      border: "5px dashed black"
-    }
-    return (
-      <div style={styles} {...getRootProps([
-        
-      ])}>
-        <input {...getInputProps()} />
-        {
-          isDragActive ?
-          
-            <p >Drop the files here ...</p> :
-            <p>Drag 'n' drop some files here, or click to select files</p>
-        }
-      </div>
-    )
-  }
+
+
+  
  //// If you want to access file contents you have to use the FileReader API:https://developer.mozilla.org/en-US/docs/Web/API/FileReader  ????
 
 
@@ -67,6 +42,44 @@ const Settings = () => {
     const data = useSelector((state: RootState) => state.userReducer);
     const url = data.photo
     console.log(url)
+
+
+    function Dropzone() {
+      const onDrop = useCallback((acceptedFiles: any)  => {
+        console.log(acceptedFiles)
+        console.log(acceptedFiles[0].type)
+  
+      }, [])
+      const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+      const styles = {
+        width: "400px",
+        height: "300px",
+        background: "#8B0000",
+        display: "flex",
+        'align-items': 'center',
+        'justify-content': 'center',
+        border: "5px dashed black"
+      }
+      return (
+        <div style={styles} {...getRootProps([
+          
+        ])}>
+          <input {...getInputProps()} />
+          {
+            isDragActive ?
+            
+              <p >Drop the files here ...</p> :
+              <p>Drag 'n' drop some files here, or click to select files</p>
+          }
+        </div>
+      )
+    }
+
+
+
+
+
+
   return (
     <>
       <div>Settings</div> 
@@ -102,7 +115,7 @@ const Settings = () => {
 
         <Button>Submit</Button>
       </FormControl>
-      <MyDropzone/>
+      <Dropzone/>
       </ModalBody>
       <ModalFooter>
             <Button onClick={() => OnAvatarClose()}>Close</Button>

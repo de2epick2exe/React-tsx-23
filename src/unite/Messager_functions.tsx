@@ -28,7 +28,14 @@ export const get_notify=async (id:number| null)=>{
       }}
   
 
+export const save_file =async (img:any) => {
+ try {
+  const responce = await api.post('/save_file',{img})
+  return responce.data
+ } catch (error) {
+  console.warn(error)
+ } 
+}
 
-////notify
 
 
