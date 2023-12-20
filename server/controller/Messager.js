@@ -131,13 +131,13 @@ class Messager{
     async save_file(req,res){
         try { 
                  const img = req.file
-                          
+                 console.log(img,)          
                 // send to c++ store server
                const data_from_cpp=await axios.post(`http://localhost:${process.env.CDN}/save_file`,{img})
-                //res.json({status: 200, img})
+                
                 const res_dat= data_from_cpp.data
-              console.log(res_dat)
-              
+             console.log(res_dat)
+           // res.json({status: 200, img})
              res.json({res_dat })
         } catch (e) {
             console.log(e)

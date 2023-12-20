@@ -21,6 +21,7 @@ import {
 
   import { Image } from '@chakra-ui/react'
   import {useDropzone} from 'react-dropzone'
+import { save_file } from "../unite/Messager_functions";
 
 
 
@@ -38,17 +39,22 @@ const Settings = () => {
     const { isOpen : isPasswordOpen , onOpen : OnPasswordOpen, onClose: OnPasswordClose } = useDisclosure()
     const { isOpen : isUsernameOpen , onOpen : OnUsernameOpen, onClose: OnUsernameClose } = useDisclosure()
     const { isOpen : isAvatarOpen , onOpen : OnAvatarOpen, onClose: OnAvatarClose } = useDisclosure()
+    const [avatar, setAvatar] = useState<FileList |any>()
     const dispatch: ThunkDispatch<any, any, any> = useDispatch();
     const data = useSelector((state: RootState) => state.userReducer);
     const url = data.photo
     console.log(url)
 
+    async function save_profile_photo() {
+     const res = await save_file(avatar[0])
+     console.log(res)
+       }
 
     function Dropzone() {
       const onDrop = useCallback((acceptedFiles: any)  => {
         console.log(acceptedFiles)
         console.log(acceptedFiles[0].type)
-  
+        setAvatar(acceptedFiles)
       }, [])
       const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
       const styles = {
@@ -75,8 +81,10 @@ const Settings = () => {
       )
     }
 
-
-
+    const filesHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+      e.preventDefault()
+      setAvatar(e.target.files)
+ }
 
 
 
@@ -105,7 +113,7 @@ const Settings = () => {
       <FormControl>
         <FormLabel>Change Avatar</FormLabel>
          
-        <Input type="file" />
+        <Input type="file" onChange={e => filesHandler(e)} />
         <FormHelperText>changing profile photo</FormHelperText>
         
         
@@ -113,7 +121,7 @@ const Settings = () => {
 
 
 
-        <Button>Submit</Button>
+        <Button onClick={save_profile_photo}>Submit</Button>
       </FormControl>
       <Dropzone/>
       </ModalBody>
