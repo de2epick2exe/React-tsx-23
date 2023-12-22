@@ -22,6 +22,7 @@ import {
   import { Image } from '@chakra-ui/react'
   import {useDropzone} from 'react-dropzone'
 import { save_file } from "../unite/Messager_functions";
+import { setPhoto } from "../store/reduses/UserSlice";
 
 
 
@@ -47,6 +48,7 @@ const Settings = () => {
 
     async function save_profile_photo() {
      const res = await save_file(avatar[0])
+     
      console.log(res)
        }
 
@@ -93,7 +95,7 @@ const Settings = () => {
       <div>Settings</div> 
        <Box m="5" >
       <Flex flexDir='row' >
-       <Avatar size='2xl' name={data.username ?? undefined}/>
+       <Avatar size='2xl' name={data.username ?? undefined} src={data.photo}/>
        <Flex flexDir='column'  justifyContent='space-evenly'>
         <Box ml='5'>
         <Text>{data.username}</Text>         
@@ -116,11 +118,6 @@ const Settings = () => {
         <Input type="file" onChange={e => filesHandler(e)} />
         <FormHelperText>changing profile photo</FormHelperText>
         
-        
-  
-
-
-
         <Button onClick={save_profile_photo}>Submit</Button>
       </FormControl>
       <Dropzone/>

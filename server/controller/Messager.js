@@ -118,8 +118,7 @@ class Messager{
     }
 
     async send_message(msg){
-        try{
-            
+        try{            
         const {to_id, from_id, message, media_url, room_id} = msg
         const res = await db.query("INSERT INTO messages( to_id, from_id, message, media_url, room_id) VALUES($1, $2, $3, $4,$5 RETURNING message_id", [to_id, from_id, message, media_url, room_id])
         res.json(res)}
@@ -134,11 +133,10 @@ class Messager{
                  console.log(img,)          
                 // send to c++ store server
                const data_from_cpp=await axios.post(`http://localhost:${process.env.CDN}/save_file`,{img})
-                
-                const res_dat= data_from_cpp.data
-             console.log(res_dat)
+                                 
+            
            // res.json({status: 200, img})
-             res.json({res_dat })
+             res.json(data_from_cpp.data)
         } catch (e) {
             console.log(e)
             res.json({err: e.message})

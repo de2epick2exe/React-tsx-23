@@ -59,7 +59,7 @@ const initialState: UserState = loadUserState()  || {
   token: null,
   is_auth: false,
   role: "",
-  photo: "http://localhost:8080/imgs/default.jpg",
+  photo: "http://localhost:8080/img/default.jpg",
   error: null
 };
 
@@ -187,5 +187,17 @@ export const loginUser =
       console.log(err);
     }
   };
+
+export const update_avatar= (url: string)=>
+  async (dispatch: ThunkDispatch<UserState, any, any>)=>{
+    try {
+      dispatch(setPhoto(url))
+      console.log('photo successfuly changed')
+    } catch (error) {
+      console.log('userSlice error')
+    }
+  }
+
+
 
 export default UserSlice.reducer;

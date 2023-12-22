@@ -146,8 +146,8 @@ users sort change or add more sorts
     <>
       {data.role == "ADMIN" ? (
         <>
-          <Flex>
-            <div>admin panel users</div>
+        <div>admin panel users</div>
+          <Flex>            
             <TableContainer width={window.innerWidth / 1.5}>
               <Table>
                 <Thead>
@@ -203,7 +203,11 @@ users sort change or add more sorts
             <InputLeftElement pointerEvents="none">
               <Icon as={IoIosSearch} color="gray.300" />
             </InputLeftElement>
-            <Input htmlSize={15} width="auto" placeholder="search user" />
+            <Input htmlSize={15} width="auto" placeholder="search user" 
+            onKeyDown={(e)=>{
+              if(e.key=="Enter"){console.log('searced')}
+            }}
+            />
           </InputGroup>
           <StatGroup>
             <Stat>
@@ -225,12 +229,12 @@ users sort change or add more sorts
             </Stat>
           </StatGroup>
           {/* add form field */}
-          <Input
+          <Input htmlSize={15} width="auto"
             value={notify_value}
             onChange={(e) => setNotifyValue(e.target.value)}
           />
-          <Button onClick={global_notify}>notify all users</Button>
-          <Button onClick={target_notify}>notify user</Button>
+          <Button ml='2' onClick={global_notify}>notify all users</Button>
+          <Button ml='2' onClick={target_notify}>notify user</Button>
         </>
       ) : (
         <div></div>
