@@ -160,7 +160,7 @@ console.log(arr_notify)
                   <Avatar
                     name={data.username ?? undefined}
                     size={'sm'}
-                    src={'http://localhost:8080/imgs/default.jpg'}
+                    src={data.photo}
                   />
                 </MenuButton>
                 <MenuList alignItems={'center'}>
@@ -169,7 +169,7 @@ console.log(arr_notify)
                     <Avatar
                     name={data.username ?? undefined}
                       size={'2xl'}
-                      src={'http://localhost:8080/imgs/default.jpg'}
+                      src={data.photo}
                     />
                   </Center>
                   <br />

@@ -22,7 +22,7 @@ import {
   import { Image } from '@chakra-ui/react'
   import {useDropzone} from 'react-dropzone'
 import { save_file } from "../unite/Messager_functions";
-import { setPhoto } from "../store/reduses/UserSlice";
+import { setPhoto, update_avatar } from "../store/reduses/UserSlice";
 
 
 
@@ -48,7 +48,7 @@ const Settings = () => {
 
     async function save_profile_photo() {
      const res = await save_file(avatar[0])
-     
+     await dispatch(update_avatar(res.url))
      console.log(res)
        }
 
