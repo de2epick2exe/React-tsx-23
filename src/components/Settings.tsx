@@ -93,9 +93,9 @@ const Settings = () => {
   return (
     <>
       <div>Settings</div> 
-       <Box m="5" >
+       <Box mt="5" mb='5'pb='2' pt='2' bg='#622626' >
       <Flex flexDir='row' >
-       <Avatar size='2xl' name={data.username ?? undefined} src={data.photo}/>
+       <Avatar pl='2' size='2xl' name={data.username ?? undefined} src={data.photo}/>
        <Flex flexDir='column'  justifyContent='space-evenly'>
         <Box ml='5'>
         <Text>{data.username}</Text>         
@@ -104,8 +104,8 @@ const Settings = () => {
         </Flex>
         </Flex>
       </Box>
-      
-      <Button onClick={() => OnAvatarOpen()} >Change Avatar</Button><br/>
+      <Flex flexDir='column' w='12vw' h='15vh' justifyContent='space-between'>
+      <Button onClick={() => OnAvatarOpen()} >Change Avatar</Button>
 
       <Modal isOpen={isAvatarOpen} onClose={OnAvatarClose}>
         <ModalOverlay/>   
@@ -169,7 +169,7 @@ const Settings = () => {
       </Modal>
       <Button  onClick={() => OnUsernameOpen()} >ChangeUsername</Button>
 
-
+      </Flex>
 
       
     </>
