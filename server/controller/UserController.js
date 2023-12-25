@@ -75,8 +75,8 @@ class UserController {
     console.log(hashPassword);
     try{
     const newUser = await db.query(
-      'INSERT INTO users (email, username, password, createdat, updatedat) values ($1, $2, $3, $4, $5) RETURNING *',
-      [email, username, hashPassword, createdat, createdat]
+      'INSERT INTO users (email, username, password, createdat, updatedat, avatar) values ($1, $2, $3, $4, $5) RETURNING *',
+      [email, username, hashPassword, createdat, createdat, 'default.png']
     );        
     console.log(newUser)
     const secret = process.env.SECRET_JWT;
@@ -360,7 +360,17 @@ async unban(req, res){
     }
 }
 
-  
+  async update_avatar(req, res){
+    try {
+      const {avatar, id} = req.body
+      const data = await db.query('UPDATE users Set avatar = $1 WHERE id= $2 ',[avatar, id])
+      res.json({status:200})
+
+    } catch (error) {
+      res.json({message: error.message})
+    }
+
+  }
 
 
 

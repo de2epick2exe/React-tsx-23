@@ -19,7 +19,7 @@ router.post('/lr', UserController.get_last_registered)
 router.post('/ban', UserController.ban)
 router.post('/unban',UserController.unban)
 router.post('/room:id', UserController.ban)
-
+router.post('/update_avatar', UserController.update_avatar)
 
 
 
