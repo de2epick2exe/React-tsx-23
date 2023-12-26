@@ -23,6 +23,7 @@ import {
   import {useDropzone} from 'react-dropzone'
 import { save_file } from "../unite/Messager_functions";
 import { setPhoto, update_avatar } from "../store/reduses/UserSlice";
+import { update_photo } from "../unite/User_Functions";
 
 
 
@@ -49,6 +50,7 @@ const Settings = () => {
     async function save_profile_photo() {
      const res = await save_file(avatar[0])
      await dispatch(update_avatar(res.url))
+     await update_photo(res.filename, data.id)
      console.log(res)
        }
 

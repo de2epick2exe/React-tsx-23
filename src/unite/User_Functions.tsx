@@ -74,3 +74,7 @@ export const user_profile = async(uid:number)=>{
   const response = await api.get('user/profile',{params:{id:uid}})
   return response.data
 }
+export const update_photo =async (filename:string, id:number|null) => {
+  const response = await api.post('user/update_avatar',{filename, id})
+  return response.data
+}

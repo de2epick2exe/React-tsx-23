@@ -153,6 +153,7 @@ export const loginUser =
       dispatch(setRole(data.role))
       dispatch(setIsAuth(true));
       dispatch(setError(null));
+      dispatch(setPhoto(`http://localhost:8080/img/${data.avatar}`))
       update_online(data.id)
       
 

@@ -116,7 +116,7 @@ class UserController {
     if (email === "") {
       console.log("log with username");
       user = await db.query(
-        "select id, email, username, password, role, createdAt from users where username = $1",
+        "select id, email, username, password, role, createdAt, avatar from users where username = $1",
         [username]
       );
       if (user.rows[0] === undefined) {
@@ -126,7 +126,7 @@ class UserController {
     if (username === "") {
       console.log("log with em");
       user = await db.query(
-        "select id, email, username, password, role, createdAt from users where email = $1",
+        "select id, email, username, password, role, createdAt, avatar from users where email = $1",
         [email]
       );
       if (user.rows[0] === undefined) {
@@ -146,13 +146,14 @@ class UserController {
     const log_user = user.rows[0].username;
     const log_email = user.rows[0].email;
     const role = user.rows[0].role;
-
+    const avatar = user.rows[0].avatar
     const data = {
       id,
       token,
       log_user,
       log_email,
-      role
+      role,
+      avatar
     };   
     set_online(id)
     console.log(user.rows[0].password);
@@ -362,8 +363,8 @@ async unban(req, res){
 
   async update_avatar(req, res){
     try {
-      const {avatar, id} = req.body
-      const data = await db.query('UPDATE users Set avatar = $1 WHERE id= $2 ',[avatar, id])
+      const {filename, id} = req.body
+      const data = await db.query('UPDATE users Set avatar = $1 WHERE id= $2 ',[filename, id])
       res.json({status:200})
 
     } catch (error) {
