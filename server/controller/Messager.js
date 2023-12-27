@@ -52,7 +52,7 @@ class Messager{
        
        for (const r of rooms.rows) {
             if(r.type == 'private messages'){
-                const user = await db.query('WITH subquery AS ( SELECT user_id FROM conversations WHERE room_id = $1 AND user_id != $2 ) SELECT id, username FROM users WHERE id IN (SELECT user_id FROM subquery)', [r.room_id, id])
+                const user = await db.query('WITH subquery AS ( SELECT user_id FROM conversations WHERE room_id = $1 AND user_id != $2 ) SELECT id, username, avatar FROM users WHERE id IN (SELECT user_id FROM subquery)', [r.room_id, id])
                
                 const data = {
                     id : user.rows[0].id,

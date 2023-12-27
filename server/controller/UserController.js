@@ -220,7 +220,7 @@ async unban(req, res){
     const decode = jwt.verify(token, secret)
     const verify = decode.role == "ADMIN"
     if (verify){
-    const users = await db.query("SELECT id, email, username, role, status FROM public.users FULL OUTER JOIN public.user_info ON users.id = user_info.users_id;");        
+    const users = await db.query("SELECT id, email, username, role, status, avatar FROM public.users FULL OUTER JOIN public.user_info ON users.id = user_info.users_id;");        
     const users_online = []
     for(const obj of users.rows){
       const id= obj.id       
@@ -249,7 +249,7 @@ async unban(req, res){
   async get_target_user(req,res){
     try {
       const {id} = req.query
-      const data = await db.query("SELECT username, role from public.users where id =$1",[id])
+      const data = await db.query("SELECT username, role, avatar from public.users where id =$1",[id])
       return res.json(data.rows[0])
       
     } catch (e) {

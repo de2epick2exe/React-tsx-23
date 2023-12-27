@@ -53,6 +53,7 @@ interface User {
   username: string;
   role: string;
   status: string | null;
+  avatar:string | null;
 }
 
 const Admin = () => {
@@ -165,7 +166,9 @@ users sort change or add more sorts
                     <Tr key={user.id}>
                       <Th>{user.id}</Th>
                       <Th cursor="pointer" onClick={()=>{navigate(`/profile/${user.id}`)}}>
-                       <Avatar size='sm' name={user.username}/> {user.username}
+                       <Avatar size='sm' name={user.username} 
+                       src={user.avatar != null? `http://localhost:8080/img/${user.avatar}`: `http://localhost:8080/img/default.jpg`}/>
+                        {user.username}
                       </Th>
                       <Th>{user.email}</Th>
                       <Th>{user.role}</Th>

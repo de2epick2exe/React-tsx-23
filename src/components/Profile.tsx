@@ -42,7 +42,7 @@ const Profile = () => {
       ) : (
         <Box>
             <Box m='5'  border="2px solid red" width='13vw' padding='3'>
-            <Center><Avatar size='2xl' name={profile_data?.username} /></Center><br/>
+            <Center><Avatar size='2xl' name={profile_data?.username} src={profile_data?.avatar != null? `http://localhost:8080/img/${profile_data?.avatar}`: `http://localhost:8080/img/default.jpg`}/></Center><br/>
             <Flex flexDir='column' >
             <Text as='b'>{profile_data?.username}</Text>
             <Text as='kbd'>{profile_data?.role}</Text>
