@@ -25,8 +25,10 @@ import {
   PopoverBody,
   PopoverCloseButton,
   PopoverContent,  
+  PopoverFooter,  
   PopoverHeader,
   PopoverTrigger,
+  Portal,
   SimpleGrid,
   Stat,
   StatArrow,
@@ -38,6 +40,7 @@ import {
   TableContainer,
   Tbody,
   Text,
+  Textarea,
   Th,
   Thead,
   Tr,
@@ -159,6 +162,7 @@ users sort change or add more sorts
                     <Th>Role</Th>
                     <Th>Status</Th>
                     <Th>Ban</Th>
+                    <Th>Notify</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -195,6 +199,30 @@ users sort change or add more sorts
                             <Icon as={LuBan} />
                           </Button>
                         )}
+                      </Th>
+                      <Th>
+
+
+                      <Popover>
+  <PopoverTrigger>
+    <Button>Create notify</Button>
+  </PopoverTrigger>
+  <Portal>
+    <PopoverContent>
+      <PopoverArrow />
+      <PopoverHeader>Create notify for  {user.username} </PopoverHeader>
+      <PopoverCloseButton />
+      <PopoverBody>
+        <Textarea></Textarea>
+      </PopoverBody>
+      <PopoverFooter>
+        <Button colorScheme='blue'>Submit</Button>
+        </PopoverFooter>
+    </PopoverContent>
+  </Portal>
+</Popover>
+
+
                       </Th>
                     </Tr>
                   ))}
