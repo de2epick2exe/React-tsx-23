@@ -77,7 +77,7 @@ const Admin = () => {
   const [last_registered, setLast_registered] = useState<
     { USERS_PER_DAY: any[] }[]
   >([]);
-
+  const[ notify_id, setNotify_id] = useState<number|null>(null)
   const get_users = async () => {
     const response = await get_all_users(data.username, data.token);
     setUsers(response);
@@ -117,7 +117,8 @@ const Admin = () => {
     await notify_all(notify_value);
   };
   const target_notify = async () => {
-    await notify_user(data.id, notify_value);
+   // await notify_user(notify_id, notify_value);
+   console.log("notifyed", notify_id, 'val', notify_value)
   };
 
   useEffect(() => {
@@ -205,7 +206,7 @@ users sort change or add more sorts
 
                       <Popover>
   <PopoverTrigger>
-    <Button>Create notify</Button>
+    <Button onClick={()=>setNotify_id(user?.id)}>Create notify</Button>
   </PopoverTrigger>
   <Portal>
     <PopoverContent>
@@ -213,10 +214,10 @@ users sort change or add more sorts
       <PopoverHeader>Create notify for  {user.username} </PopoverHeader>
       <PopoverCloseButton />
       <PopoverBody>
-        <Textarea></Textarea>
+        <Textarea onChange={(e)=>setNotifyValue(e.target.value)}/>
       </PopoverBody>
       <PopoverFooter>
-        <Button colorScheme='blue'>Submit</Button>
+        <Button colorScheme='blue' onClick={target_notify}>Submit</Button>
         </PopoverFooter>
     </PopoverContent>
   </Portal>
@@ -263,7 +264,7 @@ users sort change or add more sorts
           <Input htmlSize={15} width="auto"
             value={notify_value}
             onChange={(e) => setNotifyValue(e.target.value)}
-          />
+          /> 
           <Button ml='2' onClick={global_notify}>notify all users</Button>
           <Button ml='2' onClick={target_notify}>notify user</Button>
         </>
