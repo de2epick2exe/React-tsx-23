@@ -10,6 +10,7 @@ import {
   get_users_count,
   get_users_per_day,
   unBan_user,
+  user_profile,
 } from "../unite/User_Functions";
 import { useNavigate } from "react-router-dom";
 import {
@@ -78,6 +79,7 @@ const Admin = () => {
     { USERS_PER_DAY: any[] }[]
   >([]);
   const[ notify_id, setNotify_id] = useState<number|null>(null)
+  const [searced_user, setSearched_user]= useState<string | number>('')
   const get_users = async () => {
     const response = await get_all_users(data.username, data.token);
     setUsers(response);
@@ -120,7 +122,10 @@ const Admin = () => {
    // await notify_user(notify_id, notify_value);
    console.log("notifyed", notify_id, 'val', notify_value)
   };
-
+const search = async()=>
+{
+  user_profile(searced_user)
+}
   useEffect(() => {
     if (data.role !== "ADMIN" || data_role) {
       navigate("/");
@@ -236,8 +241,9 @@ users sort change or add more sorts
               <Icon as={IoIosSearch} color="gray.300" />
             </InputLeftElement>
             <Input htmlSize={15} width="auto" placeholder="search user" 
+            onChange={(e)=>setSearched_user(e.target.value)}
             onKeyDown={(e)=>{
-              if(e.key=="Enter"){console.log('searced')}
+              if(e.key=="Enter"){() => search}
             }}
             />
           </InputGroup>
