@@ -70,8 +70,8 @@ export const unBan_user =async (id:number) => {
   return response.data  
 }
 
-export const user_profile = async(uid:number)=>{
-  const response = await api.get('user/profile',{params:{id:uid}})
+export const user_profile = async(data_of_user:any)=>{
+  const response = await api.get('user/profile',{params:{data:data_of_user}})
   return response.data
 }
 export const update_photo =async (filename:string, id:number|null) => {
