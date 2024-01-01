@@ -251,15 +251,11 @@ async unban(req, res){
       const {data} = req.query
 
       /// add if data == number/uk/eng
-
-
-
-
-
-
-
+      let isnum = /^\d+$/.test(data);
+      if(isnum){
       const user_data = await db.query("SELECT username, role, avatar from public.users where id =$1",[id])
       return res.json(user_data.rows[0])
+    }
        
     } catch (e) {
       res.json({error: e})
