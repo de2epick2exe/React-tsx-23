@@ -252,8 +252,14 @@ async unban(req, res){
 
       /// add if data == number/uk/eng
       let isnum = /^\d+$/.test(data);
+      let isEmailLike = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/.test(word);
+
+      if(isEmailLike){
+        const user_data = await db.query("SELECT username, role, avatar from public.users where email =$1",[data])
+      return res.json(user_data.rows[0])
+      }
       if(isnum){
-      const user_data = await db.query("SELECT username, role, avatar from public.users where id =$1",[id])
+      const user_data = await db.query("SELECT username, role, avatar from public.users where id =$1",[data])
       return res.json(user_data.rows[0])
     }
        
