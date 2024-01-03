@@ -262,6 +262,10 @@ async unban(req, res){
       const user_data = await db.query("SELECT username, role, avatar from public.users where id =$1",[data])
       return res.json(user_data.rows[0])
     }
+    else{
+      const user_data = await db.query("SELECT username, role, avatar from public.users where username =$1",[data])
+      return res.json(user_data.rows[0])
+    }
        
     } catch (e) {
       res.json({error: e})
