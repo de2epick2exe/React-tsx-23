@@ -79,7 +79,7 @@ const Admin = () => {
     { USERS_PER_DAY: any[] }[]
   >([]);
   const[ notify_id, setNotify_id] = useState<number|null>(null)
-  const [searced_user, setSearched_user]= useState<string | number>('')
+  const [searced_user, setSearched_user]= useState<any>('')
   const get_users = async () => {
     const response = await get_all_users(data.username, data.token);
     setUsers(response);
@@ -122,9 +122,9 @@ const Admin = () => {
    // await notify_user(notify_id, notify_value);
    console.log("notifyed", notify_id, 'val', notify_value)
   };
-const search = async()=>
-{
-  user_profile(searced_user)
+const search = async()=>{
+  const res = await user_profile(searced_user)
+  console.log(res)
 }
   useEffect(() => {
     if (data.role !== "ADMIN" || data_role) {
@@ -243,7 +243,8 @@ users sort change or add more sorts
             <Input htmlSize={15} width="auto" placeholder="search user" 
             onChange={(e)=>setSearched_user(e.target.value)}
             onKeyDown={(e)=>{
-              if(e.key=="Enter"){() => search}
+              if(e.key=="Enter"){search()}
+
             }}
             />
           </InputGroup>
