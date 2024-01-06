@@ -21,12 +21,19 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
   Popover,
   PopoverArrow,
   PopoverBody,
   PopoverCloseButton,
-  PopoverContent,  
-  PopoverFooter,  
+  PopoverContent,
+  PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
   Portal,
@@ -45,6 +52,8 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
+  Center,
 } from "@chakra-ui/react";
 import { LuBan } from "react-icons/lu";
 import { IoIosSearch } from "react-icons/io";
@@ -57,7 +66,7 @@ interface User {
   username: string;
   role: string;
   status: string | null;
-  avatar:string | null;
+  avatar: string | null;
 }
 
 const Admin = () => {
@@ -78,8 +87,13 @@ const Admin = () => {
   const [last_registered, setLast_registered] = useState<
     { USERS_PER_DAY: any[] }[]
   >([]);
-  const[ notify_id, setNotify_id] = useState<number|null>(null)
-  const [searced_user, setSearched_user]= useState<any>('')
+  const [notify_id, setNotify_id] = useState<number | null>(null);
+  const [searced_user, setSearched_user] = useState<any>("");
+  const {
+    isOpen: isSearchOpen,
+    onOpen: onSearchOpen,
+    onClose: OnSearchClose,
+  } = useDisclosure();
   const get_users = async () => {
     const response = await get_all_users(data.username, data.token);
     setUsers(response);
@@ -119,13 +133,16 @@ const Admin = () => {
     await notify_all(notify_value);
   };
   const target_notify = async () => {
-   // await notify_user(notify_id, notify_value);
-   console.log("notifyed", notify_id, 'val', notify_value)
+    // await notify_user(notify_id, notify_value);
+    console.log("notifyed", notify_id, "val", notify_value);
   };
-const search = async()=>{
-  const res = await user_profile(searced_user)
-  console.log(res)
-}
+  const search = async () => {
+    const res = await user_profile(searced_user);
+    console.log(res);
+    setSearched_user(res);
+    onSearchOpen();
+  };
+
   useEffect(() => {
     if (data.role !== "ADMIN" || data_role) {
       navigate("/");
@@ -156,8 +173,8 @@ users sort change or add more sorts
     <>
       {data.role == "ADMIN" ? (
         <>
-        <div>admin panel users</div>
-          <Flex>            
+          <div>admin panel users</div>
+          <Flex>
             <TableContainer width={window.innerWidth / 1.5}>
               <Table>
                 <Thead>
@@ -175,9 +192,21 @@ users sort change or add more sorts
                   {users.map((user) => (
                     <Tr key={user.id}>
                       <Th>{user.id}</Th>
-                      <Th cursor="pointer" onClick={()=>{navigate(`/profile/${user.id}`)}}>
-                       <Avatar size='sm' name={user.username} 
-                       src={user.avatar != null? `http://localhost:8080/img/${user.avatar}`: `http://localhost:8080/img/default.jpg`}/>
+                      <Th
+                        cursor="pointer"
+                        onClick={() => {
+                          navigate(`/profile/${user.id}`);
+                        }}
+                      >
+                        <Avatar
+                          size="sm"
+                          name={user.username}
+                          src={
+                            user.avatar != null
+                              ? `http://localhost:8080/img/${user.avatar}`
+                              : `http://localhost:8080/img/default.jpg`
+                          }
+                        />
                         {user.username}
                       </Th>
                       <Th>{user.email}</Th>
@@ -207,28 +236,37 @@ users sort change or add more sorts
                         )}
                       </Th>
                       <Th>
-
-
-                      <Popover>
-  <PopoverTrigger>
-    <Button onClick={()=>setNotify_id(user?.id)}>Create notify</Button>
-  </PopoverTrigger>
-  <Portal>
-    <PopoverContent>
-      <PopoverArrow />
-      <PopoverHeader>Create notify for  {user.username} </PopoverHeader>
-      <PopoverCloseButton />
-      <PopoverBody>
-        <Textarea onChange={(e)=>setNotifyValue(e.target.value)}/>
-      </PopoverBody>
-      <PopoverFooter>
-        <Button colorScheme='blue' onClick={target_notify}>Submit</Button>
-        </PopoverFooter>
-    </PopoverContent>
-  </Portal>
-</Popover>
-
-
+                        <Popover>
+                          <PopoverTrigger>
+                            <Button onClick={() => setNotify_id(user?.id)}>
+                              Create notify
+                            </Button>
+                          </PopoverTrigger>
+                          <Portal>
+                            <PopoverContent>
+                              <PopoverArrow />
+                              <PopoverHeader>
+                                Create notify for {user.username}{" "}
+                              </PopoverHeader>
+                              <PopoverCloseButton />
+                              <PopoverBody>
+                                <Textarea
+                                  onChange={(e) =>
+                                    setNotifyValue(e.target.value)
+                                  }
+                                />
+                              </PopoverBody>
+                              <PopoverFooter>
+                                <Button
+                                  colorScheme="blue"
+                                  onClick={target_notify}
+                                >
+                                  Submit
+                                </Button>
+                              </PopoverFooter>
+                            </PopoverContent>
+                          </Portal>
+                        </Popover>
                       </Th>
                     </Tr>
                   ))}
@@ -240,14 +278,52 @@ users sort change or add more sorts
             <InputLeftElement pointerEvents="none">
               <Icon as={IoIosSearch} color="gray.300" />
             </InputLeftElement>
-            <Input htmlSize={15} width="auto" placeholder="search user" 
-            onChange={(e)=>setSearched_user(e.target.value)}
-            onKeyDown={(e)=>{
-              if(e.key=="Enter"){search()}
-
-            }}
+            <Input
+              htmlSize={15}
+              width="auto"
+              placeholder="search user"
+              onChange={(e) => setSearched_user(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key == "Enter") {
+                  search();
+                }
+              }}
             />
           </InputGroup>
+
+          <Modal isOpen={isSearchOpen} onClose={OnSearchClose} isCentered>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Found User</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Flex>
+                  <Center>
+                <Avatar
+                  size="sm"
+                  name={searced_user?.username}
+                  src={
+                    searced_user?.avatar != null
+                      ? `http://localhost:8080/img/${searced_user?.avatar}`
+                      : `http://localhost:8080/img/default.jpg`
+                  }
+                /></Center>
+                <Flex ml='2' direction='column'>
+                        <p>{searced_user?.username}</p>
+                        <p>{searced_user?.role}</p>
+                </Flex>
+                </Flex>
+              </ModalBody>
+              <ModalFooter>
+                <Button colorScheme="blue" mr={3} onClick={OnSearchClose} variant='ghost'>
+                  Close
+                </Button>
+                
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+
+          {/*      ////////////////  Users Statistic    ////////////////////      */}
           <StatGroup>
             <Stat>
               <StatLabel>Users total</StatLabel>
@@ -268,12 +344,18 @@ users sort change or add more sorts
             </Stat>
           </StatGroup>
           {/* add form field */}
-          <Input htmlSize={15} width="auto"
+          <Input
+            htmlSize={15}
+            width="auto"
             value={notify_value}
             onChange={(e) => setNotifyValue(e.target.value)}
-          /> 
-          <Button ml='2' onClick={global_notify}>notify all users</Button>
-          <Button ml='2' onClick={target_notify}>notify user</Button>
+          />
+          <Button ml="2" onClick={global_notify}>
+            notify all users
+          </Button>
+          <Button ml="2" onClick={target_notify}>
+            notify user
+          </Button>
         </>
       ) : (
         <div></div>
