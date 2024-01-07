@@ -54,6 +54,7 @@ import {
   Tr,
   useDisclosure,
   Center,
+  Box,
 } from "@chakra-ui/react";
 import { LuBan } from "react-icons/lu";
 import { IoIosSearch } from "react-icons/io";
@@ -274,7 +275,7 @@ users sort change or add more sorts
               </Table>
             </TableContainer>
           </Flex>
-          <InputGroup>
+          <InputGroup mt={2}>
             <InputLeftElement pointerEvents="none">
               <Icon as={IoIosSearch} color="gray.300" />
             </InputLeftElement>
@@ -312,6 +313,36 @@ users sort change or add more sorts
                         <p>{searced_user?.username}</p>
                         <p>{searced_user?.role}</p>
                 </Flex>
+
+                  <Box ml='2'>
+                    <Center>
+                  {searced_user?.role === "ADMIN" ? (
+                          ""
+                        ) : searced_user?.status === "BANNED" ? (
+                          <Button
+                            onClick={() => {
+                              un_ban(searced_user?.id, searced_user?.username, searced_user?.role);
+                            }}
+                            background={"green"}
+                          >
+                            <Icon as={PiCaretDoubleUpBold} />
+                          </Button>
+                        ) : (
+                          <Button
+                            onClick={() => {
+                              ban(searced_user?.id, searced_user?.username, searced_user?.role);
+                            }}
+                            background={"red"}
+                          >
+                            <Icon as={LuBan} />
+                          </Button>
+                        )}
+                        </Center>
+                  </Box>
+
+
+
+
                 </Flex>
               </ModalBody>
               <ModalFooter>

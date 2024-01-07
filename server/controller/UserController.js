@@ -39,7 +39,7 @@ const set_online = async(id)=>{
   async function get() {
     const val = await redis.get('users_per_day');
     console.log('testing users-per-day get:', val);
-  }
+  }   
   set()
   get()
  } catch (error) {
@@ -205,7 +205,10 @@ async unban(req, res){
   async getAll(req, res) {     
     try{
     const {token, username} = req.body
-    if (token == null || username == ""){ }
+    console.log(token, username)
+    if (token == null || username == ""){
+      return res.json({err: 'no data'})
+     }
     else{
     const user_db = await db.query("SELECT createdAt, role FROM users WHERE username = $1 ", [username])
     console.log("user data is", user_db.rows[0])
@@ -220,8 +223,10 @@ async unban(req, res){
     const decode = jwt.verify(token, secret)
     const verify = decode.role == "ADMIN"
     if (verify){
+      console.log('verifyed')
     const users = await db.query("SELECT id, email, username, role, status, avatar FROM public.users FULL OUTER JOIN public.user_info ON users.id = user_info.users_id;");        
     const users_online = []
+    console.log(users.rows)
     for(const obj of users.rows){
       const id= obj.id       
       const status_red = await redis.get(id)
@@ -234,9 +239,10 @@ async unban(req, res){
       }
       else{
          users_online.push({ ...obj, status: status_red})
-      }}
+      }} 
     }
-    ///res.json(users_online);  
+     
+    console.log("user online")
     res.json(users_online)
     }
     else {res.json('ACCESS DENIED')}
