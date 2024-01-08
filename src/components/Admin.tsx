@@ -60,7 +60,7 @@ import { LuBan } from "react-icons/lu";
 import { IoIosSearch } from "react-icons/io";
 import { PiCaretDoubleUpBold } from "react-icons/pi";
 import { notify_all, notify_user } from "../unite/Messager_functions";
-
+import { CiWarning } from "react-icons/ci";
 interface User {
   id: number;
   email: string;
@@ -173,10 +173,10 @@ users sort change or add more sorts
   return (
     <>
       {data.role == "ADMIN" ? (
-        <>
+        <Box ml="3">
           <div>admin panel users</div>
           <Flex>
-            <TableContainer width={window.innerWidth / 1.5}>
+            <TableContainer width={window.innerWidth - 300}>
               <Table>
                 <Thead>
                   <Tr>
@@ -199,16 +199,22 @@ users sort change or add more sorts
                           navigate(`/profile/${user.id}`);
                         }}
                       >
-                        <Avatar
-                          size="sm"
-                          name={user.username}
-                          src={
-                            user.avatar != null
-                              ? `http://localhost:8080/img/${user.avatar}`
-                              : `http://localhost:8080/img/default.jpg`
-                          }
-                        />
-                        {user.username}
+                        <Flex>
+                          <Center>
+                            <Avatar
+                              size="sm"
+                              name={user.username}
+                              src={
+                                user.avatar != null
+                                  ? `http://localhost:8080/img/${user.avatar}`
+                                  : `http://localhost:8080/img/default.jpg`
+                              }
+                            />
+                          </Center>
+                          <Center>
+                            <Box ml="1">{user.username}</Box>
+                          </Center>
+                        </Flex>
                       </Th>
                       <Th>{user.email}</Th>
                       <Th>{user.role}</Th>
@@ -295,33 +301,54 @@ users sort change or add more sorts
           <Modal isOpen={isSearchOpen} onClose={OnSearchClose} isCentered>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader>Found User</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                <Flex>
+              {searced_user?.username == undefined ? (
+                <ModalHeader>
                   <Center>
-                <Avatar
-                  size="sm"
-                  name={searced_user?.username}
-                  src={
-                    searced_user?.avatar != null
-                      ? `http://localhost:8080/img/${searced_user?.avatar}`
-                      : `http://localhost:8080/img/default.jpg`
-                  }
-                /></Center>
-                <Flex ml='2' direction='column'>
-                        <p>{searced_user?.username}</p>
-                        <p>{searced_user?.role}</p>
-                </Flex>
+                    <CiWarning style={{ color: 'red', height: '30px' }} />
+                  </Center>
+                </ModalHeader>
+              ) : (
+                <ModalHeader>Found User</ModalHeader>
+              )}
 
-                  <Box ml='2'>
+              <ModalCloseButton />
+              {searced_user?.username == undefined ? (
+                <Center>
+                  <Flex direction="column">
+                    <ModalHeader>User not found</ModalHeader>
+                  </Flex>
+                </Center>
+              ) : (
+                <ModalBody>
+                  <Flex>
                     <Center>
-                  {searced_user?.role === "ADMIN" ? (
+                      <Avatar
+                        size="sm"
+                        name={searced_user?.username}
+                        src={
+                          searced_user?.avatar != null
+                            ? `http://localhost:8080/img/${searced_user?.avatar}`
+                            : `http://localhost:8080/img/default.jpg`
+                        }
+                      />
+                    </Center>
+                    <Flex ml="2" direction="column">
+                      <p>{searced_user?.username}</p>
+                      <p>{searced_user?.role}</p>
+                    </Flex>
+
+                    <Box ml="2">
+                      <Center>
+                        {searced_user?.role === "ADMIN" ? (
                           ""
                         ) : searced_user?.status === "BANNED" ? (
                           <Button
                             onClick={() => {
-                              un_ban(searced_user?.id, searced_user?.username, searced_user?.role);
+                              un_ban(
+                                searced_user?.id,
+                                searced_user?.username,
+                                searced_user?.role
+                              );
                             }}
                             background={"green"}
                           >
@@ -330,26 +357,31 @@ users sort change or add more sorts
                         ) : (
                           <Button
                             onClick={() => {
-                              ban(searced_user?.id, searced_user?.username, searced_user?.role);
+                              ban(
+                                searced_user?.id,
+                                searced_user?.username,
+                                searced_user?.role
+                              );
                             }}
                             background={"red"}
                           >
                             <Icon as={LuBan} />
                           </Button>
                         )}
-                        </Center>
-                  </Box>
-
-
-
-
-                </Flex>
-              </ModalBody>
+                      </Center>
+                    </Box>
+                  </Flex>
+                </ModalBody>
+              )}
               <ModalFooter>
-                <Button colorScheme="blue" mr={3} onClick={OnSearchClose} variant='ghost'>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={OnSearchClose}
+                  variant="ghost"
+                >
                   Close
                 </Button>
-                
               </ModalFooter>
             </ModalContent>
           </Modal>
@@ -387,7 +419,7 @@ users sort change or add more sorts
           <Button ml="2" onClick={target_notify}>
             notify user
           </Button>
-        </>
+        </Box>
       ) : (
         <div></div>
       )}
