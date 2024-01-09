@@ -397,8 +397,22 @@ async unban(req, res){
     }
 
   }
+/*
 
+|id| friends_list[] | waiting_accept[] |
 
+*/
+async add_friend(id, add_id){
+  /* id wanted to add will add a sender (who want to add) id
+  if id 7 adds id 2 :
+  |id| friends_list[] | waiting_accept[] |
+  | 2|      [...]     |        [7]       |
+  
+  
+  */
+  const res = await db.query('INSERT INTO public.friends (id, waiting list) VALUES $1, ARRAY[$2] ON CONFLICT (id) DO UPDATE SET waiting_accept= waiting_accept || $2 where id= $1')
+  return res.rows[0]
+}
 
 
 }
