@@ -407,11 +407,14 @@ async add_friend(id, add_id){
   if id 7 adds id 2 :
   |id| friends_list[] | waiting_accept[] |
   | 2|      [...]     |        [7]       |
-  
-  
+    
   */
   const res = await db.query('INSERT INTO public.friends (id, waiting list) VALUES $1, ARRAY[$2] ON CONFLICT (id) DO UPDATE SET waiting_accept= waiting_accept || $2 where id= $1')
   return res.rows[0]
+}
+async get_accept_list(id){
+  const res = await db.query('SELECT (waiting_list) FROM public.friends WHERE id=$1', [id])
+  return res.rows
 }
 
 
