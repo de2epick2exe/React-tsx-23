@@ -402,6 +402,10 @@ async unban(req, res){
 |id| friends_list[] | waiting_accept[] |
 
 */
+async get_friends(id){
+const res= await db.query('SELECT (friends_list) FROM public.friends WHERE id=$1',[id])
+return res.rows
+}
 async add_friend(id, add_id){
   /* id wanted to add will add a sender (who want to add) id
   if id 7 adds id 2 :
