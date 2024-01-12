@@ -421,6 +421,14 @@ async get_accept_list(id){
   return res.rows
 }
 
+async accept_friend(id, accepted_id){
+  const res = await db.query('UPDATE public.friends SET waiting_accept = array_remove(waiting_accept, $2), friends_list = friends_list || $2 WHERE id = $1',[id, accepted_id])
+  return res.rows
+}
+
+
+
+
 
 }
 module.exports = new UserController();
