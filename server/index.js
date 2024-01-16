@@ -7,6 +7,7 @@ const http = require("http");
 const WebSocket = require("ws");
 const Messager = require("./controller/Messager");
 const Redis = require("ioredis");
+const UserController = require("./controller/UserController");
 
 
 const port = process.env.PORT;
@@ -111,6 +112,10 @@ wss.on("connection", (ws) => {
             }          
           }
           break;
+          case "get_friends":
+          const msg = await UserController.get_friends(parsedMessage.id)
+          clients[clientId].send(JSON.stringify(msg));
+            break;
         default:
           console.log("Unknown event:", parsedMessage.event);
       }
