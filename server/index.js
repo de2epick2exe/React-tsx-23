@@ -113,8 +113,12 @@ wss.on("connection", (ws) => {
           }
           break;
           case "get_friends":
-          const msg = await UserController.get_friends(parsedMessage.id)
-          clients[clientId].send(JSON.stringify(msg));
+          const friends_list = await UserController.get_friends(parsedMessage.id)
+          clients[clientId].send(JSON.stringify(friends_list));
+            break;
+            case "get_accept_list":
+          const accept_list = await UserController.get_friends(parsedMessage.id)
+          clients[clientId].send(JSON.stringify(accept_list));
             break;
         default:
           console.log("Unknown event:", parsedMessage.event);
