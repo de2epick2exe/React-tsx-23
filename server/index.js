@@ -9,7 +9,6 @@ const Messager = require("./controller/Messager");
 const Redis = require("ioredis");
 const UserController = require("./controller/UserController");
 
-
 const port = process.env.PORT;
 const server = express();
 function logResponse(req, res, next) {
@@ -48,22 +47,21 @@ wss.on("connection", (ws) => {
       console.log("Received message:", parsedMessage);
 
       ///DO NOT LOST TO CHANGE MESSAGER FUNCTIONS/ ROUTES
-      switch (parsedMessage.event ) {
+      switch (parsedMessage.event) {
         case "message":
           for (const live_room of setted_rooms) {
             if (live_room.clients.has(ws)) {
               live_room.clients.forEach((client) => {
                 console.log("finded room for user(current ws)");
-                
-                client.send(JSON.stringify([{...parsedMessage}]));
+
+                client.send(JSON.stringify([{ ...parsedMessage }]));
                 //client.send(message);
                 console.log(
                   "Number of clients in room:",
                   live_room.clients.size
                 );
-                console.log('event send message success')
-                console.log('message sended to room')
-
+                console.log("event send message success");
+                console.log("message sended to room");
               });
               break;
             }
@@ -109,17 +107,28 @@ wss.on("connection", (ws) => {
                   { event: "connection_to_room", connected_to: room },
                 ])
               );
-            }          
+            }
           }
           break;
-          case "get_friends":
-          const friends_list = await UserController.get_friends(parsedMessage.id)
+        case "get_friends":
+          const friends_list = await UserController.get_friends(
+            parsedMessage.id
+          );
           clients[clientId].send(JSON.stringify(friends_list));
-            break;
-            case "get_accept_list":
-          const accept_list = await UserController.get_friends(parsedMessage.id)
+          break;
+        case "get_accept_list":
+          const accept_list = await UserController.get_friends(
+            parsedMessage.id
+          );
           clients[clientId].send(JSON.stringify(accept_list));
-            break;
+          break;
+        case "accept_friend":
+          const accepted = await UserController.accept_friend(
+            parsedMessage.id,
+            parsedMessage.accept_id
+          );
+          clients[clientId].send(JSON.stringify(accepted));
+          break;
         default:
           console.log("Unknown event:", parsedMessage.event);
       }
