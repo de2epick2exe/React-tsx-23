@@ -129,6 +129,13 @@ wss.on("connection", (ws) => {
           );
           clients[clientId].send(JSON.stringify(accepted));
           break;
+          case "delete_friend":
+            const deleted = await UserController.delete_friend(
+              parsedMessage.id,
+              parsedMessage.to_delete
+            )
+          clients[clientId].send(JSON.stringify(deleted));
+        break;
         default:
           console.log("Unknown event:", parsedMessage.event);
       }
