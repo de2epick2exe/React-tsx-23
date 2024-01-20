@@ -136,6 +136,13 @@ wss.on("connection", (ws) => {
             )
           clients[clientId].send(JSON.stringify(deleted));
         break;
+        case "reject_request":
+          const rejected = await UserController.reject_request(
+            parsedMessage.id,
+            parsedMessage.reject_id
+          )
+          clients[clientId].send(JSON.stringify(rejected));
+            break;
         default:
           console.log("Unknown event:", parsedMessage.event);
       }
