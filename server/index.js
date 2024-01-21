@@ -122,6 +122,13 @@ wss.on("connection", (ws) => {
           );
           clients[clientId].send(JSON.stringify(accept_list));
           break;
+        case "add_friend":
+          const add_res= await UserController.add_friend(
+            parsedMessage.id,
+            parsedMessage.add_id
+          )
+          clients[clientId].send(JSON.stringify(add_res));
+            break;
         case "accept_friend":
           const accepted = await UserController.accept_friend(
             parsedMessage.id,

@@ -416,6 +416,7 @@ class UserController {
       "SELECT (friends_list) FROM public.friends WHERE id=$1",
       [id]
     );
+    
     return res.rows;
   }
   async add_friend(id, add_id) {
