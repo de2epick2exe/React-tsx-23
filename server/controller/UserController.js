@@ -412,53 +412,88 @@ class UserController {
 
 */
   async get_friends(id) {
-    const res = await db.query(
-      "SELECT (friends_list) FROM public.friends WHERE id=$1",
-      [id]
-    );
-    
-    return res.rows;
+    try {
+      const res = await db.query(
+        "SELECT (friends_list) FROM public.friends WHERE id=$1",
+        [id]
+      );
+      return res.rows;
+    } catch (error) {
+      console.log(error)
+
+      return { erro: error.message };
+    }
   }
   async add_friend(id, add_id) {
     /* id wanted to add will add a sender (who want to add) id
   if id 7 adds id 2 :
-  |id| friends_list[] | waiting_accept[] |hidden_not_accepted|
+  |user_id| friends_list[] | waiting_accept[] |hidden_not_accepted|
   | 2|      [...]     |        [7]       |                   |
     
   */
-    const res = await db.query(
-      "INSERT INTO public.friends (id, waiting list) VALUES $1, ARRAY[$2] ON CONFLICT (id) DO UPDATE SET waiting_accept= waiting_accept || $2 where id= $1"
-    );
-    return res.rows[0];
+    try {
+      console.log(add_id)
+      
+      const res = await db.query(
+        "INSERT INTO public.friends (user_id, waiting_accept) VALUES ($1, ARRAY[$2]) ON CONFLICT (user_id) DO UPDATE SET waiting_accept = public.friends.waiting_accept || $2 WHERE public.friends.user_id = $1",[id, add_id]
+      );
+      return res.rows[0];
+    } catch (error) {
+      console.log(error)
+      return { erro: error.message };
+      
+    }
   }
   async get_accept_list(id) {
-    const res = await db.query(
-      "SELECT (waiting_list) FROM public.friends WHERE id=$1",
-      [id]
-    );
-    return res.rows;
+    try {
+      const res = await db.query(
+        "SELECT (waiting_list) FROM public.friends WHERE id=$1",
+        [id]
+      );
+      return res.rows;
+    } catch (error) {
+
+      console.log(error)
+
+      return { erro: error.message };
+    }
   }
 
   async accept_friend(id, accepted_id) {
+  try{
     const res = await db.query(
       "UPDATE public.friends SET waiting_accept = array_remove(waiting_accept, $2), friends_list = friends_list || $2 WHERE id = $1",
       [id, accepted_id]
     );
-    return res.rows;
+    return res.rows;}
+    catch(error){
+      console.log(error)
+      
+    }
   }
   async delete_friend(id, todelete_id) {
-    const res = await db.query(
-      "UPDATE public.friends SET friends_list = array_remove(friends_list, $2), waiting_accept = waiting_accept || $2 WHERE id = $1",
-      [id, todelete_id]
-    );
-    return res.rows;
+    try {
+      const res = await db.query(
+        "UPDATE public.friends SET friends_list = array_remove(friends_list, $2), waiting_accept = waiting_accept || $2 WHERE id = $1",
+        [id, todelete_id]
+      );
+      return res.rows;
+    } catch (error) {
+      console.log(error)
+
+      return { erro: error.message };
+    }
   }
   async reject_request(id, rejected_id) {
-    const res = await db.query(
-      "UPDATE public.friends SET hidden_not_accepted = array_remove(hidden_not_accepted, $2), hidden_not_accepted = hidden_not_accepted || $2 WHERE id = $1",
-      [id, rejected_id]
-    );
-    return res.rows;
+    try {
+      const res = await db.query(
+        "UPDATE public.friends SET hidden_not_accepted = array_remove(hidden_not_accepted, $2), hidden_not_accepted = hidden_not_accepted || $2 WHERE id = $1",
+        [id, rejected_id]
+      );
+      return res.rows;
+    } catch (error) {
+      return { erro: error.message };
+    }
   }
 }
 module.exports = new UserController();
