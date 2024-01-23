@@ -414,7 +414,7 @@ class UserController {
   async get_friends(id) {
     try {
       const res = await db.query(
-        "SELECT (friends_list) FROM public.friends WHERE id=$1",
+        "SELECT (friends_list) FROM public.friends WHERE user_id=$1",
         [id]
       );
       return res.rows;
@@ -447,7 +447,7 @@ class UserController {
   async get_accept_list(id) {
     try {
       const res = await db.query(
-        "SELECT (waiting_list) FROM public.friends WHERE id=$1",
+        "SELECT (waiting_accept) FROM public.friends WHERE user_id=$1",
         [id]
       );
       return res.rows;
