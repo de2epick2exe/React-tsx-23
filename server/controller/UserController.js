@@ -462,7 +462,7 @@ class UserController {
   async accept_friend(id, accepted_id) {
   try{
     const res = await db.query(
-      "UPDATE public.friends SET waiting_accept = array_remove(waiting_accept, $2), friends_list = friends_list || $2 WHERE id = $1",
+      "UPDATE public.friends SET waiting_accept = array_remove(waiting_accept, $2), friends_list = friends_list || $2 WHERE user_id = $1",
       [id, accepted_id]
     );
     return res.rows;}
@@ -474,7 +474,7 @@ class UserController {
   async delete_friend(id, todelete_id) {
     try {
       const res = await db.query(
-        "UPDATE public.friends SET friends_list = array_remove(friends_list, $2), waiting_accept = waiting_accept || $2 WHERE id = $1",
+        "UPDATE public.friends SET friends_list = array_remove(friends_list, $2), hidden_not_accepted = hidden_not_accepted || $2 WHERE user_id = $1",
         [id, todelete_id]
       );
       return res.rows;
