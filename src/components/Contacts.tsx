@@ -64,6 +64,27 @@ const Contacts = () => {
         }
       };
 
+      const add_friend = async (add_id: any) => {
+        if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+          const message = {
+            id: data.id,
+            add_id: add_id,
+            event: "add_friend",
+          };
+          socket.current.send(JSON.stringify(message));
+        } else {
+          
+          setTimeout(() => {
+            add_friend(add_id);//add fix*
+          }, 100); 
+        }
+      };
+
+
+
+
+
+
 
 
 
