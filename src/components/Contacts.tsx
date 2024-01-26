@@ -40,7 +40,7 @@ const Contacts = () => {
         socket.current.onerror = () => {
           console.log("SOCKET error");
         };
-    
+        get_friends()
         return () => {
           if (socket.current) {
             socket.current.close();
@@ -81,7 +81,20 @@ const Contacts = () => {
       };
 
 
-
+      const get_friends = async () => {
+        if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+          const message = {
+            id: data.id,
+            event: "get_friends",
+          };
+          socket.current.send(JSON.stringify(message));
+        } else {
+          
+          setTimeout(() => {
+            get_friends();//add fix*
+          }, 100); 
+        }
+      };
 
 
 
