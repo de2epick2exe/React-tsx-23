@@ -10,6 +10,8 @@ const Contacts = () => {
         rooms_id: number;
       }
       const [friends, setFriends] = useState<user_card[]>([]);
+      const [waiting_accept, setWaiting_accept] = useState<user_card[]>([]);
+
       const data = useSelector((state: RootState) => state.userReducer);
       const dispatch: ThunkDispatch<any, any, any> = useDispatch();
     useEffect(() => {
@@ -22,10 +24,13 @@ const Contacts = () => {
             const message = JSON.parse(event.data);            
             console.log(message); // for in    
             switch (message[0].event) {                           
-              case "contacts_list":
-                console.warn("connected to room________WS");
-                console.table(message[0]);            
-                break;    
+              case "friends_list":
+                console.log('RETURNS friends lis')
+                setFriends(message[0].friends_list)                            
+                break;
+              case "waiting_accept":
+                  setWaiting_accept(message[0].waiting_accept)
+              break;      
               default:
                 break;
             }
