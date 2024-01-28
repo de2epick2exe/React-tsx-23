@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -21,8 +21,46 @@ const Profile = () => {
   useEffect(() => {
     get_profile();
   }, []);
-
- 
+  const socket = useRef<WebSocket | undefined>();
+  useEffect(() => {
+    socket.current = new WebSocket("ws://localhost:3033");
+    socket.current.onopen = () => {
+      console.log(data.username, "connected to ws");
+    };
+    socket.current.onmessage = (event) => {
+      try {
+        const message = JSON.parse(event.data);            
+        console.log(message); // for in    
+        switch (message[0].event) {                           
+          case "check_state":
+            //check if user in hidden list
+            console.log('RETURNS friends lis')
+                                      
+            break;
+          case "":
+              
+          break;      
+          default:
+            break;
+        }
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+        console.warn(event.data);
+      }
+    };
+    socket.current.onclose = () => {
+      console.log("connection closed");
+    };
+    socket.current.onerror = () => {
+      console.log("SOCKET error");
+    };
+    
+    return () => {
+      if (socket.current) {
+        socket.current.close();
+      }
+    };  
+   }, []);
 
 
   return (
