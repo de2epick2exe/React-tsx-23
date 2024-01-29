@@ -11,6 +11,7 @@ const Profile = () => {
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   const { id } = useParams<{ id?: string }>();
   const [profile_data, Set_Profile_data] = useState<any>();
+  const [is_friend_status, set_Is_friend_status]=useState<any>(false)
   const get_profile = async () => {
     if (id) {
       const res = await user_profile(parseFloat(id));

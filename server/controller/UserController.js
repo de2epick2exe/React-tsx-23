@@ -417,7 +417,7 @@ class UserController {
         "SELECT (friends_list) FROM public.friends WHERE user_id=$1",
         [id]
       );
-      return res.rows;
+      return {event: 'get_friends', data: res.rows};
     } catch (error) {
       console.log(error)
 
@@ -437,7 +437,7 @@ class UserController {
       const res = await db.query(
         "INSERT INTO public.friends (user_id, waiting_accept) VALUES ($1, ARRAY[$2]) ON CONFLICT (user_id) DO UPDATE SET waiting_accept = public.friends.waiting_accept || $2 WHERE public.friends.user_id = $1",[id, add_id]
       );
-      return res.rows[0];
+      return {event: 'add_friend', data: res.rows[0]};
     } catch (error) {
       console.log(error)
       return { erro: error.message };
@@ -450,7 +450,7 @@ class UserController {
         "SELECT (waiting_accept) FROM public.friends WHERE user_id=$1",
         [id]
       );
-      return res.rows;
+      return {event: 'get_accept_list', data: res.rows};
     } catch (error) {
 
       console.log(error)
@@ -465,7 +465,8 @@ class UserController {
       "UPDATE public.friends SET waiting_accept = array_remove(waiting_accept, $2), friends_list = friends_list || $2 WHERE user_id = $1",
       [id, accepted_id]
     );
-    return res.rows;}
+    return {event: 'accept_friend', data: res.rows};
+  }
     catch(error){
       console.log(error)
       
@@ -477,7 +478,7 @@ class UserController {
         "UPDATE public.friends SET friends_list = array_remove(friends_list, $2), hidden_not_accepted = hidden_not_accepted || $2 WHERE user_id = $1",
         [id, todelete_id]
       );
-      return res.rows;
+      return {event: 'delete_friend', data: res.rows};
     } catch (error) {
       console.log(error)
 
@@ -490,7 +491,7 @@ class UserController {
         "UPDATE public.friends SET hidden_not_accepted = array_remove(hidden_not_accepted, $2), hidden_not_accepted = hidden_not_accepted || $2 WHERE id = $1",
         [id, rejected_id]
       );
-      return res.rows;
+      return {event: 'reject_request', data:res.rows};
     } catch (error) {
       return { erro: error.message };
     }

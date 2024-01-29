@@ -101,7 +101,8 @@ class Messager{
      
 
     async rooms_messages(id){
-        try{            
+        try{           
+            //need to add limiter* 
             const res = await db.query("SELECT * FROM messages WHERE room_id = $1", [id])
             console.log(res.rows)
             const rooms_data = [{
