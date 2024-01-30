@@ -408,7 +408,7 @@ class UserController {
   }
   /*
 
-|id| friends_list[] | waiting_accept[] |
+|user_id| friends_list[] | waiting_accept[] |hidden_not_accepted|
 
 */
   async get_friends(id) {
@@ -495,6 +495,18 @@ class UserController {
     } catch (error) {
       return { erro: error.message };
     }
+  }
+  async check_user_status(id, cid){
+    const res = await db.query("SELECT CASE \
+    WHEN $1 = ANY(friends_list) THEN 'friends_list' \
+    WHEN $1 = ANY(waiting_accept) THEN 'waiting_accept' \
+    WHEN $1 = ANY(hidden_not_accepted) THEN 'hidden_not_accepted' \
+    ELSE NULL \
+  END AS matched_column \
+  FROM public.friends \
+  WHERE $1 = user_id OR $2 = ANY(friends_list, waiting_accept, hidden_not_accepted);",
+  [id, cid])
+  return {event : 'check_user_status', data: res.rows[0].matched_column};
   }
 }
 module.exports = new UserController();
