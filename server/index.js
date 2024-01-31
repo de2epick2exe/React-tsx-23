@@ -150,6 +150,12 @@ wss.on("connection", (ws) => {
           )
           clients[clientId].send(JSON.stringify(rejected));
             break;
+        case "check_status":
+            const check_stat = await UserController.check_user_status(
+              parsedMessage.id,
+              parsedMessage.cid
+            )
+        break;
         default:
           console.log("Unknown event:", parsedMessage.event);
       }
