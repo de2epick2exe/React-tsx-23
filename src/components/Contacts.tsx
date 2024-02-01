@@ -22,9 +22,9 @@ const Contacts = () => {
         socket.current.onmessage = (event) => {
           try {
             const message = JSON.parse(event.data);            
-            console.log(message); // for in    
+            console.log(message);    
             switch (message[0].event) {                           
-              case "friends_list":
+              case "get_friends":
                 console.log('RETURNS friends lis')
                 setFriends(message[0].friends_list)                            
                 break;
@@ -32,6 +32,7 @@ const Contacts = () => {
                   setWaiting_accept(message[0].waiting_accept)
               break;      
               default:
+                console.log('unhandled event:"', message)
                 break;
             }
           } catch (error) {

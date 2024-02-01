@@ -35,8 +35,7 @@ const Profile = () => {
         switch (message[0].event) {                           
           case "check_state":
             //check if user in hidden list
-            console.log('RETURNS friends lis')
-                                      
+            console.log('RETURNS friends lis')                                      
             break;
           case "":
               
@@ -63,7 +62,21 @@ const Profile = () => {
     };  
    }, []);
 
-
+    const delete_friend = async()=>{
+      if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+        const message = {
+          id: data.id,
+          to_delete: todelete,
+          event: "delete_friend",
+        };
+        socket.current.send(JSON.stringify(message));
+      } else {
+        // Wait for the connection to open and then send the message
+        setTimeout(() => {
+          delete_friend();
+        }, 100); // You can adjust the timeout value if needed
+      }
+    }
   return (
     <Box>
       {data.id === (id ? parseFloat(id) : null) ? (

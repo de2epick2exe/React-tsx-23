@@ -155,6 +155,8 @@ wss.on("connection", (ws) => {
               parsedMessage.id,
               parsedMessage.cid
             )
+          clients[clientId].send(JSON.stringify(check_stat));
+
         break;
         default:
           console.log("Unknown event:", parsedMessage.event);
