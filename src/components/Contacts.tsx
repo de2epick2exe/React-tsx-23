@@ -30,8 +30,19 @@ const Contacts = () => {
                 break;
               case "waiting_accept":
                   setWaiting_accept(message[0].waiting_accept)
-              break;      
-              default:
+              break;
+              case "accept_friend":
+                  const timed_wl = waiting_accept.filter(
+                    (value: any)=>{
+                      value.id !== message[0].accepted_id
+                    }
+                  )
+                  // need add to friends list*
+              setWaiting_accept(timed_wl)
+
+
+              break;
+               default:
                 console.log('unhandled event:"', message)
                 break;
             }

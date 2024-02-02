@@ -66,7 +66,7 @@ const Profile = () => {
       if (socket.current && socket.current.readyState === WebSocket.OPEN) {
         const message = {
           id: data.id,
-          to_delete: todelete,
+          to_delete: profile_data?.id,
           event: "delete_friend",
         };
         socket.current.send(JSON.stringify(message));

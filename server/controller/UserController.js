@@ -336,7 +336,7 @@ class UserController {
   }
 
   /////-------------------------------------------------------------------------
-  async set_status_online(req, res) {
+  async set_status_online(req, res){
     const { id } = req.body;
     const response = await redis.set(id, "online");
     res.json("ok");
