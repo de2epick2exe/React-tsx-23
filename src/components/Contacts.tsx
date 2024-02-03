@@ -34,10 +34,10 @@ const Contacts = () => {
               case "accept_friend":
                   const timed_wl = waiting_accept.filter(
                     (value: any)=>{
-                      value.id !== message[0].accepted_id
+                      value.id !== message[0].data[0].accepted_id /// add returnning
                     }
                   )
-                  // need add to friends list*
+              setFriends([...friends, message[0].data])                  
               setWaiting_accept(timed_wl)
 
 
