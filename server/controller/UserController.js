@@ -336,7 +336,7 @@ class UserController {
   }
 
   /////-------------------------------------------------------------------------
-  async set_status_online(req, res){
+  async set_status_online(req, res) {
     const { id } = req.body;
     const response = await redis.set(id, "online");
     res.json("ok");
@@ -417,9 +417,9 @@ class UserController {
         "SELECT (friends_list) FROM public.friends WHERE user_id=$1",
         [id]
       );
-      return {event: 'get_friends', data: res.rows};
+      return { event: "get_friends", data: res.rows };
     } catch (error) {
-      console.log(error)
+      console.log(error);
 
       return { erro: error.message };
     }
@@ -432,16 +432,16 @@ class UserController {
     
   */
     try {
-      console.log(add_id)
-      
+      console.log(add_id);
+
       const res = await db.query(
-        "INSERT INTO public.friends (user_id, waiting_accept) VALUES ($1, ARRAY[$2]) ON CONFLICT (user_id) DO UPDATE SET waiting_accept = public.friends.waiting_accept || $2 WHERE public.friends.user_id = $1",[id, add_id]
+        "INSERT INTO public.friends (user_id, waiting_accept) VALUES ($1, ARRAY[$2]) ON CONFLICT (user_id) DO UPDATE SET waiting_accept = public.friends.waiting_accept || $2 WHERE public.friends.user_id = $1",
+        [id, add_id]
       );
-      return {event: 'add_friend', data: res.rows[0]};
+      return { event: "add_friend", data: res.rows[0] };
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return { erro: error.message };
-      
     }
   }
   async get_accept_list(id) {
@@ -450,26 +450,23 @@ class UserController {
         "SELECT (waiting_accept) FROM public.friends WHERE user_id=$1",
         [id]
       );
-      return {event: 'get_accept_list', data: res.rows};
+      return { event: "get_accept_list", data: res.rows };
     } catch (error) {
-
-      console.log(error)
+      console.log(error);
 
       return { erro: error.message };
     }
   }
 
   async accept_friend(id, accepted_id) {
-  try{
-    const res = await db.query(
-      "UPDATE public.friends SET waiting_accept = array_remove(waiting_accept, $2), friends_list = friends_list || $2 WHERE user_id = $1",
-      [id, accepted_id]
-    );
-    return {event: 'accept_friend', data: res.rows};
-  }
-    catch(error){
-      console.log(error)
-      
+    try {
+      const res = await db.query(
+        "UPDATE public.friends SET waiting_accept = array_remove(waiting_accept, $2), friends_list = friends_list || $2 WHERE user_id = $1",
+        [id, accepted_id]
+      );
+      return { event: "accept_friend", data: res.rows };
+    } catch (error) {
+      console.log(error);
     }
   }
   async delete_friend(id, todelete_id) {
@@ -478,9 +475,9 @@ class UserController {
         "UPDATE public.friends SET friends_list = array_remove(friends_list, $2), hidden_not_accepted = hidden_not_accepted || $2 WHERE user_id = $1",
         [id, todelete_id]
       );
-      return {event: 'delete_friend', data: res.rows};
+      return { event: "delete_friend", data: res.rows };
     } catch (error) {
-      console.log(error)
+      console.log(error);
 
       return { erro: error.message };
     }
@@ -491,22 +488,18 @@ class UserController {
         "UPDATE public.friends SET hidden_not_accepted = array_remove(hidden_not_accepted, $2), hidden_not_accepted = hidden_not_accepted || $2 WHERE id = $1",
         [id, rejected_id]
       );
-      return {event: 'reject_request', data:res.rows};
+      return { event: "reject_request", data: res.rows };
     } catch (error) {
       return { erro: error.message };
     }
   }
-  async check_user_status(id, cid){
-    const res = await db.query("SELECT CASE \
-    WHEN $1 = ANY(friends_list) THEN 'friends_list' \
-    WHEN $1 = ANY(waiting_accept) THEN 'waiting_accept' \
-    WHEN $1 = ANY(hidden_not_accepted) THEN 'hidden_not_accepted' \
-    ELSE NULL \
-  END AS matched_column \
-  FROM public.friends \
-  WHERE $1 = user_id OR $2 = ANY(friends_list, waiting_accept, hidden_not_accepted);",
-  [id, cid])
-  return {event : 'check_user_status', data: res.rows[0].matched_column};
+  async check_user_status(id, cid) {
+    const res = await db.query(
+      "SELECT CASE WHEN $2::varchar = ANY(friends_list) THEN 'friends_list' WHEN $2::varchar = ANY(waiting_accept) THEN 'waiting_accept' WHEN $2::varchar = ANY(hidden_not_accepted) THEN 'hidden_not_accepted' ELSE NULL END AS matched_column FROM public.friends WHERE user_id = $1;",
+      [id,cid]
+    );
+    console.log(res)
+    return { event: "check_user_status", data: res.rows[0] };
   }
 }
 module.exports = new UserController();
