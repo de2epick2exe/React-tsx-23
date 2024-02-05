@@ -11,7 +11,7 @@ const Profile = () => {
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   const { id } = useParams<{ id?: string }>();
   const [profile_data, Set_Profile_data] = useState<any>();
-  const [is_friend_status, set_Is_friend_status]=useState<any>(false)
+  const [is_friend_status, set_Is_friend_status]=useState<any>()
   const get_profile = async () => {
     if (id) {
       const res = await user_profile(parseFloat(id));
@@ -37,9 +37,9 @@ const Profile = () => {
             //check if user in hidden list
             console.log('RETURNS friends lis')                                      
             break;
-          case "":
-              
-          break;      
+            case "check_user_status":
+            set_Is_friend_status(message[0].data)
+            break;      
           default:
             break;
         }
@@ -83,7 +83,9 @@ const Profile = () => {
         <Box>
           <Box m='5' border="2px solid red" width='13vw' padding='3'>
           
-          <Center> <Avatar size='2xl' name={data.username?? undefined} src={data.photo}/></Center>
+          <Center>
+           <Avatar size='2xl' name={data.username?? undefined} src={data.photo}/>
+           </Center>
          
           <Flex flexDir='column' >
           <Text as='b'>{data.username}</Text>
@@ -100,6 +102,7 @@ const Profile = () => {
             <Text as='kbd'>{profile_data?.role}</Text>
             
             <Button mt='2'>Write message</Button>
+            {is_friend_status}
             <Button mt='2'>Add Friend</Button>
             </Flex>
             </Box>
