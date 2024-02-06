@@ -27,7 +27,10 @@ const Profile = () => {
     socket.current = new WebSocket("ws://localhost:3033");
     socket.current.onopen = () => {
       console.log(data.username, "connected to ws");
-    };
+      if(data.is_auth){
+        socket.current.send((JSON.stringify({event: 'check_status', id: data.id, cid:profile_data?.id  })))
+    }         
+    };    
     socket.current.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);            
