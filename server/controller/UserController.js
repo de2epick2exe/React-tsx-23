@@ -498,8 +498,8 @@ class UserController {
       "SELECT CASE WHEN $2::varchar = ANY(friends_list) THEN 'friends_list' WHEN $2::varchar = ANY(waiting_accept) THEN 'waiting_accept' WHEN $2::varchar = ANY(hidden_not_accepted) THEN 'hidden_not_accepted' ELSE NULL END AS matched_column FROM public.friends WHERE user_id = $1;",
       [id,cid]
     );
-    console.log(res)
-    return { event: "check_user_status", data: res.rows[0] };
+    console.log(res.rows)
+    return { event: "check_user_status", data: res.rows };
   }
 }
 module.exports = new UserController();

@@ -27,9 +27,12 @@ const Profile = () => {
     socket.current = new WebSocket("ws://localhost:3033");
     socket.current.onopen = () => {
       console.log(data.username, "connected to ws");
-      if(data.is_auth){
-        socket.current.send((JSON.stringify({event: 'check_status', id: data.id, cid:profile_data?.id  })))
-    }         
+           
+      if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+        if(data.is_auth){
+          socket.current.send((JSON.stringify({event: 'check_status', id: data.id, cid:profile_data?.id  })))
+      }    }
+
     };    
     socket.current.onmessage = (event) => {
       try {
@@ -41,6 +44,7 @@ const Profile = () => {
             console.log('RETURNS friends lis')                                      
             break;
             case "check_user_status":
+              console.log("user status",message);
             set_Is_friend_status(message[0].data)
             break;      
           default:
@@ -80,6 +84,18 @@ const Profile = () => {
         }, 100); // You can adjust the timeout value if needed
       }
     }
+    
+    const add_friend = async()=>{
+      if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+        const message = {
+          id: data.id,
+          add_id: profile_data?.id,
+          event: "add_friend",
+        };
+        socket.current.send(JSON.stringify(message));
+      }
+    }
+
   return (
     <Box>
       {data.id === (id ? parseFloat(id) : null) ? (
