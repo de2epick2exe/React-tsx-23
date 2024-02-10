@@ -444,13 +444,13 @@ class UserController {
       return { erro: error.message };
     }
   }
-  async get_accept_list(id) {
+  async get_waiting_list(id) {
     try {
       const res = await db.query(
         "SELECT (waiting_accept) FROM public.friends WHERE user_id=$1",
         [id]
       );
-      return { event: "get_accept_list", data: res.rows };
+      return { event: "get_waiting_list", data: res.rows };
     } catch (error) {
       console.log(error);
 

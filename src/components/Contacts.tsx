@@ -23,13 +23,13 @@ const Contacts = () => {
       try {
         const message = JSON.parse(event.data);
         console.log(message);
-        switch (message[0].event) {
+        switch (message.event) {
           case "get_friends":
             console.log("RETURNS friends lis");
-            setFriends(message[0].friends_list);
+            setFriends(message.data[0].friends_list);
             break;
-          case "waiting_accept":
-            setWaiting_accept(message[0].waiting_accept);
+          case "get_waiting_list":
+            setWaiting_accept(message.data[0].waiting_accept);
             break;
           case "accept_friend":
             const timed_wl = waiting_accept.filter((value: any) => 
@@ -40,7 +40,7 @@ const Contacts = () => {
             break;
           
           default:
-            console.log('unhandled event:"', message);
+            console.log('unhandled event:', message);
             break;
         }
       } catch (error) {
