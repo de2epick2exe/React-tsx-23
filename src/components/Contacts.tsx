@@ -106,6 +106,23 @@ const Contacts = () => {
     }
   };
 
+  const get_waiting_list = async () => {
+    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+      const message = {
+        id: data.id,
+        event: "get_waiting_list",
+      };
+      socket.current.send(JSON.stringify(message));
+    } else {
+      setTimeout(() => {
+        get_friends(); //add fix*
+      }, 100);
+    }
+  };
+
+
+
+
   return (
     <>
       <p>friends</p> <p>ctct rm</p>
