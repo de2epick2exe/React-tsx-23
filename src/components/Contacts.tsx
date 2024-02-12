@@ -120,8 +120,23 @@ const Contacts = () => {
     }
   };
 
+  const delete_friend = async (usr:any) => {
+    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+      const message = {
+        id: data.id,
+        to_delete: usr,
+        event: "delete_friend",
+      };
+      socket.current.send(JSON.stringify(message));
+    } else {
+      setTimeout(() => {
+        get_friends(); //add fix*
+      }, 100);
+    }
+  };
 
 
+      
 
   return (
     <>
