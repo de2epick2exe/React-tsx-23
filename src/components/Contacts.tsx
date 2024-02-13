@@ -2,6 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store/store";
+import {
+  Box,
+  Flex,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+} from "@chakra-ui/react";
+
 const Contacts = () => {
   const socket = useRef<WebSocket | undefined>();
   interface user_card {
@@ -32,15 +42,15 @@ const Contacts = () => {
             setWaiting_accept(message.data[0].waiting_accept);
             break;
           case "accept_friend":
-            const timed_wl = waiting_accept.filter((value: any) => 
-                    value.id !== message[0].data[0].accepted_id
-               );
+            const timed_wl = waiting_accept.filter(
+              (value: any) => value.id !== message[0].data[0].accepted_id
+            );
             setFriends([...friends, message[0].data]);
             setWaiting_accept(timed_wl);
             break;
-          
+
           default:
-            console.log('unhandled event:', message);
+            console.log("unhandled event:", message);
             break;
         }
       } catch (error) {
@@ -120,7 +130,7 @@ const Contacts = () => {
     }
   };
 
-  const delete_friend = async (usr:any) => {
+  const delete_friend = async (usr: any) => {
     if (socket.current && socket.current.readyState === WebSocket.OPEN) {
       const message = {
         id: data.id,
@@ -135,12 +145,35 @@ const Contacts = () => {
     }
   };
 
-
-      
-
   return (
     <>
-      <p>friends</p> <p>ctct rm</p>
+      <Flex
+        justifyContent={"center"}
+        flexDirection={"column"}
+        alignItems={"center"}
+      >
+        <p>friends</p> <p>ctct rm</p>
+        <Flex>
+          <Box>
+            <Tabs>
+              <TabList>
+                <Tab>Friends</Tab>
+                <Tab>Waiting list</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                {friends.map((frd) => (
+                    <Box key={frd.id}>{frd.username}</Box>
+                  ))}
+                </TabPanel>
+                <TabPanel>
+                  waiting users
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </Box>
+        </Flex>
+      </Flex>
     </>
   );
 };
