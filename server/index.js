@@ -158,6 +158,14 @@ wss.on("connection", (ws) => {
           clients[clientId].send(JSON.stringify(check_stat));
 
         break;
+        case "get_recomended_users":
+            const recomended_users = await UserController.check_user_status(
+              parsedMessage.page,
+              parsedMessage.limit
+            )
+          clients[clientId].send(JSON.stringify(recomended_users));
+
+        break;
         default:
           console.log("Unknown event:", parsedMessage.event);
       }
