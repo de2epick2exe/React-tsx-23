@@ -21,7 +21,7 @@ const Contacts = () => {
   }
   const [friends, setFriends] = useState<user_card[]>([]);
   const [waiting_accept, setWaiting_accept] = useState<user_card[]>([]);
-
+  const [recomended_users, setRecomended_users] = useState<user_card[]>([])
   const data = useSelector((state: RootState) => state.userReducer);
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   useEffect(() => {
@@ -48,7 +48,9 @@ const Contacts = () => {
             setFriends([...friends, message[0].data]);
             setWaiting_accept(timed_wl);
             break;
-
+          case "recomended_users" :            
+              setRecomended_users([...recomended_users, message[0].data])
+            break;
           default:
             console.log("unhandled event:", message);
             break;
