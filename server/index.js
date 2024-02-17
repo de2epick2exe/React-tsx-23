@@ -123,12 +123,12 @@ wss.on("connection", (ws) => {
           clients[clientId].send(JSON.stringify(waiting_list));
           break;
         case "add_friend":
-          const add_res= await UserController.add_friend(
+          const add_res = await UserController.add_friend(
             parsedMessage.id,
             parsedMessage.add_id
-          )
+          );
           clients[clientId].send(JSON.stringify(add_res));
-            break;
+          break;
         case "accept_friend":
           const accepted = await UserController.accept_friend(
             parsedMessage.id,
@@ -136,36 +136,34 @@ wss.on("connection", (ws) => {
           );
           clients[clientId].send(JSON.stringify(accepted));
           break;
-          case "delete_friend":
-            const deleted = await UserController.delete_friend(
-              parsedMessage.id,
-              parsedMessage.to_delete
-            )
+        case "delete_friend":
+          const deleted = await UserController.delete_friend(
+            parsedMessage.id,
+            parsedMessage.to_delete
+          );
           clients[clientId].send(JSON.stringify(deleted));
-        break;
+          break;
         case "reject_request":
           const rejected = await UserController.reject_request(
             parsedMessage.id,
             parsedMessage.reject_id
-          )
+          );
           clients[clientId].send(JSON.stringify(rejected));
-            break;
+          break;
         case "check_status":
-            const check_stat = await UserController.check_user_status(
-              parsedMessage.id,
-              parsedMessage.cid
-            )
+          const check_stat = await UserController.check_user_status(
+            parsedMessage.id,
+            parsedMessage.cid
+          );
           clients[clientId].send(JSON.stringify(check_stat));
-
-        break;
+          break;
         case "get_recomended_users":
-            const recomended_users = await UserController.check_user_status(
-              parsedMessage.page,
-              parsedMessage.limit
-            )
+          const recomended_users = await UserController.get_recomended_users(
+            parsedMessage.page,
+            parsedMessage.limit
+          ); 
           clients[clientId].send(JSON.stringify(recomended_users));
-
-        break;
+          break;
         default:
           console.log("Unknown event:", parsedMessage.event);
       }

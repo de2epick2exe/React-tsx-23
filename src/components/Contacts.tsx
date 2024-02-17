@@ -21,25 +21,26 @@ const Contacts = () => {
   }
   const [friends, setFriends] = useState<user_card[]>([]);
   const [waiting_accept, setWaiting_accept] = useState<user_card[]>([]);
-  const [recomended_users, setRecomended_users] = useState<user_card[]>([])
+  const [recomended_users, setRecomended_users] = useState<user_card[]>([]);
   const data = useSelector((state: RootState) => state.userReducer);
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   useEffect(() => {
     socket.current = new WebSocket("ws://localhost:3033");
     socket.current.onopen = () => {
       console.log(data.username, "connected to ws");
-    };
+    };    
     socket.current.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
         console.log(message);
+        console.log(message.data)
         switch (message.event) {
           case "get_friends":
             console.log("RETURNS friends lis");
-            setFriends(message.data[0].friends_list);
+            setFriends(message.data);
             break;
           case "get_waiting_list":
-            setWaiting_accept(message.data[0].waiting_accept);
+            setWaiting_accept(message.data);
             break;
           case "accept_friend":
             const timed_wl = waiting_accept.filter(
@@ -48,8 +49,8 @@ const Contacts = () => {
             setFriends([...friends, message[0].data]);
             setWaiting_accept(timed_wl);
             break;
-          case "recomended_users" :            
-              setRecomended_users([...recomended_users, message[0].data])
+          case "recomended_users":
+            setRecomended_users([...recomended_users, message[0].data]);
             break;
           default:
             console.log("unhandled event:", message);
@@ -67,6 +68,13 @@ const Contacts = () => {
       console.log("SOCKET error");
     };
     get_friends();
+
+    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+      socket.current.send(
+        JSON.stringify({ event: "get_recomended_users", page: 1, limit: 10 })
+      );
+    }
+
     return () => {
       if (socket.current) {
         socket.current.close();
@@ -146,7 +154,7 @@ const Contacts = () => {
       }, 100);
     }
   };
-
+ 
   return (
     <>
       <Flex
@@ -164,13 +172,11 @@ const Contacts = () => {
               </TabList>
               <TabPanels>
                 <TabPanel>
-                {friends.map((frd) => (
+                  {friends.map((frd) => (
                     <Box key={frd.id}>{frd.username}</Box>
                   ))}
                 </TabPanel>
-                <TabPanel>
-                  waiting users
-                </TabPanel>
+                <TabPanel>waiting users</TabPanel>
               </TabPanels>
             </Tabs>
           </Box>
