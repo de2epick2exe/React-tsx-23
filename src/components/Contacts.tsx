@@ -68,12 +68,8 @@ const Contacts = () => {
       console.log("SOCKET error");
     };
     get_friends();
-
-    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
-      socket.current.send(
-        JSON.stringify({ event: "get_recomended_users", page: 1, limit: 10 })
-      );
-    }
+    get_recomended()
+   
 
     return () => {
       if (socket.current) {
@@ -89,6 +85,7 @@ const Contacts = () => {
         event: "friends",
       };
       socket.current.send(JSON.stringify(message));
+      
     } else {
       // Wait for the connection to open and then send the message
       setTimeout(() => {
@@ -96,6 +93,24 @@ const Contacts = () => {
       }, 100); // You can adjust the timeout value if needed
     }
   };
+
+
+  const get_recomended = async () => {
+          if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+        socket.current.send(
+          JSON.stringify({ event: "get_recomended_users", page: 1, limit: 10 })
+        );
+          
+    } else {
+      // Wait for the connection to open and then send the message
+      setTimeout(() => {
+        get_recomended();
+      }, 100); // You can adjust the timeout value if needed
+    }
+  };
+
+
+
 
   const add_friend = async (add_id: any) => {
     if (socket.current && socket.current.readyState === WebSocket.OPEN) {
@@ -135,7 +150,7 @@ const Contacts = () => {
       socket.current.send(JSON.stringify(message));
     } else {
       setTimeout(() => {
-        get_friends(); //add fix*
+        get_waiting_list(); //add fix*
       }, 100);
     }
   };
@@ -150,7 +165,7 @@ const Contacts = () => {
       socket.current.send(JSON.stringify(message));
     } else {
       setTimeout(() => {
-        get_friends(); //add fix*
+       /// delete_friend(); //add fix*
       }, 100);
     }
   };
@@ -179,7 +194,7 @@ const Contacts = () => {
                 <TabPanel>waiting users</TabPanel>
               </TabPanels>
             </Tabs>
-          </Box>
+          </Box>          
         </Flex>
       </Flex>
     </>
