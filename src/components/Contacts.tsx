@@ -21,7 +21,11 @@ const Contacts = () => {
   }
   const [friends, setFriends] = useState<user_card[]>([]);
   const [waiting_accept, setWaiting_accept] = useState<user_card[]>([]);
-  const [recomended_users, setRecomended_users] = useState<user_card[]>([]);
+  const [recomended_users, setRecomended_users] = useState([]);
+  const [isLoadedFriends, setIsLoadedFriends]= useState(false)
+  const [isLoadedWaiting, setIsLoadedWaiting]= useState(false)
+  const [isLoadedRecomended, setIsLoadedRecomended]= useState(false)
+
   const data = useSelector((state: RootState) => state.userReducer);
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   useEffect(() => {
@@ -50,7 +54,17 @@ const Contacts = () => {
             setWaiting_accept(timed_wl);
             break;
           case "recomended_users":
-            setRecomended_users([...recomended_users, message[0].data]);
+            //@ts-ignore
+            setRecomended_users( message.data);
+            console.log(message.data)
+            console.log(recomended_users)
+            recomended_users.map((user)=>{
+              console.log(user)
+              console.log(user)  
+            })
+            setIsLoadedRecomended(true)
+
+
             break;
           default:
             console.log("unhandled event:", message);
@@ -170,6 +184,11 @@ const Contacts = () => {
     }
   };
  
+
+
+
+
+
   return (
     <>
       <Flex
@@ -184,6 +203,7 @@ const Contacts = () => {
               <TabList>
                 <Tab>Friends</Tab>
                 <Tab>Waiting list</Tab>
+                <Tab>Recomended list</Tab>
               </TabList>
               <TabPanels>
                 <TabPanel>
@@ -192,6 +212,14 @@ const Contacts = () => {
                   ))}
                 </TabPanel>
                 <TabPanel>waiting users</TabPanel>
+                <TabPanel>
+                  <Flex flexDirection={'column'}>
+                  {isLoadedRecomended? recomended_users.map(user=>(
+                    //@ts-ignore
+                  <span key={user.id}>{user.username}</span>
+                )) : <Box>Loading</Box> }
+                </Flex>
+                </TabPanel>
               </TabPanels>
             </Tabs>
           </Box>          

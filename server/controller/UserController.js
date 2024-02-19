@@ -294,7 +294,7 @@ class UserController {
     const offset = page * limit - limit
     const users = await db.query('SELECT id, username, role, avatar FROM users LIMIT $1 OFFSET $2',[limit, offset])
     console.log(users.rows)
-    return JSON.stringify({event: 'recomended_users', data: users.rows[0]})
+    return {event: "recomended_users", data: users.rows}
   }
 
 
