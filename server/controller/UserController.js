@@ -422,7 +422,7 @@ class UserController {
   async get_friends(id) {
     try {
       const res = await db.query(
-        "SELECT (friends_list) FROM public.friends WHERE user_id=$1",
+        "SELECT users.username, users.role, users.avatar FROM public.users RIGHT JOIN public.friends ON public.users.id::varchar = ANY(public.friends.friends_list) WHERE public.friends.user_id = $1",
         [id]
       );
       return { event: "get_friends", data: res.rows };

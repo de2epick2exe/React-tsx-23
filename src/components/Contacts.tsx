@@ -127,6 +127,7 @@ const Contacts = () => {
 
 
   const add_friend = async (add_id: any) => {
+    if (add_id !== data.id){
     if (socket.current && socket.current.readyState === WebSocket.OPEN) {
       const message = {
         id: data.id,
@@ -139,6 +140,9 @@ const Contacts = () => {
         add_friend(add_id); //add fix*
       }, 100);
     }
+  }else{
+    return
+  }
   };
 
   const get_friends = async () => {
