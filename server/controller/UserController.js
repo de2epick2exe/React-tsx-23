@@ -455,7 +455,7 @@ class UserController {
   async get_waiting_list(id) {
     try {
       const res = await db.query(
-        "SELECT (waiting_accept) FROM public.friends WHERE user_id=$1",
+        "SELECT users.username, users.role, users.avatar FROM public.users RIGHT JOIN public.friends ON public.users.id::varchar = ANY(public.friends.waiting_accept) WHERE public.friends.user_id = $1",
         [id]
       );
       return { event: "get_waiting_list", data: res.rows };

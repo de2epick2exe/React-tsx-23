@@ -10,6 +10,7 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  Button,
 } from "@chakra-ui/react";
 
 const Contacts = () => {
@@ -42,6 +43,7 @@ const Contacts = () => {
           case "get_friends":
             console.log("RETURNS friends lis");
             setFriends(message.data);
+            setIsLoadedFriends(true)
             break;
           case "get_waiting_list":
             setWaiting_accept(message.data);
@@ -211,17 +213,23 @@ const Contacts = () => {
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  {friends.map((frd) => (
-                    <Box key={frd.id}>{frd.username}</Box>
-                  ))}
+                  <Flex flexDirection={'column'}>
+                  {isLoadedFriends? friends.map((frd) => (
+                    <Box key={frd.id}>
+                      <span>{frd.username}</span>
+                    <Button onClick={()=>delete_friend(frd.id)}>Delete</Button>
+                    </Box>
+                  )) : <Box>Loading...</Box>}</Flex>
                 </TabPanel>
-                <TabPanel>waiting users</TabPanel>
+                <TabPanel>{isLoadedWaiting ? waiting_accept.map((usr)=>(
+                  <Box key={usr.id}>{usr.username}</Box>
+                )) : <Box> Loading...</Box>}</TabPanel>
                 <TabPanel>
                   <Flex flexDirection={'column'}>
                   {isLoadedRecomended? recomended_users.map(user=>(
                     //@ts-ignore
                   <span key={user.id}>{user.username}</span>
-                )) : <Box>Loading</Box> }
+                )) : <Box>Loading...</Box> }
                 </Flex>
                 </TabPanel>
               </TabPanels>
