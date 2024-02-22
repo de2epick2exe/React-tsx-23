@@ -47,6 +47,7 @@ const Contacts = () => {
             break;
           case "get_waiting_list":
             setWaiting_accept(message.data);
+            setIsLoadedWaiting(true)
             break;
           case "accept_friend":
             const timed_wl = waiting_accept.filter(
@@ -85,7 +86,7 @@ const Contacts = () => {
     };
     get_friends();
     get_recomended()
-   
+    get_waiting_list()
 
     return () => {
       if (socket.current) {
@@ -222,13 +223,25 @@ const Contacts = () => {
                   )) : <Box>Loading...</Box>}</Flex>
                 </TabPanel>
                 <TabPanel>{isLoadedWaiting ? waiting_accept.map((usr)=>(
-                  <Box key={usr.id}>{usr.username}</Box>
+                  <Box key={usr.id}>
+                    <span>{usr.username}</span>
+                    <Button onClick={()=>add_friend(usr.id)}>Add to friends</Button>
+                    </Box>
                 )) : <Box> Loading...</Box>}</TabPanel>
                 <TabPanel>
                   <Flex flexDirection={'column'}>
                   {isLoadedRecomended? recomended_users.map(user=>(
                     //@ts-ignore
-                  <span key={user.id}>{user.username}</span>
+                  <span key={user.id}>
+                    <span>
+                    {//@ts-ignore
+                    user.username}
+                    </span>
+                    {//@ts-ignore
+                                              
+                    <Button onClick={()=>add_friend(user.id)}>Add to friends</Button>
+                    }
+                    </span>
                 )) : <Box>Loading...</Box> }
                 </Flex>
                 </TabPanel>
