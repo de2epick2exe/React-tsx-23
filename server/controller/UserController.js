@@ -443,8 +443,8 @@ class UserController {
       console.log(add_id);
 
       const res = await db.query(
-        "INSERT INTO public.friends (user_id, waiting_accept) VALUES ($1, ARRAY[$2]) ON CONFLICT (user_id) DO UPDATE SET waiting_accept = public.friends.waiting_accept || $2 WHERE public.friends.user_id = $1",
-        [id, add_id]
+        "INSERT INTO public.friends (waiting_accept, user_id) VALUES (ARRAY[$1], $2) ON CONFLICT (user_id) DO UPDATE SET waiting_accept = public.friends.waiting_accept || $1 WHERE public.friends.user_id = $2",
+        [add_id, id]
       );
       return { event: "add_friend", data: res.rows[0] };
     } catch (error) {

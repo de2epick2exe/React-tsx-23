@@ -130,11 +130,14 @@ const Contacts = () => {
 
 
   const add_friend = async (add_id: any) => {
+    console.log(add_id, data.id)
+    
     if (add_id !== data.id){
+      console.log('add frined')
     if (socket.current && socket.current.readyState === WebSocket.OPEN) {
       const message = {
-        id: data.id,
-        add_id: add_id,
+        id: add_id,
+        add_id: data.id,
         event: "add_friend",
       };
       socket.current.send(JSON.stringify(message));
@@ -230,17 +233,18 @@ const Contacts = () => {
                 )) : <Box> Loading...</Box>}</TabPanel>
                 <TabPanel>
                   <Flex flexDirection={'column'}>
-                  {isLoadedRecomended? recomended_users.map(user=>(
-                    //@ts-ignore
-                  <span key={user.id}>
-                    <span>
-                    {//@ts-ignore
-                    user.username}
-                    </span>
-                    {//@ts-ignore
-                                              
-                    <Button onClick={()=>add_friend(user.id)}>Add to friends</Button>
-                    }
+                  {isLoadedRecomended? recomended_users.map(user=>(                    
+                  //@ts-ignore
+                  <span key={user?.id}>
+                    
+                    <span>{
+                  //@ts-ignore                    
+                    user?.username }</span>
+                    {
+                  //@ts-ignore                      
+                      <Button onClick={()=>add_friend(user?.id)}>
+                      Add to friends
+                      </Button>}
                     </span>
                 )) : <Box>Loading...</Box> }
                 </Flex>
