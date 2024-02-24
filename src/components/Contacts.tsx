@@ -194,7 +194,27 @@ const Contacts = () => {
     }
   };
  
-
+  const accept_friend = async (accept_id: any) => {
+    console.log(accept_id, data.id)
+    
+    if (accept_id !== data.id){
+      console.log('add frined')
+    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+      const message = {
+        id: accept_id,
+        accept_id: data.id,
+        event: "accept_friend",
+      };
+      socket.current.send(JSON.stringify(message));
+    } else {
+      setTimeout(() => {
+        accept_friend(accept_id); //add fix*
+      }, 100);
+    }
+  }else{
+    return
+  }
+  };
 
 
 

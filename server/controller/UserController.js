@@ -469,7 +469,7 @@ class UserController {
   async accept_friend(id, accepted_id) {
     try {
       const res = await db.query(
-        "UPDATE public.friends SET waiting_accept = array_remove(waiting_accept, $2), friends_list = friends_list || $2 WHERE user_id = $1",
+        "UPDATE public.friends SET waiting_accept = array_remove(waiting_accept, $2), friends_list = friends_list || $2 WHERE user_id = $1 AND UPDATE public.friends SET friends_list = friends_list || $1 WHERE user_id = $2 ",
         [id, accepted_id]
       );
       return { event: "accept_friend", data: res.rows };
