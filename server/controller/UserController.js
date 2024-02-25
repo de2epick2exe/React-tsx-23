@@ -455,7 +455,7 @@ class UserController {
   async get_waiting_list(id) {
     try {
       const res = await db.query(
-        "SELECT users.username, users.role, users.avatar FROM public.users RIGHT JOIN public.friends ON public.users.id::varchar = ANY(public.friends.waiting_accept) WHERE public.friends.user_id = $1",
+        "SELECT users.id, users.username, users.role, users.avatar FROM public.users RIGHT JOIN public.friends ON public.users.id::varchar = ANY(public.friends.waiting_accept) WHERE public.friends.user_id = $1",
         [id]
       );
       return { event: "get_waiting_list", data: res.rows };
@@ -469,14 +469,21 @@ class UserController {
   async accept_friend(id, accepted_id) {
     try {
       const res = await db.query(
-        "UPDATE public.friends SET waiting_accept = array_remove(waiting_accept, $2), friends_list = friends_list || $2 WHERE user_id = $1 AND UPDATE public.friends SET friends_list = friends_list || $1 WHERE user_id = $2 ",
+        "UPDATE public.friends SET waiting_accept = array_remove(waiting_accept, $2), friends_list = friends_list || ARRAY[$2] WHERE user_id = $1",
         [id, accepted_id]
       );
+  
+      const add_to_friends = await db.query(
+        "UPDATE public.friends SET friends_list = friends_list || ARRAY[$1] WHERE user_id = $2",
+        [id, accepted_id]
+      );
+  
       return { event: "accept_friend", data: res.rows };
     } catch (error) {
       console.log(error);
     }
   }
+  
   async delete_friend(id, todelete_id) {
     try {
       const res = await db.query(

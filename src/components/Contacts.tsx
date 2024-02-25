@@ -168,7 +168,7 @@ const Contacts = () => {
   const get_waiting_list = async () => {
     if (socket.current && socket.current.readyState === WebSocket.OPEN) {
       const message = {
-        id: data.id,
+        id: data.id,        
         event: "get_waiting_list",
       };
       socket.current.send(JSON.stringify(message));
@@ -194,21 +194,24 @@ const Contacts = () => {
     }
   };
  
-  const accept_friend = async (accept_id: any) => {
-    console.log(accept_id, data.id)
-    
-    if (accept_id !== data.id){
+  const accept_friend = async (accepted_id: any) => {
+    console.log(accepted_id, data.id)
+    if(!accepted_id){
+      return alert('!accepted id')
+    }
+
+    if (accepted_id !== data.id){
       console.log('add frined')
     if (socket.current && socket.current.readyState === WebSocket.OPEN) {
       const message = {
-        id: accept_id,
-        accept_id: data.id,
+        id: data.id,
+        accept_id: accepted_id,
         event: "accept_friend",
       };
       socket.current.send(JSON.stringify(message));
     } else {
       setTimeout(() => {
-        accept_friend(accept_id); //add fix*
+        accept_friend(accepted_id); //add fix*
       }, 100);
     }
   }else{
@@ -247,8 +250,8 @@ const Contacts = () => {
                 </TabPanel>
                 <TabPanel>{isLoadedWaiting ? waiting_accept.map((usr)=>(
                   <Box key={usr.id}>
-                    <span>{usr.username}</span>
-                    <Button onClick={()=>add_friend(usr.id)}>Add to friends</Button>
+                    <span>{usr.username}</span>                    
+                    <Button onClick={()=>accept_friend(usr.id)}>Add to friends</Button>
                     </Box>
                 )) : <Box> Loading...</Box>}</TabPanel>
                 <TabPanel>
