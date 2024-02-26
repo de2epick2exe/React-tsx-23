@@ -23,9 +23,9 @@ const Contacts = () => {
   const [friends, setFriends] = useState<user_card[]>([]);
   const [waiting_accept, setWaiting_accept] = useState<user_card[]>([]);
   const [recomended_users, setRecomended_users] = useState([]);
-  const [isLoadedFriends, setIsLoadedFriends]= useState(false)
-  const [isLoadedWaiting, setIsLoadedWaiting]= useState(false)
-  const [isLoadedRecomended, setIsLoadedRecomended]= useState(false)
+  const [isLoadedFriends, setIsLoadedFriends] = useState(false);
+  const [isLoadedWaiting, setIsLoadedWaiting] = useState(false);
+  const [isLoadedRecomended, setIsLoadedRecomended] = useState(false);
 
   const data = useSelector((state: RootState) => state.userReducer);
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
@@ -33,21 +33,21 @@ const Contacts = () => {
     socket.current = new WebSocket("ws://localhost:3033");
     socket.current.onopen = () => {
       console.log(data.username, "connected to ws");
-    };    
+    };
     socket.current.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
         console.log(message);
-        console.log(message.data)
+        console.log(message.data);
         switch (message.event) {
           case "get_friends":
             console.log("RETURNS friends lis");
             setFriends(message.data);
-            setIsLoadedFriends(true)
+            setIsLoadedFriends(true);
             break;
           case "get_waiting_list":
             setWaiting_accept(message.data);
-            setIsLoadedWaiting(true)
+            setIsLoadedWaiting(true);
             break;
           case "accept_friend":
             const timed_wl = waiting_accept.filter(
@@ -58,15 +58,14 @@ const Contacts = () => {
             break;
           case "recomended_users":
             //@ts-ignore
-            setRecomended_users( message.data);
-            console.log(message.data)
-            console.log(recomended_users)
-            recomended_users.map((user)=>{
-              console.log(user)
-              console.log(user)  
-            })
-            setIsLoadedRecomended(true)
-
+            setRecomended_users(message.data);
+            console.log(message.data);
+            console.log(recomended_users);
+            recomended_users.map((user) => {
+              console.log(user);
+              console.log(user);
+            });
+            setIsLoadedRecomended(true);
 
             break;
           default:
@@ -84,9 +83,10 @@ const Contacts = () => {
     socket.current.onerror = () => {
       console.log("SOCKET error");
     };
+
     get_friends();
-    get_recomended()
-    get_waiting_list()
+    get_recomended();
+    get_waiting_list();
 
     return () => {
       if (socket.current) {
@@ -102,53 +102,50 @@ const Contacts = () => {
         event: "friends",
       };
       socket.current.send(JSON.stringify(message));
-      
     } else {
       // Wait for the connection to open and then send the message
+
       setTimeout(() => {
         get_users_rooms_data();
-      }, 100); // You can adjust the timeout value if needed
-    }
-  };
-
-
-  const get_recomended = async () => {
-          if (socket.current && socket.current.readyState === WebSocket.OPEN) {
-        socket.current.send(
-          JSON.stringify({ event: "get_recomended_users", page: 1, limit: 10 })
-        );
-          
-    } else {
-      // Wait for the connection to open and then send the message
-      setTimeout(() => {
-        get_recomended();
-      }, 100); // You can adjust the timeout value if needed
-    }
-  };
-
-
-
-
-  const add_friend = async (add_id: any) => {
-    console.log(add_id, data.id)
-    
-    if (add_id !== data.id){
-      console.log('add frined')
-    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
-      const message = {
-        id: add_id,
-        add_id: data.id,
-        event: "add_friend",
-      };
-      socket.current.send(JSON.stringify(message));
-    } else {
-      setTimeout(() => {
-        add_friend(add_id); //add fix*
       }, 100);
     }
-  }else{
-    return
-  }
+  };
+
+  const get_recomended = async () => {
+    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+      socket.current.send(
+        JSON.stringify({ event: "get_recomended_users", page: 1, limit: 10 })
+      );
+    } else {
+      setTimeout(() => {
+        get_recomended();
+      }, 100);
+      return;
+      //get_recomended();
+    }
+  };
+
+  const add_friend = async (add_id: any) => {
+    console.log(add_id, data.id);
+
+    if (add_id !== data.id) {
+      console.log("add frined");
+      if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+        const message = {
+          id: add_id,
+          add_id: data.id,
+          event: "add_friend",
+        };
+        socket.current.send(JSON.stringify(message));
+      } else {
+        setTimeout(() => {
+          add_friend(add_id);
+        }, 100);
+        //; //add fix*
+      }
+    } else {
+      return;
+    }
   };
 
   const get_friends = async () => {
@@ -160,22 +157,24 @@ const Contacts = () => {
       socket.current.send(JSON.stringify(message));
     } else {
       setTimeout(() => {
-        get_friends(); //add fix*
+        get_friends();
       }, 100);
+      //get_friends(); //add fix*
     }
   };
 
   const get_waiting_list = async () => {
     if (socket.current && socket.current.readyState === WebSocket.OPEN) {
       const message = {
-        id: data.id,        
+        id: data.id,
         event: "get_waiting_list",
       };
       socket.current.send(JSON.stringify(message));
     } else {
       setTimeout(() => {
-        get_waiting_list(); //add fix*
+        get_waiting_list();
       }, 100);
+      //get_waiting_list(); //add fix*
     }
   };
 
@@ -189,38 +188,63 @@ const Contacts = () => {
       socket.current.send(JSON.stringify(message));
     } else {
       setTimeout(() => {
-       /// delete_friend(); //add fix*
+        delete_friend(usr);
       }, 100);
+      //delete_friend(usr); //add fix*
     }
   };
- 
+
   const accept_friend = async (accepted_id: any) => {
-    console.log(accepted_id, data.id)
-    if(!accepted_id){
-      return alert('!accepted id')
+    console.log(accepted_id, data.id);
+    if (!accepted_id) {
+      return alert("!accepted id");
     }
 
-    if (accepted_id !== data.id){
-      console.log('add frined')
-    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
-      const message = {
-        id: data.id,
-        accept_id: accepted_id,
-        event: "accept_friend",
-      };
-      socket.current.send(JSON.stringify(message));
+    if (accepted_id !== data.id) {
+      console.log("add frined");
+      if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+        const message = {
+          id: data.id,
+          accept_id: accepted_id,
+          event: "accept_friend",
+        };
+        socket.current.send(JSON.stringify(message));
+      } else {
+        setTimeout(() => {
+          accept_friend(accepted_id);
+        }, 100);
+        // accept_friend(accepted_id); //add fix*
+      }
     } else {
-      setTimeout(() => {
-        accept_friend(accepted_id); //add fix*
-      }, 100);
+      return;
     }
-  }else{
-    return
-  }
   };
 
+  const reject_friend = async (reject_id: any) => {
+    console.log(reject_id, data.id);
+    if (!reject_id) {
+      return alert("!accepted id");
+    }
 
-
+    if (reject_id !== data.id) {
+      console.log("add frined");
+      if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+        const message = {
+          id: data.id,
+          reject_id: reject_id,
+          event: "reject_request",
+        };
+        socket.current.send(JSON.stringify(message));
+      } else {
+        setTimeout(() => {
+          reject_friend(reject_id);
+        }, 100);
+        //accept_friend(reject_id); //add fix*
+      }
+    } else {
+      return;
+    }
+  };
 
   return (
     <>
@@ -240,41 +264,66 @@ const Contacts = () => {
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  <Flex flexDirection={'column'}>
-                  {isLoadedFriends? friends.map((frd) => (
-                    <Box key={frd.id}>
-                      <span>{frd.username}</span>
-                    <Button onClick={()=>delete_friend(frd.id)}>Delete</Button>
-                    </Box>
-                  )) : <Box>Loading...</Box>}</Flex>
+                  <Flex flexDirection={"column"}>
+                    {isLoadedFriends ? (
+                      friends.map((frd) => (
+                        <Box key={frd.id}>
+                          <span>{frd.username}</span>
+                          <Button onClick={() => delete_friend(frd.id)}>
+                            Delete
+                          </Button>
+                        </Box>
+                      ))
+                    ) : (
+                      <Box>Loading...</Box>
+                    )}
+                  </Flex>
                 </TabPanel>
-                <TabPanel>{isLoadedWaiting ? waiting_accept.map((usr)=>(
-                  <Box key={usr.id}>
-                    <span>{usr.username}</span>                    
-                    <Button onClick={()=>accept_friend(usr.id)}>Add to friends</Button>
-                    </Box>
-                )) : <Box> Loading...</Box>}</TabPanel>
                 <TabPanel>
-                  <Flex flexDirection={'column'}>
-                  {isLoadedRecomended? recomended_users.map(user=>(                    
-                  //@ts-ignore
-                  <span key={user?.id}>
-                    
-                    <span>{
-                  //@ts-ignore                    
-                    user?.username }</span>
-                    {
-                  //@ts-ignore                      
-                      <Button onClick={()=>add_friend(user?.id)}>
-                      Add to friends
-                      </Button>}
-                    </span>
-                )) : <Box>Loading...</Box> }
-                </Flex>
+                  {isLoadedWaiting ? (
+                    waiting_accept.map((usr) => (
+                      <Box key={usr.id}>
+                        <span>{usr.username}</span>
+                        <Button onClick={() => accept_friend(usr.id)}>
+                              Add to friends
+                        </Button>
+                        <Button onClick={() => reject_friend(usr.id)}>
+                      Reject
+                      </Button>
+                      </Box>
+                    ))
+                  ) : (
+                    <Box> Loading...</Box>
+                  )}
+                </TabPanel>
+                <TabPanel>
+                  <Flex flexDirection={"column"}>
+                    {isLoadedRecomended ? (
+                      recomended_users.map((user) => (
+                        //@ts-ignore
+                        <span key={user?.id}>
+                          <span>
+                            {
+                              //@ts-ignore
+                              user?.username
+                            }
+                          </span>
+                          {
+                            //@ts-ignore
+                            <Button onClick={() => add_friend(user?.id)}>
+                              Add to friends
+                            </Button>
+                          }
+                        </span>
+                      ))
+                    ) : (
+                      <Box>Loading...</Box>
+                    )}
+                  </Flex>
                 </TabPanel>
               </TabPanels>
             </Tabs>
-          </Box>          
+          </Box>
         </Flex>
       </Flex>
     </>
