@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const WebSocket = require("ws");
 require("dotenv");
 const Redis = require("ioredis");
+const Messager_Controller = require('./Messager')
 
 const redis = new Redis({
   port: 6379,
@@ -422,7 +423,7 @@ class UserController {
   async get_friends(id) {
     try {
       const res = await db.query(
-        "SELECT users.username, users.role, users.avatar FROM public.users RIGHT JOIN public.friends ON public.users.id::varchar = ANY(public.friends.friends_list) WHERE public.friends.user_id = $1",
+        "SELECT users.id, users.username, users.role, users.avatar FROM public.users RIGHT JOIN public.friends ON public.users.id::varchar = ANY(public.friends.friends_list) WHERE public.friends.user_id = $1",
         [id]
       );
       return { event: "get_friends", data: res.rows };
@@ -473,10 +474,11 @@ class UserController {
         [id, accepted_id]
       );
   
-      const add_to_friends = await db.query(
+      await db.query(
         "UPDATE public.friends SET friends_list = friends_list || ARRAY[$1] WHERE user_id = $2",
         [id, accepted_id]
       );
+      const create_room = await Messager_Controller.create_private_room({body:{id_1: id, id_2: accepted_id}})
   
       return { event: "accept_friend", data: res.rows };
     } catch (error) {

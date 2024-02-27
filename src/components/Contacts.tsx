@@ -179,6 +179,9 @@ const Contacts = () => {
   };
 
   const delete_friend = async (usr: any) => {
+    if(!usr){
+      return alert(`no user id, ${usr}`)
+    }
     if (socket.current && socket.current.readyState === WebSocket.OPEN) {
       const message = {
         id: data.id,
