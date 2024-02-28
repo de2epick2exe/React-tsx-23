@@ -17,6 +17,12 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
+  Switch,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
 } from "@chakra-ui/react";
 import React, { RefObject, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -28,7 +34,7 @@ import {
   SearchIcon,
   DragHandleIcon,
 } from "@chakra-ui/icons";
-
+import { useNavigate } from "react-router-dom";
 
 interface RoomProps {
   room_name: string | undefined;
@@ -52,8 +58,8 @@ const Room: React.FC<RoomProps> = ({
     onOpen: onProfileOpen,
     onClose: onProfileClose,
   } = useDisclosure();
-
-  const profileRef : RefObject<HTMLDivElement> = React.useRef(null);
+  const navigate = useNavigate()
+  const profileRef: RefObject<HTMLDivElement> = React.useRef(null);
 
   console.info("mesager", messager.messages);
   ////// ---------------------------- connecting to socket room
@@ -114,14 +120,6 @@ const Room: React.FC<RoomProps> = ({
     );
   };
 
-
-
-
-
-
-
-
-
   //// if no props
   if (room_id == undefined) {
     return <Center h={window.innerHeight / 1.13}>chs smn</Center>;
@@ -129,7 +127,7 @@ const Room: React.FC<RoomProps> = ({
     return (
       <>
         <ScrollbarStyles />
-        <Box >
+        <Box>
           <Box
             height="7vh"
             bg="darkred"
@@ -152,12 +150,11 @@ const Room: React.FC<RoomProps> = ({
                 <Button ml="2" borderRadius="20">
                   <SearchIcon />
                 </Button>
-                <Button ml="2" borderRadius="20" >
+                <Button ml="2" borderRadius="20">
                   <DragHandleIcon />
                 </Button>
               </Flex>
-              
-            </Flex>            
+            </Flex>
           </Box>
 
           <Flex flexDirection="column">
@@ -182,7 +179,8 @@ const Room: React.FC<RoomProps> = ({
                           marginTop: "10px",
                         }}
                       >
-                       <Avatar name={msg.username} /> {msg.username}: {msg.message}
+                        <Avatar name={msg.username} /> {msg.username}:{" "}
+                        {msg.message}
                       </p>
                     </Flex>
                   ) : (
@@ -196,7 +194,8 @@ const Room: React.FC<RoomProps> = ({
                           marginTop: "10px",
                         }}
                       >
-                     <Avatar name={msg.username}  /> {msg.username}: {msg.message} 
+                        <Avatar name={msg.username} /> {msg.username}:{" "}
+                        {msg.message}
                       </p>
                     </Flex>
                   )}
@@ -229,27 +228,55 @@ const Room: React.FC<RoomProps> = ({
               </InputGroup>
             </Flex>
           </Flex>
-          <Drawer 
-                isOpen={isProfileOpen}
-                placement="right"
-                onClose={onProfileClose}
-                finalFocusRef={profileRef}
-              >  <DrawerOverlay />
-              <DrawerContent>
-                <DrawerCloseButton />
-                <DrawerHeader>Create your account</DrawerHeader>
-      
-                <DrawerBody>
-                  <Input placeholder='Type here...' />
-                </DrawerBody>
-      
-                <DrawerFooter>
-                  <Button variant='outline' mr={3} onClick={onProfileClose}>
-                    Cancel
-                  </Button>
-                  <Button colorScheme='blue'>Save</Button>
-                </DrawerFooter>
-              </DrawerContent></Drawer>
+          <Drawer
+            isOpen={isProfileOpen}
+            placement="right"
+            onClose={onProfileClose}
+            finalFocusRef={profileRef}
+          >
+            {" "}
+            <DrawerOverlay />
+            <DrawerContent>
+              <DrawerCloseButton />
+              <DrawerHeader>User Info</DrawerHeader>
+
+              <DrawerBody w={"100%"}>
+                <Flex flexDirection={"column"} alignItems={"center"}>
+                  <Avatar size={"2xl"} name={room_name} />
+                  <Box
+                  cursor="pointer"
+                  onClick={() => {
+                    navigate(`/profile/${room_id}`);
+                  }}
+                  >{room_name}</Box>
+                  <Box>Last seen ...</Box>
+                  <Box> number</Box>
+                  <Flex w={"100%"} justifyContent={"space-between"}>
+                    <Box> Notifications </Box>
+                    <Switch />
+                  </Flex>
+                </Flex>
+                
+                <Tabs>
+                  <TabList>
+                    <Tab>Media</Tab>
+                    <Tab>Files</Tab>
+                    <Tab>Links</Tab>
+                    <Tab>Music</Tab>
+                    <Tab>Voise</Tab>
+                  </TabList>
+                  <TabPanels>
+                    <TabPanel>1</TabPanel>
+                    <TabPanel>2</TabPanel>
+                    <TabPanel>3</TabPanel>
+                    <TabPanel>4</TabPanel>
+                    <TabPanel>5</TabPanel>
+
+                  </TabPanels>
+                </Tabs>
+              </DrawerBody>
+            </DrawerContent>
+          </Drawer>
         </Box>
       </>
     );
