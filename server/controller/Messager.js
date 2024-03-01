@@ -57,14 +57,40 @@ class Messager{
                 const data = {
                     id : user.rows[0].id,
                     username: user.rows[0].username,
+                    type: 'private',
                     rooms_id: r.room_id
                 }
 
                 rooms_data[0].rooms.push(data);
             
-            }else{
-                console.log('chat')
-            }}     
+            }
+            else if(r.type == 'channel'){
+                const user = await db.query('WITH subquery AS ( SELECT user_id FROM conversations WHERE room_id = $1 AND user_id != $2 ) SELECT id, username, avatar FROM users WHERE id IN (SELECT user_id FROM subquery)', [r.room_id, id])
+               
+                const data = {
+                    id : user.rows[0].id,
+                    username: user.rows[0].username,
+                    type: 'channel',
+                    rooms_id: r.room_id
+                }
+
+                rooms_data[0].rooms.push(data);
+            
+            }
+            else{
+                const user = await db.query('WITH subquery AS ( SELECT user_id FROM conversations WHERE room_id = $1 AND user_id != $2 ) SELECT id, username, avatar FROM users WHERE id IN (SELECT user_id FROM subquery)', [r.room_id, id])
+               
+                const data = {
+                    id : user.rows[0].id,
+                    username: user.rows[0].username,
+                    type: 'chat',
+                    rooms_id: r.room_id
+                }
+
+                rooms_data[0].rooms.push(data);
+            
+            }
+        }     
        
        console.log('rdata_______:',rooms_data)
         return rooms_data
