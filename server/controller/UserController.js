@@ -276,7 +276,10 @@ class UserController {
           [data]
         );
         console.log("tar num");
-
+        console.log(user_data.rows[0] == undefined)
+        if(user_data.rows[0] == undefined){
+          return res.json({status: 404})
+        }
         return res.json(user_data.rows[0]);
       } else {
         const user_data = await db.query(

@@ -166,7 +166,13 @@ const Profile = () => {
       { matched_column: 'friends_list' }
       */
   };
-
+  if(profile_data?.status == 404){
+    return(
+    <>    not found
+    </>
+        )
+  }
+  else{
   return (
     <Box>
       {data.id === (id ? parseFloat(id) : null) ? (
@@ -229,6 +235,7 @@ const Profile = () => {
       )}
     </Box>
   );
+              }
 };
 
 export default Profile;
