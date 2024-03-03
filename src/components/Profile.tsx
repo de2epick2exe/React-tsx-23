@@ -27,6 +27,7 @@ const Profile = () => {
   const { id } = useParams<{ id?: string }>();
   const [profile_data, Set_Profile_data] = useState<any>();
   const [is_friend_status, set_Is_friend_status] = useState<any>();
+  const [isLoading, set_IsLoading] = useState(true)
   const {
     isOpen: isOpenLogin,
     onOpen: onOpenLogin,
@@ -131,16 +132,7 @@ const Profile = () => {
   }, [profile_data]);
 
   useEffect(() => {
-    console.log("USER STATUS IS");
-    console.log("USER STATUS IS");
-    console.log("USER STATUS IS");
-    console.log("USER STATUS IS");
-    console.log("USER STATUS IS");
-    console.log(is_friend_status);
-    console.log("USER STATUS IS");
-    console.log("USER STATUS IS");
-    console.log("USER STATUS IS");
-    console.log("USER STATUS IS");
+    profile_data?.status? set_IsLoading(false): set_IsLoading(true)
   }, [is_friend_status]);
   const Friend_button = () => {
     if (is_friend_status == "friends_list") {

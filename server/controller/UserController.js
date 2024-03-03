@@ -280,7 +280,7 @@ class UserController {
         if(user_data.rows[0] == undefined){
           return res.json({status: 404})
         }
-        return res.json(user_data.rows[0]);
+        return res.json({...user_data.rows[0], status: 200});
       } else {
         const user_data = await db.query(
           "SELECT username, role, avatar from public.users where username =$1",
