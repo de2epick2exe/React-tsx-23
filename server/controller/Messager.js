@@ -127,9 +127,8 @@ class Messager{
     }
     async create_channel(req, res){
         try {
-            const {id}= req.body
-            const room = await db.query("INSERT INTO rooms (type) VALUES ($1) RETURNING id",['CHANNEL'] )
-            /// room id >> post
+            const {id, title,}= req.body
+            const channel = await db.query("INSERT INTO channels (title, admins, owner) VALUES ($1, $2, $3) RETURNING id",[title, id, id])
             const data = {
                 status : 200,
                 room: "created",
