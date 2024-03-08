@@ -182,6 +182,7 @@ class Messager {
     }
   }
   async create_post(req, res) {
+    try{
     const { id, content } = req.body;
     const post = await db.query(
       "INSERT INTO posts (id, content) VALUES ($1, $2) RETURNING *",
@@ -189,12 +190,29 @@ class Messager {
     );
     const data = {
       status: 200,
-      id_room: room.rows[0],
+      post: post.rows[0],
     };
     return JSON.stringify(data);
   }
   catch(error) {
     console.log(error);
+  }
+}
+  async get_posts(req, res){
+    try{
+      const { id} = req.body;
+      const posts = await db.query(
+        "SELECT * FROM posts WHERE id = $1",
+        [id]);
+      const data = {
+        status: 200,
+        id_room: posts.rows,
+      };
+      return JSON.stringify(data);
+    }
+    catch(error) {
+      console.log(error);
+    }
   }
   async send_message(msg) {
     try {
