@@ -164,6 +164,11 @@ wss.on("connection", (ws) => {
           ); 
           clients[clientId].send(JSON.stringify(recomended_users));
           break;
+        case "create_channel":
+          const create_channel= await Messager.create_channel(
+            parsedMessage.id,            
+          )
+        break;
         default:
           console.log("Unknown event:", parsedMessage.event);
       }
