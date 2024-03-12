@@ -178,6 +178,12 @@ wss.on("connection", (ws) => {
           )
           clients[clientId].send(JSON.stringify(create_channel));
         break;
+        case "get_posts":
+          const get_posts= await Messager.get_posts(
+            parsedMessage.id,                      
+          )
+          clients[clientId].send(JSON.stringify(get_posts));
+          break;
         default:
           console.log("Unknown event:", parsedMessage.event);
       }
