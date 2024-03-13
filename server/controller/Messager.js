@@ -214,6 +214,22 @@ class Messager {
       console.log(error);
     }
   }
+  async follow_onChannel(req, res){
+    try{
+      const { id, userid} = req.body;
+      const follow = await db.query(
+        "INSERT INTO channels_follows $1, $2",
+        [id, userid]);
+      const data = {
+        status: 200,
+        id_room: follow.rows[0],
+      };
+      return JSON.stringify(data);
+    }
+    catch(error) {
+      console.log(error);
+    }
+  }
   async send_message(msg) {
     try {
       const { to_id, from_id, message, media_url, room_id } = msg;
