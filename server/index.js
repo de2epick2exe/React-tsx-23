@@ -184,6 +184,13 @@ wss.on("connection", (ws) => {
           )
           clients[clientId].send(JSON.stringify(get_posts));
           break;
+          case "follow_onChannel":
+          const follow_onChan= await Messager.follow_onChannel(
+            parsedMessage.id,
+            parsedMessage.uid
+          )
+          clients[clientId].send(JSON.stringify(follow_onChan));
+          break;
         default:
           console.log("Unknown event:", parsedMessage.event);
       }
