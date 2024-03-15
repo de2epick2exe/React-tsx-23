@@ -260,5 +260,22 @@ class Messager {
       res.json({ err: e.message });
     }
   }
+  async delete_file(req, res) {
+    try {
+      const fid = req.body.id;
+      console.log(img);
+      // send to c++ store server
+      const data_from_cpp = await axios.delete(
+        `http://localhost:${process.env.CDN}/${fid}`,
+        
+      );
+
+      // res.json({status: 200, img})
+      res.json(data_from_cpp.data);
+    } catch (e) {
+      console.log(e);
+      res.json({ err: e.message });
+    }
+  }
 }
 module.exports = new Messager();
