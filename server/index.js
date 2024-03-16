@@ -191,6 +191,20 @@ wss.on("connection", (ws) => {
           )
           clients[clientId].send(JSON.stringify(follow_onChan));
           break;
+
+
+
+
+
+
+
+          case "delete_file":
+          const file= await Messager.follow_onChannel(
+            parsedMessage.id,
+            parsedMessage.uid
+          )
+          clients[clientId].send(JSON.stringify(file));
+          break;
         default:
           console.log("Unknown event:", parsedMessage.event);
       }
