@@ -10,11 +10,16 @@ interface Notify{
     message: string
     avatar: string
 }
-
+interface Message{
+    title: string;
+    text: string | boolean;
+    media: string | boolean;
+    emotes: []
+}
 interface WS{
     socket: WebSocket | null;
     message: any;
-    messages: [];
+    messages: Message[];
     notifies : Notify[]
     current_channel: Channel|null;
     connected:boolean;    
@@ -33,6 +38,20 @@ export const WSSlice = createSlice({
     name: 'WS',
     initialState,
     reducers:{
-
+        setSocket:(state, action: PayloadAction< WebSocket | null>)=>{
+            state.socket = action.payload;            
+          },
+          setMessage: (state, action: PayloadAction<string | null>) => {
+            state.message = action.payload;
+          },
+          setMessages: (state, action: PayloadAction<Message[] | null>) => {
+            state.messages = action.payload!;  // check if ?? works          
+          },
+          setChannel: (state, action: PayloadAction<Channel | null>) => {
+            state.current_channel = action.payload;            
+          },
+          setConnected: (state, action: PayloadAction<boolean>) => {
+            state.connected = action.payload;            
+          }
     }
 })
