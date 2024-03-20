@@ -34,7 +34,7 @@ const initialState: WS = {
     connected:false,
   };
 
-export const WSSlice = createSlice({
+export const WS_Slice = createSlice({
     name: 'WS',
     initialState,
     reducers:{
@@ -55,3 +55,30 @@ export const WSSlice = createSlice({
           }
     }
 })
+export const { setSocket, setMessage, setMessages, setChannel,setConnected} =
+  WS_Slice.actions;
+
+  export const connectToWebSocket = () => {
+    return (dispatch: any) => {
+        const socket = new WebSocket("ws://localhost:8080"); // Adjust URL accordingly
+
+        socket.onopen = () => {
+            dispatch(setConnected(true));
+        };
+
+        socket.onmessage = (event) => {
+            const message: Message = JSON.parse(event.data);
+                    
+        };
+
+        socket.onerror = (error) => {
+            console.error("WebSocket error:", error);
+        };
+
+        socket.onclose = () => {
+            dispatch(setConnected(false));
+        };
+
+        dispatch(setSocket(socket));
+    };
+};  
