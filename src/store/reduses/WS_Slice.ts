@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 interface Channel{
     id:number;
     channel_name: string;
@@ -67,8 +68,15 @@ export const { setSocket, setMessage, setMessages, setChannel,setConnected} =
         };
 
         socket.onmessage = (event) => {
-            const message: Message = JSON.parse(event.data);
-                    
+            const message= JSON.parse(event.data);
+             switch (message.event) {
+              case 'Notify':
+                
+                break;
+             
+              default:
+                break;
+             }       
         };
 
         socket.onerror = (error) => {
@@ -82,3 +90,16 @@ export const { setSocket, setMessage, setMessages, setChannel,setConnected} =
         dispatch(setSocket(socket));
     };
 };  
+
+export const sendMessage = (message: any) => {
+  return (dispatch: ThunkDispatch<{}, {}, any>, getState: () => RootState) => {
+      const { socket } = getState().WS_Slice;
+      if (socket && socket.readyState === WebSocket.OPEN) {
+          socket.send(JSON.stringify(message));
+      } else {
+          console.error("WebSocket connection is not open.");
+      }
+  };
+};
+
+export default WS_Slice.reducer;

@@ -222,6 +222,7 @@ class Messager {
         [id, userid]);
       const data = {
         status: 200,
+        event: follow,
         id_room: follow.rows[0],
       };
       return JSON.stringify(data);
@@ -237,7 +238,7 @@ class Messager {
         "INSERT INTO messages( to_id, from_id, message, media_url, room_id) VALUES($1, $2, $3, $4,$5 RETURNING message_id",
         [to_id, from_id, message, media_url, room_id]
       );
-      res.json(res);
+      res.json({res});
     } catch (error) {
       res.json(error);
     }
