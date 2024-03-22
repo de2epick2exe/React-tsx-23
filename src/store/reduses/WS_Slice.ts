@@ -48,6 +48,9 @@ export const WS_Slice = createSlice({
           setMessages: (state, action: PayloadAction<Message[] | null>) => {
             state.messages = action.payload!;  // check if ?? works          
           },
+          setNotifies:(state, action: PayloadAction<Notify[] | null>) => {
+            state.notifies = action.payload!
+          },
           setChannel: (state, action: PayloadAction<Channel | null>) => {
             state.current_channel = action.payload;            
           },
@@ -56,7 +59,7 @@ export const WS_Slice = createSlice({
           }
     }
 })
-export const { setSocket, setMessage, setMessages, setChannel,setConnected} =
+export const { setSocket, setMessage, setMessages, setChannel,setConnected, setNotifies} =
   WS_Slice.actions;
 
   export const connectToWebSocket = () => {
@@ -71,7 +74,7 @@ export const { setSocket, setMessage, setMessages, setChannel,setConnected} =
             const message= JSON.parse(event.data);
              switch (message.event) {
               case 'Notify':
-                
+                dispatch(setNotifies(message.notify))
                 break;
              
               default:

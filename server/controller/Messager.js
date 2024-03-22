@@ -151,6 +151,7 @@ class Messager {
         [title, id, id]
       );
       const data = {
+        event: 'create_chat',
         status: 200,
         room: "created",
         id_room: room.rows[0],
@@ -189,10 +190,11 @@ class Messager {
       [id, content]
     );
     const data = {
+      event: 'create_post',
       status: 200,
       post: post.rows[0],
     };
-    return JSON.stringify(data);
+    return data;
   }
   catch(error) {
     console.log(error);
@@ -205,10 +207,11 @@ class Messager {
         "SELECT * FROM posts WHERE id = $1",
         [id]);
       const data = {
+        event: "get_posts",
         status: 200,
-        id_room: posts.rows,
+        posts: posts.rows,
       };
-      return JSON.stringify(data);
+      return data;
     }
     catch(error) {
       console.log(error);
@@ -222,10 +225,10 @@ class Messager {
         [id, userid]);
       const data = {
         status: 200,
-        event: follow,
+        event: 'follow',
         id_room: follow.rows[0],
       };
-      return JSON.stringify(data);
+      return data;
     }
     catch(error) {
       console.log(error);
