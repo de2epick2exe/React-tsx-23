@@ -97,6 +97,9 @@ export const connectToWebSocket = () => {
         case "get_posts":
           dispatch(setPosts(message.posts));
           break;
+        case "notifies":
+          dispatch(setNotifies(message.notifies));
+          break;
         default:
           break;
       }

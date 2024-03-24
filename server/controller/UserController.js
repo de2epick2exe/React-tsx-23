@@ -483,7 +483,7 @@ class UserController {
       );
       const create_room = await Messager_Controller.create_private_room({body:{id_1: id, id_2: accepted_id}})
   
-      return { event: "accept_friend", data: res.rows };
+      return { event: "accept_friend", data: res.rows, accepted_id: accepted_id };
     } catch (error) {
       console.log(error);
     }
