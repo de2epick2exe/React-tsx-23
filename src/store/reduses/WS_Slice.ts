@@ -100,6 +100,9 @@ export const connectToWebSocket = () => {
         case "notifies":
           dispatch(setNotifies(message.notifies));
           break;
+        case "rooms_messages":
+          dispatch(setMessages(message.messages))
+         break;
         default:
           break;
       }
