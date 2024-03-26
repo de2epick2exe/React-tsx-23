@@ -131,4 +131,14 @@ export const sendMessage = (message: any) => {
   };
 };
 
+export const set_current_channel=(channel: any)=>{
+  (dispatch: ThunkDispatch<{}, {}, any>, getState: () => RootState) => {
+  try {
+    dispatch(setChannel(channel))
+  } catch (error) {
+    console.log('ws slice error', error)
+  }
+}
+
+
 export default WS_Slice.reducer;
