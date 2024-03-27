@@ -92,7 +92,7 @@ export const connectToWebSocket = () => {
       const message = JSON.parse(event.data);
       switch (message.event) {
         case "notify":
-          dispatch(setNotifies(message.notify));
+          dispatch(setNotifies(message.notify || message.notifies));
           break;
         case "get_posts":
           dispatch(setPosts(message.posts));
@@ -122,11 +122,15 @@ export const connectToWebSocket = () => {
 
 export const sendMessage = (message: any) => {
   return (dispatch: ThunkDispatch<{}, {}, any>, getState: () => RootState) => {
+    try{
     const { socket } = getState().WS_Slice;
     if (socket && socket.readyState === WebSocket.OPEN) {
       socket.send(JSON.stringify(message));
     } else {
       console.error("WebSocket connection is not open.");
+    }}
+    catch(erorr){
+      console.log('ws slice redux error:', erorr)
     }
   };
 };
@@ -138,7 +142,7 @@ export const set_current_channel=(channel: any)=>{
   } catch (error) {
     console.log('ws slice error', error)
   }
-}
+}}
 
 
 export default WS_Slice.reducer;

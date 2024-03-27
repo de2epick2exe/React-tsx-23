@@ -26,6 +26,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { logout } from "../store/reduses/UserSlice";
 import { get_notify } from "../unite/Messager_functions";
+import { connectToWebSocket } from "../store/reduses/WS_Slice";
 
 interface Props {
   children: React.ReactNode
@@ -79,7 +80,7 @@ const Navbar = () => {
     setArr_notify(res)
   }
   React.useEffect(() => {
-    
+    dispatch(connectToWebSocket());
     call_notify()   
  }, []);
 
