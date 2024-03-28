@@ -1,11 +1,19 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import { Box, Flex } from "@chakra-ui/react";
+import { sendMessage } from "./store/reduses/WS_Slice";
+import { ThunkDispatch } from "@reduxjs/toolkit";
 
 function App() {
   const data = useSelector((state: RootState) => state.userReducer);
+  const ws = useSelector((state: RootState) => state.WS_Slice);
+  const dispatch: ThunkDispatch<any, any, any> = useDispatch();
+  useEffect(
+    ()=>{
+      sendMessage({event: 'get_notify'})
+  }, [ws.connected])
   return (
     <>
       <div className="App page" >
