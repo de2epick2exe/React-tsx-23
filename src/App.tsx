@@ -12,7 +12,14 @@ function App() {
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   useEffect(
     ()=>{
-      sendMessage({event: 'get_notify'})
+      try {
+        
+        sendMessage({event: 'get_notify', id: data.id})
+
+      } catch (error) {
+        console.log('app tsx ws error')
+      }
+      
   }, [ws.connected])
   return (
     <>

@@ -247,6 +247,9 @@ class Messager {
     }
   }
 
+ 
+
+
   async save_file(req, res) {
     try {
       const img = req.file;
@@ -264,6 +267,26 @@ class Messager {
       res.json({ err: e.message });
     }
   }
+
+
+  async delete_post(req, res) {
+    try{
+    const { id, content } = req.body;
+    const post = await db.query(
+      "DELETE FROM posts WHERE id = $1 RETURNING id, content",
+      [id, content]
+    );
+    const data = {
+      event: 'create_post',
+      status: 200,
+      post: post.rows[0],
+    };
+    return data;
+  }
+  catch(error) {
+    console.log(error);
+  }
+}
   async delete_file(req, res) {
     try {
       const fid = req.body.id;

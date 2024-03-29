@@ -26,7 +26,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { logout } from "../store/reduses/UserSlice";
 import { get_notify } from "../unite/Messager_functions";
-import { connectToWebSocket } from "../store/reduses/WS_Slice";
+import { connectToWebSocket, sendMessage } from "../store/reduses/WS_Slice";
 
 interface Props {
   children: React.ReactNode
@@ -71,7 +71,7 @@ const Navbar = () => {
   const data = useSelector((state: RootState) => state.userReducer);
   const [arr_notify, setArr_notify]= useState<Notification[]>([])
   const logout_user = async () => {
-    dispatch(logout());
+    dispatch(logout());    
     window.location.reload();
   };
   
@@ -81,6 +81,7 @@ const Navbar = () => {
   }
   React.useEffect(() => {
     dispatch(connectToWebSocket());
+    dispatch(sendMessage({event: 'get_notify', id: data.id}))
     call_notify()   
  }, []);
 
