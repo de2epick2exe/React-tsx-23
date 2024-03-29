@@ -287,6 +287,7 @@ class Messager {
     console.log(error);
   }
 }
+//test
   async delete_file(req, res) {
     try {
       const fid = req.body.id;
