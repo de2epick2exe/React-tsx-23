@@ -287,7 +287,26 @@ class Messager {
     console.log(error);
   }
 }
-//test
+
+async update_post(req, res) {
+  try{
+  const { id, content } = req.body;
+  const post = await db.query(
+    "UPDATE posts SET content = $1 WHERE id = $2 RETURNING id, content",
+    [content, id]
+  );
+  const data = {
+    event: 'update_post',
+    status: 200,
+    post: post.rows[0],
+  };
+  return data;
+}
+catch(error) {
+  console.log(error);
+}
+}
+
   async delete_file(req, res) {
     try {
       const fid = req.body.id;
