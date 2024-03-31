@@ -184,7 +184,7 @@ wss.on("connection", (ws) => {
           )
           clients[clientId].send(JSON.stringify(get_posts));
           break;
-          case "follow_onChannel":
+        case "follow_onChannel":
           const follow_onChan= await Messager.follow_onChannel(
             parsedMessage.id,
             parsedMessage.uid
@@ -197,6 +197,13 @@ wss.on("connection", (ws) => {
 
 
          //------- Delete commands ------   
+         case "delete_post":
+          const del_post= await Messager.delete_post(
+            parsedMessage.id,           
+          )
+          clients[clientId].send(JSON.stringify(file));
+          break;  
+
 
           case "delete_file":
           const file= await Messager.follow_onChannel(
