@@ -191,7 +191,13 @@ wss.on("connection", (ws) => {
           )
           clients[clientId].send(JSON.stringify(follow_onChan));
           break;
-
+        case "update_post":
+           const update_post= await Messager.update_post(
+             parsedMessage.id,
+             parsedMessage.content
+           )
+          clients[clientId].send(JSON.stringify(update_post));
+          break;    
 
 
 
