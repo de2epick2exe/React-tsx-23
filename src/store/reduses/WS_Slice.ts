@@ -81,11 +81,12 @@ export const {
 } = WS_Slice.actions;
 
 export const connectToWebSocket = () => {
-  return (dispatch: any) => {
-    const socket = new WebSocket("ws://localhost:8080"); // Adjust URL accordingly
-
+  return (dispatch: ThunkDispatch<WS, any, any>) => {
+    try {
+      const socket = new WebSocket("ws://localhost:3033"); 
+    
     socket.onopen = () => {
-      dispatch(setConnected(true));
+      dispatch(setConnected(true))
     };
 
     socket.onmessage = (event) => {
@@ -117,6 +118,10 @@ export const connectToWebSocket = () => {
     };
 
     dispatch(setSocket(socket));
+    } catch (error) {
+      console.log('websocket connection error:', error )
+    }
+    
   };
 };
 
@@ -136,8 +141,9 @@ export const sendMessage = (message: any) => {
 };
 
 export const set_current_channel=(channel: any)=>{
-  (dispatch: ThunkDispatch<{}, {}, any>, getState: () => RootState) => {
+  return (dispatch: ThunkDispatch<WS, any, any>) => {
   try {
+    console.log('connected to ws by redux')
     dispatch(setChannel(channel))
   } catch (error) {
     console.log('ws slice error', error)

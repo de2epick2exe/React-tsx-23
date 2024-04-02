@@ -13,7 +13,7 @@ function App() {
   useEffect(
     ()=>{
       try {
-        
+        console.log('WEBSOCKET MAIN STATE IS:',ws.connected)
         sendMessage({event: 'get_notify', id: data.id})
 
       } catch (error) {

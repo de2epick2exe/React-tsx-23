@@ -69,6 +69,7 @@ const Navbar = () => {
   const isAuth = useSelector((state: RootState) => state.userReducer.is_auth);
   const isAdmin = useSelector((state: RootState) => state.userReducer.role) == 'ADMIN';
   const data = useSelector((state: RootState) => state.userReducer);
+  const ws = useSelector((state:RootState )=> state.WS_Slice)
   const [arr_notify, setArr_notify]= useState<Notification[]>([])
   const logout_user = async () => {
     dispatch(logout());    
@@ -81,13 +82,16 @@ const Navbar = () => {
   }
   React.useEffect(() => {
     dispatch(connectToWebSocket());
-    dispatch(sendMessage({event: 'get_notify', id: data.id}))
+    ///dispatch(sendMessage({event: 'get_notify', id: data.id}))
     call_notify()   
  }, []);
 
 console.log(arr_notify)
 
-
+React.useEffect(() => {  
+  //dispatch(sendMessage({event: 'get_notify', id: data.id}))    
+  console.log('connected to ws', ws.connected)
+}, [ws.connected]);
 
 
 
