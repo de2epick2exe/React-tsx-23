@@ -130,6 +130,7 @@ export const sendMessage = (message: any) => {
     try{
     const { socket } = getState().WS_Slice;
     if (socket && socket.readyState === WebSocket.OPEN) {
+      console.log('sended message:', JSON.stringify(message))
       socket.send(JSON.stringify(message));
     } else {
       console.error("WebSocket connection is not open.");
