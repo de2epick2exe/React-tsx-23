@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { addMessage } from "./MessagerSlice";
 interface Channel {
   id: number;
   channel_name: string;
@@ -81,75 +82,97 @@ export const {
 } = WS_Slice.actions;
 
 export const connectToWebSocket = () => {
-  return (dispatch: ThunkDispatch<WS, any, any>) => {
+  return (dispatch: ThunkDispatch<any, any, any>) => {
     try {
-      const socket = new WebSocket("ws://localhost:3033"); 
-    
-    socket.onopen = () => {
-      dispatch(setConnected(true))
-    };
+      const socket = new WebSocket("ws://localhost:3033");
+      
+      socket.onopen = () => {
+        dispatch(setConnected(true));
+      };
 
-    socket.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      switch (message.event) {
-        case "notify":
-          dispatch(setNotifies(message.notify || message.notifies));
-          break;
-        case "get_posts":
-          dispatch(setPosts(message.posts));
-          break;
-        case "notifies":
-          dispatch(setNotifies(message.notifies));
-          break;
-        case "rooms_messages":
-          dispatch(setMessages(message.messages))
-         break;
-        default:
-          break;
-      }
-    };
+      socket.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        switch (message.event) {
+          case "message":
+            dispatch(addMessage(message[0]));
+            console.log("recived message________WS", message); 
+            break;
+          case "chats":
+            console.log("caca________WS");
+            //setRooms(message[0].rooms);
+           // console.table(rooms);
+            break;
+          case "rooms_messages":
+            console.info("rmsgss________WS");
+            console.table(message[0]);
+            //// ---------------------------------------------
+            if ((message[0].messages = [])) {
+            } else {
+              dispatch(addMessage(message[0].messages));
+            }
+            break;
+          case "connection_to_room":
+            console.warn("connected to room________WS");
+            console.table(message[0]);
+            break;
+          case "notify":
+            dispatch(setNotifies(message.notify || message.notifies));
+            break;
+          case "get_posts":
+            dispatch(setPosts(message.posts));
+            break;
+          case "notifies":
+            dispatch(setNotifies(message.notifies));
+            break;
+          case "rooms_messages":
+            dispatch(setMessages(message.messages));
+            break;
+          default:
+            console.log("unhandled event:", message[0].event);
+            break;
+        }
+      };
 
-    socket.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
+      socket.onerror = (error) => {
+        console.error("WebSocket error:", error);
+      };
 
-    socket.onclose = () => {
-      dispatch(setConnected(false));
-    };
+      socket.onclose = () => {
+        dispatch(setConnected(false));
+      };
 
-    dispatch(setSocket(socket));
+      dispatch(setSocket(socket));
     } catch (error) {
-      console.log('websocket connection error:', error )
+      console.log("websocket connection error:", error);
     }
-    
   };
 };
 
 export const sendMessage = (message: any) => {
   return (dispatch: ThunkDispatch<{}, {}, any>, getState: () => RootState) => {
-    try{
-    const { socket } = getState().WS_Slice;
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      console.log('sended message:', JSON.stringify(message))
-      socket.send(JSON.stringify(message));
-    } else {
-      console.error("WebSocket connection is not open.");
-    }}
-    catch(erorr){
-      console.log('ws slice redux error:', erorr)
+    try {
+      const { socket } = getState().WS_Slice;
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        console.log("sended message:", JSON.stringify(message));
+        socket.send(JSON.stringify(message));
+      } else {
+        console.error("WebSocket connection is not open.");
+      }
+    } catch (erorr) {
+      console.log("ws slice redux error:", erorr);
     }
   };
 };
 
-export const set_current_channel=(channel: any)=>{
+export const set_current_channel = (channel: any) => {
   return (dispatch: ThunkDispatch<WS, any, any>) => {
-  try {
-    console.log('connected to ws by redux')
-    dispatch(setChannel(channel))
-  } catch (error) {
-    console.log('ws slice error', error)
-  }
-}}
-
+    try {
+      console.log("connected to ws by redux");
+      dispatch(setChannel(channel));
+    } catch (error) {
+      console.log("ws slice error", error);
+    }
+  };
+};
 
 export default WS_Slice.reducer;

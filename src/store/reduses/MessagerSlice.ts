@@ -33,4 +33,5 @@ interface MessagerState {
 
   })
   export const {addMessage}= messagerSlice.actions;
+  
   export default messagerSlice.reducer
