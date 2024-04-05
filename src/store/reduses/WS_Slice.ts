@@ -1,46 +1,14 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { addMessage } from "./MessagerSlice";
-interface Channel {
-  id: number;
-  channel_name: string;
-  status: boolean;
-  followers: number;
-}
-interface Notify {
-  from: string;
-  message: string;
-  avatar: string;
-}
-interface Message {
-  title: string;
-  text: string | boolean;
-  media: string | boolean;
-  emotes: [];
-}
-interface Post {
-  title: string;
-  content: string;
-  media: any;
-  emotes: [];
-}
+import { addMessage, setChannel, setMessages, setNotifies, setPosts } from "./MessagerSlice";
+
 interface WS {
-  socket: WebSocket | null;
-  message: any;
-  messages: Message[];
-  notifies: Notify[];
-  posts: Post[];
-  current_channel: Channel | null;
+  socket: WebSocket | null;  
   connected: boolean;
 }
 
 const initialState: WS = {
-  socket: null,
-  message: "",
-  messages: [],
-  notifies: [],
-  posts: [],
-  current_channel: null,
+  socket: null,  
   connected: false,
 };
 
@@ -51,21 +19,7 @@ export const WS_Slice = createSlice({
     setSocket: (state, action: PayloadAction<WebSocket | null>) => {
       state.socket = action.payload;
     },
-    setMessage: (state, action: PayloadAction<string | null>) => {
-      state.message = action.payload;
-    },
-    setMessages: (state, action: PayloadAction<Message[] | null>) => {
-      state.messages = action.payload!; // check if ?? works
-    },
-    setNotifies: (state, action: PayloadAction<Notify[] | null>) => {
-      state.notifies = action.payload!;
-    },
-    setPosts: (state, action: PayloadAction<Post[] | null>) => {
-      state.posts = action.payload!;
-    },
-    setChannel: (state, action: PayloadAction<Channel | null>) => {
-      state.current_channel = action.payload;
-    },
+    
     setConnected: (state, action: PayloadAction<boolean>) => {
       state.connected = action.payload;
     },
@@ -73,12 +27,8 @@ export const WS_Slice = createSlice({
 });
 export const {
   setSocket,
-  setMessage,
-  setMessages,
-  setChannel,
   setConnected,
-  setNotifies,
-  setPosts,
+
 } = WS_Slice.actions;
 
 export const connectToWebSocket = () => {
@@ -92,18 +42,18 @@ export const connectToWebSocket = () => {
 
       socket.onmessage = (event) => {
         const message = JSON.parse(event.data);
-        switch (message.event) {
+        switch (message[0].event) {
           case "message":
             dispatch(addMessage(message[0]));
-            console.log("recived message________WS", message); 
+            console.log("WS_slice chats recived message", message); 
             break;
           case "chats":
-            console.log("caca________WS");
+            console.log("WS_slice chats:");
             //setRooms(message[0].rooms);
            // console.table(rooms);
             break;
           case "rooms_messages":
-            console.info("rmsgss________WS");
+            console.info("WS_slice chats rooms_messages");
             console.table(message[0]);
             //// ---------------------------------------------
             if ((message[0].messages = [])) {
@@ -112,7 +62,7 @@ export const connectToWebSocket = () => {
             }
             break;
           case "connection_to_room":
-            console.warn("connected to room________WS");
+            console.warn("WS_slice connected to room");
             console.table(message[0]);
             break;
           case "notify":
@@ -128,7 +78,7 @@ export const connectToWebSocket = () => {
             dispatch(setMessages(message.messages));
             break;
           default:
-            console.log("unhandled event:", message[0].event);
+            console.log("unhandled event in wsStore:", message[0].event);
             break;
         }
       };

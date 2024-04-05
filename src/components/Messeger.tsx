@@ -13,6 +13,7 @@ import { ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store/store";
 import Room from "./Room";
 import { addMessage } from "../store/reduses/MessagerSlice";
+import { sendMessage } from "../store/reduses/WS_Slice";
 
 interface room_user {
   id: number;
@@ -103,7 +104,7 @@ const Messenger = () => {
     }
   }, [messages]);
 
-  const sendMessage = async (message: any) => {
+  const sendmsg = async (message: any) => {
     const msg = {
       id: Date.now(),
       user_id: data.id,
@@ -124,6 +125,7 @@ const Messenger = () => {
         rooms_for: data.id,
         event: "geting_rooms",
       };
+      dispatch(sendMessage(message))
       socket.current.send(JSON.stringify(message));
     } else {
       // Wait for the connection to open and then send the message
@@ -232,7 +234,7 @@ const Messenger = () => {
             room_id={room}
             room_name={selected_room}
             onConnectToRoom={get_room_messages}
-            onSendMessage={sendMessage}
+            onSendMessage={sendmsg }
           />
         </GridItem>
       </Grid>
