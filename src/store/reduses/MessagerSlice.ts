@@ -9,7 +9,12 @@ interface MessagerState {
     room_error: string| null;
   }
 */
-
+interface Rooms{
+  id: number,
+  username: string,
+  type: string,
+  rooms_id: number,
+}
 interface Channel {
   id: number;
   channel_name: string;
@@ -41,6 +46,7 @@ interface MessagerState {
   notifies: Notify[];
   posts: Post[];
   current_channel: Channel | null;
+  rooms: Rooms[]
 }
 const initialState: MessagerState = {
   messages: [],
@@ -48,6 +54,7 @@ const initialState: MessagerState = {
   notifies: [],
   posts: [],
   current_channel: null,
+  rooms:[]
 };
 const messagerSlice = createSlice({
   name: "messager",
@@ -71,6 +78,9 @@ const messagerSlice = createSlice({
     setChannel: (state, action: PayloadAction<Channel | null>) => {
       state.current_channel = action.payload;
     },
+    setRooms: (state, action: PayloadAction<Rooms[] | null>) => {
+      state.rooms = action.payload!;
+    },
   },
 });
 export const {
@@ -80,6 +90,7 @@ export const {
   setChannel,
   setNotifies,
   setPosts,
+  setRooms,
 } = messagerSlice.actions;
 
 export default messagerSlice.reducer;
