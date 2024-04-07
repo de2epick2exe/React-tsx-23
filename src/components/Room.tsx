@@ -35,6 +35,7 @@ import {
   DragHandleIcon,
 } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
+import { sendMessage } from "../store/reduses/WS_Slice";
 
 interface RoomProps {
   room_name: string | undefined;
@@ -53,6 +54,8 @@ const Room: React.FC<RoomProps> = ({
   const data = useSelector((state: RootState) => state.userReducer);
   const messager = useSelector((state: RootState) => state.messagerReducer);
   const [message, setMessage] = useState("");
+  const dispatch: ThunkDispatch<any, any, any> = useDispatch();
+  
   const {
     isOpen: isProfileOpen,
     onOpen: onProfileOpen,
@@ -77,8 +80,17 @@ const Room: React.FC<RoomProps> = ({
     if (!message.trim().length) {
       return;
     }
-    onSendMessage(message);
+    //onSendMessage(message);
     setMessage(""); // need to fix
+    const msg = {
+      id: Date.now(),
+      user_id: data.id,
+      username: data.username,
+      room: room_id,
+      message: message,
+      event: "message",
+    };
+    dispatch(sendMessage(msg))
   };
   const AlwaysScrollToBottom = () => {
     const elementRef = useRef<HTMLDivElement>(null);

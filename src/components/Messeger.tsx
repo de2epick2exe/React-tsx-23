@@ -160,6 +160,7 @@ const Messenger = () => {
   const setRoomdata = (r: any) => {
     setRoom(r?.rooms_id);
     setSelected_room(r?.username);
+    dispatch(setRoom(r))
     console.log(r);
   };
   /// need to fix bottom white line
