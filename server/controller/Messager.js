@@ -179,7 +179,8 @@ class Messager {
       console.log(rooms_data);
       return rooms_data;
     } catch (error) {
-      res.json(error);
+      console.log('error getting rooms', error) 
+      
     }
   }
   async create_post(req, res) {

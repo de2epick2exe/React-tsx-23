@@ -48,12 +48,12 @@ export const connectToWebSocket = () => {
             console.log("WS_slice chats recived message", message); 
             break;
           case "chats":
-            console.log("WS_slice chats:");
+            console.log("WS_slice chats:", message[0]);
             //setRooms(message[0].rooms);
            // console.table(rooms);
             break;
           case "rooms_messages":
-            console.info("WS_slice chats rooms_messages");
+            console.log("WS_slice chats rooms_messages");
             console.table(message[0]);
             //// ---------------------------------------------
             if ((message[0].messages = [])) {
@@ -76,6 +76,12 @@ export const connectToWebSocket = () => {
             break;
           case "rooms_messages":
             dispatch(setMessages(message.messages));
+            break;
+            case "delete_post":
+            console.log('deleted post')
+            break;  
+          case "delete_file":
+            console.log('deleted file')
             break;
           default:
             console.log("unhandled event in wsStore:", message[0].event);

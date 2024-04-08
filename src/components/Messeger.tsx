@@ -79,7 +79,7 @@ const Messenger = () => {
         }
       } catch (error) {
         console.error("Error parsing JSON:", error);
-        console.warn(event.data);
+        console.warn(JSON.parse(event.data));
       }
     };
     socket.current.onclose = () => {
@@ -143,12 +143,14 @@ const Messenger = () => {
         event: "connection_to_room",
       };
       socket.current.send(JSON.stringify(connection_to_room));
-
+      dispatch(sendMessage(connection_to_room))
+  
       const message = {
         room_id: id,
         event: "rooms_messages",
       };
       socket.current.send(JSON.stringify(message));
+      dispatch(sendMessage(message))
     }
   };
   //get access to the ws from another file or write one big
