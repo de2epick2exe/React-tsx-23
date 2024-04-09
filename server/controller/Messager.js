@@ -161,12 +161,13 @@ class Messager {
       console.log(error);
     }
   }
-
+ 
   async rooms_messages(id) {
     try {
       //need to add limiter*
+      console.log('rooms_messages for id: ',id)
       const res = await db.query("SELECT * FROM messages WHERE room_id = $1", [
-        id,
+        id.id,
       ]);
       console.log(res.rows);
       const rooms_data = [

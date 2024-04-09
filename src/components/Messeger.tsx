@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store/store";
 import Room from "./Room";
-import { addMessage } from "../store/reduses/MessagerSlice";
+import { addMessage, setMessages } from "../store/reduses/MessagerSlice";
 import { sendMessage } from "../store/reduses/WS_Slice";
 
 interface room_user {
@@ -23,7 +23,7 @@ interface room_user {
 
 const Messenger = () => {
   const socket = useRef<WebSocket | undefined>();
-  const [messages, setMessages] = useState<any[]>([]);
+  //const [messages, setMessages] = useState<any[]>([]);
   const [socket_msg, setSocket_msg] = useState("");
   const [rooms, setRooms] = useState<room_user[]>([]);
   const [room, setRoom] = useState<number | undefined>();
@@ -33,6 +33,7 @@ const Messenger = () => {
   console.log(room);
 
   const data = useSelector((state: RootState) => state.userReducer);
+  const messager = useSelector((state: RootState) => state.messagerReducer);
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -66,7 +67,8 @@ const Messenger = () => {
             //// ---------------------------------------------
             if ((message[0].messages = [])) {
             } else {
-              dispatch(addMessage(message[0].messages));
+              ///setMessages(message[0].messages)
+              dispatch(setMessages(message[0].messages));
             }
             break;
           case "connection_to_room":
@@ -102,7 +104,7 @@ const Messenger = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages]);
+  }, [messager.messages]);
 
   const sendmsg = async (message: any) => {
     const msg = {
@@ -162,7 +164,7 @@ const Messenger = () => {
   const setRoomdata = (r: any) => {
     setRoom(r?.rooms_id);
     setSelected_room(r?.username);
-    dispatch(setRoom(r))
+    //dispatch(setRoom(r)) need fix
     console.log(r);
   };
   /// need to fix bottom white line

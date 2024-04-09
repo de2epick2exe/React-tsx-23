@@ -90,7 +90,7 @@ const Room: React.FC<RoomProps> = ({
       message: message,
       event: "message",
     };
-    dispatch(sendMessage(msg))
+    dispatch(sendMessage(msg)) // sends 2x times
   };
   const AlwaysScrollToBottom = () => {
     const elementRef = useRef<HTMLDivElement>(null);
