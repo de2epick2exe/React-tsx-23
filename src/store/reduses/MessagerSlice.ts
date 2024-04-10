@@ -96,6 +96,7 @@ export const {
   setNotifies,
   setPosts,
   setRooms,
+  setCurrentRoom,
 } = messagerSlice.actions;
 
 export default messagerSlice.reducer;

@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store/store";
 import Room from "./Room";
-import { addMessage, setMessages } from "../store/reduses/MessagerSlice";
+import { addMessage, setCurrentRoom, setMessages } from "../store/reduses/MessagerSlice";
 import { sendMessage } from "../store/reduses/WS_Slice";
 
 interface room_user {
@@ -26,7 +26,7 @@ const Messenger = () => {
   //const [messages, setMessages] = useState<any[]>([]);
   const [socket_msg, setSocket_msg] = useState("");
   const [rooms, setRooms] = useState<room_user[]>([]);
-  const [room, setRoom] = useState<number | undefined>();
+  const [room, setRoomState] = useState<number | undefined>();
   const [selected_room, setSelected_room] = useState("");
   const [message_State, setMesage_state] = useState(false);
   //add send message to room as func *
@@ -162,9 +162,9 @@ const Messenger = () => {
   }, [socket.current]);
 
   const setRoomdata = (r: any) => {
-    setRoom(r?.rooms_id);
+    setRoomState(r?.rooms_id);
     setSelected_room(r?.username);
-    //dispatch(setRoom(r)) need fix
+    dispatch(setCurrentRoom(r)) 
     console.log(r);
   };
   /// need to fix bottom white line
@@ -218,7 +218,7 @@ const Messenger = () => {
         
         <GridItem pl="2" bg="red" area={"all-chats"}>
           All Chats
-          {rooms.map((r) => (
+          {messager.rooms.map((r) => (
             <span key={r.id}>
               <br />
               <Button

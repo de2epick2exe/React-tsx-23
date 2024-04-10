@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { addMessage, setChannel, setMessages, setNotifies, setPosts } from "./MessagerSlice";
+import { addMessage, setChannel, setMessages, setNotifies, setPosts, setRooms } from "./MessagerSlice";
 
 interface WS {
   socket: WebSocket | null;  
@@ -49,6 +49,7 @@ export const connectToWebSocket = () => {
             break;
           case "chats":
             console.log("WS_slice chats:", message[0]);
+            dispatch(setRooms(message[0].rooms))
             //setRooms(message[0].rooms);
            // console.table(rooms);
             break;
