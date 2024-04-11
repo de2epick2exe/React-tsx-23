@@ -40,14 +40,12 @@ import { sendMessage } from "../store/reduses/WS_Slice";
 interface RoomProps {
   room_name: string | undefined;
   room_id: number | undefined;
-  onConnectToRoom: (roomId: number | undefined) => void;
-  onSendMessage: (message: any) => void;
+  onConnectToRoom: (roomId: number | undefined) => void;  
 }
 
 const Room: React.FC<RoomProps> = ({
   room_id,
-  onConnectToRoom,
-  onSendMessage,
+  onConnectToRoom,  
   room_name,
 }) => {
   const [room_messages, setRoomMessages] = useState([]);
@@ -64,7 +62,7 @@ const Room: React.FC<RoomProps> = ({
   const navigate = useNavigate()
   const profileRef: RefObject<HTMLDivElement> = React.useRef(null);
 
-  console.info("mesager", messager.messages);
+  console.info("messager", messager.messages);
   ////// ---------------------------- connecting to socket room
   useEffect(() => {
     if (room_id !== null || undefined) {
@@ -80,7 +78,7 @@ const Room: React.FC<RoomProps> = ({
     if (!message.trim().length) {
       return;
     }
-    //onSendMessage(message);
+    
     setMessage(""); // need to fix
     const msg = {
       id: Date.now(),

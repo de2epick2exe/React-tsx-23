@@ -12,7 +12,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store/store";
 import Room from "./Room";
-import { addMessage, setCurrentRoom, setMessages } from "../store/reduses/MessagerSlice";
+import {
+  addMessage,
+  setCurrentRoom,
+  setMessages,
+} from "../store/reduses/MessagerSlice";
 import { sendMessage } from "../store/reduses/WS_Slice";
 
 interface room_user {
@@ -34,69 +38,11 @@ const Messenger = () => {
 
   const data = useSelector((state: RootState) => state.userReducer);
   const messager = useSelector((state: RootState) => state.messagerReducer);
+  const ws = useSelector((state: RootState) => state.WS_Slice);
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    socket.current = new WebSocket("ws://localhost:3033");
-    socket.current.onopen = () => {
-      console.log(data.username, "connected to ws");
-    };
-    socket.current.onmessage = (event) => {
-      try {
-        const message = JSON.parse(event.data);
-
-        console.log(message); // for in
-
-        switch (message[0].event) {
-          case "message":
-            /// setMessages((prev) => [message, ...prev]);
-            // if (message[0].id !== null){
-            dispatch(addMessage(message[0]));
-            console.log("recived message________WS", message); //}
-            break;
-
-          case "chats":
-            console.log("caca________WS");
-            setRooms(message[0].rooms);
-            console.table(rooms);
-            break;
-          case "rooms_messages":
-            console.info("rmsgss________WS");
-            console.table(message[0]);
-            //// ---------------------------------------------
-            if ((message[0].messages = [])) {
-            } else {
-              ///setMessages(message[0].messages)
-              dispatch(setMessages(message[0].messages));
-            }
-            break;
-          case "connection_to_room":
-            console.warn("connected to room________WS");
-            console.table(message[0]);
-            break;
-
-          default:
-            break;
-        }
-      } catch (error) {
-        console.error("Error parsing JSON:", error);
-        console.warn(JSON.parse(event.data));
-      }
-    };
-    socket.current.onclose = () => {
-      console.log("connection closed");
-    };
-    socket.current.onerror = () => {
-      console.log("SOCKET error");
-    };
-
-    return () => {
-      if (socket.current) {
-        socket.current.close();
-      }
-    };
-
     /* add rooms call on init and cached it in store    */
   }, []);
 
@@ -106,65 +52,40 @@ const Messenger = () => {
     }
   }, [messager.messages]);
 
-  const sendmsg = async (message: any) => {
-    const msg = {
-      id: Date.now(),
-      user_id: data.id,
-      username: data.username,
-      room,
-      message: message,
-      event: "message",
-    };
-    if (socket.current) {
-      socket.current.send(JSON.stringify(msg));
-    }
-    setSocket_msg(""); // Clear the input after sending the message
-  };
   /// call users init data
   const get_users_rooms_data = async () => {
-    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
-      const message = {
-        rooms_for: data.id,
-        event: "geting_rooms",
-      };
-      dispatch(sendMessage(message))
-      socket.current.send(JSON.stringify(message));
-    } else {
-      // Wait for the connection to open and then send the message
-      setTimeout(() => {
-        get_users_rooms_data();
-      }, 100); // You can adjust the timeout value if needed
-    }
+    const message = {
+      rooms_for: data.id,
+      event: "geting_rooms",
+    };
+
+    dispatch(sendMessage(message));
   };
-  //console.log(socket.current);
 
   const get_room_messages = (id: number | undefined) => {
-    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
-      const connection_to_room = {
-        room: id,
-        event: "connection_to_room",
-      };
-      socket.current.send(JSON.stringify(connection_to_room));
-      dispatch(sendMessage(connection_to_room))
-  
-      const message = {
-        room_id: id,
-        event: "rooms_messages",
-      };
-      socket.current.send(JSON.stringify(message));
-      dispatch(sendMessage(message))
-    }
+    const connection_to_room = {
+      room: id,
+      event: "connection_to_room",
+    };
+    //socket.current.send(JSON.stringify(connection_to_room));
+    dispatch(sendMessage(connection_to_room));
+
+    const message = {
+      room_id: id,
+      event: "rooms_messages",
+    };
+    //socket.current.send(JSON.stringify(message));
+    dispatch(sendMessage(message));
   };
-  //get access to the ws from another file or write one big
 
   useEffect(() => {
     get_users_rooms_data();
-  }, [socket.current]);
+  }, [ws.connected]);
 
   const setRoomdata = (r: any) => {
     setRoomState(r?.rooms_id);
     setSelected_room(r?.username);
-    dispatch(setCurrentRoom(r)) 
+    dispatch(setCurrentRoom(r));
     console.log(r);
   };
   /// need to fix bottom white line
@@ -197,15 +118,41 @@ const Messenger = () => {
       </style>
     );
   };
+
+  const Rooms_list = () => {
+    if (messager.rooms.length != 0) {
+      return (
+        <>
+          {messager.rooms.map((r) => (
+            <span key={r.id}>
+              <br />
+              <Button
+                bg="black"
+                ml="-1"
+                width="100% "
+                variant="ghost"
+                onClick={(e) => setRoomdata(r)}
+              >
+                {r.username}
+              </Button>
+            </span>
+          ))}
+        </>
+      );
+    }
+    return (
+      <>
+        <div>loading...</div>
+      </>
+    );
+  };
   return (
     <>
-    
       <Grid
         className="page"
         templateAreas={`"all-chats chat"`} /* Updated grid template areas */
         gridTemplateRows={"1fr"} /* Adjusted row sizing */
         gridTemplateColumns={"150px 1fr"}
-        
         color="white"
         fontWeight="bold"
         boxSizing="border-box"
@@ -215,31 +162,16 @@ const Messenger = () => {
           margin: "0",
         }}
       >
-        
         <GridItem pl="2" bg="red" area={"all-chats"}>
           All Chats
-          {messager.rooms.map((r) => (
-            <span key={r.id}>
-              <br />
-              <Button
-                bg="black"
-                ml="-1"
-                width="100%"
-                variant="ghost"
-                onClick={(e) => setRoomdata(r)}
-              >
-                {r.username}
-              </Button>
-            </span>
-          ))}
+          <Rooms_list />
         </GridItem>
-        
-        <GridItem  bg="black" area={"chat"}>
+
+        <GridItem bg="black" area={"chat"}>
           <Room
             room_id={room}
             room_name={selected_room}
             onConnectToRoom={get_room_messages}
-            onSendMessage={sendmsg }
           />
         </GridItem>
       </Grid>

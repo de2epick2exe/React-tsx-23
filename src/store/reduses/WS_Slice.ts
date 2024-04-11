@@ -41,53 +41,58 @@ export const connectToWebSocket = () => {
       };
 
       socket.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-        switch (message[0].event) {
-          case "message":
-            dispatch(addMessage(message[0]));
-            console.log("WS_slice chats recived message", message); 
-            break;
-          case "chats":
-            console.log("WS_slice chats:", message[0]);
-            dispatch(setRooms(message[0].rooms))
-            //setRooms(message[0].rooms);
-           // console.table(rooms);
-            break;
-          case "rooms_messages":
-            console.log("WS_slice chats rooms_messages");
-            console.table(message[0]);
-            //// ---------------------------------------------
-            if ((message[0].messages = [])) {
-            } else {
-              dispatch(addMessage(message[0].messages));
-            }
-            break;
-          case "connection_to_room":
-            console.warn("WS_slice connected to room");
-            console.table(message[0]);
-            break;
-          case "notify":
-            dispatch(setNotifies(message.notify || message.notifies));
-            break;
-          case "get_posts":
-            dispatch(setPosts(message.posts));
-            break;
-          case "notifies":
-            dispatch(setNotifies(message.notifies));
-            break;
-          case "rooms_messages":
-            dispatch(setMessages(message.messages));
-            break;
-            case "delete_post":
-            console.log('deleted post')
-            break;  
-          case "delete_file":
-            console.log('deleted file')
-            break;
-          default:
-            console.log("unhandled event in wsStore:", message[0].event);
-            break;
+        try {
+          const message = JSON.parse(event.data);
+          switch (message[0].event) {
+            case "message":
+              dispatch(addMessage(message[0]));
+              console.log("WS_slice chats recived message", message); 
+              break;
+            case "chats":
+              console.log("WS_slice chats:", message[0]);
+              dispatch(setRooms(message[0].rooms))
+              //setRooms(message[0].rooms);
+             // console.table(rooms);
+              break;
+            case "rooms_messages":
+              console.log("WS_slice chats rooms_messages");
+              console.table(message[0]);
+              //// ---------------------------------------------
+              if ((message[0].messages = [])) {
+              } else {
+                dispatch(addMessage(message[0].messages));
+              }
+              break;
+            case "connection_to_room":
+              console.warn("WS_slice connected to room");
+              console.table(message[0]);
+              break;
+            case "notify":
+              dispatch(setNotifies(message.notify || message.notifies));
+              break;
+            case "get_posts":
+              dispatch(setPosts(message.posts));
+              break;
+            case "notifies":
+              dispatch(setNotifies(message.notifies));
+              break;
+            case "rooms_messages":
+              dispatch(setMessages(message.messages));
+              break;
+              case "delete_post":
+              console.log('deleted post')
+              break;  
+            case "delete_file":
+              console.log('deleted file')
+              break;
+            default:
+              console.log("unhandled event in wsStore:", message[0].event);
+              break;
+          }
+        } catch (error) {
+          console.error('ws slice error parsing event:', error)
         }
+       
       };
 
       socket.onerror = (error) => {
