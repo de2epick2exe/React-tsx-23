@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Grid,
   GridItem,
@@ -33,9 +33,7 @@ const Messenger = () => {
   const [room, setRoomState] = useState<number | undefined>();
   const [selected_room, setSelected_room] = useState("");
   const [message_State, setMesage_state] = useState(false);
-  //add send message to room as func *
-  console.log(room);
-
+ 
   const data = useSelector((state: RootState) => state.userReducer);
   const messager = useSelector((state: RootState) => state.messagerReducer);
   const ws = useSelector((state: RootState) => state.WS_Slice);
@@ -43,8 +41,8 @@ const Messenger = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    /* add rooms call on init and cached it in store    */
-  }, []);
+    setRooms(messager.rooms)
+  }, [messager.rooms]);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -67,14 +65,14 @@ const Messenger = () => {
       room: id,
       event: "connection_to_room",
     };
-    //socket.current.send(JSON.stringify(connection_to_room));
+    
     dispatch(sendMessage(connection_to_room));
 
     const message = {
       room_id: id,
       event: "rooms_messages",
     };
-    //socket.current.send(JSON.stringify(message));
+    
     dispatch(sendMessage(message));
   };
 
@@ -119,33 +117,7 @@ const Messenger = () => {
     );
   };
 
-  const Rooms_list = () => {
-    if (messager.rooms.length != 0) {
-      return (
-        <>
-          {messager.rooms.map((r) => (
-            <span key={r.id}>
-              <br />
-              <Button
-                bg="black"
-                ml="-1"
-                width="100% "
-                variant="ghost"
-                onClick={(e) => setRoomdata(r)}
-              >
-                {r.username}
-              </Button>
-            </span>
-          ))}
-        </>
-      );
-    }
-    return (
-      <>
-        <div>loading...</div>
-      </>
-    );
-  };
+  
   return (
     <>
       <Grid
@@ -164,7 +136,22 @@ const Messenger = () => {
       >
         <GridItem pl="2" bg="red" area={"all-chats"}>
           All Chats
-          <Rooms_list />
+          {rooms?.map((r) => (
+          <span key={r.id}>
+            <br />
+            <Button
+              
+              bg="black"
+              ml="-1"
+              width="100% "
+              variant="ghost"
+              onClick={(e) => setRoomdata(r)}
+            >
+              {r.username}
+            </Button>
+          </span>
+        ))}
+        
         </GridItem>
 
         <GridItem bg="black" area={"chat"}>

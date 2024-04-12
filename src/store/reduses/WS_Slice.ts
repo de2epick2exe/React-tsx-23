@@ -51,8 +51,7 @@ export const connectToWebSocket = () => {
             case "chats":
               console.log("WS_slice chats:", message[0]);
               dispatch(setRooms(message[0].rooms))
-              //setRooms(message[0].rooms);
-             // console.table(rooms);
+              
               break;
             case "rooms_messages":
               console.log("WS_slice chats rooms_messages");
