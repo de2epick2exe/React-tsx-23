@@ -26,7 +26,11 @@ import {
 } from "../store/reduses/MessagerSlice";
 import { sendMessage } from "../store/reduses/WS_Slice";
 import { EditIcon, CloseIcon } from "@chakra-ui/icons";
-import { AiFillNotification, AiOutlineTeam, AiOutlineUser } from "react-icons/ai";
+import {
+  AiFillNotification,
+  AiOutlineTeam,
+  AiOutlineUser,
+} from "react-icons/ai";
 
 interface room_user {
   id: number;
@@ -125,7 +129,71 @@ const Messenger = () => {
       </style>
     );
   };
-
+  const [turnOnNChn, setTurnOnNChn] = useState(false);
+  const [turnOnNG, setTurnOnNG] = useState(false);
+  const [turnOnNP, setTurnOnNP] = useState(false);
+  const [turnOnMain, setTurnOnmain] = useState(true);
+  const turnNCht = () => {
+    setTurnOnNChn(!turnOnNChn);
+    setTurnOnNG(false);
+    setTurnOnNP(false);
+    setTurnOnmain(!turnOnMain);
+  };
+  const turnNg = () => {
+    setTurnOnNG(!turnOnNG);
+    setTurnOnNChn(false);
+    setTurnOnNP(false);
+    setTurnOnmain(!turnOnMain);
+  };
+  const turnNP = () => {
+    setTurnOnNP(!turnOnNP);
+    setTurnOnNChn(false);
+    setTurnOnNG(false);
+    setTurnOnmain(!turnOnMain);
+  };
+  const Chats = () => {
+    if(turnOnNChn){
+      return (
+        <>
+          <GridItem>Create new group</GridItem>
+          </>
+          )
+    }
+    if(turnOnNG){
+      return (
+        <>
+          <GridItem>Create new Chat</GridItem>
+          </>
+          )
+    }
+    if(turnOnNP){
+      return (
+        <>
+          <GridItem>Create new Private</GridItem>
+          </>
+          )
+    }
+    return (
+      <>
+        <GridItem>folders</GridItem>
+        All Chats
+        {rooms?.map((r) => (
+          <span key={r.id}>
+            <br />
+            <Button
+              bg="black"
+              ml="-1"
+              width="100% "
+              variant="ghost"
+              onClick={(e) => setRoomdata(r)}
+            >
+              {r.username}
+            </Button>
+          </span>
+        ))}
+      </>
+    );
+  };
   return (
     <>
       <Grid
@@ -142,55 +210,62 @@ const Messenger = () => {
           margin: "0",
         }}
       >
-        
         <GridItem pl="2" bg="red" area={"all-chats"} position="relative">
-        <GridItem >
-          folders
-        </GridItem>
-          All Chats
-          {rooms?.map((r) => (
-            <span key={r.id}>
-              <br />
-              <Button
-                bg="black"
-                ml="-1"
-                width="100% "
-                variant="ghost"
-                onClick={(e) => setRoomdata(r)}
-              >
-                {r.username}
-              </Button>
-            </span>
-          ))}
+          <Chats/>
           <Box>
             <Popover>
               <PopoverTrigger>
-              <EditIcon
-              w="12"
-              h="12"
-              cursor="pointer"
-              borderRadius="full"
-              p="2"
-              position="absolute"
-              bg="blackAlpha.900"
-              bottom="2"
-              right="2"
-              textColor="white"
-            />
+                <EditIcon
+                  w="12"
+                  h="12"
+                  cursor="pointer"
+                  borderRadius="full"
+                  p="2"
+                  position="absolute"
+                  bg="blackAlpha.900"
+                  bottom="2"
+                  right="2"
+                  textColor="white"
+                />
               </PopoverTrigger>
-              <Portal >
-                <PopoverContent w='6vw' >   
-                  <PopoverBody display='flex'  flexDirection='column' p='0' >
-                    <Button borderRadius='none' p='0' m='0' display='flex' justifyContent='start'><AiFillNotification fontSize='md'  /><Text fontSize='xs'>New channel</Text></Button>
-                    <Button borderRadius='none' p='0' m='0' display='flex' justifyContent='start'><AiOutlineTeam fontSize='md' /> <Text fontSize='xs' >New group</Text></Button>
-                    <Button borderRadius='none' p='0' m='0' display='flex' justifyContent='start'> <AiOutlineUser fontSize='md'  /><Text fontSize='xs' >New private</Text> </Button>
-
-                  </PopoverBody>                  
+              <Portal>
+                <PopoverContent w="6vw">
+                  <PopoverBody display="flex" flexDirection="column" p="0">
+                    <Button
+                      borderRadius="none"
+                      p="0"
+                      m="0"
+                      display="flex"
+                      justifyContent="start"
+                    >
+                      <AiFillNotification fontSize="md" />
+                      <Text fontSize="xs">New channel</Text>
+                    </Button>
+                    <Button
+                      borderRadius="none"
+                      p="0"
+                      m="0"
+                      display="flex"
+                      justifyContent="start"
+                    >
+                      <AiOutlineTeam fontSize="md" />{" "}
+                      <Text fontSize="xs">New group</Text>
+                    </Button>
+                    <Button
+                      borderRadius="none"
+                      p="0"
+                      m="0"
+                      display="flex"
+                      justifyContent="start"
+                    >
+                      {" "}
+                      <AiOutlineUser fontSize="md" />
+                      <Text fontSize="xs">New private</Text>{" "}
+                    </Button>
+                  </PopoverBody>
                 </PopoverContent>
               </Portal>
             </Popover>
-
-       
           </Box>
         </GridItem>
 
