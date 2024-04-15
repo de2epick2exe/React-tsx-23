@@ -31,6 +31,7 @@ import {
   AiOutlineTeam,
   AiOutlineUser,
 } from "react-icons/ai";
+import { SlArrowLeftCircle } from "react-icons/sl";
 
 interface room_user {
   id: number;
@@ -133,7 +134,7 @@ const Messenger = () => {
   const [turnOnNG, setTurnOnNG] = useState(false);
   const [turnOnNP, setTurnOnNP] = useState(false);
   const [turnOnMain, setTurnOnmain] = useState(true);
-  const turnNCht = () => {
+  const turnNChn = () => {
     setTurnOnNChn(!turnOnNChn);
     setTurnOnNG(false);
     setTurnOnNP(false);
@@ -152,26 +153,51 @@ const Messenger = () => {
     setTurnOnmain(!turnOnMain);
   };
   const Chats = () => {
-    if(turnOnNChn){
+    if (turnOnNChn) {
       return (
         <>
+          <Button
+            onClick={() => {
+              turnNChn();
+            }}
+            textColor="black"
+            p='0' m='0' w='0' h='0' 
+          >
+            <SlArrowLeftCircle  />
+          </Button>
           <GridItem>Create new group</GridItem>
-          </>
-          )
+        </>
+      );
     }
-    if(turnOnNG){
+    if (turnOnNG) {
       return (
         <>
+          <Button
+            onClick={() => {
+              turnNg();
+            }}
+            textColor="black"
+          >
+            <SlArrowLeftCircle />
+          </Button>
           <GridItem>Create new Chat</GridItem>
-          </>
-          )
+        </>
+      );
     }
-    if(turnOnNP){
+    if (turnOnNP) {
       return (
         <>
+          <Button
+            onClick={() => {
+              turnNP();
+            }}
+            textColor="black"
+          >
+            <SlArrowLeftCircle />
+          </Button>
           <GridItem>Create new Private</GridItem>
-          </>
-          )
+        </>
+      );
     }
     return (
       <>
@@ -211,7 +237,7 @@ const Messenger = () => {
         }}
       >
         <GridItem pl="2" bg="red" area={"all-chats"} position="relative">
-          <Chats/>
+          <Chats />
           <Box>
             <Popover>
               <PopoverTrigger>
@@ -237,6 +263,9 @@ const Messenger = () => {
                       m="0"
                       display="flex"
                       justifyContent="start"
+                      onClick={() => {
+                        turnNChn();
+                      }}
                     >
                       <AiFillNotification fontSize="md" />
                       <Text fontSize="xs">New channel</Text>
@@ -247,6 +276,9 @@ const Messenger = () => {
                       m="0"
                       display="flex"
                       justifyContent="start"
+                      onClick={() => {
+                        turnNg();
+                      }}
                     >
                       <AiOutlineTeam fontSize="md" />{" "}
                       <Text fontSize="xs">New group</Text>
@@ -257,6 +289,9 @@ const Messenger = () => {
                       m="0"
                       display="flex"
                       justifyContent="start"
+                      onClick={() => {
+                        turnNP();
+                      }}
                     >
                       {" "}
                       <AiOutlineUser fontSize="md" />
