@@ -14,11 +14,14 @@ import {
   Portal,
   PopoverBody,
   Text,
+  Flex,
+  IconButton,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store/store";
 import Room from "./Room";
+import { RiImageAddLine } from "react-icons/ri";
 import {
   addMessage,
   setCurrentRoom,
@@ -56,7 +59,7 @@ const Messenger = () => {
 
   useEffect(() => {
     setRooms(messager.rooms);
-  }, [messager.rooms]);
+  });
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -156,16 +159,42 @@ const Messenger = () => {
     if (turnOnNChn) {
       return (
         <>
-          <Button
-            onClick={() => {
-              turnNChn();
-            }}
-            textColor="black"
-            p='0' m='0' w='0' h='0' 
-          >
-            <SlArrowLeftCircle  />
-          </Button>
-          <GridItem>Create new group</GridItem>
+          <Flex direction="row" alignItems="center">
+            
+            <Input
+            type="file"
+            display='none'
+            />
+            <IconButton
+              onClick={() => {
+                turnNChn();
+              }}
+              aria-label="Back"
+              isRound={true} p='0'
+              icon={<SlArrowLeftCircle  />}
+            />
+
+            <GridItem>Create new Channel</GridItem>
+          </Flex>
+          <Box>
+            <Flex direction="column">
+              <Flex my='4' flexDir='row' justifyContent='center' w='100%' alignItems='center'>
+                <IconButton
+                  variant="outline"
+                  colorScheme="teal"
+                  aria-label="Call Sage"
+                  fontSize="20px"
+                  icon={<RiImageAddLine />}
+                />
+              </Flex>
+              <Box my='2'>
+                <Input />
+              </Box>
+              <Box my='2'>
+                <Input />
+              </Box>
+            </Flex>
+          </Box>
         </>
       );
     }
@@ -202,7 +231,7 @@ const Messenger = () => {
     return (
       <>
         <GridItem>folders</GridItem>
-        All Chats
+        All Chats 
         {rooms?.map((r) => (
           <span key={r.id}>
             <br />
@@ -226,7 +255,7 @@ const Messenger = () => {
         className="page"
         templateAreas={`"all-chats chat"`} /* Updated grid template areas */
         gridTemplateRows={"1fr"} /* Adjusted row sizing */
-        gridTemplateColumns={"150px 1fr"}
+        gridTemplateColumns={"230px 1fr"}
         color="white"
         fontWeight="bold"
         boxSizing="border-box"
@@ -236,7 +265,7 @@ const Messenger = () => {
           margin: "0",
         }}
       >
-        <GridItem pl="2" bg="red" area={"all-chats"} position="relative">
+        <GridItem pl="2" bg="#980000" area={"all-chats"} position="relative">
           <Chats />
           <Box>
             <Popover>
