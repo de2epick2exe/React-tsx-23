@@ -160,25 +160,28 @@ const Messenger = () => {
       return (
         <>
           <Flex direction="row" alignItems="center">
-            
-            <Input
-            type="file"
-            display='none'
-            />
+            <Input type="file" display="none" />
             <IconButton
               onClick={() => {
                 turnNChn();
               }}
               aria-label="Back"
-              isRound={true} p='0'
-              icon={<SlArrowLeftCircle  />}
+              isRound={true}
+              p="0"
+              icon={<SlArrowLeftCircle />}
             />
 
             <GridItem>Create new Channel</GridItem>
           </Flex>
           <Box>
             <Flex direction="column">
-              <Flex my='4' flexDir='row' justifyContent='center' w='100%' alignItems='center'>
+              <Flex
+                my="4"
+                flexDir="row"
+                justifyContent="center"
+                w="100%"
+                alignItems="center"
+              >
                 <IconButton
                   variant="outline"
                   colorScheme="teal"
@@ -187,10 +190,10 @@ const Messenger = () => {
                   icon={<RiImageAddLine />}
                 />
               </Flex>
-              <Box my='2'>
+              <Box my="2">
                 <Input />
               </Box>
-              <Box my='2'>
+              <Box my="2">
                 <Input />
               </Box>
             </Flex>
@@ -201,37 +204,52 @@ const Messenger = () => {
     if (turnOnNG) {
       return (
         <>
-          <Button
-            onClick={() => {
-              turnNg();
-            }}
-            textColor="black"
-          >
-            <SlArrowLeftCircle />
-          </Button>
-          <GridItem>Create new Chat</GridItem>
+          <Flex direction="row" alignItems="center">
+            <Input type="file" display="none" />
+            <IconButton
+              onClick={() => {
+                turnNg();
+              }}
+              variant="outline"
+              colorScheme="teal"
+              textColor="black"
+              aria-label=""
+              fontSize="20px" mr='2'
+              icon={<SlArrowLeftCircle />}
+            />             
+            <GridItem>Add user</GridItem>
+          </Flex>
+          <Box>
+            <Input />
+              
+          </Box>
         </>
       );
     }
     if (turnOnNP) {
       return (
         <>
-          <Button
+        <Flex direction="row" alignItems="center">
+          <IconButton
             onClick={() => {
               turnNP();
             }}
-            textColor="black"
-          >
-            <SlArrowLeftCircle />
-          </Button>
+            variant="outline"
+              colorScheme="teal"
+              textColor="black"
+              aria-label=""
+              fontSize="20px" mr='2'
+            icon={<SlArrowLeftCircle />}
+          /> 
           <GridItem>Create new Private</GridItem>
+          </Flex>
         </>
       );
     }
     return (
       <>
         <GridItem>folders</GridItem>
-        All Chats 
+        All Chats
         {rooms?.map((r) => (
           <span key={r.id}>
             <br />

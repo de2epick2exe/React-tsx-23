@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { auth_login, register, set_online } from "../../unite/User_Functions";
-
+interface Friend {
+  id: number;
+  username: string;
+  rooms_id: number;
+}
 interface UserState {
   id: number|null;
   username: string | null;
@@ -11,6 +15,7 @@ interface UserState {
   /// find securiry ways to load default img
   photo: string;
   error: string| null;
+  friends:Friend[]
 }
 
 const update_online =async (id: number) =>{
@@ -60,7 +65,8 @@ const initialState: UserState = loadUserState()  || {
   is_auth: false,
   role: "",
   photo: "http://localhost:8080/img/default.jpg",
-  error: null
+  error: null,
+  friends:[]
 };
 
 
@@ -117,6 +123,10 @@ export const UserSlice = createSlice({
       state.error = action.payload;
       saveUserState(state); 
     },
+    setFriends:(state, action: PayloadAction<Friend[] | null>) => {
+      state.friends = action.payload!
+      saveUserState(state); 
+    },
     logout: (state) => {
       state.token = null;
       state.is_auth = false;
@@ -131,7 +141,8 @@ export const UserSlice = createSlice({
 
 
 
-export const { setId,setToken, setUsername, setEmail, setIsAuth, setRole,setPhoto, setError, logout } =
+export const { setId,setToken, setUsername, setEmail, setIsAuth, 
+  setRole,setPhoto, setError,setFriends, logout } =
   UserSlice.actions;
 
 export const loginUser =
