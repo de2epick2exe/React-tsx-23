@@ -16,6 +16,7 @@ import {
   Text,
   Flex,
   IconButton,
+  Checkbox,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -218,6 +219,12 @@ const Messenger = () => {
               icon={<SlArrowLeftCircle />}
             />             
             <GridItem>Add user</GridItem>
+            {data.friends.map((frd) => (
+                        <Box key={frd.id}>
+                          <span>{frd.username}</span>
+                          <Checkbox/>                           
+                        </Box>
+                      ))}
           </Flex>
           <Box>
             <Input />
