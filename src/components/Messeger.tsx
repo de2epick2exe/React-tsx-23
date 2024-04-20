@@ -215,20 +215,20 @@ const Messenger = () => {
               colorScheme="teal"
               textColor="black"
               aria-label=""
-              fontSize="20px" mr='2'
+              fontSize="20px"
+              mr="2"
               icon={<SlArrowLeftCircle />}
-            />             
+            />
             <GridItem>Add user</GridItem>
             {data.friends.map((frd) => (
-                        <Box key={frd.id}>
-                          <span>{frd.username}</span>
-                          <Checkbox/>                           
-                        </Box>
-                      ))}
+              <Box key={frd.id}>
+                <span>{frd.username}</span>
+                <Checkbox />
+              </Box>
+            ))}
           </Flex>
           <Box>
             <Input />
-              
           </Box>
         </>
       );
@@ -236,20 +236,26 @@ const Messenger = () => {
     if (turnOnNP) {
       return (
         <>
-        <Flex direction="row" alignItems="center">
-          <IconButton
-            onClick={() => {
-              turnNP();
-            }}
-            variant="outline"
+          <Flex direction="row" alignItems="center">
+            <IconButton
+              onClick={() => {
+                turnNP();
+              }}
+              variant="outline"
               colorScheme="teal"
               textColor="black"
               aria-label=""
-              fontSize="20px" mr='2'
-            icon={<SlArrowLeftCircle />}
-          /> 
-          <GridItem>Create new Private</GridItem>
+              fontSize="20px"
+              mr="2"
+              icon={<SlArrowLeftCircle />}
+            />
+            <Input />
           </Flex>
+          {data.friends.map((frd) => (
+            <Box key={frd.id}>
+              <span>{frd.username}</span>
+            </Box>
+          ))}
         </>
       );
     }
