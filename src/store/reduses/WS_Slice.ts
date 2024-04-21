@@ -87,6 +87,7 @@ export const connectToWebSocket = () => {
               break;
               case "get_friends":
                 console.log('friends received')
+                console.log(message.data)
                 dispatch(setFriends(message.data))
                 break;
               case "get_waiting_list":

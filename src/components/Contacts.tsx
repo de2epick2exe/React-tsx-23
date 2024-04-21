@@ -26,7 +26,8 @@ const Contacts = () => {
   const [isLoadedFriends, setIsLoadedFriends] = useState(false);
   const [isLoadedWaiting, setIsLoadedWaiting] = useState(false);
   const [isLoadedRecomended, setIsLoadedRecomended] = useState(false);
-
+  
+  const messager = useSelector((state: RootState) => state.messagerReducer);
   const data = useSelector((state: RootState) => state.userReducer);
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   useEffect(() => {

@@ -203,6 +203,7 @@ const Messenger = () => {
       );
     }
     if (turnOnNG) {
+      console.log('data friends list:',data.friends)
       return (
         <>
           <Flex direction="row" alignItems="center">
@@ -220,9 +221,9 @@ const Messenger = () => {
               icon={<SlArrowLeftCircle />}
             />
             <GridItem>Add user</GridItem>
-            {data.friends.map((frd) => (
-              <Box key={frd.id}>
-                <span>{frd.username}</span>
+            {data.friends?.map((frd) => (
+              <Box key={frd?.id}>
+                <span>{frd?.username}</span>
                 <Checkbox />
               </Box>
             ))}
@@ -251,9 +252,9 @@ const Messenger = () => {
             />
             <Input />
           </Flex>
-          {data.friends.map((frd) => (
-            <Box key={frd.id}>
-              <span>{frd.username}</span>
+          {data.friends?.map((frd) => (
+            <Box key={frd?.id}>
+              <span>{frd?.username}</span>
             </Box>
           ))}
         </>
@@ -263,7 +264,7 @@ const Messenger = () => {
       <>
         <GridItem>folders</GridItem>
         All Chats
-        {rooms?.map((r) => (
+        {messager.rooms?.map((r) => (
           <span key={r.id}>
             <br />
             <Button
