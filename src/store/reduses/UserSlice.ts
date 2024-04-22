@@ -16,6 +16,8 @@ interface UserState {
   photo: string;
   error: string| null;
   friends:Friend[]
+  waiting_list:Friend[]
+  recomends_list:Friend[]
 }
 
 const update_online =async (id: number) =>{
@@ -66,7 +68,9 @@ const initialState: UserState = loadUserState()  || {
   role: "",
   photo: "http://localhost:8080/img/default.jpg",
   error: null,
-  friends:[]
+  friends:[],
+  waiting_list:[],
+  recomends_list:[]
 };
 
 
@@ -125,6 +129,14 @@ export const UserSlice = createSlice({
     },
     setFriends:(state, action: PayloadAction<Friend[] | null>) => {
       state.friends = action.payload!
+      saveUserState(state); 
+    },
+    setWaitingList:(state, action: PayloadAction<Friend[] | null>) => {
+      state.waiting_list = action.payload!
+      saveUserState(state); 
+    },
+    setRecomends:(state, action: PayloadAction<Friend[] | null>) => {
+      state.recomends_list = action.payload!
       saveUserState(state); 
     },
     logout: (state) => {
