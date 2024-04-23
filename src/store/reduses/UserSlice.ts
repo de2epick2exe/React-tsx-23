@@ -154,7 +154,7 @@ export const UserSlice = createSlice({
 
 
 export const { setId,setToken, setUsername, setEmail, setIsAuth, 
-  setRole,setPhoto, setError,setFriends, logout } =
+  setRole,setPhoto, setError,setFriends,setWaitingList, setRecomends,logout } =
   UserSlice.actions;
 
 export const loginUser =

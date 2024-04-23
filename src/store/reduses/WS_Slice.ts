@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { addMessage, setChannel, setMessages, setNotifies, setPosts, setRooms } from "./MessagerSlice";
-import { setFriends } from "./UserSlice";
+import { setFriends, setWaitingList, setRecomends } from "./UserSlice";
 
 interface WS {
   socket: WebSocket | null;  
@@ -91,13 +91,14 @@ export const connectToWebSocket = () => {
                 dispatch(setFriends(message.data))
                 break;
               case "get_waiting_list":
-                
+                dispatch(setWaitingList(message[0].rooms))
                 break;
               case "accept_friend":
+                dispatch(setRecomends(message[0].rooms))
                 
                 break;
               case "recomended_users":
-                
+                dispatch(setRooms(message[0].rooms))
                 break;
             default:
               console.log("unhandled event in wsStore:", message[0].event);
