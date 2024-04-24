@@ -145,6 +145,13 @@ const Messenger = () => {
     setTurnOnmain(!turnOnMain);
   };
   const turnNg = () => {
+
+    const message = {
+      rooms_for: data.id,
+      event: "friends",
+    };
+    dispatch(sendMessage(message))
+
     setTurnOnNG(!turnOnNG);
     setTurnOnNChn(false);
     setTurnOnNP(false);
