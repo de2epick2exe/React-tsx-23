@@ -12,6 +12,7 @@ import {
   TabPanel,
   Button,
 } from "@chakra-ui/react";
+import { sendMessage } from "../store/reduses/WS_Slice";
 
 const Contacts = () => {
   const socket = useRef<WebSocket | undefined>();
@@ -103,6 +104,7 @@ const Contacts = () => {
         event: "friends",
       };
       socket.current.send(JSON.stringify(message));
+      dispatch(sendMessage(message))
     } else {
       // Wait for the connection to open and then send the message
 
@@ -270,7 +272,7 @@ const Contacts = () => {
                 <TabPanel>
                   <Flex flexDirection={"column"}>
                     {isLoadedFriends ? (
-                      friends.map((frd) => (
+                      data.friends.map((frd) => (
                         <Box key={frd.id}>
                           <span>{frd.username}</span>
                           <Button onClick={() => delete_friend(frd.id)}>
@@ -285,7 +287,7 @@ const Contacts = () => {
                 </TabPanel>
                 <TabPanel>
                   {isLoadedWaiting ? (
-                    waiting_accept.map((usr) => (
+                    data.waiting_list.map((usr) => (
                       <Box key={usr.id}>
                         <span>{usr.username}</span>
                         <Button onClick={() => accept_friend(usr.id)}>
