@@ -145,12 +145,11 @@ const Messenger = () => {
     setTurnOnmain(!turnOnMain);
   };
   const turnNg = () => {
-
     const message = {
-      rooms_for: data.id,
-      event: "friends",
+      id: data.id,
+      event: "get_friends",
     };
-    dispatch(sendMessage(message))
+    dispatch(sendMessage(message));
 
     setTurnOnNG(!turnOnNG);
     setTurnOnNChn(false);
@@ -164,6 +163,18 @@ const Messenger = () => {
     setTurnOnmain(!turnOnMain);
   };
   const Chats = () => {
+    const [channelName, setChannelName] = useState([]);
+    const chanAvatar = useRef<HTMLDivElement>(null);
+    const setFile = () => {
+      try {
+        if (chanAvatar.current !== null) {
+          chanAvatar?.current.click();
+        }
+      } catch (err) {
+        console.log("file error", err);
+      }
+    };
+
     if (turnOnNChn) {
       return (
         <>
@@ -210,7 +221,7 @@ const Messenger = () => {
       );
     }
     if (turnOnNG) {
-      console.log('data friends list:',data.friends)
+      console.log("data friends list:", data.friends);
       return (
         <>
           <Flex direction="row" alignItems="center">
