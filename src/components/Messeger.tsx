@@ -179,10 +179,10 @@ const Messenger = () => {
       return (
         <>
           <Flex direction="row" alignItems="center">
-            <Input type="file" display="none" />
+            <Input type="file" ref={chanAvatar} display="none" />
             <IconButton
               onClick={() => {
-                turnNChn();
+                turnNChn()
               }}
               aria-label="Back"
               isRound={true}
@@ -206,6 +206,7 @@ const Messenger = () => {
                   colorScheme="teal"
                   aria-label="Call Sage"
                   fontSize="20px"
+                  onClick={ setFile()}
                   icon={<RiImageAddLine />}
                 />
               </Flex>
