@@ -163,7 +163,8 @@ const Messenger = () => {
     setTurnOnmain(!turnOnMain);
   };
   const Chats = () => {
-    const [channelName, setChannelName] = useState([]);
+    const [channelName, setChannelName] = useState('');
+    const[ channelDesc, setChannelDesc] = useState('')
     const chanAvatar = useRef<HTMLDivElement>(null);
     const setFile = () => {
       try {
@@ -179,7 +180,7 @@ const Messenger = () => {
       return (
         <>
           <Flex direction="row" alignItems="center">
-            <Input type="file" ref={chanAvatar} display="none" />
+            
             <IconButton
               onClick={() => {
                 turnNChn()
@@ -193,6 +194,7 @@ const Messenger = () => {
             <GridItem>Create new Channel</GridItem>
           </Flex>
           <Box>
+          <Input type="file" ref={chanAvatar} display="none" />
             <Flex direction="column">
               <Flex
                 my="4"
@@ -211,7 +213,7 @@ const Messenger = () => {
                 />
               </Flex>
               <Box my="2">
-                <Input />
+                <Input onChange={(e)=>{setChannelName(e.target.value)}} />
               </Box>
               <Box my="2">
                 <Input />
