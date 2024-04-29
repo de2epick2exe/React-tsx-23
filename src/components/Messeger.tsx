@@ -165,7 +165,7 @@ const Messenger = () => {
   const Chats = () => {
     const [channelName, setChannelName] = useState('');
     const[ channelDesc, setChannelDesc] = useState('')
-    const chanAvatar = useRef<HTMLDivElement>(null);
+    const chanAvatar = useRef<HTMLInputElement>(null);
     const setFile = () => {
       try {
         if (chanAvatar.current !== null) {
@@ -208,7 +208,7 @@ const Messenger = () => {
                   colorScheme="teal"
                   aria-label="Call Sage"
                   fontSize="20px"
-                  onClick={ setFile()}
+                  onClick={setFile}
                   icon={<RiImageAddLine />}
                 />
               </Flex>
@@ -216,7 +216,7 @@ const Messenger = () => {
                 <Input onChange={(e)=>{setChannelName(e.target.value)}} />
               </Box>
               <Box my="2">
-                <Input />
+                <Input onChange={(e)=>{setChannelDesc(e.target.value)}} />
               </Box>
             </Flex>
           </Box>
