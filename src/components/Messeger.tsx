@@ -35,7 +35,7 @@ import {
   AiOutlineTeam,
   AiOutlineUser,
 } from "react-icons/ai";
-import { SlArrowLeftCircle } from "react-icons/sl";
+import { SlArrowLeftCircle, SlArrowRightCircle } from "react-icons/sl";
 
 interface room_user {
   id: number;
@@ -176,6 +176,11 @@ const Messenger = () => {
       }
     };
 
+    const createChannel=() =>{
+      console.log('created channel', channelName, channelDesc)
+    }
+
+
     if (turnOnNChn) {
       return (
         <>
@@ -218,6 +223,11 @@ const Messenger = () => {
               <Box my="2">
                 <Input onChange={(e)=>{setChannelDesc(e.target.value)}} />
               </Box>
+              <IconButton  variant="outline" borderColor='transparent'
+                  colorScheme="teal"
+                  aria-label="Call Sage"
+                  fontSize="20px" w='4' onClick={createChannel}                  
+                  icon={<SlArrowRightCircle/>} />
             </Flex>
           </Box>
         </>
