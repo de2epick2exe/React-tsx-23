@@ -145,10 +145,10 @@ class Messager {
   }
   async create_channel(req, res) {
     try {
-      const { id, title } = req.body;
+      const { id, title, desc } = req.body;
       const channel = await db.query(
-        "INSERT INTO channels (title, admins, owner) VALUES ($1, $2, $3) RETURNING id",
-        [title, id, id]
+        "INSERT INTO channels (title, admins, owner, avatars, description) VALUES ($1, $2, $3, $4) RETURNING id",
+        [title, id, id, ["default.png"], desc]
       );
       const data = {
         event: 'create_chat',

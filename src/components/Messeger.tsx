@@ -177,6 +177,10 @@ const Messenger = () => {
     };
 
     const createChannel=() =>{
+      const data = {
+        event: 'create_channel',
+        
+      }
       console.log('created channel', channelName, channelDesc)
     }
 
