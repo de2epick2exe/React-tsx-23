@@ -166,8 +166,7 @@ wss.on("connection", (ws) => {
           break;
         case "create_channel":
           const create_channel= await Messager.create_channel(
-            parsedMessage.id,
-            parsedMessage.title            
+           parsedMessage         
           )
           clients[clientId].send(JSON.stringify(create_channel));
         break;

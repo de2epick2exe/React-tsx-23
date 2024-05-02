@@ -177,10 +177,16 @@ const Messenger = () => {
     };
 
     const createChannel=() =>{
-      const data = {
+      const message_data = {
         event: 'create_channel',
-        
+        body: {
+        id: data.id,
+        title: channelName,
+        desc: channelDesc,
+        //avatar: chanAvatar         
+        }
       }
+      dispatch(sendMessage(message_data))
       console.log('created channel', channelName, channelDesc)
     }
 

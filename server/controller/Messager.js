@@ -145,16 +145,17 @@ class Messager {
   }
   async create_channel(req, res) {
     try {
+      console.log(req.body) 
       const { id, title, desc } = req.body;
       const channel = await db.query(
-        "INSERT INTO channels (title, admins, owner, avatars, description) VALUES ($1, $2, $3, $4) RETURNING id",
+        "INSERT INTO channels (title, admins, owner, avatars, description) VALUES ($1, $2, $3, $4, $5) RETURNING id",
         [title, id, id, ["default.png"], desc]
       );
       const data = {
         event: 'create_chat',
         status: 200,
         room: "created",
-        id_room: room.rows[0],
+        id_room: channel.rows[0],
       };
       return JSON.stringify(data);
     } catch (error) {
