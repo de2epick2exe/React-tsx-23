@@ -12,6 +12,12 @@ db`s tabs:
 |users| <= | conversations  | <= |rooms| <= |messages|
 |id   |    |id  u_id room_id|    | id  |    | room_id|  
 
+|users| <= | conversations  | <= |rooms| <= |channels | <= |channel_followers |
+|id   |    |id  u_id room_id|    | id  |    | admins json{} |    follower_id   | 
+
+
+
+
 */
 class Messager {
   async global_notify(req, res) {
