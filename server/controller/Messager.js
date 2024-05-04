@@ -12,8 +12,8 @@ db`s tabs:
 |users| <= | conversations  | <= |rooms| <= |messages|
 |id   |    |id  u_id room_id|    | id  |    | room_id|  
 
-|users| <= | conversations  | <= |rooms| <= |channels | <= |channel_followers |
-|id   |    |id  u_id room_id|    | id  |    | admins json{} |    follower_id   | 
+|users|  <= |     channel_followers     |<=  |channels      |
+|id   |     |follower_id   channel_id   |    | admins json{}|
 
 
 
