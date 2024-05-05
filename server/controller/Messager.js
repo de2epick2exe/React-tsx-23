@@ -149,6 +149,13 @@ class Messager {
       console.log(error);
     }
   }
+ /*
+ 
+ |users|  <= |     channel_followers     |<=  |channels      |
+ |id   |     |follower_id   channel_id   |    | admins json{}|
+ 
+ */
+
   async create_channel(req, res) {
     try {
       console.log(req.body) 
@@ -157,6 +164,11 @@ class Messager {
         "INSERT INTO channels (title, admins, owner, avatars, description) VALUES ($1, $2, $3, $4, $5) RETURNING id",
         [title, id, id, ["default.png"], desc]
       );
+      if(channel){
+        await db.query("INSERT INTO channels_followers (follower_id, channel_id, ) VALUES ($1, $2, ) RETURNING id",
+        [id, channel.rows[0].id, ])
+      }
+
       const data = {
         event: 'create_chat',
         status: 200,
