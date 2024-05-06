@@ -160,13 +160,20 @@ class Messager {
     try {
       console.log(req.body) 
       const { id, title, desc } = req.body;
+
+      const room = await db.query(
+        "INSERT INTO rooms (type) VALUES ($1) RETURNING id",
+        ["channel"]
+      );
+      const room_id = room.rows[0].id;
+
       const channel = await db.query(
-        "INSERT INTO channels (title, admins, owner, avatars, description) VALUES ($1, $2, $3, $4, $5) RETURNING id",
-        [title, id, id, ["default.png"], desc]
+        "INSERT INTO channels (title, admins, owner, avatars, description, room_id) VALUES ($1, $2, $3, $4, $5) RETURNING id",
+        [title, id, id, ["default.png"], desc, room_id]
       );
       if(channel){
         await db.query("INSERT INTO channels_followers (follower_id, channel_id, ) VALUES ($1, $2, ) RETURNING id",
-        [id, channel.rows[0].id, ])
+        [id, channel.rows[0].id ])
       }
 
       const data = {
