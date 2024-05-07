@@ -80,14 +80,16 @@ class Messager {
 
           rooms_data[0].rooms.push(data);
         } else if (r.type == "channel") {
-          const user = await db.query(
-            "WITH subquery AS ( SELECT user_id FROM conversations WHERE room_id = $1 AND user_id != $2 ) SELECT id, username, avatar FROM users WHERE id IN (SELECT user_id FROM subquery)",
-            [r.room_id, id]
+          const channel = await db.query(
+            "SELECT id, title, avatars FROM channels WHERE room_id =$1",
+            [r.room_id]
           );
+          console.log("channel =", channel.rows)
+          console.log("room id =", r.room_id)
 
           const data = {
-            id: user.rows[0].id,
-            username: user.rows[0].username,
+            id: channel.rows[0].id,
+            username: channel.rows[0].title,
             type: "channel",
             rooms_id: r.room_id,
           };
@@ -166,13 +168,18 @@ class Messager {
         ["channel"]
       );
       const room_id = room.rows[0].id;
+      const room_u1 = await db.query(
+        "INSERT INTO conversations (user_id, room_id) VALUES ($1, $2)",
+        [id, room_id]
+      );
 
       const channel = await db.query(
-        "INSERT INTO channels (title, admins, owner, avatars, description, room_id) VALUES ($1, $2, $3, $4, $5) RETURNING id",
+        "INSERT INTO channels (title, admins, owner, avatars, description, room_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
         [title, id, id, ["default.png"], desc, room_id]
       );
+      console.log(channel.rows[0].id)
       if(channel){
-        await db.query("INSERT INTO channels_followers (follower_id, channel_id, ) VALUES ($1, $2, ) RETURNING id",
+        await db.query("INSERT INTO channels_followers (follower_id, channel_id) VALUES ($1, $2) RETURNING id",
         [id, channel.rows[0].id ])
       }
 
