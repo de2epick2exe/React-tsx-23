@@ -408,8 +408,9 @@ const Messenger = () => {
 
         <GridItem bg="black" area={"chat"}>
           <Room
-            room_id={room}
-            room_name={selected_room}
+            room_id={messager?.current_room?.id}
+            room_name={messager?.current_room?.username}
+            room_type={messager?.current_room?.type}
             onConnectToRoom={get_room_messages}
           />
         </GridItem>

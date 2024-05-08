@@ -40,6 +40,7 @@ import { sendMessage } from "../store/reduses/WS_Slice";
 interface RoomProps {
   room_name: string | undefined;
   room_id: number | undefined;
+  room_type:string|undefined;
   onConnectToRoom: (roomId: number | undefined) => void;  
 }
 
@@ -47,13 +48,14 @@ const Room: React.FC<RoomProps> = ({
   room_id,
   onConnectToRoom,  
   room_name,
+  room_type
 }) => {
   const [room_messages, setRoomMessages] = useState([]);
   const data = useSelector((state: RootState) => state.userReducer);
   const messager = useSelector((state: RootState) => state.messagerReducer);
   const [message, setMessage] = useState("");
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
-  
+  console.log('connected to room type:',room_type)
   const {
     isOpen: isProfileOpen,
     onOpen: onProfileOpen,
