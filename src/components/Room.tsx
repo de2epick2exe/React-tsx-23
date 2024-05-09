@@ -41,7 +41,7 @@ interface RoomProps {
   room_name: string | undefined;
   room_id: number | undefined;
   room_type:string|undefined;
-  onConnectToRoom: (roomId: number | undefined) => void;  
+  onConnectToRoom: (roomId: number | undefined, roomt: string|undefined) => void;  
 }
 
 const Room: React.FC<RoomProps> = ({
@@ -69,7 +69,7 @@ const Room: React.FC<RoomProps> = ({
   useEffect(() => {
     if (room_id !== null || undefined) {
       console.log(room_id);
-      onConnectToRoom(room_id);
+      onConnectToRoom(room_id, room_type);
     }
   }, [room_id]);
   /// Do not lost to change the ws userid in server
@@ -80,7 +80,7 @@ const Room: React.FC<RoomProps> = ({
     if (!message.trim().length) {
       return;
     }
-    
+    if(room_type == 'private' || 'chat'){
     setMessage(""); // need to fix
     const msg = {
       id: Date.now(),
@@ -91,6 +91,19 @@ const Room: React.FC<RoomProps> = ({
       event: "message",
     };
     dispatch(sendMessage(msg)) // sends 2x times
+  }
+  else{
+    setMessage(""); // need to fix
+    const msg = {
+      id: Date.now(),
+      user_id: data.id,
+      username: data.username,
+      room: room_id,
+      message: message,
+      event: "create_post",
+    };
+    dispatch(sendMessage(msg)) // sends 2x times
+  }
   };
   const AlwaysScrollToBottom = () => {
     const elementRef = useRef<HTMLDivElement>(null);

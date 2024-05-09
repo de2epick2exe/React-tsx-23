@@ -78,9 +78,10 @@ const Messenger = () => {
     dispatch(sendMessage(message));
   };
 
-  const get_room_messages = (id: number | undefined) => {
+  const get_room_messages = (id: number | undefined, roomt: string | undefined) => {
     const connection_to_room = {
       room: id,
+      type: roomt,
       event: "connection_to_room",
     };
 
