@@ -173,9 +173,10 @@ wss.on("connection", (ws) => {
         case "create_post":
           const create_post= await Messager.create_post(
             parsedMessage.id,
+            parsedMessage.userid,
             parsedMessage.data,            
           )
-          clients[clientId].send(JSON.stringify(create_channel));
+          clients[clientId].send(JSON.stringify(create_post));
         break;
         case "get_posts":
           const get_posts= await Messager.get_posts(

@@ -219,10 +219,11 @@ class Messager {
   }
   async create_post(req, res) {
     try{
-    const { id, content } = req.body;
+    const { id, content, userid } = req.body;
+    const check = await db.query("SELECT ")
     const post = await db.query(
-      "INSERT INTO posts (id, content) VALUES ($1, $2) RETURNING *",
-      [id, content]
+      "INSERT INTO posts (content, user_id, channel_id) VALUES ($1, $2, $3) RETURNING *",
+      [content, id, userid]
     );
     const data = {
       event: 'create_post',
