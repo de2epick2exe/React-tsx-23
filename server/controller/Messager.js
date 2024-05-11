@@ -175,7 +175,7 @@ class Messager {
 
       const channel = await db.query(
         "INSERT INTO channels (title, admins, owner, avatars, description, room_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
-        [title, id, id, ["default.png"], desc, room_id]
+        [title, [id], id, ["default.png"], desc, room_id]
       );
       console.log(channel.rows[0].id)
       if(channel){
@@ -220,7 +220,7 @@ class Messager {
   async create_post(req, res) {
     try{
     const { id, content, userid } = req.body;
-    const check = await db.query("SELECT ")
+    const check = await db.query("SELECT id  FROM channels  WHERE $1 = ANY(admins) AND id = $2 ", [userid, id])
     const post = await db.query(
       "INSERT INTO posts (content, user_id, channel_id) VALUES ($1, $2, $3) RETURNING *",
       [content, id, userid]
