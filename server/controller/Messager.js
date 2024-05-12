@@ -199,6 +199,13 @@ class Messager {
     try {
       //need to add limiter*
       console.log('rooms_messages for id: ',id)
+      const room_type = await db.query('SELECT type from rooms where id = $1', [id])
+      
+      if (room_type.rows[0] == 'channel'){
+        const res = await db.query("SELECT * FROM post WHERE room_id = $1", [
+          id.id,
+        ]);
+      }
       const res = await db.query("SELECT * FROM messages WHERE room_id = $1", [
         id.id,
       ]);
@@ -219,10 +226,11 @@ class Messager {
   }
   async create_post(req, res) {
     try{
+      console.log(req.body, req) 
     const { id, content, userid } = req.body;
     const check = await db.query("SELECT id  FROM channels  WHERE $1 = ANY(admins) AND id = $2 ", [userid, id])
     const post = await db.query(
-      "INSERT INTO posts (content, user_id, channel_id) VALUES ($1, $2, $3) RETURNING *",
+      "INSERT INTO post (content, channel_id, user_id) VALUES ($1, $2, $3) RETURNING *",
       [content, id, userid]
     );
     const data = {

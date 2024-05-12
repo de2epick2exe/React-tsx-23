@@ -80,7 +80,8 @@ const Room: React.FC<RoomProps> = ({
     if (!message.trim().length) {
       return;
     }
-    if(room_type == 'private' || 'chat'){
+    console.log('room type is:',room_type == 'private' ||room_type ==  'chat', room_type)
+    if(room_type == 'private' || room_type ==  'chat'){
     setMessage(""); // need to fix
     const msg = {
       id: Date.now(),
@@ -95,11 +96,11 @@ const Room: React.FC<RoomProps> = ({
   else{
     setMessage(""); // need to fix
     const msg = {
-      id: Date.now(),
-      user_id: data.id,
+      id: room_id,
+      userid: data.id,
       username: data.username,
       room: room_id,
-      message: message,
+      content: message,
       event: "create_post",
     };
     dispatch(sendMessage(msg)) // sends 2x times
