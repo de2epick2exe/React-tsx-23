@@ -38,10 +38,20 @@ interface Message {
   user_id: number;
   username: string;
   message: any;
-  emotes: [];
+  emotes: [];  
 }
+interface Rooms_msgs {
+[roomid: number]: Message[]
+}
+/*
+messages: {
+  room_id : [messages array], 
+  room_id2: [messages array],  
+}
+ 
+*/
 interface MessagerState {
-  messages: Message[];
+  messages: Rooms_msgs;
   message: any;
   notifies: Notify[];
   posts: Post[];
@@ -50,7 +60,7 @@ interface MessagerState {
   rooms: Room[]
 }
 const initialState: MessagerState = {
-  messages: [],
+  messages: {},
   message: "",
   notifies: [],
   posts: [],
@@ -58,18 +68,24 @@ const initialState: MessagerState = {
   current_room: null,
   rooms:[]
 };
+
+
 const messagerSlice = createSlice({
   name: "messager",
   initialState,
   reducers: {
-    addMessage: (state, action: PayloadAction<Message>) => {
-      state.messages.push(action.payload);
+    addMessage: (state, action: PayloadAction<Rooms_msgs>) => {
+      const roomID = action.payload.roomid
+      if(!(roomID in state.messages)){
+        state.messages[roomID]=[]
+      }
+      state.messages[roomID].push(action.payload.data)
     },
     setMessage: (state, action: PayloadAction<string | null>) => {
       state.message = action.payload;
     },
-    setMessages: (state, action: PayloadAction<Message[] | null>) => {
-      state.messages = action.payload!; // check if ?? works
+    setMessages: (state, action: PayloadAction<Rooms_msgs | null>) => {
+      state.messages = action.payload || ""; // check if ?? works
     },
     setNotifies: (state, action: PayloadAction<Notify[] | null>) => {
       state.notifies = action.payload!;
