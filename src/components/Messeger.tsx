@@ -100,10 +100,12 @@ const Messenger = () => {
   }, [ws.connected]);
 
   const setRoomdata = (r: any) => {
+    setRoomState(undefined)
     setRoomState(r?.rooms_id);
     setSelected_room(r?.username);
     dispatch(setCurrentRoom(r));
     console.log(r);
+    console.log(r?.rooms_id);
   };
   /// need to fix bottom white line
   const ScrollbarStyles = () => {
@@ -408,8 +410,8 @@ const Messenger = () => {
         </GridItem>
 
         <GridItem bg="black" area={"chat"}>
-          <Room
-            room_id={messager?.current_room?.id}
+          <Room          
+            room_id={messager?.current_room?.rooms_id}
             room_name={messager?.current_room?.username}
             room_type={messager?.current_room?.type}
             onConnectToRoom={get_room_messages}

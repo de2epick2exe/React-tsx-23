@@ -146,6 +146,8 @@ const Room: React.FC<RoomProps> = ({
     );
   };
 
+
+  
   //// if no props
   if (room_id == undefined) {
     return <Center h={window.innerHeight / 1.13}>chs smn</Center>;
@@ -191,7 +193,8 @@ const Room: React.FC<RoomProps> = ({
               maxHeight="70vh"
               flexDirection="column"
             >
-              {messager.messages.map((msg) => (
+              
+              {messager.messages[room_id]?.map((msg) => ( 
                 <span key={msg.id}>
                   {msg.user_id == data.id ? (
                     <Flex justify="flex-end">

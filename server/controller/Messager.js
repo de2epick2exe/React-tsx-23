@@ -200,25 +200,34 @@ class Messager {
       //need to add limiter*
       console.log('rooms_messages for id: ',id)
       const room_type = await db.query('SELECT type from rooms where id = $1', [id])
-      
-      if (room_type.rows[0] == 'channel'){
-        const res = await db.query("SELECT * FROM post WHERE room_id = $1", [
+      let res;
+      console.log(room_type.rows[0].type)
+      if (room_type.rows[0].type == 'channel'){
+        console.log('type channel')
+         res = await db.query("SELECT * FROM post WHERE room_id = $1", [
           id.id,
         ]);
       }
-      const res = await db.query("SELECT * FROM messages WHERE room_id = $1", [
+      else{
+        console.log('type private')
+       res = await db.query("SELECT * FROM messages WHERE room_id = $1", [
         id.id,
-      ]);
-      console.log(res.rows);
+      ])
+    }
+    console.log(res.rows);
       const rooms_data = [
         {
           event: "rooms_messages",
-          messages: [],
+          [id]:[]
+          
         },
       ];
-      rooms_data[0].messages.push(res.rows);
-      console.log(rooms_data);
+      rooms_data[0][id].push(...res.rows);
+      console.log("rooms messages",rooms_data[0][id], res.rows);
       return rooms_data;
+    
+    
+      
     } catch (error) {
       console.log('error getting rooms', error) 
       

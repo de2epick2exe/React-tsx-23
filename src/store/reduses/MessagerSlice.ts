@@ -75,17 +75,25 @@ const messagerSlice = createSlice({
   initialState,
   reducers: {
     addMessage: (state, action: PayloadAction<Rooms_msgs>) => {
-      const roomID = action.payload.roomid
-      if(!(roomID in state.messages)){
-        state.messages[roomID]=[]
+      
+      const roomID = Object.keys(action.payload)
+      const msg = Object.values(action.payload)
+      if(!(roomID[0] in state.messages)){        
+        state.messages[parseInt(roomID[0],10)]=[]
       }
-      state.messages[roomID].push(action.payload.data)
+      
+      state.messages[parseInt(roomID[0],10)].push(msg[0])
     },
     setMessage: (state, action: PayloadAction<string | null>) => {
       state.message = action.payload;
     },
-    setMessages: (state, action: PayloadAction<Rooms_msgs | null>) => {
-      state.messages = action.payload || ""; // check if ?? works
+    setMessages: (state, action: PayloadAction<Rooms_msgs >) => {
+      const roomID = Object.keys(action.payload)
+      const msg = Object.values(action.payload)
+      if(!(roomID[0] in state.messages)){        
+        state.messages[parseInt(roomID[0],10)]=[]
+      }      
+      state.messages[parseInt(roomID[0],10)].push(msg[0]) // check if ?? works
     },
     setNotifies: (state, action: PayloadAction<Notify[] | null>) => {
       state.notifies = action.payload!;
