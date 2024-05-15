@@ -204,8 +204,8 @@ class Messager {
       console.log(room_type.rows[0].type)
       if (room_type.rows[0].type == 'channel'){
         console.log('type channel')
-         res = await db.query("SELECT * FROM post WHERE room_id = $1", [
-          id.id,
+         res = await db.query("SELECT * FROM post WHERE channel_id IN ( SELECT channels.id FROM channels JOIN rooms ON channels.room_id = rooms.id WHERE rooms.id = $1 );", [
+          id,
         ]);
       }
       else{
@@ -223,7 +223,7 @@ class Messager {
         },
       ];
       rooms_data[0][id].push(...res.rows);
-      console.log("rooms messages",rooms_data[0][id], res.rows);
+      console.log("rooms messages",rooms_data[0], res.rows);
       return rooms_data;
     
     
@@ -237,10 +237,11 @@ class Messager {
     try{
       console.log(req.body, req) 
     const { id, content, userid } = req.body;
-    const check = await db.query("SELECT id  FROM channels  WHERE $1 = ANY(admins) AND id = $2 ", [userid, id])
+
+    const check = await db.query("SELECT id  FROM channels  WHERE $1 = ANY(admins) AND room_id = $2 ", [userid, id])
     const post = await db.query(
       "INSERT INTO post (content, channel_id, user_id) VALUES ($1, $2, $3) RETURNING *",
-      [content, id, userid]
+      [content, check.rows[0].id, userid]
     );
     const data = {
       event: 'create_post',
@@ -257,7 +258,7 @@ class Messager {
     try{
       const { id} = req.body;
       const posts = await db.query(
-        "SELECT * FROM posts WHERE id = $1",
+        "SELECT * FROM post WHERE channel_id IN ( SELECT channels.id FROM channels JOIN rooms ON channels.room_id = rooms.id WHERE rooms.id = $1 );",
         [id]);
       const data = {
         event: "get_posts",
