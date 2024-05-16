@@ -90,10 +90,12 @@ const messagerSlice = createSlice({
     setMessages: (state, action: PayloadAction<Rooms_msgs >) => {
       const roomID = Object.keys(action.payload)
       const msg = Object.values(action.payload)
+      console.log('MessagerSlice SetMessages func data:',action.payload, msg, roomID)
       if(!(roomID[0] in state.messages)){        
         state.messages[parseInt(roomID[0],10)]=[]
       }      
       state.messages[parseInt(roomID[0],10)].push(msg[0]) // check if ?? works
+      console.log('Finaly MessagerSlice messages: ',state.messages)
     },
     setNotifies: (state, action: PayloadAction<Notify[] | null>) => {
       state.notifies = action.payload!;

@@ -223,7 +223,7 @@ class Messager {
         },
       ];
       rooms_data[0][id].push(...res.rows);
-      console.log("rooms messages",rooms_data[0], res.rows);
+     /// console.log("rooms messages",rooms_data[0], res.rows);
       return rooms_data;
     
     

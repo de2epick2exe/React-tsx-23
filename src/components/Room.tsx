@@ -40,28 +40,31 @@ import { sendMessage } from "../store/reduses/WS_Slice";
 interface RoomProps {
   room_name: string | undefined;
   room_id: number | undefined;
-  room_type:string|undefined;
-  onConnectToRoom: (roomId: number | undefined, roomt: string|undefined) => void;  
+  room_type: string | undefined;
+  onConnectToRoom: (
+    roomId: number | undefined,
+    roomt: string | undefined
+  ) => void;
 }
 
 const Room: React.FC<RoomProps> = ({
   room_id,
-  onConnectToRoom,  
+  onConnectToRoom,
   room_name,
-  room_type
+  room_type,
 }) => {
   const [room_messages, setRoomMessages] = useState([]);
   const data = useSelector((state: RootState) => state.userReducer);
   const messager = useSelector((state: RootState) => state.messagerReducer);
   const [message, setMessage] = useState("");
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
-  console.log('connected to room type:',room_type)
+  console.log("connected to room type:", room_type);
   const {
     isOpen: isProfileOpen,
     onOpen: onProfileOpen,
     onClose: onProfileClose,
   } = useDisclosure();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const profileRef: RefObject<HTMLDivElement> = React.useRef(null);
 
   console.info("messager", messager.messages);
@@ -80,31 +83,34 @@ const Room: React.FC<RoomProps> = ({
     if (!message.trim().length) {
       return;
     }
-    console.log('room type is:',room_type == 'private' ||room_type ==  'chat', room_type)
-    if(room_type == 'private' || room_type ==  'chat'){
-    setMessage(""); // need to fix
-    const msg = {
-      id: Date.now(),
-      user_id: data.id,
-      username: data.username,
-      room: room_id,
-      message: message,
-      event: "message",
-    };
-    dispatch(sendMessage(msg)) // sends 2x times
-  }
-  else{
-    setMessage(""); // need to fix
-    const msg = {
-      id: room_id,
-      userid: data.id,
-      username: data.username,
-      room: room_id,
-      content: message,
-      event: "create_post",
-    };
-    dispatch(sendMessage(msg)) // sends 2x times
-  }
+    console.log(
+      "room type is:",
+      room_type == "private" || room_type == "chat",
+      room_type
+    );
+    if (room_type == "private" || room_type == "chat") {
+      setMessage(""); // need to fix
+      const msg = {
+        id: Date.now(),
+        user_id: data.id,
+        username: data.username,
+        room: room_id,
+        message: message,
+        event: "message",
+      };
+      dispatch(sendMessage(msg)); // sends 2x times
+    } else {
+      setMessage(""); // need to fix
+      const msg = {
+        id: room_id,
+        userid: data.id,
+        username: data.username,
+        room: room_id,
+        content: message,
+        event: "create_post",
+      };
+      dispatch(sendMessage(msg)); // sends 2x times
+    }
   };
   const AlwaysScrollToBottom = () => {
     const elementRef = useRef<HTMLDivElement>(null);
@@ -146,8 +152,89 @@ const Room: React.FC<RoomProps> = ({
     );
   };
 
+  const MessagesComponent = () => {
+    console.log('MessagesComponent:', room_id)
+    if (room_id && messager.messages[room_id] !==undefined ) {
+    
+      if (room_type == "channel") {
+        //@ts-ignore
+        messager.messages[room_id][0]?.map((msg) => {
+          //@ts-ignore
+          console.log(messager.messages[room_id][0])
+          //@ts-ignore
+          console.log(msg.content)
+        })
+        return (
+          <>{/* @ts-ignore*/}
+            {messager.messages[room_id][0]?.map((msg) => (
+              <span key={msg.id}>
+                
+                  <Flex justify="flex-end">
+                    <p
+                      className="bubble right"
+                      style={{
+                        backgroundColor: "red",
+                        marginLeft: "10vw",
 
-  
+                        borderRadius: "2px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      {/* @ts-ignore */}
+                      <Avatar name={room_name} /> {room_name}:{" "}
+                      {msg.content}
+                    </p>
+                  </Flex>
+              
+              </span>
+            ))}{" "}
+          </>
+        );
+      } else {
+        return (//@ts-ignore
+          <>{messager.messages[room_id][0]?.map((msg) => (
+              <span key={msg.id}>
+                {msg.user_id == data.id ? (
+                  <Flex justify="flex-end">
+                    <p
+                      className="bubble right"
+                      style={{
+                        backgroundColor: "red",
+                        marginLeft: "10vw",
+
+                        borderRadius: "2px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      <Avatar name={msg.username} /> {msg.username}:{" "}
+                      {msg.message}
+                    </p>
+                  </Flex>
+                ) : (
+                  <Flex ml="45%">
+                    <p
+                      className="bubble left"
+                      style={{
+                        backgroundColor: "#7f0000",
+
+                        borderRadius: "2px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      <Avatar name={msg.username} /> {msg.username}:{" "}
+                      {msg.message}
+                    </p>
+                  </Flex>
+                )}
+              </span>
+            ))}{" "}
+          </>
+        );
+      }
+    }
+    return (<></>);
+  };
+
   //// if no props
   if (room_id == undefined) {
     return <Center h={window.innerHeight / 1.13}>chs smn</Center>;
@@ -193,46 +280,10 @@ const Room: React.FC<RoomProps> = ({
               maxHeight="70vh"
               flexDirection="column"
             >
-              
-              {messager.messages[room_id]?.map((msg) => ( 
-                <span key={msg.id}>
-                  {msg.user_id == data.id ? (
-                    <Flex justify="flex-end">
-                      <p
-                        className="bubble right"
-                        style={{
-                          backgroundColor: "red",
-                          marginLeft: "10vw",
-
-                          borderRadius: "2px",
-                          marginTop: "10px",
-                        }}
-                      >
-                        <Avatar name={msg.username} /> {msg.username}:{" "}
-                        {msg.message}
-                      </p>
-                    </Flex>
-                  ) : (
-                    <Flex ml="45%">
-                      <p
-                        className="bubble left"
-                        style={{
-                          backgroundColor: "#7f0000",
-
-                          borderRadius: "2px",
-                          marginTop: "10px",
-                        }}
-                      >
-                        <Avatar name={msg.username} /> {msg.username}:{" "}
-                        {msg.message}
-                      </p>
-                    </Flex>
-                  )}
-                </span>
-              ))}
+              <MessagesComponent/>
               <AlwaysScrollToBottom />
             </Flex>
-
+            
             <Flex w="40%" ml="30%" mt="5" backgroundColor={"black"}>
               <InputGroup>
                 <Textarea
@@ -256,6 +307,7 @@ const Room: React.FC<RoomProps> = ({
                 </InputRightElement>
               </InputGroup>
             </Flex>
+            
           </Flex>
           <Drawer
             isOpen={isProfileOpen}
@@ -273,11 +325,13 @@ const Room: React.FC<RoomProps> = ({
                 <Flex flexDirection={"column"} alignItems={"center"}>
                   <Avatar size={"2xl"} name={room_name} />
                   <Box
-                  cursor="pointer"
-                  onClick={() => {
-                    navigate(`/profile/${room_id}`);
-                  }}
-                  >{room_name}</Box>
+                    cursor="pointer"
+                    onClick={() => {
+                      navigate(`/profile/${room_id}`);
+                    }}
+                  >
+                    {room_name}
+                  </Box>
                   <Box>Last seen ...</Box>
                   <Box> number</Box>
                   <Flex w={"100%"} justifyContent={"space-between"}>
@@ -285,7 +339,7 @@ const Room: React.FC<RoomProps> = ({
                     <Switch />
                   </Flex>
                 </Flex>
-                
+                    
                 <Tabs>
                   <TabList>
                     <Tab>Media</Tab>
@@ -300,7 +354,6 @@ const Room: React.FC<RoomProps> = ({
                     <TabPanel>3</TabPanel>
                     <TabPanel>4</TabPanel>
                     <TabPanel>5</TabPanel>
-
                   </TabPanels>
                 </Tabs>
               </DrawerBody>

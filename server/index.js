@@ -75,6 +75,7 @@ wss.on("connection", (ws) => {
           break;
         case "rooms_messages":
           const msgs = await Messager.rooms_messages(parsedMessage.room_id); /// change args in main messager
+          console.log(`sent messages for ${parsedMessage.room_id}: `, message)
           clients[clientId].send(JSON.stringify(msgs));
           break;
         case "connection_to_room":
@@ -91,7 +92,7 @@ wss.on("connection", (ws) => {
               console.log("Client connected to room"); //-----------------
               clients[clientId].send(
                 JSON.stringify([
-                  { event: "conection_to_room", connected_to: room },
+                  { event: "connection_to_room", connected_to: room },
                 ])
               );
             } else {
