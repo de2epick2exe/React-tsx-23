@@ -47,7 +47,7 @@ export const connectToWebSocket = () => {
           switch (message[0].event) {
             case "message":
               dispatch(addMessage(message[0]));
-              console.log("WS_slice chats recived message", message); 
+              console.log("WS_slice chats recived message", message[0]); 
               break;
             case "chats":
               console.log("WS_slice chats:", message[0]);

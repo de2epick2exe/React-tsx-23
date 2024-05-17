@@ -81,8 +81,8 @@ const messagerSlice = createSlice({
       if(!(roomID[0] in state.messages)){        
         state.messages[parseInt(roomID[0],10)]=[]
       }
-      
-      state.messages[parseInt(roomID[0],10)].push(msg[0])
+      //@ts-ignore
+      state.messages[parseInt(roomID[0],10)][0].push(msg[0])
     },
     setMessage: (state, action: PayloadAction<string | null>) => {
       state.message = action.payload;

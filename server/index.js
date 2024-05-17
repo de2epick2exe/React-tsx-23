@@ -53,8 +53,11 @@ wss.on("connection", (ws) => {
             if (live_room.clients.has(ws)) {
               live_room.clients.forEach((client) => {
                 console.log("finded room for user(current ws)");
-
-                client.send(JSON.stringify([{ ...parsedMessage }]));
+                console.log(parsedMessage)
+                client.send(JSON.stringify([
+                  { event : 'message',
+                    [parsedMessage.room] : { ...parsedMessage }}
+                ]));
                 //client.send(message);
                 console.log(
                   "Number of clients in room:",

@@ -191,6 +191,9 @@ const Room: React.FC<RoomProps> = ({
           </>
         );
       } else {
+        console.log('chat messages arr')
+        //@ts-ignore
+        messager.messages[room_id][0]?.map((msg) => console.log(msg[0]))
         return (//@ts-ignore
           <>{messager.messages[room_id][0]?.map((msg) => (
               <span key={msg.id}>
