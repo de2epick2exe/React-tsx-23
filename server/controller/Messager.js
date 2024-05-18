@@ -288,16 +288,28 @@ class Messager {
       console.log(error);
     }
   }
+
   async send_message(msg) {
     try {
-      const { to_id, from_id, message, media_url, room_id } = msg;
+      const { from_id, message, media_url, room } = msg;
+      console.log(from_id, message, media_url, room )
+      const date = new Date()
       const res = await db.query(
-        "INSERT INTO messages( to_id, from_id, message, media_url, room_id) VALUES($1, $2, $3, $4,$5 RETURNING message_id",
-        [to_id, from_id, message, media_url, room_id]
+        "INSERT INTO messages( to_id, from_id, content, media_url, date,  room_id) VALUES((select user_id from conversations where user_id != $1 and room_id = $5 ), $1, $2, $3, $4, $5) RETURNING *",
+        [from_id, message, media_url, date, room]
       );
-      res.json({res});
-    } catch (error) {
-      res.json(error);
+      ///res.json({res});
+      console.log([{
+        event : 'message',
+       [res.rows[0].room_id] : { ...res.rows[0] }}
+   ]  )
+     return  [{
+         event : 'message',
+        [res.rows[0].room_id] : { ...res.rows[0] }}
+    ]  
+      } catch (error) {
+        console.log('sending message error: ', error)
+      //res.json(error);
     }
   }
 

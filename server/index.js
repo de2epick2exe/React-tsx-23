@@ -51,13 +51,11 @@ wss.on("connection", (ws) => {
         case "message":
           for (const live_room of setted_rooms) {
             if (live_room.clients.has(ws)) {
-              live_room.clients.forEach((client) => {
+              live_room.clients.forEach( async (client) => {
                 console.log("finded room for user(current ws)");
                 console.log(parsedMessage)
-                client.send(JSON.stringify([
-                  { event : 'message',
-                    [parsedMessage.room] : { ...parsedMessage }}
-                ]));
+                const messagedb_res = await Messager.send_message(parsedMessage)
+                client.send(JSON.stringify(messagedb_res));
                 //client.send(message);
                 console.log(
                   "Number of clients in room:",

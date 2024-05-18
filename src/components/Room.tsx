@@ -91,7 +91,7 @@ const Room: React.FC<RoomProps> = ({
     if (room_type == "private" || room_type == "chat") {
       setMessage(""); // need to fix
       const msg = {
-        id: Date.now(),
+        from_id: data.id,
         user_id: data.id,
         username: data.username,
         room: room_id,
