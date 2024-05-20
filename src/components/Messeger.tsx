@@ -78,7 +78,10 @@ const Messenger = () => {
     dispatch(sendMessage(message));
   };
 
-  const get_room_messages = (id: number | undefined, roomt: string | undefined) => {
+  const get_room_messages = (
+    id: number | undefined,
+    roomt: string | undefined
+  ) => {
     const connection_to_room = {
       room: id,
       type: roomt,
@@ -100,7 +103,7 @@ const Messenger = () => {
   }, [ws.connected]);
 
   const setRoomdata = (r: any) => {
-    setRoomState(undefined)
+    setRoomState(undefined);
     setRoomState(r?.rooms_id);
     setSelected_room(r?.username);
     dispatch(setCurrentRoom(r));
@@ -166,8 +169,8 @@ const Messenger = () => {
     setTurnOnmain(!turnOnMain);
   };
   const Chats = () => {
-    const [channelName, setChannelName] = useState('');
-    const[ channelDesc, setChannelDesc] = useState('')
+    const [channelName, setChannelName] = useState("");
+    const [channelDesc, setChannelDesc] = useState("");
     const chanAvatar = useRef<HTMLInputElement>(null);
     const setFile = () => {
       try {
@@ -179,29 +182,27 @@ const Messenger = () => {
       }
     };
 
-    const createChannel=() =>{
+    const createChannel = () => {
       const message_data = {
-        event: 'create_channel',
+        event: "create_channel",
         body: {
-        id: data.id,
-        title: channelName,
-        desc: channelDesc,
-        //avatar: chanAvatar         
-        }
-      }
-      dispatch(sendMessage(message_data))
-      console.log('created channel', channelName, channelDesc)
-    }
-
+          id: data.id,
+          title: channelName,
+          desc: channelDesc,
+          //avatar: chanAvatar
+        },
+      };
+      dispatch(sendMessage(message_data));
+      console.log("created channel", channelName, channelDesc);
+    };
 
     if (turnOnNChn) {
       return (
         <>
           <Flex direction="row" alignItems="center">
-            
             <IconButton
               onClick={() => {
-                turnNChn()
+                turnNChn();
               }}
               aria-label="Back"
               isRound={true}
@@ -212,7 +213,7 @@ const Messenger = () => {
             <GridItem>Create new Channel</GridItem>
           </Flex>
           <Box>
-          <Input type="file" ref={chanAvatar} display="none" />
+            <Input type="file" ref={chanAvatar} display="none" />
             <Flex direction="column">
               <Flex
                 my="4"
@@ -231,16 +232,29 @@ const Messenger = () => {
                 />
               </Flex>
               <Box my="2">
-                <Input onChange={(e)=>{setChannelName(e.target.value)}} />
+                <Input
+                  onChange={(e) => {
+                    setChannelName(e.target.value);
+                  }}
+                />
               </Box>
               <Box my="2">
-                <Input onChange={(e)=>{setChannelDesc(e.target.value)}} />
+                <Input
+                  onChange={(e) => {
+                    setChannelDesc(e.target.value);
+                  }}
+                />
               </Box>
-              <IconButton  variant="outline" borderColor='transparent'
-                  colorScheme="teal"
-                  aria-label="Call Sage"
-                  fontSize="20px" w='4' onClick={createChannel}                  
-                  icon={<SlArrowRightCircle/>} />
+              <IconButton
+                variant="outline"
+                borderColor="transparent"
+                colorScheme="teal"
+                aria-label="Call Sage"
+                fontSize="20px"
+                w="4"
+                onClick={createChannel}
+                icon={<SlArrowRightCircle />}
+              />
             </Flex>
           </Box>
         </>
@@ -304,22 +318,49 @@ const Messenger = () => {
         </>
       );
     }
+
+    const Latest_message:React.FC<{id: number, room_name: string}> = ({id, room_name})=>{
+      console.log('latest message id:', id, 'room name:', room_name)
+      if(id){    
+        /** @ts-ignore */    
+        console.log(messager.messages[id] )
+        if(messager.messages[id]){        
+      return (
+        <Box>
+          {room_name}:
+          {
+            /** @ts-ignore */
+            messager.messages[id][0]?.[messager.messages[id][0]?.length - 1].content
+          }
+        </Box>
+      );
+      }}
+      return(<>nothing</>)
+    };
+
+    //@ts-ignore
+    ///console.log(messager.messages[1][0]?.[messager.messages[1][0]?.length - 1]);
+
     return (
       <>
         <GridItem>folders</GridItem>
         All Chats
         {messager.rooms?.map((r) => (
           <span key={r.id}>
-            <br />
-            <Button
+            <Box
               bg="black"
               ml="-1"
               width="100% "
-              variant="ghost"
+              my="2"
+              py="3"
               onClick={(e) => setRoomdata(r)}
             >
-              {r.username}
-            </Button>
+              <Flex flexDirection="column">
+                <Box>{r.username}</Box>
+                <Latest_message room_name={r.username} id={r.id} />
+                
+              </Flex>
+            </Box>
           </span>
         ))}
       </>
@@ -410,7 +451,7 @@ const Messenger = () => {
         </GridItem>
 
         <GridItem bg="black" area={"chat"}>
-          <Room          
+          <Room
             room_id={messager?.current_room?.rooms_id}
             room_name={messager?.current_room?.username}
             room_type={messager?.current_room?.type}

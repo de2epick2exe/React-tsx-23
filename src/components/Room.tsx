@@ -197,7 +197,7 @@ const Room: React.FC<RoomProps> = ({
         return (//@ts-ignore
           <>{messager.messages[room_id][0]?.map((msg) => (
               <span key={msg.id}>
-                {msg.user_id == data.id ? (
+                {msg.from_id == data.id ? (
                   <Flex justify="flex-end">
                     <p
                       className="bubble right"
@@ -209,8 +209,8 @@ const Room: React.FC<RoomProps> = ({
                         marginTop: "10px",
                       }}
                     >
-                      <Avatar name={msg.username} /> {msg.username}:{" "}
-                      {msg.message}
+                      <Avatar name={data.username ?? undefined} /> {data.username}:{" "}
+                      {msg.content}
                     </p>
                   </Flex>
                 ) : (
@@ -224,8 +224,8 @@ const Room: React.FC<RoomProps> = ({
                         marginTop: "10px",
                       }}
                     >
-                      <Avatar name={msg.username} /> {msg.username}:{" "}
-                      {msg.message}
+                      <Avatar name={room_name} /> {room_name}:{" "}
+                      {msg.content}
                     </p>
                   </Flex>
                 )}

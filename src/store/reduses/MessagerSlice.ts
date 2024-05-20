@@ -34,10 +34,11 @@ interface Post {
   emotes: [];
 }
 interface Message {
-  id: number;
+  from_id: number;
+  to_id: number;
   user_id: number;
-  username: string;
-  message: any;
+  date: Date;
+  content: any;
   emotes: [];  
 }
 interface Rooms_msgs {
