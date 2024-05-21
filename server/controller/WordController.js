@@ -97,7 +97,9 @@ class WordController {
             "SELECT * FROM public.words where id=$1",
             [rand]
           );
+          if(word.rows.length > 0 ){
           word_arr.push(word.rows);
+          }
           
         
        // console.log(test_rand);

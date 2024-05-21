@@ -238,7 +238,7 @@ const Eng_Ua = () => {
         {random_list.map((item) => (
           <span key={item[0].id}>
             <Button onClick={(e) => word_button(e, item[0].id)}>
-              {item[0].translate}
+              {item[0] !== undefined ?  item[0].translate : 'error'}
             </Button>
           </span>
         ))}
