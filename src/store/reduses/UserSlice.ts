@@ -128,14 +128,19 @@ export const UserSlice = createSlice({
       saveUserState(state); 
     },
     setFriends:(state, action: PayloadAction<Friend[] | null>) => {
+      console.log(action.payload)
       state.friends = action.payload!
       saveUserState(state); 
     },
     setWaitingList:(state, action: PayloadAction<Friend[] | null>) => {
+      console.log(action.payload)
+
       state.waiting_list = action.payload!
       saveUserState(state); 
     },
     setRecomends:(state, action: PayloadAction<Friend[] | null>) => {
+      console.log(action.payload)
+
       state.recomends_list = action.payload!
       saveUserState(state); 
     },

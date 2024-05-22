@@ -94,8 +94,7 @@ export const connectToWebSocket = () => {
                 dispatch(setWaitingList(message[0].rooms))
                 break;
               case "accept_friend":
-                dispatch(setRecomends(message[0].rooms))
-                
+                dispatch(setRecomends(message[0].rooms))                
                 break;
               case "recomended_users":
                 dispatch(setRooms(message[0].rooms))

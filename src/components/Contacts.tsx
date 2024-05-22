@@ -32,12 +32,13 @@ const Contacts = () => {
   const data = useSelector((state: RootState) => state.userReducer);
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   useEffect(() => {
-    socket.current = new WebSocket("ws://localhost:3033");
+    /*socket.current = new WebSocket("ws://localhost:3033");
     socket.current.onopen = () => {
       console.log(data.username, "connected to ws");
     };
     socket.current.onmessage = (event) => {
       try {
+       
         const message = JSON.parse(event.data);
         console.log(message);
         console.log(message.data);
@@ -78,14 +79,15 @@ const Contacts = () => {
         console.error("Error parsing JSON:", error);
         console.warn(event.data);
       }
-    };
+    };*/
+    /*
     socket.current.onclose = () => {
       console.log("connection closed");
     };
     socket.current.onerror = () => {
       console.log("SOCKET error");
     };
-
+    */
     get_friends();
     get_recomended();
     get_waiting_list();
@@ -271,8 +273,7 @@ const Contacts = () => {
               <TabPanels>
                 <TabPanel>
                   <Flex flexDirection={"column"}>
-                    {isLoadedFriends ? (
-                      data.friends.map((frd) => (
+                    {data.friends?.map((frd) => (
                         <Box key={frd.id}>
                           <span>{frd.username}</span>
                           <Button onClick={() => delete_friend(frd.id)}>
@@ -280,14 +281,11 @@ const Contacts = () => {
                           </Button>
                         </Box>
                       ))
-                    ) : (
-                      <Box>Loading...</Box>
-                    )}
+                    }
                   </Flex>
                 </TabPanel>
                 <TabPanel>
-                  {isLoadedWaiting ? (
-                    data.waiting_list.map((usr) => (
+                  {data.waiting_list?.map((usr) => (
                       <Box key={usr.id}>
                         <span>{usr.username}</span>
                         <Button onClick={() => accept_friend(usr.id)}>
@@ -297,15 +295,12 @@ const Contacts = () => {
                       Reject
                       </Button>
                       </Box>
-                    ))
-                  ) : (
-                    <Box> Loading...</Box>
-                  )}
+                    ))}
                 </TabPanel>
                 <TabPanel>
                   <Flex flexDirection={"column"}>
-                    {isLoadedRecomended ? (
-                      recomended_users.map((user) => (
+                    {
+                      recomended_users?.map((user) => (
                         //@ts-ignore
                         <span key={user?.id}>
                           <span>
@@ -321,10 +316,7 @@ const Contacts = () => {
                             </Button>
                           }
                         </span>
-                      ))
-                    ) : (
-                      <Box>Loading...</Box>
-                    )}
+                      )) }
                   </Flex>
                 </TabPanel>
               </TabPanels>
