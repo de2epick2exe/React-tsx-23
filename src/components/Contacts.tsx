@@ -15,7 +15,6 @@ import {
 import { sendMessage } from "../store/reduses/WS_Slice";
 
 const Contacts = () => {
-  const socket = useRef<WebSocket | undefined>();
   interface user_card {
     id: number;
     username: string;
@@ -27,9 +26,11 @@ const Contacts = () => {
   const [isLoadedFriends, setIsLoadedFriends] = useState(false);
   const [isLoadedWaiting, setIsLoadedWaiting] = useState(false);
   const [isLoadedRecomended, setIsLoadedRecomended] = useState(false);
-  
+
   const messager = useSelector((state: RootState) => state.messagerReducer);
+  const socket = useSelector((state: RootState) => state.WS_Slice);
   const data = useSelector((state: RootState) => state.userReducer);
+
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   useEffect(() => {
     /*socket.current = new WebSocket("ws://localhost:3033");
@@ -91,43 +92,26 @@ const Contacts = () => {
     get_friends();
     get_recomended();
     get_waiting_list();
-
-    return () => {
-      if (socket.current) {
-        socket.current.close();
-      }
-    };
   }, []);
 
   const get_users_rooms_data = async () => {
-    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+    if (socket.connected) {
       const message = {
         rooms_for: data.id,
         event: "friends",
       };
-      socket.current.send(JSON.stringify(message));
-      dispatch(sendMessage(message))
-    } else {
-      // Wait for the connection to open and then send the message
-
-      setTimeout(() => {
-        get_users_rooms_data();
-      }, 100);
-    }
+      sendMessage(message);
+      dispatch(sendMessage(message));
+    } 
   };
 
   const get_recomended = async () => {
-    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
-      socket.current.send(
-        JSON.stringify({ event: "get_recomended_users", page: 1, limit: 10 })
-      );
-    } else {
-      setTimeout(() => {
-        get_recomended();
-      }, 100);
+    if (socket.connected) {
+      sendMessage({ event: "get_recomended_users", page: 1, limit: 10 });
+    } 
       return;
       //get_recomended();
-    }
+    
   };
 
   const add_friend = async (add_id: any) => {
@@ -135,18 +119,13 @@ const Contacts = () => {
 
     if (add_id !== data.id) {
       console.log("add frined");
-      if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+      if (socket.connected) {
         const message = {
           id: add_id,
           add_id: data.id,
           event: "add_friend",
         };
-        socket.current.send(JSON.stringify(message));
-      } else {
-        setTimeout(() => {
-          add_friend(add_id);
-        }, 100);
-        //; //add fix*
+        sendMessage(message);
       }
     } else {
       return;
@@ -154,51 +133,36 @@ const Contacts = () => {
   };
 
   const get_friends = async () => {
-    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+    if (socket.connected) {
       const message = {
         id: data.id,
         event: "get_friends",
       };
-      socket.current.send(JSON.stringify(message));
-    } else {
-      setTimeout(() => {
-        get_friends();
-      }, 100);
-      //get_friends(); //add fix*
+      sendMessage(JSON.stringify(message));
     }
   };
 
   const get_waiting_list = async () => {
-    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+    if (socket.connected) {
       const message = {
         id: data.id,
         event: "get_waiting_list",
       };
-      socket.current.send(JSON.stringify(message));
-    } else {
-      setTimeout(() => {
-        get_waiting_list();
-      }, 100);
-      //get_waiting_list(); //add fix*
+      sendMessage(message);
     }
   };
 
   const delete_friend = async (usr: any) => {
-    if(!usr){
-      return alert(`no user id, ${usr}`)
+    if (!usr) {
+      return alert(`no user id, ${usr}`);
     }
-    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+    if (socket.connected) {
       const message = {
         id: data.id,
         to_delete: usr,
         event: "delete_friend",
       };
-      socket.current.send(JSON.stringify(message));
-    } else {
-      setTimeout(() => {
-        delete_friend(usr);
-      }, 100);
-      //delete_friend(usr); //add fix*
+      sendMessage(message);
     }
   };
 
@@ -210,18 +174,13 @@ const Contacts = () => {
 
     if (accepted_id !== data.id) {
       console.log("add frined");
-      if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+      if (socket.connected) {
         const message = {
           id: data.id,
           accept_id: accepted_id,
           event: "accept_friend",
         };
-        socket.current.send(JSON.stringify(message));
-      } else {
-        setTimeout(() => {
-          accept_friend(accepted_id);
-        }, 100);
-        // accept_friend(accepted_id); //add fix*
+        sendMessage(message);
       }
     } else {
       return;
@@ -236,18 +195,13 @@ const Contacts = () => {
 
     if (reject_id !== data.id) {
       console.log("add frined");
-      if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+      if (socket.connected) {
         const message = {
           id: data.id,
           reject_id: reject_id,
           event: "reject_request",
         };
-        socket.current.send(JSON.stringify(message));
-      } else {
-        setTimeout(() => {
-          reject_friend(reject_id);
-        }, 100);
-        //accept_friend(reject_id); //add fix*
+        sendMessage(message);
       }
     } else {
       return;
@@ -268,55 +222,53 @@ const Contacts = () => {
               <TabList>
                 <Tab>Friends</Tab>
                 <Tab>Waiting list</Tab>
-                <Tab>Recomended list</Tab>
+                <Tab onClick={() => get_friends()}>Recomended list</Tab>
               </TabList>
               <TabPanels>
                 <TabPanel>
                   <Flex flexDirection={"column"}>
                     {data.friends?.map((frd) => (
-                        <Box key={frd.id}>
-                          <span>{frd.username}</span>
-                          <Button onClick={() => delete_friend(frd.id)}>
-                            Delete
-                          </Button>
-                        </Box>
-                      ))
-                    }
+                      <Box key={frd.id}>
+                        <span>{frd.username}</span>
+                        <Button onClick={() => delete_friend(frd.id)}>
+                          Delete
+                        </Button>
+                      </Box>
+                    ))}
                   </Flex>
                 </TabPanel>
                 <TabPanel>
                   {data.waiting_list?.map((usr) => (
-                      <Box key={usr.id}>
-                        <span>{usr.username}</span>
-                        <Button onClick={() => accept_friend(usr.id)}>
-                              Add to friends
-                        </Button>
-                        <Button onClick={() => reject_friend(usr.id)}>
-                      Reject
+                    <Box key={usr.id}>
+                      <span>{usr.username}</span>
+                      <Button onClick={() => accept_friend(usr.id)}>
+                        Add to friends
                       </Button>
-                      </Box>
-                    ))}
+                      <Button onClick={() => reject_friend(usr.id)}>
+                        Reject
+                      </Button>
+                    </Box>
+                  ))}
                 </TabPanel>
                 <TabPanel>
                   <Flex flexDirection={"column"}>
-                    {
-                      recomended_users?.map((user) => (
-                        //@ts-ignore
-                        <span key={user?.id}>
-                          <span>
-                            {
-                              //@ts-ignore
-                              user?.username
-                            }
-                          </span>
+                    {recomended_users?.map((user) => (
+                      //@ts-ignore
+                      <span key={user?.id}>
+                        <span>
                           {
                             //@ts-ignore
-                            <Button onClick={() => add_friend(user?.id)}>
-                              Add to friends
-                            </Button>
+                            user?.username
                           }
                         </span>
-                      )) }
+                        {
+                          //@ts-ignore
+                          <Button onClick={() => add_friend(user?.id)}>
+                            Add to friends
+                          </Button>
+                        }
+                      </span>
+                    ))}
                   </Flex>
                 </TabPanel>
               </TabPanels>
