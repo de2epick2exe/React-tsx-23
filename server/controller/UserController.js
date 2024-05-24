@@ -429,7 +429,7 @@ class UserController {
         "SELECT users.id, users.username, users.role, users.avatar FROM public.users RIGHT JOIN public.friends ON public.users.id::varchar = ANY(public.friends.friends_list) WHERE public.friends.user_id = $1",
         [id]
       );
-      return { event: "get_friends", data: res.rows };
+      return [{ event: "get_friends", data: res.rows }];
     } catch (error) {
       console.log(error);
 

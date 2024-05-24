@@ -87,17 +87,17 @@ export const connectToWebSocket = () => {
               break;
               case "get_friends":
                 console.log('friends received')
-                console.log(message.data)
-                dispatch(setFriends(message.data))
+                console.log(message[0].data[0])
+                dispatch(setFriends(message[0].data[0]))
                 break;
               case "get_waiting_list":
-                dispatch(setWaitingList(message[0].rooms))
+                dispatch(setWaitingList(message[0].rooms[0]))
                 break;
               case "accept_friend":
-                dispatch(setRecomends(message[0].rooms))                
+                dispatch(setRecomends(message[0].rooms[0]))                
                 break;
               case "recomended_users":
-                dispatch(setRooms(message[0].rooms))
+                dispatch(setRooms(message[0].rooms[0]))
                 break;
             default:
               console.log("unhandled event in wsStore:", message[0].event);

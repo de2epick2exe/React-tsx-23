@@ -12,7 +12,7 @@ import {
   TabPanel,
   Button,
 } from "@chakra-ui/react";
-import { sendMessage } from "../store/reduses/WS_Slice";
+import WS_Slice, { sendMessage } from "../store/reduses/WS_Slice";
 
 const Contacts = () => {
   interface user_card {
@@ -92,7 +92,7 @@ const Contacts = () => {
     get_friends();
     get_recomended();
     get_waiting_list();
-  }, []);
+  }, [socket.connected]);
 
   const get_users_rooms_data = async () => {
     if (socket.connected) {
@@ -100,14 +100,14 @@ const Contacts = () => {
         rooms_for: data.id,
         event: "friends",
       };
-      sendMessage(message);
+      
       dispatch(sendMessage(message));
     } 
   };
 
   const get_recomended = async () => {
     if (socket.connected) {
-      sendMessage({ event: "get_recomended_users", page: 1, limit: 10 });
+      dispatch(sendMessage({ event: "get_recomended_users", page: 1, limit: 10 }));
     } 
       return;
       //get_recomended();
@@ -125,7 +125,7 @@ const Contacts = () => {
           add_id: data.id,
           event: "add_friend",
         };
-        sendMessage(message);
+        dispatch(sendMessage(message));
       }
     } else {
       return;
@@ -138,7 +138,7 @@ const Contacts = () => {
         id: data.id,
         event: "get_friends",
       };
-      sendMessage(JSON.stringify(message));
+      dispatch(sendMessage(message));
     }
   };
 
@@ -148,7 +148,7 @@ const Contacts = () => {
         id: data.id,
         event: "get_waiting_list",
       };
-      sendMessage(message);
+      dispatch(sendMessage(message));
     }
   };
 
@@ -162,7 +162,7 @@ const Contacts = () => {
         to_delete: usr,
         event: "delete_friend",
       };
-      sendMessage(message);
+      dispatch(sendMessage(message));
     }
   };
 
@@ -180,7 +180,7 @@ const Contacts = () => {
           accept_id: accepted_id,
           event: "accept_friend",
         };
-        sendMessage(message);
+        dispatch(sendMessage(message));
       }
     } else {
       return;
@@ -201,7 +201,7 @@ const Contacts = () => {
           reject_id: reject_id,
           event: "reject_request",
         };
-        sendMessage(message);
+        dispatch(sendMessage(message));
       }
     } else {
       return;
