@@ -100,18 +100,19 @@ const Contacts = () => {
         rooms_for: data.id,
         event: "friends",
       };
-      
+
       dispatch(sendMessage(message));
-    } 
+    }
   };
 
   const get_recomended = async () => {
     if (socket.connected) {
-      dispatch(sendMessage({ event: "get_recomended_users", page: 1, limit: 10 }));
-    } 
-      return;
-      //get_recomended();
-    
+      dispatch(
+        sendMessage({ event: "get_recomended_users", page: 1, limit: 10 })
+      );
+    }
+    return;
+    //get_recomended();
   };
 
   const add_friend = async (add_id: any) => {
@@ -208,6 +209,111 @@ const Contacts = () => {
     }
   };
 
+  const Users_Tabs = () => {
+    const Friends_list = () => {
+      if (data.friends.length == 0) {
+        return (
+          <>
+            {data.friends?.map((frd) => (
+              <Box key={frd.id}>
+                <span>{frd.username}</span>
+                <Button onClick={() => delete_friend(frd.id)}>Delete</Button>
+              </Box>
+            ))}
+          </>
+        );
+      }
+      else{
+        return(<> <p>You hasn`t  friends (</p>  </>)
+      }
+    };
+    const Waiting_list = () => {
+      if (data.waiting_list.length == 0) {
+        return (
+          <>
+            {data.waiting_list?.map((frd) => (
+              <Box key={frd.id}>
+                <span>{frd.username}</span>
+                <Button onClick={() => delete_friend(frd.id)}>Delete</Button>
+              </Box>
+            ))}
+          </>
+        );
+      }
+      else{
+        return(<> <p>You hasn`t  friends (</p>  </>)
+      }
+    };
+    const Recomends_list = () => {
+      if (data.recomends_list.length == 0) {
+        return (
+          <>
+            {data.friends?.map((frd) => (
+              <Box key={frd.id}>
+                <span>{frd.username}</span>
+                <Button onClick={() => delete_friend(frd.id)}>Delete</Button>
+              </Box>
+            ))}
+          </>
+        );
+      }
+      else{
+        return(<> <p>You hasn`t  friends (</p>  </>)
+      }
+    };
+
+    return (
+      <>
+        <Tabs>
+          <TabList>
+            <Tab onClick={() => get_friends()}>Friends</Tab>
+            <Tab onClick={() => get_waiting_list()}>Waiting list</Tab>
+            <Tab onClick={() => get_recomended()}>Recomended list</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <Flex flexDirection={"column"}>
+                <Friends_list/>
+              </Flex>
+            </TabPanel>
+            <TabPanel>
+              {data.waiting_list?.map((usr) => (
+                <Box key={usr.id}>
+                  <span>{usr.username}</span>
+                  <Button onClick={() => accept_friend(usr.id)}>
+                    Add to friends
+                  </Button>
+                  <Button onClick={() => reject_friend(usr.id)}>Reject</Button>
+                </Box>
+              ))}
+            </TabPanel>
+            <TabPanel>
+              <Flex flexDirection={"column"}>
+                {recomended_users?.map((user) => (
+                  //@ts-ignore
+                  <span key={user?.id}>
+                    <span>
+                      {
+                        //@ts-ignore
+                        user?.username
+                      }
+                    </span>
+                    {
+                      //@ts-ignore
+                      <Button onClick={() => add_friend(user?.id)}>
+                        Add to friends
+                      </Button>
+                    }
+                  </span>
+                ))}
+              </Flex>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </>
+    );
+  };
+
   return (
     <>
       <Flex
@@ -218,61 +324,7 @@ const Contacts = () => {
         <p>friends</p> <p>ctct rm</p>
         <Flex>
           <Box>
-            <Tabs>
-              <TabList>
-                <Tab>Friends</Tab>
-                <Tab>Waiting list</Tab>
-                <Tab onClick={() => get_friends()}>Recomended list</Tab>
-              </TabList>
-              <TabPanels>
-                <TabPanel>
-                  <Flex flexDirection={"column"}>
-                    {data.friends?.map((frd) => (
-                      <Box key={frd.id}>
-                        <span>{frd.username}</span>
-                        <Button onClick={() => delete_friend(frd.id)}>
-                          Delete
-                        </Button>
-                      </Box>
-                    ))}
-                  </Flex>
-                </TabPanel>
-                <TabPanel>
-                  {data.waiting_list?.map((usr) => (
-                    <Box key={usr.id}>
-                      <span>{usr.username}</span>
-                      <Button onClick={() => accept_friend(usr.id)}>
-                        Add to friends
-                      </Button>
-                      <Button onClick={() => reject_friend(usr.id)}>
-                        Reject
-                      </Button>
-                    </Box>
-                  ))}
-                </TabPanel>
-                <TabPanel>
-                  <Flex flexDirection={"column"}>
-                    {recomended_users?.map((user) => (
-                      //@ts-ignore
-                      <span key={user?.id}>
-                        <span>
-                          {
-                            //@ts-ignore
-                            user?.username
-                          }
-                        </span>
-                        {
-                          //@ts-ignore
-                          <Button onClick={() => add_friend(user?.id)}>
-                            Add to friends
-                          </Button>
-                        }
-                      </span>
-                    ))}
-                  </Flex>
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
+            <Users_Tabs />
           </Box>
         </Flex>
       </Flex>
