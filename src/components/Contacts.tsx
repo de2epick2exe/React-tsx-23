@@ -33,14 +33,8 @@ const Contacts = () => {
 
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   useEffect(() => {
-    /*socket.current = new WebSocket("ws://localhost:3033");
-    socket.current.onopen = () => {
-      console.log(data.username, "connected to ws");
-    };
-    socket.current.onmessage = (event) => {
-      try {
-       
-        const message = JSON.parse(event.data);
+    /*
+             const message = JSON.parse(event.data);
         console.log(message);
         console.log(message.data);
         switch (message.event) {
@@ -71,23 +65,6 @@ const Contacts = () => {
             });
             setIsLoadedRecomended(true);
 
-            break;
-          default:
-            console.log("unhandled event:", message);
-            break;
-        }
-      } catch (error) {
-        console.error("Error parsing JSON:", error);
-        console.warn(event.data);
-      }
-    };*/
-    /*
-    socket.current.onclose = () => {
-      console.log("connection closed");
-    };
-    socket.current.onerror = () => {
-      console.log("SOCKET error");
-    };
     */
     get_friends();
     get_recomended();
@@ -211,27 +188,36 @@ const Contacts = () => {
 
   const Users_Tabs = () => {
     const Friends_list = () => {
-      if (data.friends.length == 0) {
+      if (data && Array.isArray(data.friends) && data.friends.length !== 0) {
         return (
-          <>
-            {data.friends?.map((frd) => (
+          <Box>
+            {data.friends.map((frd) => (
               <Box key={frd.id}>
                 <span>{frd.username}</span>
                 <Button onClick={() => delete_friend(frd.id)}>Delete</Button>
               </Box>
             ))}
+          </Box>
+        );
+      } else {
+        return (
+          <>
+            {" "}
+            <p>You hasn`t friends (</p>{" "}
           </>
         );
       }
-      else{
-        return(<> <p>You hasn`t  friends (</p>  </>)
-      }
     };
+
     const Waiting_list = () => {
-      if (data.waiting_list.length == 0) {
+      if (
+        data &&
+        Array.isArray(data.waiting_list) &&
+        data.waiting_list.length !== 0
+      ) {
         return (
           <>
-            {data.waiting_list?.map((frd) => (
+            {data.waiting_list.map((frd) => (
               <Box key={frd.id}>
                 <span>{frd.username}</span>
                 <Button onClick={() => delete_friend(frd.id)}>Delete</Button>
@@ -239,26 +225,45 @@ const Contacts = () => {
             ))}
           </>
         );
-      }
-      else{
-        return(<> <p>You hasn`t  friends (</p>  </>)
+      } else {
+        return <> </>;
       }
     };
+
     const Recomends_list = () => {
-      if (data.recomends_list.length == 0) {
+      if (
+        data &&
+        Array.isArray(data.recomends_list) &&
+        data.recomends_list.length !== 0
+      ) {
         return (
           <>
-            {data.friends?.map((frd) => (
-              <Box key={frd.id}>
-                <span>{frd.username}</span>
-                <Button onClick={() => delete_friend(frd.id)}>Delete</Button>
-              </Box>
+            {recomended_users?.map((user) => (
+              //@ts-ignore
+              <span key={user?.id}>
+                <span>
+                  {
+                    //@ts-ignore
+                    user?.username
+                  }
+                </span>
+                {
+                  //@ts-ignore
+                  <Button onClick={() => add_friend(user?.id)}>
+                    Add to friends
+                  </Button>
+                }
+              </span>
             ))}
           </>
         );
-      }
-      else{
-        return(<> <p>You hasn`t  friends (</p>  </>)
+      } else {
+        return (
+          <>
+            {" "}
+            <p>loading... </p>{" "}
+          </>
+        );
       }
     };
 
@@ -273,39 +278,15 @@ const Contacts = () => {
           <TabPanels>
             <TabPanel>
               <Flex flexDirection={"column"}>
-                <Friends_list/>
+                <Friends_list />
               </Flex>
             </TabPanel>
             <TabPanel>
-              {data.waiting_list?.map((usr) => (
-                <Box key={usr.id}>
-                  <span>{usr.username}</span>
-                  <Button onClick={() => accept_friend(usr.id)}>
-                    Add to friends
-                  </Button>
-                  <Button onClick={() => reject_friend(usr.id)}>Reject</Button>
-                </Box>
-              ))}
+              <Waiting_list />
             </TabPanel>
             <TabPanel>
               <Flex flexDirection={"column"}>
-                {recomended_users?.map((user) => (
-                  //@ts-ignore
-                  <span key={user?.id}>
-                    <span>
-                      {
-                        //@ts-ignore
-                        user?.username
-                      }
-                    </span>
-                    {
-                      //@ts-ignore
-                      <Button onClick={() => add_friend(user?.id)}>
-                        Add to friends
-                      </Button>
-                    }
-                  </span>
-                ))}
+                <Recomends_list />
               </Flex>
             </TabPanel>
           </TabPanels>
