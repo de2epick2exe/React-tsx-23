@@ -66,9 +66,12 @@ const Contacts = () => {
             setIsLoadedRecomended(true);
 
     */
-    get_friends();
-    get_recomended();
-    get_waiting_list();
+
+    if (socket.connected) {
+      get_friends();
+      get_recomended();
+      get_waiting_list();
+    }
   }, [socket.connected]);
 
   const get_users_rooms_data = async () => {
@@ -271,23 +274,19 @@ const Contacts = () => {
       <>
         <Tabs>
           <TabList>
-            <Tab onClick={() => get_friends()}>Friends</Tab>
-            <Tab onClick={() => get_waiting_list()}>Waiting list</Tab>
-            <Tab onClick={() => get_recomended()}>Recomended list</Tab>
+            <Tab>Friends</Tab>
+            <Tab>Waiting list</Tab>
+            <Tab>Recomended list</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
-              <Flex flexDirection={"column"}>
-                <Friends_list />
-              </Flex>
+              <Friends_list />
             </TabPanel>
             <TabPanel>
               <Waiting_list />
             </TabPanel>
             <TabPanel>
-              <Flex flexDirection={"column"}>
-                <Recomends_list />
-              </Flex>
+              <Recomends_list />
             </TabPanel>
           </TabPanels>
         </Tabs>

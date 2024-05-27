@@ -298,7 +298,7 @@ class UserController {
     const offset = page * limit - limit
     const users = await db.query('SELECT id, username, role, avatar FROM users LIMIT $1 OFFSET $2',[limit, offset])
     console.log(users.rows)
-    return {event: "recomended_users", data: users.rows}
+    return [{event: "recomended_users", data: users.rows}]
   }
 
 
@@ -462,7 +462,7 @@ class UserController {
         "SELECT users.id, users.username, users.role, users.avatar FROM public.users RIGHT JOIN public.friends ON public.users.id::varchar = ANY(public.friends.waiting_accept) WHERE public.friends.user_id = $1",
         [id]
       );
-      return { event: "get_waiting_list", data: res.rows };
+      return [{ event: "get_waiting_list", data: res.rows }]
     } catch (error) {
       console.log(error);
 
