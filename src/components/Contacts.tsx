@@ -203,6 +203,7 @@ const Contacts = () => {
           </Box>
         );
       } else {
+        console.log(data.friends)
         return (
           <>
             {" "}
