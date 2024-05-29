@@ -483,7 +483,7 @@ class UserController {
       );
       const create_room = await Messager_Controller.create_private_room({body:{id_1: id, id_2: accepted_id}})
   
-      return { event: "accept_friend", data: res.rows, accepted_id: accepted_id };
+      return [{ event: "accept_friend", data: res.rows, accepted_id: accepted_id }];
     } catch (error) {
       console.log(error);
     }
@@ -495,7 +495,7 @@ class UserController {
         "UPDATE public.friends SET friends_list = array_remove(friends_list, $2), hidden_not_accepted = hidden_not_accepted || $2 WHERE user_id = $1",
         [id, todelete_id]
       );
-      return { event: "delete_friend", data: res.rows };
+      return [{ event: "delete_friend", data: res.rows }];
     } catch (error) {
       console.log(error);
 
@@ -508,7 +508,7 @@ class UserController {
         "UPDATE public.friends SET hidden_not_accepted = array_remove(hidden_not_accepted, $2), hidden_not_accepted = hidden_not_accepted || $2 WHERE id = $1",
         [id, rejected_id]
       );
-      return { event: "reject_request", data: res.rows };
+      return [{ event: "reject_request", data: res.rows }];
     } catch (error) {
       return { erro: error.message };
     }
@@ -519,7 +519,7 @@ class UserController {
       [id,cid]
     );
     console.log('checked status', id, cid, res.rows)
-    return { event: "check_user_status", data: res.rows };
+    return [{ event: "check_user_status", data: res.rows }];
   }
 }
 module.exports = new UserController();
