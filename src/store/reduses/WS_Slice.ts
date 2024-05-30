@@ -98,7 +98,7 @@ export const connectToWebSocket = () => {
               case "recomended_users":
                 console.log('recomends received')
                 console.log(message[0].data)
-                dispatch(setRooms(message[0].data))
+                dispatch(setRecomends(message[0].data))
                 break;
               case "accept_friend":
                 dispatch(setRecomends(message[0].rooms))                

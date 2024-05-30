@@ -128,17 +128,25 @@ export const UserSlice = createSlice({
     },
     setWaitingList: (state, action: PayloadAction<Friend[] | null>) => {
       console.log("waiting accept USERSLICE: ", action.payload);
+      if (action.payload?.length !== 0){
       action.payload?.map((user) => {
+        console.log('waitng list push:', user)
         state.waiting_list.push(user);
       });
+    
       saveUserState(state);
+    }
     },
     setRecomends: (state, action: PayloadAction<Friend[] | null>) => {
       console.log("recomends USERSLICE: ", action.payload);
-      action.payload?.map((user) => {
-        state.recomends_list.push(user);
-      });
+  
+      if (action.payload?.length !== 0){
+        action.payload?.map((user) => {
+          console.log('recomends list push:', user)
+          state.waiting_list.push(user);
+        });
       saveUserState(state);
+      }
     },
     logout: (state) => {
       state.token = null;

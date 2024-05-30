@@ -235,6 +235,9 @@ const Contacts = () => {
     };
 
     const Recomends_list = () => {
+     data.recomends_list?.map(user =>{
+      console.log('1',user)
+     })
       if (
         data &&
         Array.isArray(data.recomends_list) &&
