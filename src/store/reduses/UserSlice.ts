@@ -68,7 +68,7 @@ const initialState: UserState = loadUserState() || {
   error: null,
   friends: [],
   waiting_list: [],
-  recomends_list: [],
+  recomends_list:[],
 };
 
 const saveUserState = (state: UserState): void => {
@@ -139,14 +139,16 @@ export const UserSlice = createSlice({
     },
     setRecomends: (state, action: PayloadAction<Friend[] | null>) => {
       console.log("recomends USERSLICE: ", action.payload);
-  
+      console.log(state.recomends_list)
       if (action.payload?.length !== 0){
-        action.payload?.map((user) => {
+        //@ts-ignore
+        action.payload.map((user) => {
           console.log('recomends list push:', user)
-          state.waiting_list.push(user);
+          state.recomends_list.push(user);
         });
-      saveUserState(state);
       }
+      saveUserState(state);
+      
     },
     logout: (state) => {
       state.token = null;
@@ -154,6 +156,9 @@ export const UserSlice = createSlice({
       state.email = null;
       state.username = null;
       state.role = null;
+      state.waiting_list=[];
+      state.friends=[];
+      state.recomends_list=[];
       saveUserState(state);
     },
   },

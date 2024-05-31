@@ -203,7 +203,7 @@ const Contacts = () => {
           </Box>
         );
       } else {
-        console.log(data.friends)
+        console.log(data.friends);
         return (
           <>
             {" "}
@@ -235,33 +235,35 @@ const Contacts = () => {
     };
 
     const Recomends_list = () => {
-     data.recomends_list?.map(user =>{
-      console.log('1',user)
-     })
-      if (
-        data &&
-        Array.isArray(data.recomends_list) &&
-        data.recomends_list.length !== 0
-      ) {
+      if (data.recomends_list) {
+        console.log("1", data.recomends_list[0]);
+      }
+
+      if (data.recomends_list?.length !== 0) {
         return (
           <>
-            {recomended_users?.map((user) => (
-              //@ts-ignore
-              <span key={user?.id}>
-                <span>
+          <Flex flexDirection='column'>
+            {
+              // @ts-ignore
+              data.recomends_list?.map((user) => (
+                //@ts-ignore
+                <span key={user?.id}>
+                  <span>
+                    {
+                      //@ts-ignore
+                      user?.username
+                    }
+                  </span>
                   {
                     //@ts-ignore
-                    user?.username
+                    <Button onClick={() => add_friend(user?.id)}>
+                      Add to friends
+                    </Button>
                   }
                 </span>
-                {
-                  //@ts-ignore
-                  <Button onClick={() => add_friend(user?.id)}>
-                    Add to friends
-                  </Button>
-                }
-              </span>
-            ))}
+              ))
+            }
+            </Flex>
           </>
         );
       } else {

@@ -9,11 +9,11 @@ interface MessagerState {
     room_error: string| null;
   }
 */
-interface Room{
-  id: number,
-  username: string,
-  type: string,
-  rooms_id: number,
+interface Room {
+  id: number;
+  username: string;
+  type: string;
+  rooms_id: number;
 }
 interface Channel {
   id: number;
@@ -39,10 +39,10 @@ interface Message {
   user_id: number;
   date: Date;
   content: any;
-  emotes: [];  
+  emotes: [];
 }
 interface Rooms_msgs {
-[roomid: number]: Message[]
+  [roomid: number]: Message[];
 }
 /*
 messages: {
@@ -58,7 +58,7 @@ interface MessagerState {
   posts: Post[];
   current_channel: Channel | null;
   current_room: Room | null;
-  rooms: Room[]
+  rooms: Room[];
 }
 const initialState: MessagerState = {
   messages: {},
@@ -67,36 +67,39 @@ const initialState: MessagerState = {
   posts: [],
   current_channel: null,
   current_room: null,
-  rooms:[]
+  rooms: [],
 };
-
 
 const messagerSlice = createSlice({
   name: "messager",
   initialState,
   reducers: {
     addMessage: (state, action: PayloadAction<Rooms_msgs>) => {
-      
-      const roomID = Object.keys(action.payload)
-      const msg = Object.values(action.payload)
-      if(!(roomID[0] in state.messages)){        
-        state.messages[parseInt(roomID[0],10)]=[]
+      const roomID = Object.keys(action.payload);
+      const msg = Object.values(action.payload);
+      if (!(roomID[0] in state.messages)) {
+        state.messages[parseInt(roomID[0], 10)] = [];
       }
       //@ts-ignore
-      state.messages[parseInt(roomID[0],10)][0].push(msg[0])
+      state.messages[parseInt(roomID[0], 10)][0].push(msg[0]);
     },
     setMessage: (state, action: PayloadAction<string | null>) => {
       state.message = action.payload;
     },
-    setMessages: (state, action: PayloadAction<Rooms_msgs >) => {
-      const roomID = Object.keys(action.payload)
-      const msg = Object.values(action.payload)
-      console.log('MessagerSlice SetMessages func data:',action.payload, msg, roomID)
-      if(!(roomID[0] in state.messages)){        
-        state.messages[parseInt(roomID[0],10)]=[]
-      }      
-      state.messages[parseInt(roomID[0],10)].push(msg[0]) // check if ?? works
-      console.log('Finaly MessagerSlice messages: ',state.messages)
+    setMessages: (state, action: PayloadAction<Rooms_msgs>) => {
+      const roomID = Object.keys(action.payload);
+      const msg = Object.values(action.payload);
+      console.log(
+        "MessagerSlice SetMessages func data:",
+        action.payload,
+        msg,
+        roomID
+      );
+      if (!(roomID[0] in state.messages)) {
+        state.messages[parseInt(roomID[0], 10)] = [];
+      }
+      state.messages[parseInt(roomID[0], 10)].push(msg[0]); // check if ?? works
+      console.log("Finaly MessagerSlice messages: ", state.messages);
     },
     setNotifies: (state, action: PayloadAction<Notify[] | null>) => {
       state.notifies = action.payload!;
@@ -110,7 +113,7 @@ const messagerSlice = createSlice({
     setRooms: (state, action: PayloadAction<Room[] | null>) => {
       state.rooms = action.payload!;
     },
-    setCurrentRoom:(state, action: PayloadAction<Room | null>) => {
+    setCurrentRoom: (state, action: PayloadAction<Room | null>) => {
       state.current_room = action.payload;
     },
   },
