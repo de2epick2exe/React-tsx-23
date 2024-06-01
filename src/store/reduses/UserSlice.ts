@@ -119,9 +119,12 @@ export const UserSlice = createSlice({
     },
     setFriends: (state, action: PayloadAction<Friend[] | null>) => {
       console.log("friends USERSLICE: ", action.payload);
-
+      
       action.payload?.map((user) => {
-        state.friends.push(user);
+        if(state.friends.some(u=> u.id === user.id)){
+          state.friends.push(user);
+
+        }        
       });
 
       saveUserState(state);
@@ -130,8 +133,10 @@ export const UserSlice = createSlice({
       console.log("waiting accept USERSLICE: ", action.payload);
       if (action.payload?.length !== 0){
       action.payload?.map((user) => {
-        console.log('waitng list push:', user)
-        state.waiting_list.push(user);
+        if(!state.waiting_list.some(u=> u.id === user.id)){
+         console.log('waitng list push:', user)
+        state.waiting_list.push(user); 
+        }        
       });
     
       saveUserState(state);
@@ -143,8 +148,11 @@ export const UserSlice = createSlice({
       if (action.payload?.length !== 0){
         //@ts-ignore
         action.payload.map((user) => {
+          if(!state.recomends_list.some(u=> u.id === user.id)){
           console.log('recomends list push:', user)
           state.recomends_list.push(user);
+          }
+          
         });
       }
       saveUserState(state);
