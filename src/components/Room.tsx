@@ -112,6 +112,17 @@ const Room: React.FC<RoomProps> = ({
       dispatch(sendMessage(msg)); // sends 2x times
     }
   };
+
+  const call_message_menu = (e: any)=>{
+    e.preventDefault()
+    console.log('right click event')
+  }
+
+  const call_messg_reply = ()=>{
+
+    console.log('selected message to reply')
+  }
+
   const AlwaysScrollToBottom = () => {
     const elementRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -196,10 +207,10 @@ const Room: React.FC<RoomProps> = ({
         messager.messages[room_id][0]?.map((msg) => console.log(msg[0]))
         return (//@ts-ignore
           <>{messager.messages[room_id][0]?.map((msg) => (
-              <span key={msg.id}>
+              <span key={msg.id} onDoubleClick={call_messg_reply}   onContextMenu={call_message_menu}>
                 {msg.from_id == data.id ? (
                   <Flex justify="flex-end">
-                    <p
+                    <p  
                       className="bubble right"
                       style={{
                         backgroundColor: "red",

@@ -221,10 +221,10 @@ const Contacts = () => {
       ) {
         return (
           <>
-            {data.waiting_list.map((frd) => (
-              <Box key={frd.id}>
-                <span>{frd.username}</span>
-                <Button onClick={() => delete_friend(frd.id)}>Delete</Button>
+            {data.waiting_list.map((usr) => (
+              <Box key={usr.id}>
+                <span>{usr.username}</span>
+                <Button onClick={() => delete_friend(usr.id)}>Delete</Button>
               </Box>
             ))}
           </>
