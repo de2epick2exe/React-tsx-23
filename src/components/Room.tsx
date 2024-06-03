@@ -33,7 +33,10 @@ import {
   PhoneIcon,
   SearchIcon,
   DragHandleIcon,
+  CloseIcon,
 } from "@chakra-ui/icons";
+import { FaReply } from "react-icons/fa";
+
 import { useNavigate } from "react-router-dom";
 import { sendMessage } from "../store/reduses/WS_Slice";
 
@@ -57,6 +60,8 @@ const Room: React.FC<RoomProps> = ({
   const data = useSelector((state: RootState) => state.userReducer);
   const messager = useSelector((state: RootState) => state.messagerReducer);
   const [message, setMessage] = useState("");
+  const [is_reply_on, setIsReplyOn] = useState(false);
+  const [replying_message, setReplying_message] = useState()
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   console.log("connected to room type:", room_type);
   const {
@@ -113,15 +118,16 @@ const Room: React.FC<RoomProps> = ({
     }
   };
 
-  const call_message_menu = (e: any)=>{
-    e.preventDefault()
-    console.log('right click event')
-  }
+  const call_message_menu = (e: any) => {
+    e.preventDefault();
+    console.log("right click event");
+  };
 
-  const call_messg_reply = ()=>{
-
-    console.log('selected message to reply')
-  }
+  const call_messg_reply = (msg:any) => {
+    console.log("selected message to reply");
+    setReplying_message(msg)
+    setIsReplyOn(true);
+  };
 
   const AlwaysScrollToBottom = () => {
     const elementRef = useRef<HTMLDivElement>(null);
@@ -164,22 +170,53 @@ const Room: React.FC<RoomProps> = ({
   };
 
   const MessagesComponent = () => {
-    console.log('MessagesComponent:', room_id)
-    if (room_id && messager.messages[room_id] !==undefined ) {
-    
+    console.log("MessagesComponent:", room_id);
+    if (room_id && messager.messages[room_id] !== undefined) {
       if (room_type == "channel") {
         //@ts-ignore
         messager.messages[room_id][0]?.map((msg) => {
           //@ts-ignore
-          console.log(messager.messages[room_id][0])
+          console.log(messager.messages[room_id][0]);
           //@ts-ignore
-          console.log(msg.content)
-        })
+          console.log(msg.content);
+        });
         return (
-          <>{/* @ts-ignore*/}
+          <>
+            {/* @ts-ignore*/}
             {messager.messages[room_id][0]?.map((msg) => (
               <span key={msg.id}>
-                
+                <Flex justify="flex-end">
+                  <p
+                    className="bubble right"
+                    style={{
+                      backgroundColor: "red",
+                      marginLeft: "10vw",
+
+                      borderRadius: "2px",
+                      marginTop: "10px",
+                    }}
+                  >
+                    {/* @ts-ignore */}
+                    <Avatar name={room_name} /> {room_name}: {msg.content}
+                  </p>
+                </Flex>
+              </span>
+            ))}{" "}
+          </>
+        );
+      } else {
+        console.log("chat messages arr");
+        //@ts-ignore
+        messager.messages[room_id][0]?.map((msg) => console.log(msg[0]));
+        return (
+          //@ts-ignore
+          <>{messager.messages[room_id][0]?.map((msg) => (
+              <span
+                key={msg.id}
+                onDoubleClick={()=>call_messg_reply(msg)}
+                onContextMenu={call_message_menu}
+              >
+                {msg.from_id == data.id ? (
                   <Flex justify="flex-end">
                     <p
                       className="bubble right"
@@ -191,37 +228,8 @@ const Room: React.FC<RoomProps> = ({
                         marginTop: "10px",
                       }}
                     >
-                      {/* @ts-ignore */}
-                      <Avatar name={room_name} /> {room_name}:{" "}
-                      {msg.content}
-                    </p>
-                  </Flex>
-              
-              </span>
-            ))}{" "}
-          </>
-        );
-      } else {
-        console.log('chat messages arr')
-        //@ts-ignore
-        messager.messages[room_id][0]?.map((msg) => console.log(msg[0]))
-        return (//@ts-ignore
-          <>{messager.messages[room_id][0]?.map((msg) => (
-              <span key={msg.id} onDoubleClick={call_messg_reply}   onContextMenu={call_message_menu}>
-                {msg.from_id == data.id ? (
-                  <Flex justify="flex-end">
-                    <p  
-                      className="bubble right"
-                      style={{
-                        backgroundColor: "red",
-                        marginLeft: "10vw",
-
-                        borderRadius: "2px",
-                        marginTop: "10px",
-                      }}
-                    >
-                      <Avatar name={data.username ?? undefined} /> {data.username}:{" "}
-                      {msg.content}
+                      <Avatar name={data.username ?? undefined} />{" "}
+                      {data.username}: {msg.content}
                     </p>
                   </Flex>
                 ) : (
@@ -235,8 +243,7 @@ const Room: React.FC<RoomProps> = ({
                         marginTop: "10px",
                       }}
                     >
-                      <Avatar name={room_name} /> {room_name}:{" "}
-                      {msg.content}
+                      <Avatar name={room_name} /> {room_name}: {msg.content}
                     </p>
                   </Flex>
                 )}
@@ -246,7 +253,7 @@ const Room: React.FC<RoomProps> = ({
         );
       }
     }
-    return (<></>);
+    return <></>;
   };
 
   //// if no props
@@ -294,11 +301,26 @@ const Room: React.FC<RoomProps> = ({
               maxHeight="70vh"
               flexDirection="column"
             >
-              <MessagesComponent/>
+              <MessagesComponent />
               <AlwaysScrollToBottom />
             </Flex>
-            
-            <Flex w="40%" ml="30%" mt="5" backgroundColor={"black"}>
+
+            <Flex
+              w="40%"
+              ml="30%"
+              mt="5"
+              backgroundColor={"black"}
+              flexDirection="column"
+            >
+              <Box visibility={is_reply_on? 'visible' : 'hidden'}>
+                <Flex flexDirection='row' justifyContent='space-between'>
+                <FaReply />
+                <p>{replying_message && (
+      <p>{replying_message.content}</p>
+    )}</p>
+                <CloseIcon onClick={()=>setIsReplyOn(false)} />
+                </Flex>
+              </Box>
               <InputGroup>
                 <Textarea
                   resize="none"
@@ -321,7 +343,6 @@ const Room: React.FC<RoomProps> = ({
                 </InputRightElement>
               </InputGroup>
             </Flex>
-            
           </Flex>
           <Drawer
             isOpen={isProfileOpen}
@@ -353,7 +374,7 @@ const Room: React.FC<RoomProps> = ({
                     <Switch />
                   </Flex>
                 </Flex>
-                    
+
                 <Tabs>
                   <TabList>
                     <Tab>Media</Tab>
