@@ -143,8 +143,10 @@ React.useEffect(() => {
                 <MenuList alignItems={'center'}>
                   {arr_notify.map(element => (
                     <span key={element.id}>
-                    <MenuItem >{element.notification}<br/>{element.created_at}</MenuItem>
+                    <MenuItem >{element.notification}<br/>{element.created_at}
                     <MenuDivider />
+                    </MenuItem>
+                    
                     </span>
                   ))}                  
                    

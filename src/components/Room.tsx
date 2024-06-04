@@ -314,10 +314,10 @@ const Room: React.FC<RoomProps> = ({
             >
               <Box visibility={is_reply_on? 'visible' : 'hidden'}>
                 <Flex flexDirection='row' justifyContent='space-between'>
-                <FaReply />
-                <p>{replying_message && (
-      <p>{replying_message.content}</p>
-    )}</p>
+                <FaReply />                
+                <p>{//@ts-ignore
+                      replying_message?.content }</p>
+    
                 <CloseIcon onClick={()=>setIsReplyOn(false)} />
                 </Flex>
               </Box>

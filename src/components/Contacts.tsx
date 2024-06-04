@@ -214,8 +214,9 @@ const Contacts = () => {
     };
 
     const Waiting_list = () => {
+
       if (
-        data &&
+        (data.waiting_list[1] !==undefined) &&
         Array.isArray(data.waiting_list) &&
         data.waiting_list.length !== 0
       ) {
@@ -242,12 +243,13 @@ const Contacts = () => {
       if (data.recomends_list?.length !== 0) {
         return (
           <>
-          <Flex flexDirection='column'>
+          <Flex flexDirection='column' >
             {
               // @ts-ignore
               data.recomends_list?.map((user) => (
                 //@ts-ignore
                 <span key={user?.id}>
+                  <Flex justifyContent='space-between' w='full'>
                   <span>
                     {
                       //@ts-ignore
@@ -260,6 +262,7 @@ const Contacts = () => {
                       Add to friends
                     </Button>
                   }
+                  </Flex>
                 </span>
               ))
             }
