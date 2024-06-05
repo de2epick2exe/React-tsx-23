@@ -23,6 +23,8 @@ import {
   Tab,
   TabPanels,
   TabPanel,
+  Menu,
+  MenuItem,
 } from "@chakra-ui/react";
 import React, { RefObject, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -62,6 +64,8 @@ const Room: React.FC<RoomProps> = ({
   const [message, setMessage] = useState("");
   const [is_reply_on, setIsReplyOn] = useState(false);
   const [replying_message, setReplying_message] = useState()
+  const [is_menu_on, setIsMenuOn] = useState(false)
+  const [mouse_coord, setMouseCoords]= useState({x: 0, y:0})
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   console.log("connected to room type:", room_type);
   const {
@@ -120,8 +124,14 @@ const Room: React.FC<RoomProps> = ({
 
   const call_message_menu = (e: any) => {
     e.preventDefault();
+    setMouseCoords({x: e.clientX, y: e.clientY})
+
     console.log("right click event");
+    setIsMenuOn(true)
   };
+  const menuItemClick = ()=>{
+    setIsMenuOn(false)
+  }
 
   const call_messg_reply = (msg:any) => {
     console.log("selected message to reply");
@@ -170,6 +180,7 @@ const Room: React.FC<RoomProps> = ({
   };
 
   const MessagesComponent = () => {
+    
     console.log("MessagesComponent:", room_id);
     if (room_id && messager.messages[room_id] !== undefined) {
       if (room_type == "channel") {
@@ -184,7 +195,8 @@ const Room: React.FC<RoomProps> = ({
           <>
             {/* @ts-ignore*/}
             {messager.messages[room_id][0]?.map((msg) => (
-              <span key={msg.id}>
+              <span key={msg.id} onDoubleClick={()=>call_messg_reply(msg)}
+              onContextMenu={call_message_menu}>
                 <Flex justify="flex-end">
                   <p
                     className="bubble right"
@@ -263,7 +275,17 @@ const Room: React.FC<RoomProps> = ({
     return (
       <>
         <ScrollbarStyles />
-        <Box>
+        <Box >
+          {is_menu_on? 
+          (<Box position={'absolute'} zIndex='9999' style={{top: mouse_coord.x, left: mouse_coord.y}}>
+            <p onClick={()=>menuItemClick()}>1</p>
+            <p onClick={()=>menuItemClick()}>2</p>
+            <p onClick={()=>menuItemClick()}>3</p>
+
+          </Box>)
+          :
+            (<span/>)
+          }
           <Box
             height="7vh"
             bg="darkred"
