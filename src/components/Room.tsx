@@ -37,7 +37,7 @@ import {
   DragHandleIcon,
   CloseIcon,
 } from "@chakra-ui/icons";
-import { FaReply } from "react-icons/fa";
+import { FaReplyAll } from "react-icons/fa";
 
 import { useNavigate } from "react-router-dom";
 import { sendMessage } from "../store/reduses/WS_Slice";
@@ -125,8 +125,7 @@ const Room: React.FC<RoomProps> = ({
   const call_message_menu = (e: any) => {
     e.preventDefault();
     setMouseCoords({x: e.clientX, y: e.clientY})
-
-    console.log("right click event");
+    console.log("right click event, coords", {x: e.clientX, y: e.clientY});
     setIsMenuOn(true)
   };
   const menuItemClick = ()=>{
@@ -277,12 +276,12 @@ const Room: React.FC<RoomProps> = ({
         <ScrollbarStyles />
         <Box >
           {is_menu_on? 
-          (<Box position={'absolute'} zIndex='9999' style={{top: mouse_coord.x, left: mouse_coord.y}}>
-            <p onClick={()=>menuItemClick()}>1</p>
-            <p onClick={()=>menuItemClick()}>2</p>
-            <p onClick={()=>menuItemClick()}>3</p>
+          (<Flex flexDirection={'column'}  position={'absolute'} zIndex='9999' w={'12'} style={{top: mouse_coord.x, left: mouse_coord.y, backgroundColor: 'purple'}}>
+            <Flex flexDirection={'row'} onClick={()=>menuItemClick()}><FaReplyAll height={'15'} /><p >Reply</p></Flex>
+            <Flex flexDirection={'row'} onClick={()=>menuItemClick()}><p >Edit</p></Flex>
+            <Flex flexDirection={'row'} onClick={()=>menuItemClick()}><p>Copy</p></Flex>
 
-          </Box>)
+          </Flex>)
           :
             (<span/>)
           }
@@ -336,7 +335,7 @@ const Room: React.FC<RoomProps> = ({
             >
               <Box visibility={is_reply_on? 'visible' : 'hidden'}>
                 <Flex flexDirection='row' justifyContent='space-between'>
-                <FaReply />                
+                <FaReplyAll />                
                 <p>{//@ts-ignore
                       replying_message?.content }</p>
     

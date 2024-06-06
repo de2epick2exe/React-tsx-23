@@ -214,9 +214,8 @@ const Contacts = () => {
     };
 
     const Waiting_list = () => {
-
-      if (
-        (data.waiting_list[1] !==undefined) &&
+      console.log('waitnig list is: ', (data.waiting_list[1] !==undefined), data.waiting_list )
+      if (        
         Array.isArray(data.waiting_list) &&
         data.waiting_list.length !== 0
       ) {
