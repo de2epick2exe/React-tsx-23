@@ -215,6 +215,7 @@ const Contacts = () => {
 
     const Waiting_list = () => {
       console.log('waitnig list is: ', (data.waiting_list[1] !==undefined), data.waiting_list )
+                  
       if (        
         Array.isArray(data.waiting_list) &&
         data.waiting_list.length !== 0
@@ -224,7 +225,8 @@ const Contacts = () => {
             {data.waiting_list.map((usr) => (
               <Box key={usr.id}>
                 <span>{usr.username}</span>
-                <Button onClick={() => delete_friend(usr.id)}>Delete</Button>
+                <Button onClick={()=> accept_friend(usr.id) }>Accept</Button>
+                <Button onClick={() => delete_friend(usr.id)}>Reject</Button>
               </Box>
             ))}
           </>
