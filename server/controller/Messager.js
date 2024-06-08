@@ -361,7 +361,24 @@ class Messager {
         [id, content]
       );
       const data = {
-        event: "create_post",
+        event: "delete_message",
+        status: 200,
+        post: post.rows[0],
+      };
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async delete_message(req, res) {
+    try {
+      const { id, content } = req.body;
+      const post = await db.query(
+        "DELETE FROM messages WHERE id = $1 RETURNING id, content",
+        [id, content]
+      );
+      const data = {
+        event: "deleted_message",
         status: 200,
         post: post.rows[0],
       };

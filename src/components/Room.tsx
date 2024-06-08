@@ -280,6 +280,7 @@ const Room: React.FC<RoomProps> = ({
             <Flex flexDirection={'row'} onClick={()=>menuItemClick()}><FaReplyAll height={'15'} /><p >Reply</p></Flex>
             <Flex flexDirection={'row'} onClick={()=>menuItemClick()}><p >Edit</p></Flex>
             <Flex flexDirection={'row'} onClick={()=>menuItemClick()}><p>Copy</p></Flex>
+            <Flex flexDirection={'row'} onClick={()=>menuItemClick()}><p>Delete</p></Flex>
 
           </Flex>)
           :
@@ -289,6 +290,7 @@ const Room: React.FC<RoomProps> = ({
             height="7vh"
             bg="darkred"
             cursor="pointer"
+            position='relative'
             onClick={onProfileOpen}
             ref={profileRef}
           >

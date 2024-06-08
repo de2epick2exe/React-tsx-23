@@ -214,7 +214,7 @@ const Contacts = () => {
     };
 
     const Waiting_list = () => {
-      console.log('waitnig list is: ', (data.waiting_list[1] !==undefined), data.waiting_list )
+      console.log('waitnig list is: ', /*(data.waiting_list[1] !==undefined),*/ data.waiting_list )
                   
       if (        
         Array.isArray(data.waiting_list) &&
@@ -223,8 +223,8 @@ const Contacts = () => {
         return (
           <>
             {data.waiting_list.map((usr) => (
-              <Box key={usr.id}>
-                <span>{usr.username}</span>
+              <Box key={usr?.id}>
+                <span>{usr?.username}</span>
                 <Button onClick={()=> accept_friend(usr.id) }>Accept</Button>
                 <Button onClick={() => delete_friend(usr.id)}>Reject</Button>
               </Box>
@@ -245,18 +245,19 @@ const Contacts = () => {
         return (
           <>
           <Flex flexDirection='column' >
+            
             {
               // @ts-ignore
               data.recomends_list?.map((user) => (
                 //@ts-ignore
                 <span key={user?.id}>
                   <Flex justifyContent='space-between' w='full'>
-                  <span>
+                  <p>
                     {
                       //@ts-ignore
                       user?.username
                     }
-                  </span>
+                  </p>
                   {
                     //@ts-ignore
                     <Button onClick={() => add_friend(user?.id)}>
