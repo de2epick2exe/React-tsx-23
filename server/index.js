@@ -206,8 +206,14 @@ wss.on("connection", (ws) => {
           const del_post= await Messager.delete_post(
             parsedMessage.id,           
           )
-          clients[clientId].send(JSON.stringify(file));
-          break;  
+          clients[clientId].send(JSON.stringify(del_post));
+          break; 
+          case "delete_message":
+          const del_msg= await Messager.delete_post(
+            parsedMessage.id,           
+          )
+          clients[clientId].send(JSON.stringify(del_msg));
+          break;   
 
 
           case "delete_file":
