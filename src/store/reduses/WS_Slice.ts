@@ -103,6 +103,9 @@ export const connectToWebSocket = () => {
               case "accept_friend":
                 dispatch(setRecomends(message[0].rooms))                
                 break;
+              case"delete_message":
+              dispatch(delete_Message(message[0].message))
+              break
             default:
               console.log("unhandled event in wsStore:", message[0].event);
               break;
