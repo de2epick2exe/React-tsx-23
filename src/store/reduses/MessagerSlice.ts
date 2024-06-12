@@ -126,6 +126,15 @@ const messagerSlice = createSlice({
       //@ts-ignore
       state.messages[parseInt(roomID[0], 10)][0].filter(message => message.id !== action.payload.id);
     },
+    deletePost:(state, action: PayloadAction<Rooms_msgs>) => {
+      const roomID = Object.keys(action.payload);
+      const msg = Object.values(action.payload);
+      if (!(roomID[0] in state.messages)) {
+        state.messages[parseInt(roomID[0], 10)] = [];
+      }
+      //@ts-ignore
+      state.posts[parseInt(roomID[0], 10)][0].filter(message => message.id !== action.payload.id);
+    },
   },
 });
 export const {
@@ -137,6 +146,7 @@ export const {
   setPosts,
   setRooms,
   setCurrentRoom,
+  deleteMessage
 } = messagerSlice.actions;
 
 export default messagerSlice.reducer;

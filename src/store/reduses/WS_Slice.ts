@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { addMessage, setChannel, setMessages, setNotifies, setPosts, setRooms } from "./MessagerSlice";
+import { addMessage, setChannel, setMessages, setNotifies, setPosts, setRooms, deleteMessage } from "./MessagerSlice";
 import { setFriends, setWaitingList, setRecomends } from "./UserSlice";
 
 interface WS {
@@ -104,7 +104,7 @@ export const connectToWebSocket = () => {
                 dispatch(setRecomends(message[0].rooms))                
                 break;
               case"delete_message":
-              dispatch(delete_Message(message[0].message))
+              dispatch(deleteMessage(message[0].message))
               break
             default:
               console.log("unhandled event in wsStore:", message[0].event);
