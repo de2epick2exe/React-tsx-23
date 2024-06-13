@@ -1,15 +1,24 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { addMessage, setChannel, setMessages, setNotifies, setPosts, setRooms, deleteMessage } from "./MessagerSlice";
+import {
+  addMessage,
+  setChannel,
+  setMessages,
+  setNotifies,
+  setPosts,
+  setRooms,
+  deleteMessage,
+  deletePost,
+} from "./MessagerSlice";
 import { setFriends, setWaitingList, setRecomends } from "./UserSlice";
 
 interface WS {
-  socket: WebSocket | null;  
+  socket: WebSocket | null;
   connected: boolean;
 }
 
 const initialState: WS = {
-  socket: null,  
+  socket: null,
   connected: false,
 };
 
@@ -20,23 +29,19 @@ export const WS_Slice = createSlice({
     setSocket: (state, action: PayloadAction<WebSocket | null>) => {
       state.socket = action.payload;
     },
-    
+
     setConnected: (state, action: PayloadAction<boolean>) => {
       state.connected = action.payload;
     },
   },
 });
-export const {
-  setSocket,
-  setConnected,
-
-} = WS_Slice.actions;
+export const { setSocket, setConnected } = WS_Slice.actions;
 
 export const connectToWebSocket = () => {
   return (dispatch: ThunkDispatch<any, any, any>) => {
     try {
       const socket = new WebSocket("ws://localhost:3033");
-      
+
       socket.onopen = () => {
         dispatch(setConnected(true));
       };
@@ -47,20 +52,20 @@ export const connectToWebSocket = () => {
           switch (message[0].event) {
             case "message":
               dispatch(addMessage(message[0]));
-              console.log("WS_slice chats recived message", message[0]); 
+              console.log("WS_slice chats recived message", message[0]);
               break;
             case "chats":
               console.log("WS_slice chats:", message[0]);
-              dispatch(setRooms(message[0].rooms))
-              
+              dispatch(setRooms(message[0].rooms));
+
               break;
             case "rooms_messages":
               console.log("WS_slice chats rooms_messages:");
               console.log(message[0]);
               //// ---------------------------------------------
-               /** TODO check if message == [] nothing to do*/
-                dispatch(setMessages(message[0]));
-              
+              /** TODO check if message == [] nothing to do*/
+              dispatch(setMessages(message[0]));
+
               break;
             case "connection_to_room":
               console.warn("WS_slice connected to room");
@@ -76,44 +81,50 @@ export const connectToWebSocket = () => {
               dispatch(setNotifies(message.notifies));
               break;
             case "rooms_messages":
-              console.log("caught rooms messages in ws slice: ", message.messages )
+              console.log(
+                "caught rooms messages in ws slice: ",
+                message.messages
+              );
               dispatch(setMessages(message.messages));
               break;
-              case "delete_post":
-              console.log('deleted post')
-              break;  
-            case "delete_file":
-              console.log('deleted file')
+
+            case "get_friends":
+              console.log("friends received");
+              console.log(message[0].data[0]);
+              dispatch(setFriends(message[0].data));
               break;
-              case "get_friends":
-                console.log('friends received')
-                console.log(message[0].data[0])
-                dispatch(setFriends(message[0].data))
-                break;
-              case "get_waiting_list":
-                console.log('friends received')
-                console.log(message[0].data[0])
-                dispatch(setWaitingList(message[0].data))
-                break;
-              case "recomended_users":
-                console.log('recomends received')
-                console.log(message[0].data)
-                dispatch(setRecomends(message[0].data))
-                break;
-              case "accept_friend":
-                dispatch(setRecomends(message[0].rooms))                
-                break;
-              case"delete_message":
-              dispatch(deleteMessage(message[0].message))
-              break
+            case "get_waiting_list":
+              console.log("friends received");
+              console.log(message[0].data[0]);
+              dispatch(setWaitingList(message[0].data));
+              break;
+            case "recomended_users":
+              console.log("recomends received");
+              console.log(message[0].data);
+              dispatch(setRecomends(message[0].data));
+              break;
+            case "accept_friend":
+              dispatch(setRecomends(message[0].rooms));
+              break;
+            ///  
+            /// delete events  
+            ///
+            case "delete_message":
+              dispatch(deleteMessage(message[0].message));
+              break;
+            case "delete_post":
+              dispatch(deletePost)
+              break;
+            case "delete_file":
+              console.log("deleted file");
+              break;
             default:
               console.log("unhandled event in wsStore:", message[0].event);
               break;
           }
         } catch (error) {
-          console.error('ws slice error parsing event:', error)
+          console.error("ws slice error parsing event:", error);
         }
-       
       };
 
       socket.onerror = (error) => {
