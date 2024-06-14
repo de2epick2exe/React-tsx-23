@@ -353,12 +353,12 @@ class Messager {
     }
   }
 
-  async delete_post(req, res) {
+  async delete_post(id, date) {
     try {
-      const { id, content } = req.body;
+      
       const post = await db.query(
         "DELETE FROM posts WHERE id = $1 RETURNING id, content",
-        [id, content]
+        [id]
       );
       const data = {
         event: "delete_message",
@@ -370,12 +370,11 @@ class Messager {
       console.log(error);
     }
   }
-  async delete_message(req, res) {
-    try {
-      const { id, content } = req.body;
+  async delete_message(id, date) {
+    try {      
       const post = await db.query(
         "DELETE FROM messages WHERE id = $1 RETURNING id, content",
-        [id, content]
+        [id]
       );
       const data = {
         event: "deleted_message",
