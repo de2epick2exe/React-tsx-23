@@ -203,10 +203,27 @@ wss.on("connection", (ws) => {
 
          //------- Delete commands ------   
          case "delete_post":
-          const del_post= await Messager.delete_post(
-            parsedMessage.id,           
-          )
-          clients[clientId].send(JSON.stringify(del_post));
+          for (const live_room of setted_rooms) {
+            if (live_room.clients.has(ws)) {
+              live_room.clients.forEach( async (client) => {
+                console.log("finded room for user(current ws)");
+                console.log(parsedMessage)
+                const del_post= await Messager.delete_post(
+                  parsedMessage.id,           
+                )                
+                client.send(JSON.stringify(del_post));
+                //client.send(message);
+                console.log(
+                  "Number of clients in room:",
+                  live_room.clients.size
+                );
+                console.log("event send message success");
+                console.log("message DELETED in room");
+              });
+              break;
+            }
+          }
+         
           break; 
           case "delete_message":
           const del_msg= await Messager.delete_post(
