@@ -122,6 +122,34 @@ const Room: React.FC<RoomProps> = ({
     }
   };
 
+  const delete_message = ()=>{
+    if (room_type == "private" || room_type == "chat") {
+      setMessage(""); // need to fix
+      const msg = {
+        from_id: data.id,
+        user_id: data.id,
+        username: data.username,
+        room: room_id,
+        message: message,
+        event: "delete_message",
+      };
+      dispatch(sendMessage(msg)); // sends 2x times
+    } else {
+      setMessage(""); // need to fix
+      const msg = {
+        id: room_id,
+        userid: data.id,
+        username: data.username,
+        room: room_id,
+        content: message,
+        event: "delete_post",
+      };
+      dispatch(sendMessage(msg)); // sends 2x times
+    }
+  }
+
+
+
   const call_message_menu = (e: any) => {
     e.preventDefault();
     setMouseCoords({x: e.clientX, y: e.clientY})
