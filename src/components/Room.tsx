@@ -66,6 +66,7 @@ const Room: React.FC<RoomProps> = ({
   const [replying_message, setReplying_message] = useState()
   const [is_menu_on, setIsMenuOn] = useState(false)
   const [mouse_coord, setMouseCoords]= useState({x: 0, y:0})
+  const [selectedMessage, setSelectedMesssage]= useState()
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   console.log("connected to room type:", room_type);
   const {
@@ -304,7 +305,7 @@ const Room: React.FC<RoomProps> = ({
         <ScrollbarStyles />
         <Box >
           {is_menu_on? 
-          (<Flex flexDirection={'column'}  position={'absolute'} zIndex='9999' w={'12'} style={{top: mouse_coord.x, left: mouse_coord.y, backgroundColor: 'purple'}}>
+          (<Flex flexDirection={'column'}  position={'absolute'} zIndex='9999' width="150px" style={{top: mouse_coord.y, left: mouse_coord.x, backgroundColor: 'purple'}}>
             <Flex flexDirection={'row'} onClick={()=>menuItemClick()}><FaReplyAll height={'15'} /><p >Reply</p></Flex>
             <Flex flexDirection={'row'} onClick={()=>menuItemClick()}><p >Edit</p></Flex>
             <Flex flexDirection={'row'} onClick={()=>menuItemClick()}><p>Copy</p></Flex>
