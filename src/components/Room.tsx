@@ -305,11 +305,11 @@ const Room: React.FC<RoomProps> = ({
         <ScrollbarStyles />
         <Box >
           {is_menu_on? 
-          (<Flex flexDirection={'column'}  position={'absolute'} zIndex='9999' width="150px" style={{top: mouse_coord.y, left: mouse_coord.x, backgroundColor: 'purple'}}>
-            <Flex flexDirection={'row'} onClick={()=>menuItemClick()}><FaReplyAll height={'15'} /><p >Reply</p></Flex>
-            <Flex flexDirection={'row'} onClick={()=>menuItemClick()}><p >Edit</p></Flex>
-            <Flex flexDirection={'row'} onClick={()=>menuItemClick()}><p>Copy</p></Flex>
-            <Flex flexDirection={'row'} onClick={()=>menuItemClick()}><p>Delete</p></Flex>
+          (<Flex flexDirection={'column'}  position={'absolute'} zIndex='9999' width="150px" style={{top: mouse_coord.y, left: mouse_coord.x, backgroundColor: 'rgb(60, 0, 0)'}}>
+            <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick()}><FaReplyAll height={'15'} /><p >Reply</p></Flex>
+            <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick()}><p >Edit</p></Flex>
+            <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick()}><p>Copy</p></Flex>
+            <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick()}><p>Delete</p></Flex>
 
           </Flex>)
           :
