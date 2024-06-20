@@ -151,13 +151,32 @@ const Room: React.FC<RoomProps> = ({
 
 
 
-  const call_message_menu = (e: any) => {
+  const call_message_menu = (e: any, msg: any) => {
     e.preventDefault();
+    setSelectedMesssage(msg)
     setMouseCoords({x: e.clientX, y: e.clientY})
     console.log("right click event, coords", {x: e.clientX, y: e.clientY});
+    console.log('message for manipulating:', msg)
     setIsMenuOn(true)
   };
-  const menuItemClick = ()=>{
+  const menuItemClick = (e: any)=>{
+    switch (e) {
+      case 'reply':
+        call_messg_reply(selectedMessage)
+        break;
+        case 'delete':
+        console.log('deleted message', selectedMessage)
+        break;
+        case 'edit':
+          console.log('editing message', selectedMessage)        
+        break;
+        case 'copy':
+          console.log('copied message', selectedMessage)        
+        break;
+    
+      default:
+        break;
+    }
     setIsMenuOn(false)
   }
 
@@ -224,7 +243,7 @@ const Room: React.FC<RoomProps> = ({
             {/* @ts-ignore*/}
             {messager.messages[room_id][0]?.map((msg) => (
               <span key={msg.id} onDoubleClick={()=>call_messg_reply(msg)}
-              onContextMenu={call_message_menu}>
+              onContextMenu={(e)=>call_message_menu(e, msg) } >
                 <Flex justify="flex-end">
                   <p
                     className="bubble right"
@@ -254,7 +273,7 @@ const Room: React.FC<RoomProps> = ({
               <span
                 key={msg.id}
                 onDoubleClick={()=>call_messg_reply(msg)}
-                onContextMenu={call_message_menu}
+                onContextMenu={(e)=>call_message_menu(e, msg)}
               >
                 {msg.from_id == data.id ? (
                   <Flex justify="flex-end">
@@ -303,13 +322,13 @@ const Room: React.FC<RoomProps> = ({
     return (
       <>
         <ScrollbarStyles />
-        <Box >
+        <Box onClick={()=>setIsMenuOn(false)}>
           {is_menu_on? 
           (<Flex flexDirection={'column'}  position={'absolute'} zIndex='9999' width="150px" style={{top: mouse_coord.y, left: mouse_coord.x, backgroundColor: 'rgb(60, 0, 0)'}}>
-            <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick()}><FaReplyAll height={'15'} /><p >Reply</p></Flex>
-            <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick()}><p >Edit</p></Flex>
-            <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick()}><p>Copy</p></Flex>
-            <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick()}><p>Delete</p></Flex>
+            <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick('reply')}><FaReplyAll height={'15'} /><p >Reply</p></Flex>
+            <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick('edit')}><p >Edit</p></Flex>
+            <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick('copy')}><p>Copy</p></Flex>
+            <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick('delete')}><p>Delete</p></Flex>
 
           </Flex>)
           :
