@@ -134,7 +134,7 @@ const Room: React.FC<RoomProps> = ({
         message: message,
         event: "delete_message",
       };
-      dispatch(sendMessage(msg)); // sends 2x times
+      dispatch(sendMessage(selectedMessage)); // sends 2x times
     } else {
       setMessage(""); // need to fix
       const msg = {
@@ -166,11 +166,15 @@ const Room: React.FC<RoomProps> = ({
         break;
         case 'delete':
         console.log('deleted message', selectedMessage)
+        delete_message()
         break;
         case 'edit':
           console.log('editing message', selectedMessage)        
         break;
         case 'copy':
+          if(selectedMessage !==undefined){
+          navigator.clipboard.writeText(selectedMessage)
+        }
           console.log('copied message', selectedMessage)        
         break;
     
