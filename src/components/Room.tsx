@@ -67,6 +67,7 @@ const Room: React.FC<RoomProps> = ({
   const [is_menu_on, setIsMenuOn] = useState(false)
   const [mouse_coord, setMouseCoords]= useState({x: 0, y:0})
   const [selectedMessage, setSelectedMesssage]= useState()
+  const [isEditing, setIsEditing]= useState()
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   console.log("connected to room type:", room_type);
   const {
@@ -189,6 +190,12 @@ const Room: React.FC<RoomProps> = ({
     setReplying_message(msg)
     setIsReplyOn(true);
   };
+  const edit_message = ()=>{
+    if(selectedMessage !== undefined){
+    setIsEditing(true)
+    setMessage(selectedMessage.content)
+  }
+  }
 
   const AlwaysScrollToBottom = () => {
     const elementRef = useRef<HTMLDivElement>(null);
