@@ -94,13 +94,18 @@ const Room: React.FC<RoomProps> = ({
     if (!message.trim().length) {
       return;
     }
+    let msg_event
     console.log(
       "room type is:",
       room_type == "private" || room_type == "chat",
       room_type
     );
     if (room_type == "private" || room_type == "chat") {
-      setMessage(""); // need to fix
+      msg_event= "message"
+    } else {     
+      msg_event="create_post"     
+    }
+    setMessage(""); // need to fix
       const msg = {
         from_id: data.id,
         user_id: data.id,
@@ -110,44 +115,44 @@ const Room: React.FC<RoomProps> = ({
         event: "message",
       };
       dispatch(sendMessage(msg)); // sends 2x times
-    } else {
-      setMessage(""); // need to fix
-      const msg = {
-        id: room_id,
-        userid: data.id,
-        username: data.username,
-        room: room_id,
-        content: message,
-        event: "create_post",
-      };
-      dispatch(sendMessage(msg)); // sends 2x times
-    }
+
   };
 
   const delete_message = ()=>{
+    let msg_event
     if (room_type == "private" || room_type == "chat") {
-      setMessage(""); // need to fix
-      const msg = {
-        from_id: data.id,
-        user_id: data.id,
-        username: data.username,
-        room: room_id,
-        message: message,
-        event: "delete_message",
-      };
-      dispatch(sendMessage(selectedMessage)); // sends 2x times
-    } else {
-      setMessage(""); // need to fix
-      const msg = {
-        id: room_id,
-        userid: data.id,
-        username: data.username,
-        room: room_id,
-        content: message,
-        event: "delete_post",
-      };
-      dispatch(sendMessage(msg)); // sends 2x times
+      msg_event= "delete_message"
+    } else {    
+      msg_event= "delete_post"      
     }
+    setMessage(""); // need to fix
+    const msg = {
+      from_id: data.id,
+      user_id: data.id,
+      username: data.username,
+      room: room_id,
+      message: message,
+      event: msg_event,
+    };
+    dispatch(sendMessage(selectedMessage)); // sends 2x times
+  }
+  const send_edited_message = ()=>{
+    let msg_event
+    if (room_type == "private" || room_type == "chat") {
+      msg_event= "edit_message"
+    } else {    
+      msg_event= "edit_post"      
+    }
+    setMessage(""); // need to fix
+    const msg = {
+      from_id: data.id,
+      user_id: data.id,
+      username: data.username,
+      room: room_id,
+      message: message,
+      event: msg_event,
+    };
+    dispatch(sendMessage(selectedMessage)); // sends 2x times
   }
 
 
@@ -170,7 +175,8 @@ const Room: React.FC<RoomProps> = ({
         delete_message()
         break;
         case 'edit':
-          console.log('editing message', selectedMessage)        
+          console.log('editing message', selectedMessage)
+          edit_message()        
         break;
         case 'copy':
           if(selectedMessage !==undefined){
