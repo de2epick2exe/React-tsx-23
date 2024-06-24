@@ -66,8 +66,8 @@ const Room: React.FC<RoomProps> = ({
   const [replying_message, setReplying_message] = useState()
   const [is_menu_on, setIsMenuOn] = useState(false)
   const [mouse_coord, setMouseCoords]= useState({x: 0, y:0})
-  const [selectedMessage, setSelectedMesssage]= useState()
-  const [isEditing, setIsEditing]= useState()
+  const [selectedMessage, setSelectedMesssage]= useState(null)
+  const [isEditing, setIsEditing]= useState(false)
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   console.log("connected to room type:", room_type);
   const {
@@ -127,14 +127,11 @@ const Room: React.FC<RoomProps> = ({
     }
     setMessage(""); // need to fix
     const msg = {
-      from_id: data.id,
-      user_id: data.id,
-      username: data.username,
-      room: room_id,
-      message: message,
+      //@ts-ignore
+      ...selectedMessage,
       event: msg_event,
     };
-    dispatch(sendMessage(selectedMessage)); // sends 2x times
+    dispatch(sendMessage(msg)); // sends 2x times
   }
   const send_edited_message = ()=>{
     let msg_event
@@ -179,7 +176,7 @@ const Room: React.FC<RoomProps> = ({
           edit_message()        
         break;
         case 'copy':
-          if(selectedMessage !==undefined){
+          if(selectedMessage){
           navigator.clipboard.writeText(selectedMessage)
         }
           console.log('copied message', selectedMessage)        
@@ -197,9 +194,10 @@ const Room: React.FC<RoomProps> = ({
     setIsReplyOn(true);
   };
   const edit_message = ()=>{
-    if(selectedMessage !== undefined){
+    if(selectedMessage){
     setIsEditing(true)
-    setMessage(selectedMessage.content)
+    //@ts-ignore
+    setMessage(selectedMessage?.content)
   }
   }
 

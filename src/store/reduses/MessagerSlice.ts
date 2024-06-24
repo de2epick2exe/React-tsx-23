@@ -124,7 +124,8 @@ const messagerSlice = createSlice({
         state.messages[parseInt(roomID[0], 10)] = [];
       }
       //@ts-ignore
-      state.messages[parseInt(roomID[0], 10)][0].filter(message => message.id !== action.payload.id);
+      state.messages[parseInt(roomID[0], 10)][0].filter(message => message.message_id !== action.payload.message_id);
+      console.log('after deleting message: ',state.message)
     },
     deletePost:(state, action: PayloadAction<Rooms_msgs>) => {
       const roomID = Object.keys(action.payload);
@@ -134,6 +135,8 @@ const messagerSlice = createSlice({
       }
       //@ts-ignore
       state.posts[parseInt(roomID[0], 10)][0].filter(message => message.id !== action.payload.id);
+      console.log('after deleting post: ',state.message)
+
     },
   },
 });

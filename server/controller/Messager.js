@@ -361,11 +361,11 @@ class Messager {
         [id]
       );
       const data = {
-        event: "delete_message",
+        event: "delete_post",
         status: 200,
         post: post.rows[0],
       };
-      return data;
+      return [data];
     } catch (error) {
       console.log(error);
     }
@@ -373,15 +373,15 @@ class Messager {
   async delete_message(id, date) {
     try {      
       const post = await db.query(
-        "DELETE FROM messages WHERE id = $1 RETURNING id, content",
+        "DELETE FROM messages WHERE message_id = $1 RETURNING message_id, content",
         [id]
       );
       const data = {
-        event: "deleted_message",
+        event: "delete_message",
         status: 200,
-        post: post.rows[0],
+        message: post.rows[0],
       };
-      return data;
+      return [data];
     } catch (error) {
       console.log(error);
     }

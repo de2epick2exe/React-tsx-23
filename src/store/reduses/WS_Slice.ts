@@ -110,10 +110,12 @@ export const connectToWebSocket = () => {
             /// delete events  
             ///
             case "delete_message":
+              console.log('deleted message event')
               dispatch(deleteMessage(message[0].message));
               break;
             case "delete_post":
-              dispatch(deletePost)
+              console.log('deleted post event')
+              dispatch(deletePost(message[0].post))
               break;
             case "delete_file":
               console.log("deleted file");

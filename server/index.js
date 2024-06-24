@@ -225,7 +225,7 @@ wss.on("connection", (ws) => {
               live_room.clients.forEach(async (client) => {
                 console.log("finded room for user(current ws)");
                 console.log(parsedMessage);
-                const del_msg = await Messager.delete_message(parsedMessage.id);
+                const del_msg = await Messager.delete_message(parsedMessage.message_id);
                 client.send(JSON.stringify(del_msg));
                 //client.send(message);
                 console.log(
