@@ -101,9 +101,19 @@ const Room: React.FC<RoomProps> = ({
       room_type
     );
     if (room_type == "private" || room_type == "chat") {
+      if (isEditing){
+        msg_event = "update_message"
+      }
+      else{
       msg_event= "message"
+    }
     } else {     
+      if(isEditing){
+        msg_event = "update_post"
+      }
+      else{
       msg_event="create_post"     
+    }
     }
     setMessage(""); // need to fix
       const msg = {
