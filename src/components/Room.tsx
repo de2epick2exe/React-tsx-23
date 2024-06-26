@@ -68,6 +68,8 @@ const Room: React.FC<RoomProps> = ({
   const [mouse_coord, setMouseCoords]= useState({x: 0, y:0})
   const [selectedMessage, setSelectedMesssage]= useState(null)
   const [isEditing, setIsEditing]= useState(false)
+  const [isSelecting, setIsSelecting] = useState(false)
+  const [selected_id, setSelected_id] = useState([])
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   console.log("connected to room type:", room_type);
   const {
@@ -211,6 +213,23 @@ const Room: React.FC<RoomProps> = ({
   }
   }
 
+  const selecting = ()=>{
+    setIsSelecting(true)
+  }
+  const add_selected_id = (msg_id: any)=>{
+    if(isSelecting ){
+    //@ts-ignore
+    if (!selected_id.includes(msg_id)) {
+    //@ts-ignore      
+      setSelected_id([...selected_id, msg_id]);
+    }
+   if(selected_id.length >= 2){
+      console.log('selected numbers of ids is:', selected_id.length )
+    }
+  }
+
+  }
+
   const AlwaysScrollToBottom = () => {
     const elementRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -268,7 +287,13 @@ const Room: React.FC<RoomProps> = ({
             {/* @ts-ignore*/}
             {messager.messages[room_id][0]?.map((msg) => (
               <span key={msg.id} onDoubleClick={()=>call_messg_reply(msg)}
-              onContextMenu={(e)=>call_message_menu(e, msg) } >
+              onContextMenu={(e)=>call_message_menu(e, msg) } 
+              onMouseDown={()=>{selecting() }}
+              onMouseMove={()=>add_selected_id(msg.message_id)} // @ts-ignore
+              style={{  backgroundColor: selected_id.includes(msg.message_id) ? 'lightblue' : 'white'
+
+                  }}
+              >
                 <Flex justify="flex-end">
                   <p
                     className="bubble right"
@@ -299,6 +324,11 @@ const Room: React.FC<RoomProps> = ({
                 key={msg.id}
                 onDoubleClick={()=>call_messg_reply(msg)}
                 onContextMenu={(e)=>call_message_menu(e, msg)}
+                onMouseDown={()=>{selecting() }}
+                onMouseMove={()=>add_selected_id(msg.message_id)} // @ts-ignore
+                style={{  backgroundColor: selected_id.includes(msg.message_id) ? 'lightblue' : 'white'
+  
+                    }}
               >
                 {msg.from_id == data.id ? (
                   <Flex justify="flex-end">
