@@ -70,6 +70,7 @@ const Room: React.FC<RoomProps> = ({
   const [isEditing, setIsEditing]= useState(false)
   const [isSelecting, setIsSelecting] = useState(false)
   const [selected_id, setSelected_id] = useState([])
+  const [scrolling_selectingON, setScrolling_selectingON]= useState(false)
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   console.log("connected to room type:", room_type);
   const {
@@ -214,15 +215,18 @@ const Room: React.FC<RoomProps> = ({
   }
 
   const selecting = ()=>{
+    setScrolling_selectingON(true)
     setIsSelecting(true)
   }
   const add_selected_id = (msg_id: any)=>{
     if(isSelecting ){
+      if(scrolling_selectingON){
     //@ts-ignore
     if (!selected_id.includes(msg_id)) {
     //@ts-ignore      
       setSelected_id([...selected_id, msg_id]);
     }
+  }
    if(selected_id.length >= 2){
       console.log('selected numbers of ids is:', selected_id.length )
     }
@@ -289,8 +293,9 @@ const Room: React.FC<RoomProps> = ({
               <span key={msg.id} onDoubleClick={()=>call_messg_reply(msg)}
               onContextMenu={(e)=>call_message_menu(e, msg) } 
               onMouseDown={()=>{selecting() }}
+              onMouseUp={()=>{setScrolling_selectingON(false)}}
               onMouseMove={()=>add_selected_id(msg.message_id)} // @ts-ignore
-              style={{  backgroundColor: selected_id.includes(msg.message_id) ? 'lightblue' : 'white'
+              style={{  backgroundColor: selected_id.includes(msg.message_id) ? 'LightCoral' : 'black'
 
                   }}
               >
@@ -326,7 +331,7 @@ const Room: React.FC<RoomProps> = ({
                 onContextMenu={(e)=>call_message_menu(e, msg)}
                 onMouseDown={()=>{selecting() }}
                 onMouseMove={()=>add_selected_id(msg.message_id)} // @ts-ignore
-                style={{  backgroundColor: selected_id.includes(msg.message_id) ? 'lightblue' : 'white'
+                style={{  backgroundColor: selected_id.includes(msg.message_id) ? 'LightCoral' : 'black'
   
                     }}
               >
