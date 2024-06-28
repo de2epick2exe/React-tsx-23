@@ -352,6 +352,23 @@ class Messager {
       console.log(error);
     }
   }
+  async update_message(req, res) {
+    try {
+      const { id, content } = req.body;
+      const post = await db.query(
+        "UPDATE messages SET content = $1 WHERE message_id = $2 RETURNING message_id, content",
+        [content, id]
+      );
+      const data = {
+        event: "update_post",
+        status: 200,
+        post: post.rows[0],
+      };
+      return [data];
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   async delete_post(id, date) {
     try {
