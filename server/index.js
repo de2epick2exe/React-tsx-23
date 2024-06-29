@@ -196,6 +196,13 @@ wss.on("connection", (ws) => {
           );
           clients[clientId].send(JSON.stringify(update_post));
           break;
+        case "update_message":
+          const update_msg = await Messager.update_message(
+            parsedMessage.message_id,
+            parsedMessage.content
+          );
+          clients[clientId].send(JSON.stringify(update_msg));
+         break;
 
         //------- Delete commands ------
         case "delete_post":
