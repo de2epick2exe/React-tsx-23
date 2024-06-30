@@ -116,6 +116,17 @@ const messagerSlice = createSlice({
     setCurrentRoom: (state, action: PayloadAction<Room | null>) => {
       state.current_room = action.payload;
     },
+    updateMessage:(state, action:PayloadAction<Rooms_msgs>)=>{
+      const roomID = Object.keys(action.payload);
+      const msg = Object.values(action.payload);
+      //@ts-ignore
+      const messageIndex = state.messages[roomID][0].findIndex(message => message.message_id === message_id);
+    
+    if (messageIndex !== -1) {
+      //@ts-ignore      
+      state.messages[roomID][0].roomMessages[messageIndex].content = msg;
+    }
+    },
     ///deleters
     deleteMessage:(state, action: PayloadAction<Rooms_msgs>) => {
       const roomID = Object.keys(action.payload);

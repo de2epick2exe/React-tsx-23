@@ -106,6 +106,9 @@ export const connectToWebSocket = () => {
             case "accept_friend":
               dispatch(setRecomends(message[0].rooms));
               break;
+            case 'update_post':
+            dispatch(UpdateMessage(message[0].message))  
+            break;  
             ///  
             /// delete events  
             ///
