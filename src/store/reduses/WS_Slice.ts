@@ -9,6 +9,7 @@ import {
   setRooms,
   deleteMessage,
   deletePost,
+  updateMessage
 } from "./MessagerSlice";
 import { setFriends, setWaitingList, setRecomends } from "./UserSlice";
 
@@ -107,7 +108,7 @@ export const connectToWebSocket = () => {
               dispatch(setRecomends(message[0].rooms));
               break;
             case 'update_post':
-            dispatch(UpdateMessage(message[0].message))  
+            dispatch(updateMessage(message[0].message))  
             break;  
             ///  
             /// delete events  

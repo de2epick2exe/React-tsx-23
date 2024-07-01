@@ -106,6 +106,18 @@ const Room: React.FC<RoomProps> = ({
     if (room_type == "private" || room_type == "chat") {
       if (isEditing){
         msg_event = "update_message"
+        if(isEditing){
+          msg_event = "update_post"
+          setMessage(""); // need to fix
+        const msg = {
+          //@ts-ignore
+          message_id: selectedMessage.message_id,
+          room: room_id,
+          content: message,
+          event: msg_event,
+        };
+        dispatch(sendMessage(msg));
+        return
       }
       else{
       msg_event= "message"
@@ -113,6 +125,16 @@ const Room: React.FC<RoomProps> = ({
     } else {     
       if(isEditing){
         msg_event = "update_post"
+        setMessage(""); // need to fix
+      const msg = {
+        //@ts-ignore
+        message_id: selectedMessage.message_id,
+        room: room_id,
+        content: message,
+        event: msg_event,
+      };
+      dispatch(sendMessage(msg));
+      return
       }
       else{
       msg_event="create_post"     

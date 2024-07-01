@@ -161,7 +161,8 @@ export const {
   setRooms,
   setCurrentRoom,
   deleteMessage, 
-  deletePost
+  deletePost,
+  updateMessage
 } = messagerSlice.actions;
 
 export default messagerSlice.reducer;
