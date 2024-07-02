@@ -205,7 +205,7 @@ const Room: React.FC<RoomProps> = ({
         case 'delete':
         console.log('deleted message', selectedMessage)
         delete_message()
-        break;
+        break;        
         case 'edit':
           console.log('editing message', selectedMessage)
           edit_message()        
@@ -408,7 +408,10 @@ const Room: React.FC<RoomProps> = ({
           {is_menu_on? 
           (<Flex flexDirection={'column'}  position={'absolute'} zIndex='9999' width="150px" style={{top: mouse_coord.y, left: mouse_coord.x, backgroundColor: 'rgb(60, 0, 0)'}}>
             <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick('reply')}><FaReplyAll height={'15'} /><p >Reply</p></Flex>
+            {//@ts-ignore
+            selectedMessage.user_id == data.id? 
             <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick('edit')}><p >Edit</p></Flex>
+            : ''}
             <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick('copy')}><p>Copy</p></Flex>
             <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick('delete')}><p>Delete</p></Flex>
 
