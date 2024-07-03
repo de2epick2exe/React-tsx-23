@@ -119,6 +119,7 @@ const Room: React.FC<RoomProps> = ({
         dispatch(sendMessage(msg));
         return
       }
+      }
       else{
       msg_event= "message"
     }
@@ -197,6 +198,7 @@ const Room: React.FC<RoomProps> = ({
     console.log('message for manipulating:', msg)
     setIsMenuOn(true)
   };
+
   const menuItemClick = (e: any)=>{
     switch (e) {
       case 'reply':
@@ -221,6 +223,13 @@ const Room: React.FC<RoomProps> = ({
         break;
     }
     setIsMenuOn(false)
+  }
+  const mouse_check = (e: any, set: any)=>{
+    console.log('clicked left click: ',e.button === 0)
+    if(e.button === 0){
+      set ? selecting() : setScrolling_selectingON(false)
+    }
+    return
   }
 
   const call_messg_reply = (msg:any) => {
@@ -253,7 +262,6 @@ const Room: React.FC<RoomProps> = ({
       console.log('selected numbers of ids is:', selected_id.length )
     }
   }
-
   }
 
   const AlwaysScrollToBottom = () => {
@@ -296,8 +304,7 @@ const Room: React.FC<RoomProps> = ({
     );
   };
 
-  const MessagesComponent = () => {
-    
+  const MessagesComponent = () => {    
     console.log("MessagesComponent:", room_id);
     if (room_id && messager.messages[room_id] !== undefined) {
       if (room_type == "channel") {
@@ -314,9 +321,9 @@ const Room: React.FC<RoomProps> = ({
             {messager.messages[room_id][0]?.map((msg) => (
               <span key={msg.id} onDoubleClick={()=>call_messg_reply(msg)}
               onContextMenu={(e)=>call_message_menu(e, msg) } 
-              onMouseDown={()=>{selecting() }}
-              onMouseUp={()=>{setScrolling_selectingON(false)}}
-              onMouseMove={()=>add_selected_id(msg.message_id)} // @ts-ignore
+              onMouseDown={(e)=>{mouse_check(e, true)}}
+              onMouseUp={(e)=>{mouse_check(e, false)}}
+              onMouseMove={()=>{add_selected_id(msg.message_id)}} // @ts-ignore
               style={{  backgroundColor: selected_id.includes(msg.message_id) ? 'LightCoral' : 'black'
 
                   }}
@@ -351,8 +358,9 @@ const Room: React.FC<RoomProps> = ({
                 key={msg.id}
                 onDoubleClick={()=>call_messg_reply(msg)}
                 onContextMenu={(e)=>call_message_menu(e, msg)}
-                onMouseDown={()=>{selecting() }}
-                onMouseMove={()=>add_selected_id(msg.message_id)} // @ts-ignore
+                onMouseDown={(e)=>{mouse_check(e, true)}}
+                onMouseUp={(e)=>{mouse_check(e, false)}}
+                onMouseMove={()=> {add_selected_id(msg.message_id)}} // @ts-ignore
                 style={{  backgroundColor: selected_id.includes(msg.message_id) ? 'LightCoral' : 'black'
   
                     }}
