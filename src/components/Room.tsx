@@ -304,6 +304,34 @@ const Room: React.FC<RoomProps> = ({
     );
   };
 
+  const Messaging_area = ()=>{
+
+    if(isSelecting){
+      return(<>
+      <Box> <CloseIcon/> <p>{selected_id.length} messages</p></Box>
+      
+      </>)
+    }
+
+
+    return(
+      <>
+      <Textarea
+                  resize="none"
+                  onInput={(e) => setMessage(e.currentTarget.value)}
+                  value={message}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      send();
+                    }
+                  }}
+                />
+      </>
+    )
+
+  }
+
+
   const MessagesComponent = () => {    
     console.log("MessagesComponent:", room_id);
     if (room_id && messager.messages[room_id] !== undefined) {
@@ -486,16 +514,7 @@ const Room: React.FC<RoomProps> = ({
                 </Flex>
               </Box>
               <InputGroup>
-                <Textarea
-                  resize="none"
-                  onInput={(e) => setMessage(e.currentTarget.value)}
-                  value={message}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      send();
-                    }
-                  }}
-                />
+              <Messaging_area/>
 
                 <InputRightElement>
                   <Button
