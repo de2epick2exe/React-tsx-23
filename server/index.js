@@ -193,17 +193,48 @@ wss.on("connection", (ws) => {
           const update_post = await Messager.update_post(
             parsedMessage.id,
             parsedMessage.content
-          );
-          clients[clientId].send(JSON.stringify(update_post));
+          );                   
+          for (const live_room of setted_rooms) {
+            if (live_room.clients.has(ws)) {
+              live_room.clients.forEach(async (client) => {
+                console.log("finded room for user(current ws)");
+                console.log(parsedMessage);                
+                client.send(JSON.stringify(update_post));
+                //client.send(message);
+                console.log(
+                  "Number of clients in room:",
+                  live_room.clients.size
+                );
+                console.log("event send message success");
+                console.log("post DELETED in room");
+              });
+              break;
+            }
+          }
           break;
         case "update_message":
           const update_msg = await Messager.update_message(
             parsedMessage.message_id,
             parsedMessage.content
-          );
-          clients[clientId].send(JSON.stringify(update_msg));
-         break;
-
+          );       
+         for (const live_room of setted_rooms) {
+          if (live_room.clients.has(ws)) {
+            live_room.clients.forEach(async (client) => {
+              console.log("finded room for user(current ws)");
+              console.log(parsedMessage);                
+              client.send(JSON.stringify(update_msg));
+              //client.send(message);
+              console.log(
+                "Number of clients in room:",
+                live_room.clients.size
+              );
+              console.log("event send message success");
+              console.log("post DELETED in room");
+            });
+            break;
+          }
+        }
+        break;
         //------- Delete commands ------
         case "delete_post":
           for (const live_room of setted_rooms) {
