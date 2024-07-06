@@ -175,8 +175,24 @@ wss.on("connection", (ws) => {
         case "create_post":
           const create_post = await Messager.create_post({
             body: { ...parsedMessage },
-          });
-          clients[clientId].send(JSON.stringify(create_post));
+          });                
+          for (const live_room of setted_rooms) {
+            if (live_room.clients.has(ws)) {
+              live_room.clients.forEach(async (client) => {
+                console.log("finded room for user(current ws)");
+                console.log(parsedMessage);                
+                client.send(JSON.stringify(create_post));
+                //client.send(message);
+                console.log(
+                  "Number of clients in room:",
+                  live_room.clients.size
+                );
+                console.log("event send message success");
+                console.log("post CREATED in CHANNEL room");
+              });
+              break;
+            }
+          }
           break;
         case "get_posts":
           const get_posts = await Messager.get_posts(parsedMessage.id);
@@ -206,7 +222,7 @@ wss.on("connection", (ws) => {
                   live_room.clients.size
                 );
                 console.log("event send message success");
-                console.log("post DELETED in room");
+                console.log("post UPDATED in CHANNEL room");
               });
               break;
             }
@@ -229,7 +245,7 @@ wss.on("connection", (ws) => {
                 live_room.clients.size
               );
               console.log("event send message success");
-              console.log("post DELETED in room");
+              console.log("post UPDATED in room");
             });
             break;
           }
