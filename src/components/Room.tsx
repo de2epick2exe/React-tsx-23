@@ -63,14 +63,14 @@ const Room: React.FC<RoomProps> = ({
   const messager = useSelector((state: RootState) => state.messagerReducer);
   const [message, setMessage] = useState("");
   const [is_reply_on, setIsReplyOn] = useState(false);
-  const [replying_message, setReplying_message] = useState()
-  const [is_menu_on, setIsMenuOn] = useState(false)
-  const [mouse_coord, setMouseCoords]= useState({x: 0, y:0})
-  const [selectedMessage, setSelectedMesssage]= useState(null)
-  const [isEditing, setIsEditing]= useState(false)
-  const [isSelecting, setIsSelecting] = useState(false)
-  const [selected_id, setSelected_id] = useState([])
-  const [scrolling_selectingON, setScrolling_selectingON]= useState(false)
+  const [replying_message, setReplying_message] = useState();
+  const [is_menu_on, setIsMenuOn] = useState(false);
+  const [mouse_coord, setMouseCoords] = useState({ x: 0, y: 0 });
+  const [selectedMessage, setSelectedMesssage] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isSelecting, setIsSelecting] = useState(false);
+  const [selected_id, setSelected_id] = useState<number[]>([]);
+  const [scrolling_selectingON, setScrolling_selectingON] = useState(false);
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   console.log("connected to room type:", room_type);
   const {
@@ -97,18 +97,35 @@ const Room: React.FC<RoomProps> = ({
     if (!message.trim().length) {
       return;
     }
-    let msg_event
+    let msg_event;
     console.log(
       "room type is:",
       room_type == "private" || room_type == "chat",
       room_type
     );
     if (room_type == "private" || room_type == "chat") {
-      if (isEditing){
-        msg_event = "update_message"
-        if(isEditing){
-          msg_event = "update_post"
+      if (isEditing) {
+        msg_event = "update_message";
+        if (isEditing) {
+          msg_event = "update_post";
           setMessage(""); // need to fix
+          const msg = {
+            //@ts-ignore
+            message_id: selectedMessage.message_id,
+            room: room_id,
+            content: message,
+            event: msg_event,
+          };
+          dispatch(sendMessage(msg));
+          return;
+        }
+      } else {
+        msg_event = "message";
+      }
+    } else {
+      if (isEditing) {
+        msg_event = "update_post";
+        setMessage(""); // need to fix
         const msg = {
           //@ts-ignore
           message_id: selectedMessage.message_id,
@@ -117,49 +134,29 @@ const Room: React.FC<RoomProps> = ({
           event: msg_event,
         };
         dispatch(sendMessage(msg));
-        return
+        return;
+      } else {
+        msg_event = "create_post";
       }
-      }
-      else{
-      msg_event= "message"
-    }
-    } else {     
-      if(isEditing){
-        msg_event = "update_post"
-        setMessage(""); // need to fix
-      const msg = {
-        //@ts-ignore
-        message_id: selectedMessage.message_id,
-        room: room_id,
-        content: message,
-        event: msg_event,
-      };
-      dispatch(sendMessage(msg));
-      return
-      }
-      else{
-      msg_event="create_post"     
-    }
     }
     setMessage(""); // need to fix
-      const msg = {
-        from_id: data.id,
-        user_id: data.id,
-        username: data.username,
-        room: room_id,
-        message: message,
-        event: "message",
-      };
-      dispatch(sendMessage(msg)); // sends 2x times
-
+    const msg = {
+      from_id: data.id,
+      user_id: data.id,
+      username: data.username,
+      room: room_id,
+      message: message,
+      event: "message",
+    };
+    dispatch(sendMessage(msg)); // sends 2x times
   };
 
-  const delete_message = ()=>{
-    let msg_event
+  const delete_message = () => {
+    let msg_event;
     if (room_type == "private" || room_type == "chat") {
-      msg_event= "delete_message"
-    } else {    
-      msg_event= "delete_post"      
+      msg_event = "delete_message";
+    } else {
+      msg_event = "delete_post";
     }
     setMessage(""); // need to fix
     const msg = {
@@ -168,13 +165,13 @@ const Room: React.FC<RoomProps> = ({
       event: msg_event,
     };
     dispatch(sendMessage(msg)); // sends 2x times
-  }
-  const send_edited_message = ()=>{
-    let msg_event
+  };
+  const send_edited_message = () => {
+    let msg_event;
     if (room_type == "private" || room_type == "chat") {
-      msg_event= "edit_message"
-    } else {    
-      msg_event= "edit_post"      
+      msg_event = "edit_message";
+    } else {
+      msg_event = "edit_post";
     }
     setMessage(""); // need to fix
     const msg = {
@@ -186,83 +183,95 @@ const Room: React.FC<RoomProps> = ({
       event: msg_event,
     };
     dispatch(sendMessage(selectedMessage)); // sends 2x times
-  }
-
-
+  };
 
   const call_message_menu = (e: any, msg: any) => {
     e.preventDefault();
-    setSelectedMesssage(msg)
-    setMouseCoords({x: e.clientX, y: e.clientY})
-    console.log("right click event, coords", {x: e.clientX, y: e.clientY});
-    console.log('message for manipulating:', msg)
-    setIsMenuOn(true)
+    setSelectedMesssage(msg);
+    setMouseCoords({ x: e.clientX, y: e.clientY });
+    console.log("right click event, coords", { x: e.clientX, y: e.clientY });
+    console.log("message for manipulating:", msg);
+    setIsMenuOn(true);
   };
 
-  const menuItemClick = (e: any)=>{
+  const menuItemClick = (e: any) => {
     switch (e) {
-      case 'reply':
-        call_messg_reply(selectedMessage)
+      case "reply":
+        call_messg_reply(selectedMessage);
         break;
-        case 'delete':
-        console.log('deleted message', selectedMessage)
-        delete_message()
-        break;        
-        case 'edit':
-          console.log('editing message', selectedMessage)
-          edit_message()        
+      case "delete":
+        console.log("deleted message", selectedMessage);
+        delete_message();
         break;
-        case 'copy':
-          if(selectedMessage){
-          navigator.clipboard.writeText(selectedMessage)
+      case "edit":
+        console.log("editing message", selectedMessage);
+        edit_message();
+        break;
+      case "copy":
+        if (selectedMessage) {
+          navigator.clipboard.writeText(selectedMessage);
         }
-          console.log('copied message', selectedMessage)        
+        console.log("copied message", selectedMessage);
         break;
-    
+
       default:
         break;
     }
-    setIsMenuOn(false)
-  }
-  const mouse_check = (e: any, set: any)=>{
-    console.log('clicked left click: ',e.button === 0)
-    if(e.button === 0){
-      set ? selecting() : setScrolling_selectingON(false)
+    setIsMenuOn(false);
+  };
+  const mouse_check = (e: any, set: any) => {
+    console.log("clicked left click: ", e.button === 0);
+    if (e.button === 0) {
+      if (set) {
+        selecting();
+        if (selectedMessage) {
+          //@ts-ignore
+          //  add_selected_id(selectedMessage?.message_id)
+        }
+      } else {
+        setScrolling_selectingON(false);
+      }
     }
-    return
-  }
+    return;
+  };
 
-  const call_messg_reply = (msg:any) => {
+  const call_messg_reply = (msg: any) => {
     console.log("selected message to reply");
-    setReplying_message(msg)
+    setReplying_message(msg);
     setIsReplyOn(true);
   };
-  const edit_message = ()=>{
-    if(selectedMessage){
-    setIsEditing(true)
-    //@ts-ignore
-    setMessage(selectedMessage?.content)
-  }
-  }
+  const edit_message = () => {
+    if (selectedMessage) {
+      setIsEditing(true);
+      //@ts-ignore
+      setMessage(selectedMessage?.content);
+    }
+  };
 
-  const selecting = ()=>{
-    setScrolling_selectingON(true)
-    setIsSelecting(true)
-  }
-  const add_selected_id = (msg_id: any)=>{
-    if(isSelecting ){
-      if(scrolling_selectingON){
-    //@ts-ignore
-    if (!selected_id.includes(msg_id)) {
-    //@ts-ignore      
-      setSelected_id([...selected_id, msg_id]);
+  const selecting = () => {
+    setScrolling_selectingON(true);
+    setIsSelecting(true);
+  };
+  const stop_selecting = () => {
+    setScrolling_selectingON(false);
+    setIsSelecting(false);
+    setSelected_id([]);
+  };
+  const add_selected_id = (msg_id: any) => {
+    if (isSelecting) {
+      if (scrolling_selectingON) {
+        //@ts-ignore
+        if (!selected_id.includes(msg_id)) {
+          setSelected_id([...selected_id, msg_id]);
+        } else {
+          setSelected_id((prev_ids) => prev_ids.filter((id) => id !== msg_id));
+        }
+      }
+      if (selected_id.length >= 2) {
+        console.log("selected numbers of ids is:", selected_id.length);
+      }
     }
-  }
-   if(selected_id.length >= 2){
-      console.log('selected numbers of ids is:', selected_id.length )
-    }
-  }
-  }
+  };
 
   const AlwaysScrollToBottom = () => {
     const elementRef = useRef<HTMLDivElement>(null);
@@ -304,35 +313,40 @@ const Room: React.FC<RoomProps> = ({
     );
   };
 
-  const Messaging_area = ()=>{
-
-    if(isSelecting){
-      return(<>
-      <Box> <CloseIcon/> <p>{selected_id.length} messages</p></Box>
-      
-      </>)
+  const Messaging_area = () => {
+    if (selected_id.length >= 1 && isSelecting) {
+      return (
+        <>
+          <Flex>
+            <CloseIcon
+              mr="2"
+              onClick={() => {
+                stop_selecting();
+              }}
+            />
+            <p>{selected_id.length} messages</p>
+          </Flex>
+        </>
+      );
     }
 
-
-    return(
+    return (
       <>
-      <Textarea
-                  resize="none"
-                  onInput={(e) => setMessage(e.currentTarget.value)}
-                  value={message}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      send();
-                    }
-                  }}
-                />
+        <Textarea
+          resize="none"
+          onInput={(e) => setMessage(e.currentTarget.value)}
+          value={message}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              send();
+            }
+          }}
+        />
       </>
-    )
+    );
+  };
 
-  }
-
-
-  const MessagesComponent = () => {    
+  const MessagesComponent = () => {
     console.log("MessagesComponent:", room_id);
     if (room_id && messager.messages[room_id] !== undefined) {
       if (room_type == "channel") {
@@ -347,14 +361,24 @@ const Room: React.FC<RoomProps> = ({
           <>
             {/* @ts-ignore*/}
             {messager.messages[room_id][0]?.map((msg) => (
-              <span key={msg.id} onDoubleClick={()=>call_messg_reply(msg)}
-              onContextMenu={(e)=>call_message_menu(e, msg) } 
-              onMouseDown={(e)=>{mouse_check(e, true)}}
-              onMouseUp={(e)=>{mouse_check(e, false)}}
-              onMouseMove={()=>{add_selected_id(msg.message_id)}} // @ts-ignore
-              style={{  backgroundColor: selected_id.includes(msg.message_id) ? 'LightCoral' : 'black'
-
-                  }}
+              <span
+                key={msg.id}
+                onDoubleClick={() => call_messg_reply(msg)}
+                onContextMenu={(e) => call_message_menu(e, msg)}
+                onMouseDown={(e) => {
+                  mouse_check(e, true);
+                }}
+                onMouseUp={(e) => {
+                  mouse_check(e, false);
+                }}
+                onMouseMove={() => {
+                  add_selected_id(msg.message_id);
+                }} // @ts-ignore
+                style={{
+                  backgroundColor: selected_id.includes(msg.message_id)
+                    ? "LightCoral"
+                    : "black",
+                }}
               >
                 <Flex justify="flex-end">
                   <p
@@ -362,7 +386,6 @@ const Room: React.FC<RoomProps> = ({
                     style={{
                       backgroundColor: "red",
                       marginLeft: "10vw",
-
                       borderRadius: "2px",
                       marginTop: "10px",
                     }}
@@ -380,18 +403,28 @@ const Room: React.FC<RoomProps> = ({
         //@ts-ignore
         messager.messages[room_id][0]?.map((msg) => console.log(msg[0]));
         return (
-          //@ts-ignore
-          <>{messager.messages[room_id][0]?.map((msg) => (
+          <>            
+            {/* @ts-ignore*/}
+            {messager.messages[room_id][0]?.map((msg) => (
               <span
                 key={msg.id}
-                onDoubleClick={()=>call_messg_reply(msg)}
-                onContextMenu={(e)=>call_message_menu(e, msg)}
-                onMouseDown={(e)=>{mouse_check(e, true)}}
-                onMouseUp={(e)=>{mouse_check(e, false)}}
-                onMouseMove={()=> {add_selected_id(msg.message_id)}} // @ts-ignore
-                style={{  backgroundColor: selected_id.includes(msg.message_id) ? 'LightCoral' : 'black'
-  
-                    }}
+                onDoubleClick={() => call_messg_reply(msg)}
+                onContextMenu={(e) => call_message_menu(e, msg)}
+                //@ts-ignore
+                onMouseDown={(e) => {
+                  mouse_check(e, true);
+                }}
+                onMouseUp={(e) => {
+                  mouse_check(e, false);
+                }}
+                onMouseMove={() => {
+                  add_selected_id(msg.message_id);
+                }} // @ts-ignore
+                style={{
+                  backgroundColor: selected_id.includes(msg.message_id)
+                    ? "LightCoral"
+                    : "black",
+                }}
               >
                 {msg.from_id == data.id ? (
                   <Flex justify="flex-end">
@@ -440,26 +473,68 @@ const Room: React.FC<RoomProps> = ({
     return (
       <>
         <ScrollbarStyles />
-        <Box onClick={()=>setIsMenuOn(false)}>
-          {is_menu_on? 
-          (<Flex flexDirection={'column'}  position={'absolute'} zIndex='9999' width="150px" style={{top: mouse_coord.y, left: mouse_coord.x, backgroundColor: 'rgb(60, 0, 0)'}}>
-            <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick('reply')}><FaReplyAll height={'15'} /><p >Reply</p></Flex>
-            {//@ts-ignore
-            selectedMessage.user_id == data.id? 
-            <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick('edit')}><p >Edit</p></Flex>
-            : ''}
-            <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick('copy')}><p>Copy</p></Flex>
-            <Flex cursor="pointer" _hover={{ bg: 'FireBrick', color: 'white' }} flexDirection={'row'} onClick={()=>menuItemClick('delete')}><p>Delete</p></Flex>
-
-          </Flex>)
-          :
-            (<span/>)
-          }
+        <Box onClick={() => setIsMenuOn(false)}>
+          {is_menu_on ? (
+            <Flex
+              flexDirection={"column"}
+              position={"absolute"}
+              zIndex="9999"
+              width="150px"
+              style={{
+                top: mouse_coord.y,
+                left: mouse_coord.x,
+                backgroundColor: "rgb(60, 0, 0)",
+              }}
+            >
+              <Flex
+                cursor="pointer"
+                _hover={{ bg: "FireBrick", color: "white" }}
+                flexDirection={"row"}
+                onClick={() => menuItemClick("reply")}
+              >
+                <FaReplyAll height={"15"} />
+                <p>Reply</p>
+              </Flex>
+              {
+                //@ts-ignore
+                selectedMessage.user_id == data.id ? (
+                  <Flex
+                    cursor="pointer"
+                    _hover={{ bg: "FireBrick", color: "white" }}
+                    flexDirection={"row"}
+                    onClick={() => menuItemClick("edit")}
+                  >
+                    <p>Edit</p>
+                  </Flex>
+                ) : (
+                  ""
+                )
+              }
+              <Flex
+                cursor="pointer"
+                _hover={{ bg: "FireBrick", color: "white" }}
+                flexDirection={"row"}
+                onClick={() => menuItemClick("copy")}
+              >
+                <p>Copy</p>
+              </Flex>
+              <Flex
+                cursor="pointer"
+                _hover={{ bg: "FireBrick", color: "white" }}
+                flexDirection={"row"}
+                onClick={() => menuItemClick("delete")}
+              >
+                <p>Delete</p>
+              </Flex>
+            </Flex>
+          ) : (
+            <span />
+          )}
           <Box
             height="7vh"
             bg="darkred"
             cursor="pointer"
-            position='relative'
+            position="relative"
             onClick={onProfileOpen}
             ref={profileRef}
           >
@@ -504,17 +579,21 @@ const Room: React.FC<RoomProps> = ({
               backgroundColor={"black"}
               flexDirection="column"
             >
-              <Box visibility={is_reply_on? 'visible' : 'hidden'}>
-                <Flex flexDirection='row' justifyContent='space-between'>
-                <FaReplyAll />                
-                <p>{//@ts-ignore
-                      replying_message?.content }</p>
-    
-                <CloseIcon onClick={()=>setIsReplyOn(false)} />
+              <Box visibility={is_reply_on ? "visible" : "hidden"}>
+                <Flex flexDirection="row" justifyContent="space-between">
+                  <FaReplyAll />
+                  <p>
+                    {
+                      //@ts-ignore
+                      replying_message?.content
+                    }
+                  </p>
+
+                  <CloseIcon onClick={() => setIsReplyOn(false)} />
                 </Flex>
               </Box>
               <InputGroup>
-              <Messaging_area/>
+                <Messaging_area />
 
                 <InputRightElement>
                   <Button
