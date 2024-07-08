@@ -17,6 +17,7 @@ import {
   Flex,
   IconButton,
   Checkbox,
+  InputLeftElement,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -29,7 +30,7 @@ import {
   setMessages,
 } from "../store/reduses/MessagerSlice";
 import { sendMessage } from "../store/reduses/WS_Slice";
-import { EditIcon, CloseIcon } from "@chakra-ui/icons";
+import { EditIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons";
 import {
   AiFillNotification,
   AiOutlineTeam,
@@ -319,23 +320,28 @@ const Messenger = () => {
       );
     }
 
-    const Latest_message:React.FC<{id: number, room_name: string}> = ({id, room_name})=>{
-      console.log('latest message id:', id, 'room name:', room_name)
-      if(id){    
-        /** @ts-ignore */    
-        console.log(messager.messages[id] )
-        if(messager.messages[id]){        
-      return (
-        <Box>
-          {room_name}:
-          {
-            /** @ts-ignore */
-            messager.messages[id][0]?.[messager.messages[id][0]?.length - 1].content
-          }
-        </Box>
-      );
-      }}
-      return(<>nothing</>)
+    const Latest_message: React.FC<{ id: number; room_name: string }> = ({
+      id,
+      room_name,
+    }) => {
+      console.log("latest message id:", id, "room name:", room_name);
+      if (id) {
+        /** @ts-ignore */
+        console.log(messager.messages[id]);
+        if (messager.messages[id]) {
+          return (
+            <Box>
+              {room_name}:
+              {
+                /** @ts-ignore */
+                messager.messages[id][0]?.[messager.messages[id][0]?.length - 1]
+                  .content
+              }
+            </Box>
+          );
+        }
+      }
+      return <>nothing</>;
     };
 
     //@ts-ignore
@@ -343,7 +349,16 @@ const Messenger = () => {
 
     return (
       <>
-        <GridItem>folders</GridItem>
+        <Flex flexDirection='row'>
+          <p>folders</p>
+          <InputGroup>
+            <InputLeftElement pointerEvents="none">
+              <SearchIcon color="gray.300" />
+            </InputLeftElement>
+            <Input type="tel" placeholder="Phone number" />
+          </InputGroup>
+        </Flex>
+        <Flex flexDirection='column'>
         All Chats
         {messager.rooms?.map((r) => (
           <span key={r.id}>
@@ -358,11 +373,11 @@ const Messenger = () => {
               <Flex flexDirection="column">
                 <Box>{r.username}</Box>
                 <Latest_message room_name={r.username} id={r.id} />
-                
               </Flex>
             </Box>
           </span>
         ))}
+        </Flex>
       </>
     );
   };
