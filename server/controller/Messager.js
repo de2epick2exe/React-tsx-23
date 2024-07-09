@@ -288,6 +288,23 @@ class Messager {
       console.log(error);
     }
   }
+  async search_channel(title){
+    const channel = await db.query(
+      "SELECT * FROM channels WHERE title =$1",
+      [title]
+    );
+    console.log("channel =", channel.rows);
+    console.log("room id =", r.room_id);
+
+    const data = {
+      id: channel.rows[0].id,
+      username: channel.rows[0].title,
+      type: "channel",
+      rooms_id: title.room_id,
+      ...channel
+    };
+    return [data]
+  }
 
   async send_message(msg) {
     try {
@@ -334,6 +351,10 @@ class Messager {
       res.json({ err: e.message });
     }
   }
+
+
+
+
 
   async update_post(req, res) {
     try {
