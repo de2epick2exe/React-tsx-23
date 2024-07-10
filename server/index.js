@@ -205,6 +205,12 @@ wss.on("connection", (ws) => {
           );
           clients[clientId].send(JSON.stringify(follow_onChan));
           break;
+        case "search_channel":
+          const search_Chan = await Messager.search_channel(
+            parsedMessage.title          
+          );
+          clients[clientId].send(JSON.stringify(search_Chan));
+          break;
         case "update_post":
           const update_post = await Messager.update_post(
             parsedMessage.id,
