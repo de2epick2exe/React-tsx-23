@@ -9,7 +9,8 @@ import {
   setRooms,
   deleteMessage,
   deletePost,
-  updateMessage
+  updateMessage,
+  setSearchedChannel
 } from "./MessagerSlice";
 import { setFriends, setWaitingList, setRecomends } from "./UserSlice";
 
@@ -110,6 +111,9 @@ export const connectToWebSocket = () => {
             case 'update_post':
             dispatch(updateMessage(message[0].message))  
             break;  
+            case 'searched_channel':
+              dispatch(setSearchedChannel)
+              break;
             ///  
             /// delete events  
             ///

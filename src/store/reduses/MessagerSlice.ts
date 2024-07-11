@@ -59,6 +59,7 @@ interface MessagerState {
   current_channel: Channel | null;
   current_room: Room | null;
   rooms: Room[];
+  searched_channel: Channel[];
 }
 const initialState: MessagerState = {
   messages: {},
@@ -68,6 +69,7 @@ const initialState: MessagerState = {
   current_channel: null,
   current_room: null,
   rooms: [],
+  searched_channel:[]
 };
 
 const messagerSlice = createSlice({
@@ -116,6 +118,9 @@ const messagerSlice = createSlice({
     setCurrentRoom: (state, action: PayloadAction<Room | null>) => {
       state.current_room = action.payload;
     },
+    setSearchedChannel:(state, action: PayloadAction<Channel[] >) => {
+      state.searched_channel = action.payload;
+    },
     updateMessage:(state, action:PayloadAction<Rooms_msgs>)=>{
       const roomID = Object.keys(action.payload);
       const msg = Object.values(action.payload);
@@ -160,6 +165,7 @@ export const {
   setPosts,
   setRooms,
   setCurrentRoom,
+  setSearchedChannel,
   deleteMessage, 
   deletePost,
   updateMessage

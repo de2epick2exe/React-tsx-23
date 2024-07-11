@@ -301,6 +301,7 @@ class Messager {
       username: channel.rows[0].title,
       type: "channel",
       rooms_id: title.room_id,
+      event:"searched_channel",
       ...channel
     };
     return [data]
