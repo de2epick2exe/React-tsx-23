@@ -52,6 +52,8 @@ const Messenger = () => {
   const [room, setRoomState] = useState<number | undefined>();
   const [selected_room, setSelected_room] = useState("");
   const [message_State, setMesage_state] = useState(false);
+  const [isSearching, setIsSearching]= useState(false)
+
 
   const data = useSelector((state: RootState) => state.userReducer);
   const messager = useSelector((state: RootState) => state.messagerReducer);
@@ -197,7 +199,7 @@ const Messenger = () => {
       console.log("created channel", channelName, channelDesc);
     };
 
-    if (turnOnNChn) {
+    if(turnOnNChn) {
       return (
         <>
           <Flex direction="row" alignItems="center">
@@ -344,12 +346,32 @@ const Messenger = () => {
       return <>nothing</>;
     };
 
+    if(isSearching){
+      return(<>
+      <Flex flexDirection="row">
+      {data.friends?.map((frd) => (
+            <Box key={frd?.id}>
+              <span>{frd?.username}</span>
+            </Box>
+          ))}
+      </Flex>
+      <Flex direction='column'>
+        {messager.searched_channel?.map((channel)=>(
+          <Box key={channel?.id}>
+            <span>{channel?.title}</span>
+          </Box>
+        ))}
+      </Flex>
+
+
+      </>)
+    }
     //@ts-ignore
     ///console.log(messager.messages[1][0]?.[messager.messages[1][0]?.length - 1]);
 
     return (
       <>
-        <Flex flexDirection='row'>
+        <Flex flexDirection="row">
           <p>folders</p>
           <InputGroup>
             <InputLeftElement pointerEvents="none">
@@ -358,25 +380,25 @@ const Messenger = () => {
             <Input type="tel" placeholder="Phone number" />
           </InputGroup>
         </Flex>
-        <Flex flexDirection='column'>
-        All Chats
-        {messager.rooms?.map((r) => (
-          <span key={r.id}>
-            <Box
-              bg="black"
-              ml="-1"
-              width="100% "
-              my="2"
-              py="3"
-              onClick={(e) => setRoomdata(r)}
-            >
-              <Flex flexDirection="column">
-                <Box>{r.username}</Box>
-                <Latest_message room_name={r.username} id={r.id} />
-              </Flex>
-            </Box>
-          </span>
-        ))}
+        <Flex flexDirection="column">
+          All Chats
+          {messager.rooms?.map((r) => (
+            <span key={r.id}>
+              <Box
+                bg="black"
+                ml="-1"
+                width="100% "
+                my="2"
+                py="3"
+                onClick={(e) => setRoomdata(r)}
+              >
+                <Flex flexDirection="column">
+                  <Box>{r.username}</Box>
+                  <Latest_message room_name={r.username} id={r.id} />
+                </Flex>
+              </Box>
+            </span>
+          ))}
         </Flex>
       </>
     );
