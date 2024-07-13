@@ -51,6 +51,7 @@ const Messenger = () => {
   const [rooms, setRooms] = useState<room_user[]>([]);
   const [room, setRoomState] = useState<number | undefined>();
   const [selected_room, setSelected_room] = useState("");
+  const [searched_channel, setSearched_channel] = useState("")
   const [message_State, setMesage_state] = useState(false);
   const [isSearching, setIsSearching]= useState(false)
 
@@ -104,6 +105,17 @@ const Messenger = () => {
   useEffect(() => {
     get_users_rooms_data();
   }, [ws.connected]);
+
+  const search_channel = (data: any)=>{
+    setSearched_channel(data)
+    
+
+
+
+
+
+  }
+
 
   const setRoomdata = (r: any) => {
     setRoomState(undefined);
@@ -358,7 +370,7 @@ const Messenger = () => {
       <Flex direction='column'>
         {messager.searched_channel?.map((channel)=>(
           <Box key={channel?.id}>
-            <span>{channel?.title}</span>
+            <span onClick={(e) => setRoomdata(channel)}>{channel?.channel_name}</span>
           </Box>
         ))}
       </Flex>
@@ -377,7 +389,7 @@ const Messenger = () => {
             <InputLeftElement pointerEvents="none">
               <SearchIcon color="gray.300" />
             </InputLeftElement>
-            <Input type="tel" placeholder="Phone number" />
+            <Input onClick={()=>setIsSearching(true)} value={searched_channel} onChange={(e) => search_channel(e.target.value)}  />
           </InputGroup>
         </Flex>
         <Flex flexDirection="column">
