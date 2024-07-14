@@ -107,6 +107,12 @@ const Messenger = () => {
   }, [ws.connected]);
 
   const search_channel = (data: any)=>{
+    const msg ={
+      ...data,
+      event : "search_channel"
+
+    }
+    dispatch(sendMessage(msg))
     setSearched_channel(data)
     
 
