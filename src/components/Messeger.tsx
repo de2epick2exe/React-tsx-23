@@ -18,6 +18,7 @@ import {
   IconButton,
   Checkbox,
   InputLeftElement,
+  Divider,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -365,6 +366,26 @@ const Messenger = () => {
     };
 
     if(isSearching){
+
+      const SearchResults = ()=>{
+        if(messager.searched_channel.length == 0){
+          return (
+          <>
+            notFound :^
+          </>)
+        }
+        return(<>
+       <Flex flexDirection='column'> {messager.searched_channel?.map((channel)=>(
+          <Box key={channel?.id}>
+            <span onClick={(e) => setRoomdata(channel)}>{channel?.channel_name}</span>
+          </Box>
+        ))}
+        </Flex>
+        </>)
+
+      }
+
+
       return(<>
       <Flex flexDirection="row">
       {data.friends?.map((frd) => (
@@ -373,12 +394,9 @@ const Messenger = () => {
             </Box>
           ))}
       </Flex>
+      <Divider my='2'/>
       <Flex direction='column'>
-        {messager.searched_channel?.map((channel)=>(
-          <Box key={channel?.id}>
-            <span onClick={(e) => setRoomdata(channel)}>{channel?.channel_name}</span>
-          </Box>
-        ))}
+      <SearchResults />
       </Flex>
 
 
@@ -389,15 +407,7 @@ const Messenger = () => {
 
     return (
       <>
-        <Flex flexDirection="row">
-          <p>folders</p>
-          <InputGroup>
-            <InputLeftElement pointerEvents="none">
-              <SearchIcon color="gray.300" />
-            </InputLeftElement>
-            <Input onClick={()=>setIsSearching(true)} value={searched_channel} onChange={(e) => search_channel(e.target.value)}  />
-          </InputGroup>
-        </Flex>
+        
         <Flex flexDirection="column">
           All Chats
           {messager.rooms?.map((r) => (
@@ -421,8 +431,9 @@ const Messenger = () => {
       </>
     );
   };
+
   return (
-    <>
+    <>    
       <Grid
         className="page"
         templateAreas={`"all-chats chat"`} /* Updated grid template areas */
@@ -437,7 +448,16 @@ const Messenger = () => {
           margin: "0",
         }}
       >
-        <GridItem pl="2" bg="#980000" area={"all-chats"} position="relative">
+      <GridItem pl="2" bg="#980000" area={"all-chats"} position="relative">
+        <Flex flexDirection="row">
+          <p>folders</p>
+          <InputGroup>
+            <InputLeftElement pointerEvents="none">
+              <SearchIcon color="gray.300" />
+            </InputLeftElement>
+            <Input onClick={()=>setIsSearching(true)} value={searched_channel} onChange={(e) => search_channel(e.target.value)}  />
+          </InputGroup>
+        </Flex>
           <Chats />
           <Box>
             <Popover>

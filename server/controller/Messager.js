@@ -295,7 +295,13 @@ class Messager {
     );
     console.log("channel =", channel.rows);
     console.log("room id =", r.room_id);
-
+    if(!channel){
+      const data = {
+       event:"searched_channel",
+       status : 404 
+      };
+      return [data]
+    }
     const data = {
       id: channel.rows[0].id,
       username: channel.rows[0].title,
