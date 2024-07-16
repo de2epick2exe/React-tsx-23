@@ -112,7 +112,11 @@ export const connectToWebSocket = () => {
             dispatch(updateMessage(message[0].message))  
             break;  
             case 'searched_channel':
-              dispatch(setSearchedChannel)
+              if(message[0].status == 404){
+                dispatch(setSearchedChannel({channel_name : undefined}))
+                break;
+              }
+              dispatch(setSearchedChannel(message[0]))
               break;
             ///  
             /// delete events  

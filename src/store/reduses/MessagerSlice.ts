@@ -119,6 +119,9 @@ const messagerSlice = createSlice({
       state.current_room = action.payload;
     },
     setSearchedChannel:(state, action: PayloadAction<Channel[] >) => {
+      if(action.payload[0].channel_name == undefined){
+        return
+      }
       state.searched_channel = action.payload;
     },
     updateMessage:(state, action:PayloadAction<Rooms_msgs>)=>{
