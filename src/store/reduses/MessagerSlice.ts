@@ -119,10 +119,15 @@ const messagerSlice = createSlice({
       state.current_room = action.payload;
     },
     setSearchedChannel:(state, action: PayloadAction<Channel[] >) => {
-      if(action.payload[0].channel_name == undefined){
+      console.log('ws searched func data:', action.payload)
+      state.searched_channel = []
+      //@ts-ignore
+      if(action.payload.channel_name == undefined){
+      console.log('not found chan: ', action.payload[0].channel_name == undefined)
         return
       }
       state.searched_channel = action.payload;
+      console.log('founded chan is: ', state.searched_channel )
     },
     updateMessage:(state, action:PayloadAction<Rooms_msgs>)=>{
       const roomID = Object.keys(action.payload);

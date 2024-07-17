@@ -289,28 +289,36 @@ class Messager {
     }
   }
   async search_channel(title){
+    try{
     const channel = await db.query(
       "SELECT * FROM channels WHERE title =$1",
       [title]
     );
-    console.log("channel =", channel.rows);
-    console.log("room id =", r.room_id);
-    if(!channel){
+    
+    if(!channel || channel.rows.length == 0){
       const data = {
        event:"searched_channel",
        status : 404 
       };
+    console.log("channel =", channel.rows);
+    console.log("room id =", channel.room_id);
       return [data]
     }
+    console.log("channel =", channel.rows);
+    console.log("room id =", channel.room_id);
     const data = {
       id: channel.rows[0].id,
       username: channel.rows[0].title,
+      channel_name: channel.rows[0].title,
       type: "channel",
       rooms_id: title.room_id,
       event:"searched_channel",
       ...channel
     };
     return [data]
+  }catch(e){
+    console.log('search channel func error:', e)
+  }
   }
 
   async send_message(msg) {

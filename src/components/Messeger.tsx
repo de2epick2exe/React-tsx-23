@@ -109,17 +109,12 @@ const Messenger = () => {
 
   const search_channel = (data: any)=>{
     const msg ={
-      ...data,
+      channel_name : data,
       event : "search_channel"
 
     }
     dispatch(sendMessage(msg))
     setSearched_channel(data)
-    
-
-
-
-
 
   }
 
@@ -366,9 +361,9 @@ const Messenger = () => {
     };
 
     if(isSearching){
-
+      console.log('searched next: ', messager.searched_channel)
       const SearchResults = ()=>{
-        if(messager.searched_channel.length == 0){
+        if(messager.searched_channel.length < 1){
           return (
           <>
             notFound :^

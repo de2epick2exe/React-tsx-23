@@ -111,9 +111,11 @@ export const connectToWebSocket = () => {
             case 'update_post':
             dispatch(updateMessage(message[0].message))  
             break;  
-            case 'searched_channel':
+            case "searched_channel":
+              console.log('searched channel is:',message[0] )
               if(message[0].status == 404){
-                dispatch(setSearchedChannel({channel_name : undefined}))
+                //@ts-ignore
+                dispatch(setSearchedChannel([{channel_name : ''}]))
                 break;
               }
               dispatch(setSearchedChannel(message[0]))
