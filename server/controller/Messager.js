@@ -214,8 +214,7 @@ class Messager {
         );
       } else {
         console.log("type private");
-        res = await db.query("SELECT * FROM messages WHERE room_id = $1", 
-        [id]);
+        res = await db.query("SELECT * FROM messages WHERE room_id = $1", [id]);
       }
       console.log(res.rows);
       const rooms_data = [
@@ -288,37 +287,43 @@ class Messager {
       console.log(error);
     }
   }
-  async search_channel(title){
-    try{
-    const channel = await db.query(
-      "SELECT * FROM channels WHERE title =$1",
-      [title]
-    );
-    
-    if(!channel || channel.rows.length == 0){
-      const data = {
-       event:"searched_channel",
-       status : 404 
-      };
-    console.log("channel =", channel.rows);
-    console.log("room id =", channel.room_id);
-      return [data]
+  async search_channel(title) {
+    try {
+      const search_res = await db.query(
+        "SELECT * FROM channels WHERE title =$1",
+        [title]
+      );
+
+      if (!channel || channel.rows.length == 0) {
+        const data = {
+          event: "searched_channel",
+          status: 404,
+        };
+        console.log("channel =", channel.rows);
+        console.log("room id =", channel.room_id);
+        return [data];
+      }
+      console.log("channel =", channel.rows);
+      console.log("room id =", channel.room_id);
+      let data = [
+        {
+          event: "searched_channel",
+          data: [],
+        },
+      ];
+      for (ent in search_res) {
+        data[0].data.push({
+          id: ent.id,
+          username: ent.title,
+          channel_name: ent.title,
+          rooms_id: title.room_id,
+          ...ent
+        });
+      }
+      return data;
+    } catch (e) {
+      console.log("search channel func error:", e);
     }
-    console.log("channel =", channel.rows);
-    console.log("room id =", channel.room_id);
-    const data = {
-      id: channel.rows[0].id,
-      username: channel.rows[0].title,
-      channel_name: channel.rows[0].title,
-      type: "channel",
-      rooms_id: title.room_id,
-      event:"searched_channel",
-      ...channel
-    };
-    return [data]
-  }catch(e){
-    console.log('search channel func error:', e)
-  }
   }
 
   async send_message(msg) {
@@ -367,10 +372,6 @@ class Messager {
     }
   }
 
-
-
-
-
   async update_post(req, res) {
     try {
       const { id, content } = req.body;
@@ -390,7 +391,7 @@ class Messager {
   }
   async update_message(id, content) {
     try {
-     // const { id, content } = req.body;
+      // const { id, content } = req.body;
       const post = await db.query(
         "UPDATE messages SET content = $1 WHERE message_id = $2 RETURNING message_id, content",
         [content, id]
@@ -408,7 +409,6 @@ class Messager {
 
   async delete_post(id, date) {
     try {
-      
       const post = await db.query(
         "DELETE FROM posts WHERE id = $1 RETURNING id, content",
         [id]
@@ -424,7 +424,7 @@ class Messager {
     }
   }
   async delete_message(id, date) {
-    try {      
+    try {
       const post = await db.query(
         "DELETE FROM messages WHERE message_id = $1 RETURNING message_id, content",
         [id]
