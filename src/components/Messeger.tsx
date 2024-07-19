@@ -363,12 +363,13 @@ const Messenger = () => {
     if(isSearching){
       console.log('searched next: ', messager.searched_channel)
       const SearchResults = ()=>{
-        if(messager.searched_channel.length < 1){
-          return (
-          <>
-            notFound :^
-          </>)
-        }
+        messager.searched_channel?.map((channel)=>(console.log('ws searched ent: ', channel)))  
+            if(messager.searched_channel.length <= 0){
+              return (
+              <>
+                notFound :^
+              </>)
+            }
         return(<>
        <Flex flexDirection='column'> {messager.searched_channel?.map((channel)=>(
           <Box key={channel?.id}>

@@ -294,24 +294,25 @@ class Messager {
         [title]
       );
 
-      if (!channel || channel.rows.length == 0) {
+      if (!search_res || search_res.rows.length == 0) {
         const data = {
           event: "searched_channel",
           status: 404,
         };
-        console.log("channel =", channel.rows);
-        console.log("room id =", channel.room_id);
+        console.log("channel =", search_res.rows);
+        console.log("room id =", search_res.room_id);
         return [data];
       }
-      console.log("channel =", channel.rows);
-      console.log("room id =", channel.room_id);
+      console.log("channel =", search_res.rows);
+      console.log("room id =", search_res.room_id);
       let data = [
         {
           event: "searched_channel",
           data: [],
         },
       ];
-      for (ent in search_res) {
+      for (const ent of search_res.rows) {     
+        console.log('entity in searching res:', ent)
         data[0].data.push({
           id: ent.id,
           username: ent.title,

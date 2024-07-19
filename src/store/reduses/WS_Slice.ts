@@ -118,7 +118,7 @@ export const connectToWebSocket = () => {
                 dispatch(setSearchedChannel([{channel_name : ''}]))
                 break;
               }
-              dispatch(setSearchedChannel(message[0]))
+              dispatch(setSearchedChannel(message[0].data))
               break;
             ///  
             /// delete events  
