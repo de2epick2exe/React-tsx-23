@@ -316,8 +316,8 @@ class Messager {
         data[0].data.push({
           id: ent.id,
           username: ent.title,
-          channel_name: ent.title,
-          rooms_id: title.room_id,
+          channel_name: ent.title, 
+          rooms_id: ent.room_id,         
           ...ent
         });
       }
