@@ -122,8 +122,8 @@ const messagerSlice = createSlice({
       console.log('ws searched func data:', action.payload)
       state.searched_channel = []
       //@ts-ignore
-      if(action.payload[0].channel_name == undefined){
-      console.log('not found chan: ', action.payload[0].channel_name == undefined)
+      if(action.payload[0].channel_name == ''){
+      console.log('not found chan: ', action.payload[0].channel_name == '')
         return
       }
 

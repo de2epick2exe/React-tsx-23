@@ -108,13 +108,18 @@ const Messenger = () => {
   }, [ws.connected]);
 
   const search_channel = (data: any)=>{
+    if(data.length == 0){
+      setIsSearching(false)
+    }
+    setIsSearching(true)
+    setSearched_channel(data)
     const msg ={
       channel_name : data,
       event : "search_channel"
 
     }
     dispatch(sendMessage(msg))
-    setSearched_channel(data)
+    
 
   }
 
@@ -451,7 +456,7 @@ const Messenger = () => {
             <InputLeftElement pointerEvents="none">
               <SearchIcon color="gray.300" />
             </InputLeftElement>
-            <Input onClick={()=>setIsSearching(true)} value={searched_channel} onChange={(e) => search_channel(e.target.value)}  />
+            <Input  value={searched_channel} onChange={(e) => search_channel(e.target.value)}  />
           </InputGroup>
         </Flex>
           <Chats />
