@@ -329,9 +329,15 @@ const Room: React.FC<RoomProps> = ({
         </>
       );
     }
-
+    //@ts-ignore
+    console.log(messager.current_room)
+    //@ts-ignore
+    if (!messager.current_channel?.admins.includes(data.id)){
+      return(<></>)
+    }
     return (
       <>
+      <InputGroup> 
         <Textarea
           resize="none"
           onInput={(e) => setMessage(e.currentTarget.value)}
@@ -342,6 +348,18 @@ const Room: React.FC<RoomProps> = ({
             }
           }}
         />
+         <InputRightElement>
+        <Button
+          onClick={(e) => send()}
+          disabled={message.trim().length <= 0}
+        >
+          <ArrowRightIcon />
+        </Button>
+      </InputRightElement>
+    </InputGroup>
+
+
+
       </>
     );
   };
@@ -592,18 +610,8 @@ const Room: React.FC<RoomProps> = ({
                   <CloseIcon onClick={() => setIsReplyOn(false)} />
                 </Flex>
               </Box>
-              <InputGroup>
-                <Messaging_area />
-
-                <InputRightElement>
-                  <Button
-                    onClick={(e) => send()}
-                    disabled={message.trim().length <= 0}
-                  >
-                    <ArrowRightIcon />
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
+              <Messaging_area />
+              
             </Flex>
           </Flex>
           <Drawer

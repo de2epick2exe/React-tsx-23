@@ -20,6 +20,8 @@ interface Channel {
   channel_name: string;
   status: boolean;
   followers: number;
+  admins: [];
+
 }
 interface Notify {
   from: string;
@@ -118,6 +120,9 @@ const messagerSlice = createSlice({
     setCurrentRoom: (state, action: PayloadAction<Room | null>) => {
       state.current_room = action.payload;
     },
+    setCurrentChannel: (state, action: PayloadAction<Channel | null>) => {
+      state.current_channel = action.payload;
+    },
     setSearchedChannel:(state, action: PayloadAction<Channel[] >) => {
       console.log('ws searched func data:', action.payload)
       state.searched_channel = []
@@ -174,6 +179,7 @@ export const {
   setPosts,
   setRooms,
   setCurrentRoom,
+  setCurrentChannel,
   setSearchedChannel,
   deleteMessage, 
   deletePost,

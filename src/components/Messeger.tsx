@@ -27,6 +27,7 @@ import Room from "./Room";
 import { RiImageAddLine } from "react-icons/ri";
 import {
   addMessage,
+  setCurrentChannel,
   setCurrentRoom,
   setMessages,
 } from "../store/reduses/MessagerSlice";
@@ -129,6 +130,8 @@ const Messenger = () => {
     setRoomState(r?.rooms_id);
     setSelected_room(r?.username);
     dispatch(setCurrentRoom(r));
+    dispatch(setCurrentChannel(r));
+
     console.log(r);
     console.log(r?.rooms_id);
   };

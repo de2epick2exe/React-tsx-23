@@ -81,7 +81,7 @@ class Messager {
           rooms_data[0].rooms.push(data);
         } else if (r.type == "channel") {
           const channel = await db.query(
-            "SELECT id, title, avatars FROM channels WHERE room_id =$1",
+            "SELECT id, title, avatars, admins FROM channels WHERE room_id =$1",
             [r.room_id]
           );
           console.log("channel =", channel.rows);
@@ -90,6 +90,7 @@ class Messager {
           const data = {
             id: channel.rows[0].id,
             username: channel.rows[0].title,
+            admins: channel.rows[0].admins,
             type: "channel",
             rooms_id: r.room_id,
           };
