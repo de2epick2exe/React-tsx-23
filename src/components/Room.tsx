@@ -331,10 +331,13 @@ const Room: React.FC<RoomProps> = ({
     }
     //@ts-ignore
     console.log(messager.current_room)
-    //@ts-ignore
-    if (!messager.current_channel?.admins.includes(data.id)){
-      return(<></>)
+    if(room_type == 'channel'){
+      //@ts-ignore
+      if (!messager.current_channel?.admins.includes(data.id)){
+        return(<></>)
+      }
     }
+    
     return (
       <>
       <InputGroup> 
