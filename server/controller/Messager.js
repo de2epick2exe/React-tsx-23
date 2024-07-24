@@ -86,7 +86,7 @@ class Messager {
           );
           console.log("channel =", channel.rows);
           console.log("room id =", r.room_id);
-
+ 
           const data = {
             id: channel.rows[0].id,
             username: channel.rows[0].title,

@@ -110,10 +110,7 @@ const messagerSlice = createSlice({
     },
     setPosts: (state, action: PayloadAction<Post[] | null>) => {
       state.posts = action.payload!;
-    },
-    setChannel: (state, action: PayloadAction<Channel | null>) => {
-      state.current_channel = action.payload;
-    },
+    },    
     setRooms: (state, action: PayloadAction<Room[] | null>) => {
       state.rooms = action.payload!;
     },
@@ -169,12 +166,11 @@ const messagerSlice = createSlice({
 
     },
   },
-});
+}); 
 export const {
   addMessage,
   setMessage,
-  setMessages,
-  setChannel,
+  setMessages,  
   setNotifies,
   setPosts,
   setRooms,

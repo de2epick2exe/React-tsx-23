@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import {
-  addMessage,
-  setChannel,
+  addMessage,  
   setMessages,
   setNotifies,
   setPosts,
@@ -10,7 +9,8 @@ import {
   deleteMessage,
   deletePost,
   updateMessage,
-  setSearchedChannel
+  setSearchedChannel,
+  setCurrentChannel
 } from "./MessagerSlice";
 import { setFriends, setWaitingList, setRecomends } from "./UserSlice";
 
@@ -178,7 +178,7 @@ export const set_current_channel = (channel: any) => {
   return (dispatch: ThunkDispatch<WS, any, any>) => {
     try {
       console.log("connected to ws by redux");
-      dispatch(setChannel(channel));
+      dispatch(setCurrentChannel(channel));
     } catch (error) {
       console.log("ws slice error", error);
     }

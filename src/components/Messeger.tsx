@@ -130,10 +130,10 @@ const Messenger = () => {
     setRoomState(r?.rooms_id);
     setSelected_room(r?.username);
     dispatch(setCurrentRoom(r));
+    console.log("setting current room : ", r)
+    if(r.type == 'channel'){
     dispatch(setCurrentChannel(r));
-
-    console.log(r);
-    console.log(r?.rooms_id);
+    }    
   };
   /// need to fix bottom white line
   const ScrollbarStyles = () => {
@@ -344,28 +344,27 @@ const Messenger = () => {
       );
     }
 
-    const Latest_message: React.FC<{ id: number; room_name: string }> = ({
-      id,
+    const Latest_message: React.FC<{ room_id: number; room_name: string }> = ({
+      room_id,
       room_name,
     }) => {
-      console.log("latest message id:", id, "room name:", room_name);
-      if (id) {
-        /** @ts-ignore */
-        console.log(messager.messages[id]);
-        if (messager.messages[id]) {
+      console.log("latest message id:", room_id, "room name:", room_name);
+      console.log('latest message is:', messager.messages );      
+      if (room_id) { 
+        if (messager.messages[room_id] !== undefined) {
           return (
             <Box>
               {room_name}:
               {
                 /** @ts-ignore */
-                messager.messages[id][0]?.[messager.messages[id][0]?.length - 1]
+                messager.messages[room_id][0]?.[messager.messages[room_id][0]?.length - 1]
                   .content
               }
             </Box>
           );
         }
       }
-      return <>nothing</>;
+      return <>-</>;
     };
 
     if(isSearching){
@@ -426,7 +425,7 @@ const Messenger = () => {
               >
                 <Flex flexDirection="column">
                   <Box>{r.username}</Box>
-                  <Latest_message room_name={r.username} id={r.id} />
+                  <Latest_message room_name={r.username} room_id={r.rooms_id} />
                 </Flex>
               </Box>
             </span>
