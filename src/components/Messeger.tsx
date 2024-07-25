@@ -109,8 +109,11 @@ const Messenger = () => {
   }, [ws.connected]);
 
   const search_channel = (data: any)=>{
-    if(data.length == 0){
+    console.log('searched data lenght', data.length, data.length == 0)
+    if(data.length == 0){      
       setIsSearching(false)
+      setSearched_channel('')
+      return 
     }
     setIsSearching(true)
     setSearched_channel(data)
@@ -379,7 +382,12 @@ const Messenger = () => {
             }
         return(<>
        <Flex flexDirection='column'> {messager.searched_channel?.map((channel)=>(
-          <Box key={channel?.id}>
+          <Box key={channel?.id}  
+          bg="black"
+          ml="-1"
+          width="100% "
+          my="2"
+          py="3">
             <span onClick={(e) => setRoomdata(channel)}>{channel?.channel_name}</span>
           </Box>
         ))}
