@@ -551,6 +551,7 @@ const Room: React.FC<RoomProps> = ({
           ) : (
             <span />
           )}
+          {/*----------------- TOP--------------------------- */}
           <Box
             height="7vh"
             bg="darkred"
@@ -580,6 +581,8 @@ const Room: React.FC<RoomProps> = ({
               </Flex>
             </Flex>
           </Box>
+
+          {/*----------------- BODY--------------------------- */}
 
           <Flex flexDirection="column">
             <Flex
@@ -617,6 +620,8 @@ const Room: React.FC<RoomProps> = ({
               
             </Flex>
           </Flex>
+
+          {/*----------------- SIDE DRAWER--------------------------- */}
           <Drawer
             isOpen={isProfileOpen}
             placement="right"

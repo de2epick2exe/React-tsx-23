@@ -53,10 +53,9 @@ const Messenger = () => {
   const [rooms, setRooms] = useState<room_user[]>([]);
   const [room, setRoomState] = useState<number | undefined>();
   const [selected_room, setSelected_room] = useState("");
-  const [searched_channel, setSearched_channel] = useState("")
+  const [searched_channel, setSearched_channel] = useState("");
   const [message_State, setMesage_state] = useState(false);
-  const [isSearching, setIsSearching]= useState(false)
-
+  const [isSearching, setIsSearching] = useState(false);
 
   const data = useSelector((state: RootState) => state.userReducer);
   const messager = useSelector((state: RootState) => state.messagerReducer);
@@ -108,35 +107,31 @@ const Messenger = () => {
     get_users_rooms_data();
   }, [ws.connected]);
 
-  const search_channel = (data: any)=>{
-    console.log('searched data lenght', data.length, data.length == 0)
-    if(data.length == 0){      
-      setIsSearching(false)
-      setSearched_channel('')
-      return 
+  const search_channel = (data: any) => {
+    console.log("searched data lenght", data.length, data.length == 0);
+    if (data.length == 0) {
+      setIsSearching(false);
+      setSearched_channel("");
+      return;
     }
-    setIsSearching(true)
-    setSearched_channel(data)
-    const msg ={
-      channel_name : data,
-      event : "search_channel"
-
-    }
-    dispatch(sendMessage(msg))
-    
-
-  }
-
+    setIsSearching(true);
+    setSearched_channel(data);
+    const msg = {
+      channel_name: data,
+      event: "search_channel",
+    };
+    dispatch(sendMessage(msg));
+  };
 
   const setRoomdata = (r: any) => {
     setRoomState(undefined);
     setRoomState(r?.rooms_id);
     setSelected_room(r?.username);
     dispatch(setCurrentRoom(r));
-    console.log("setting current room : ", r)
-    if(r.type == 'channel'){
-    dispatch(setCurrentChannel(r));
-    }    
+    console.log("setting current room : ", r, r.type == "channel");
+    if (r.type == "channel") {
+      dispatch(setCurrentChannel(r));
+    }
   };
   /// need to fix bottom white line
   const ScrollbarStyles = () => {
@@ -224,7 +219,7 @@ const Messenger = () => {
       console.log("created channel", channelName, channelDesc);
     };
 
-    if(turnOnNChn) {
+    if (turnOnNChn) {
       return (
         <>
           <Flex direction="row" alignItems="center">
@@ -352,16 +347,15 @@ const Messenger = () => {
       room_name,
     }) => {
       console.log("latest message id:", room_id, "room name:", room_name);
-      console.log('latest message is:', messager.messages );      
-      if (room_id) { 
+      console.log("latest message is:", messager.messages);
+      if (room_id) {
         if (messager.messages[room_id] !== undefined) {
           return (
             <Box>
               {room_name}:
               {
                 /** @ts-ignore */
-                messager.messages[room_id][0]?.[messager.messages[room_id][0]?.length - 1]
-                  .content
+                messager.messages[room_id][0]?.[messager.messages[room_id][0]?.length - 1].content
               }
             </Box>
           );
@@ -370,55 +364,59 @@ const Messenger = () => {
       return <>-</>;
     };
 
-    if(isSearching){
-      console.log('searched next: ', messager.searched_channel)
-      const SearchResults = ()=>{
-        messager.searched_channel?.map((channel)=>(console.log('ws searched ent: ', channel)))  
-            if(messager.searched_channel.length <= 0){
-              return (
-              <>
-                notFound :^
-              </>)
-            }
-        return(<>
-       <Flex flexDirection='column'> {messager.searched_channel?.map((channel)=>(
-          <Box key={channel?.id}  
-          bg="black"
-          ml="-1"
-          width="100% "
-          my="2"
-          py="3">
-            <span onClick={(e) => setRoomdata(channel)}>{channel?.channel_name}</span>
-          </Box>
-        ))}
-        </Flex>
-        </>)
+    if (isSearching) {
+      console.log("searched next: ", messager.searched_channel);
+      const SearchResults = () => {
+        messager.searched_channel?.map((channel) =>
+          console.log("ws searched ent: ", channel)
+        );
+        if (messager.searched_channel.length <= 0) {
+          return <>notFound :^</>;
+        }
+        return (
+          <>
+            <Flex flexDirection="column">
+              {" "}
+              {messager.searched_channel?.map((channel) => (
+                <Box
+                  key={channel?.id}
+                  bg="black"
+                  ml="-1"
+                  width="100% "
+                  my="2"
+                  py="3"
+                  onClick={(e) => setRoomdata(channel)}
+                  _hover={{ bg: "#CD5C5C"}}
+                >
+                  <span>{channel?.channel_name}</span>
+                </Box>
+              ))}
+            </Flex>
+          </>
+        );
+      };
 
-      }
-
-
-      return(<>
-      <Flex flexDirection="row">
-      {data.friends?.map((frd) => (
-            <Box key={frd?.id}>
-              <span>{frd?.username}</span>
-            </Box>
-          ))}
-      </Flex>
-      <Divider my='2'/>
-      <Flex direction='column'>
-      <SearchResults />
-      </Flex>
-
-
-      </>)
+      return (
+        <>
+          <Flex flexDirection="row">
+            {data.friends?.map((frd) => (
+              <Box key={frd?.id}>
+                <span>{frd?.username}</span>
+              </Box>
+            ))}
+          </Flex>
+          <Divider my="2" />
+          <Flex direction="column">
+            <SearchResults />
+          </Flex>
+        </>
+      );
     }
     //@ts-ignore
     ///console.log(messager.messages[1][0]?.[messager.messages[1][0]?.length - 1]);
 
     return (
       <>
-        
         <Flex flexDirection="column">
           All Chats
           {messager.rooms?.map((r) => (
@@ -430,6 +428,7 @@ const Messenger = () => {
                 my="2"
                 py="3"
                 onClick={(e) => setRoomdata(r)}
+                _hover={{ bg: "#CD5C5C"}}
               >
                 <Flex flexDirection="column">
                   <Box>{r.username}</Box>
@@ -444,7 +443,7 @@ const Messenger = () => {
   };
 
   return (
-    <>    
+    <>
       <Grid
         className="page"
         templateAreas={`"all-chats chat"`} /* Updated grid template areas */
@@ -459,16 +458,19 @@ const Messenger = () => {
           margin: "0",
         }}
       >
-      <GridItem pl="2" bg="#980000" area={"all-chats"} position="relative">
-        <Flex flexDirection="row">
-          <p>folders</p>
-          <InputGroup>
-            <InputLeftElement pointerEvents="none">
-              <SearchIcon color="gray.300" />
-            </InputLeftElement>
-            <Input  value={searched_channel} onChange={(e) => search_channel(e.target.value)}  />
-          </InputGroup>
-        </Flex>
+        <GridItem pl="2" bg="#980000" area={"all-chats"} position="relative">
+          <Flex flexDirection="row">
+            <p>folders</p>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none">
+                <SearchIcon color="gray.300" />
+              </InputLeftElement>
+              <Input
+                value={searched_channel}
+                onChange={(e) => search_channel(e.target.value)}
+              />
+            </InputGroup>
+          </Flex>
           <Chats />
           <Box>
             <Popover>
