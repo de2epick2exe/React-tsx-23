@@ -329,11 +329,12 @@ const Room: React.FC<RoomProps> = ({
         </>
       );
     }
-    //@ts-ignore
-    console.log('user is in admin list?', messager.current_channel)
+    //@ts-ignore    
+    console.log('user is admin ?', messager.current_channel?.admins.includes(data.id.toString()))
+
     if(room_type == 'channel'){
       //@ts-ignore
-      if (!messager.current_channel?.admins.includes(data.id)){
+      if (!messager.current_channel?.admins.includes(data.id.toString())){
         return(<></>)
       }
     }
