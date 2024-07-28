@@ -114,6 +114,7 @@ const Room: React.FC<RoomProps> = ({
             message_id: selectedMessage.message_id,
             room: room_id,
             content: message,
+            date: new Date(),
             event: msg_event,
           };
           dispatch(sendMessage(msg));
@@ -131,6 +132,7 @@ const Room: React.FC<RoomProps> = ({
           message_id: selectedMessage.message_id,
           room: room_id,
           content: message,
+          date: new Date(),
           event: msg_event,
         };
         dispatch(sendMessage(msg));
@@ -146,6 +148,7 @@ const Room: React.FC<RoomProps> = ({
       username: data.username,
       room: room_id,
       message: message,
+      date: new Date(),
       event: "message",
     };
     dispatch(sendMessage(msg)); // sends 2x times
