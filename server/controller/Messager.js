@@ -318,7 +318,8 @@ class Messager {
           id: ent.id,
           username: ent.title,
           channel_name: ent.title, 
-          rooms_id: ent.room_id,         
+          rooms_id: ent.room_id,
+          type: "channel",         
           ...ent
         });
       }

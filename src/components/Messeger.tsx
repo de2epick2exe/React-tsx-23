@@ -348,20 +348,27 @@ const Messenger = () => {
     }) => {
       console.log("latest message id:", room_id, "room name:", room_name);
       console.log("latest message is:", messager.messages);
-      if (room_id) {
+         // @ts-ignore        
+      if (room_id && messager.messages && messager.messages[room_id]) {
+         // @ts-ignore 
         if (messager.messages[room_id] !== undefined) {
-          return (
-            <Box>
-              {room_name}:
-              {
-                /** @ts-ignore */
-                messager.messages[room_id][0]?.[messager.messages[room_id][0]?.length - 1].content
-              }
-            </Box>
-          );
+          let last_msg 
+          try {
+         // @ts-ignore 
+            last_msg = messager.messages[room_id][0]?.[messager.messages[room_id][0]?.length - 1].content 
+          } catch (error) {
+            last_msg = ''
+          }
+          console.log("last msg:", last_msg);          
+            return (
+              <Box>
+                {room_name}: {last_msg}
+              </Box>
+            );
+          
         }
-      }
-      return <>-</>;
+      }      
+      return <> </>;
     };
 
     if (isSearching) {
