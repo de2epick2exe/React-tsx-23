@@ -26,7 +26,7 @@ import {
   Menu,
   MenuItem,
 } from "@chakra-ui/react";
-import React, { RefObject, useEffect, useRef, useState } from "react";
+import React, { RefObject, useEffect, useMemo, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store/store";
@@ -316,9 +316,12 @@ const Room: React.FC<RoomProps> = ({
     );
   };
 
-  const Messaging_area = () => {
+  const Messaging_area = useMemo(() => {
+    
+
+  const Selecting_navigate = ()=>{
     if (selected_id.length >= 1 && isSelecting) {
-      return (
+     return (
         <>
           <Flex>
             <CloseIcon
@@ -332,6 +335,9 @@ const Room: React.FC<RoomProps> = ({
         </>
       );
     }
+    return(<></>)
+   }
+   
     //@ts-ignore    
     console.log('user is admin ?', messager.current_channel?.admins.includes(data.id.toString()), data.id, messager.current_channel?.admins)
 
@@ -341,14 +347,20 @@ const Room: React.FC<RoomProps> = ({
         return(<></>)
       }
     }
-    
+    const set_message = (e: any)=>{          
+      let msg = e.target.value      
+      setMessage(msg)     
+    }
+
+
     return (
       <>
+      <Selecting_navigate/>
       <InputGroup> 
         <Textarea
           resize="none"
-          onInput={(e) => setMessage(e.currentTarget.value)}
-          value={message}
+          onChange={(e) => set_message(e)}
+          value={message} 
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               send();
@@ -369,7 +381,7 @@ const Room: React.FC<RoomProps> = ({
 
       </>
     );
-  };
+  },[selected_id, isSelecting, message, send, stop_selecting])
 
   const MessagesComponent = () => {
     console.log("MessagesComponent:", room_id);
@@ -620,7 +632,7 @@ const Room: React.FC<RoomProps> = ({
                   <CloseIcon onClick={() => setIsReplyOn(false)} />
                 </Flex>
               </Box>
-              <Messaging_area />
+              {Messaging_area}
               
             </Flex>
           </Flex>
