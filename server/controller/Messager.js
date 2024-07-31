@@ -234,22 +234,31 @@ class Messager {
   async create_post(req, res) {
     try {
       console.log(req.body, req);
-      const { id, content, userid, date } = req.body;
-
+      const { room, message, user_id, date } = req.body;
+      const id = room
+      const content = message
+      console.log('types before check:',  typeof user_id)
       const check = await db.query(
         "SELECT id  FROM channels  WHERE $1 = ANY(admins) AND room_id = $2 ",
-        [userid, id]
+        [user_id.toString(), id]
       );
+      console.log('check is:', check.rows, typeof user_id)
+      if(check){
       const post = await db.query(
         "INSERT INTO post (content, channel_id, user_id, date) VALUES ($1, $2, $3, $4) RETURNING *",
-        [content, check.rows[0].id, userid, date]
+        [content, check.rows[0].id, user_id, date]
       );
       const data = {
-        event: "create_post",
+        event: "message",
         status: 200,
-        post: post.rows[0],
+        [id]: {...post.rows[0]},
       };
-      return data;
+      return [data];
+      }
+      return[{
+        event: "create_post",
+        status: 404,        
+      }]
     } catch (error) {
       console.log(error);
     }

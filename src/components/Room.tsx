@@ -149,7 +149,7 @@ const Room: React.FC<RoomProps> = ({
       room: room_id,
       message: message,
       date: new Date(),
-      event: "message",
+      event: msg_event,
     };
     dispatch(sendMessage(msg)); // sends 2x times
   };
