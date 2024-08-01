@@ -105,9 +105,7 @@ const Room: React.FC<RoomProps> = ({
     );
     if (room_type == "private" || room_type == "chat") {
       if (isEditing) {
-        msg_event = "update_message";
-        if (isEditing) {
-          msg_event = "update_post";
+        msg_event = "update_message";        
           setMessage(""); // need to fix
           const msg = {
             //@ts-ignore
@@ -119,7 +117,7 @@ const Room: React.FC<RoomProps> = ({
           };
           dispatch(sendMessage(msg));
           return;
-        }
+        
       } else {
         msg_event = "message";
       }
@@ -169,24 +167,7 @@ const Room: React.FC<RoomProps> = ({
     };
     dispatch(sendMessage(msg)); // sends 2x times
   };
-  const send_edited_message = () => {
-    let msg_event;
-    if (room_type == "private" || room_type == "chat") {
-      msg_event = "edit_message";
-    } else {
-      msg_event = "edit_post";
-    }
-    setMessage(""); // need to fix
-    const msg = {
-      from_id: data.id,
-      user_id: data.id,
-      username: data.username,
-      room: room_id,
-      message: message,
-      event: msg_event,
-    };
-    dispatch(sendMessage(selectedMessage)); // sends 2x times
-  };
+  
 
   const call_message_menu = (e: any, msg: any) => {
     e.preventDefault();
@@ -534,7 +515,7 @@ const Room: React.FC<RoomProps> = ({
               </Flex>
               {
                 //@ts-ignore
-                selectedMessage.user_id == data.id ? (
+                selectedMessage.from_id == data.id ? (
                   <Flex
                     cursor="pointer"
                     _hover={{ bg: "FireBrick", color: "white" }}

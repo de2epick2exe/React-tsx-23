@@ -280,6 +280,31 @@ class Messager {
       console.log(error);
     }
   }
+  async get_latest_messaging_content(req, res){
+    try {
+      const { id } = req.body;
+      const last_messages = await db.query(
+        "SELECT DISTINCT ON (room_id) * FROM messages WHERE room_id IN (SELECT room_id FROM conversations WHERE user_id = $1) ORDER BY room_id, message_id DESC;",
+        [id]
+      );
+      const last_posts = await db.query(
+        "SELECT * FROM post WHERE channel_id IN ( SELECT channels.id FROM channels JOIN rooms ON channels.room_id = rooms.id WHERE rooms.id = $1 );",
+        [id]
+      );
+      const data = {
+        event: "letest_messaging_content",
+        status: 200,
+        posts: last_posts.rows,
+        messages: last_messages.rows
+      };
+      return [data];
+    } catch (error) {
+      console.log("latest messaging content error:", error)
+    }
+
+  }
+
+
   async follow_onChannel(req, res) {
     try {
       const { id, userid } = req.body;

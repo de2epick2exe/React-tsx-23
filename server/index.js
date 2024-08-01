@@ -251,7 +251,7 @@ wss.on("connection", (ws) => {
                 live_room.clients.size
               );
               console.log("event send message success");
-              console.log("post UPDATED in room");
+              console.log("message UPDATED in room");
             });
             break;
           }
