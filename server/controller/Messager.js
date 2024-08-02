@@ -288,9 +288,10 @@ class Messager {
         [id]
       );
       const last_posts = await db.query(
-        "SELECT * FROM post WHERE channel_id IN ( SELECT channels.id FROM channels JOIN rooms ON channels.room_id = rooms.id WHERE rooms.id = $1 );",
+        "SELECT DISTINCT ON id * FROM post WHERE channel_id IN ( SELECT channels.id FROM channels JOIN rooms ON channels.room_id = rooms.id WHERE rooms.id = $1 );",
         [id]
       );
+      console.log('letest_messaging_content', last_messages, last_posts)
       const data = {
         event: "letest_messaging_content",
         status: 200,

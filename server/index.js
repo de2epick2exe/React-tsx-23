@@ -71,16 +71,7 @@ wss.on("connection", (ws) => {
           }
 
           break;
-        case "geting_rooms":
-          const rooms = await Messager.get_rooms_list(parsedMessage.rooms_for); /// change args in main messager
-          console.log("getted rooms", parsedMessage.rooms_for);
-          clients[clientId].send(JSON.stringify(rooms)); //JSON.stringify(rooms)
-          break;
-        case "rooms_messages":
-          const msgs = await Messager.rooms_messages(parsedMessage.room_id); /// change args in main messager
-          console.log(`sent messages for ${parsedMessage.room_id}: `, message);
-          clients[clientId].send(JSON.stringify(msgs));
-          break;
+
         case "connection_to_room":
           //add here to create a room
           const room = parsedMessage.room;
@@ -114,18 +105,7 @@ wss.on("connection", (ws) => {
             }
           }
           break;
-        case "get_friends":
-          const friends_list = await UserController.get_friends(
-            parsedMessage.id
-          );
-          clients[clientId].send(JSON.stringify(friends_list));
-          break;
-        case "get_waiting_list":
-          const waiting_list = await UserController.get_waiting_list(
-            parsedMessage.id
-          );
-          clients[clientId].send(JSON.stringify(waiting_list));
-          break;
+
         case "add_friend":
           const add_res = await UserController.add_friend(
             parsedMessage.id,
@@ -140,13 +120,7 @@ wss.on("connection", (ws) => {
           );
           clients[clientId].send(JSON.stringify(accepted));
           break;
-        case "delete_friend":
-          const deleted = await UserController.delete_friend(
-            parsedMessage.id,
-            parsedMessage.to_delete
-          );
-          clients[clientId].send(JSON.stringify(deleted));
-          break;
+
         case "reject_request":
           const rejected = await UserController.reject_request(
             parsedMessage.id,
@@ -161,13 +135,21 @@ wss.on("connection", (ws) => {
           );
           clients[clientId].send(JSON.stringify(check_stat));
           break;
-        case "get_recomended_users":
-          const recomended_users = await UserController.get_recomended_users(
-            parsedMessage.page,
-            parsedMessage.limit
+        case "follow_onChannel":
+          const follow_onChan = await Messager.follow_onChannel(
+            parsedMessage.id,
+            parsedMessage.uid
           );
-          clients[clientId].send(JSON.stringify(recomended_users));
+          clients[clientId].send(JSON.stringify(follow_onChan));
           break;
+        case "search_channel":
+          const search_Chan = await Messager.search_channel(
+            parsedMessage.channel_name
+          );
+          clients[clientId].send(JSON.stringify(search_Chan));
+          break;
+        //----------------------creating events-----------------------------------
+
         case "create_channel":
           const create_channel = await Messager.create_channel(parsedMessage);
           clients[clientId].send(JSON.stringify(create_channel));
@@ -175,12 +157,12 @@ wss.on("connection", (ws) => {
         case "create_post":
           const create_post = await Messager.create_post({
             body: { ...parsedMessage },
-          });                
+          });
           for (const live_room of setted_rooms) {
             if (live_room.clients.has(ws)) {
               live_room.clients.forEach(async (client) => {
                 console.log("finded room for user(current ws)");
-                console.log(parsedMessage);                
+                console.log(parsedMessage);
                 client.send(JSON.stringify(create_post));
                 //client.send(message);
                 console.log(
@@ -194,33 +176,52 @@ wss.on("connection", (ws) => {
             }
           }
           break;
+        //---------------------------getting events------------------------------
+        case "rooms_messages":
+          const msgs = await Messager.rooms_messages(parsedMessage.room_id); /// change args in main messager
+          console.log(`sent messages for ${parsedMessage.room_id}: `, message);
+          clients[clientId].send(JSON.stringify(msgs));
+          break;
         case "get_posts":
           const get_posts = await Messager.get_posts(parsedMessage.id);
           clients[clientId].send(JSON.stringify(get_posts));
           break;
-        case "follow_onChannel":
-          const follow_onChan = await Messager.follow_onChannel(
-            parsedMessage.id,
-            parsedMessage.uid
+        case "get_recomended_users":
+          const recomended_users = await UserController.get_recomended_users(
+            parsedMessage.page,
+            parsedMessage.limit
           );
-          clients[clientId].send(JSON.stringify(follow_onChan));
+          clients[clientId].send(JSON.stringify(recomended_users));
           break;
-        case "search_channel":
-          const search_Chan = await Messager.search_channel(
-            parsedMessage.channel_name          
+        case "get_friends":
+          const friends_list = await UserController.get_friends(
+            parsedMessage.id
           );
-          clients[clientId].send(JSON.stringify(search_Chan));
+          clients[clientId].send(JSON.stringify(friends_list));
           break;
+        case "get_waiting_list":
+          const waiting_list = await UserController.get_waiting_list(
+            parsedMessage.id
+          );
+          clients[clientId].send(JSON.stringify(waiting_list));
+          break;
+        case "geting_rooms":
+          const rooms = await Messager.get_rooms_list(parsedMessage.rooms_for); /// change args in main messager
+          console.log("getted rooms", parsedMessage.rooms_for);
+          clients[clientId].send(JSON.stringify(rooms)); //JSON.stringify(rooms)
+          break;
+
+        //-----------------------modifying-------------------------------
         case "update_post":
           const update_post = await Messager.update_post(
             parsedMessage.id,
             parsedMessage.content
-          );                   
+          );
           for (const live_room of setted_rooms) {
             if (live_room.clients.has(ws)) {
               live_room.clients.forEach(async (client) => {
                 console.log("finded room for user(current ws)");
-                console.log(parsedMessage);                
+                console.log(parsedMessage);
                 client.send(JSON.stringify(update_post));
                 //client.send(message);
                 console.log(
@@ -238,25 +239,25 @@ wss.on("connection", (ws) => {
           const update_msg = await Messager.update_message(
             parsedMessage.message_id,
             parsedMessage.content
-          );       
-         for (const live_room of setted_rooms) {
-          if (live_room.clients.has(ws)) {
-            live_room.clients.forEach(async (client) => {
-              console.log("finded room for user(current ws)");
-              console.log(parsedMessage);                
-              client.send(JSON.stringify(update_msg));
-              //client.send(message);
-              console.log(
-                "Number of clients in room:",
-                live_room.clients.size
-              );
-              console.log("event send message success");
-              console.log("message UPDATED in room");
-            });
-            break;
+          );
+          for (const live_room of setted_rooms) {
+            if (live_room.clients.has(ws)) {
+              live_room.clients.forEach(async (client) => {
+                console.log("finded room for user(current ws)");
+                console.log(parsedMessage);
+                client.send(JSON.stringify(update_msg));
+                //client.send(message);
+                console.log(
+                  "Number of clients in room:",
+                  live_room.clients.size
+                );
+                console.log("event send message success");
+                console.log("message UPDATED in room");
+              });
+              break;
+            }
           }
-        }
-        break;
+          break;
         //------- Delete commands ------
         case "delete_post":
           for (const live_room of setted_rooms) {
@@ -285,7 +286,9 @@ wss.on("connection", (ws) => {
               live_room.clients.forEach(async (client) => {
                 console.log("finded room for user(current ws)");
                 console.log(parsedMessage);
-                const del_msg = await Messager.delete_message(parsedMessage.message_id);
+                const del_msg = await Messager.delete_message(
+                  parsedMessage.message_id
+                );
                 client.send(JSON.stringify(del_msg));
                 //client.send(message);
                 console.log(
@@ -298,6 +301,14 @@ wss.on("connection", (ws) => {
               break;
             }
           }
+          break;
+
+        case "delete_friend":
+          const deleted = await UserController.delete_friend(
+            parsedMessage.id,
+            parsedMessage.to_delete
+          );
+          clients[clientId].send(JSON.stringify(deleted));
           break;
 
         case "delete_file":
