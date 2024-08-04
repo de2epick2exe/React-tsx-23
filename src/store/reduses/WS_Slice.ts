@@ -100,6 +100,11 @@ export const connectToWebSocket = () => {
               console.log(message[0].data[0]);
               dispatch(setWaitingList(message[0].data));
               break;
+            case "get_latest_messeging":
+              console.log("latest messaging content received");
+              console.log(message[0].data[0]);
+              dispatch(setMessages(message[0]));              
+            break;
             case "recomended_users":
               console.log("recomends received");
               console.log(message[0].data);

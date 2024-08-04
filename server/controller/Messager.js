@@ -292,13 +292,15 @@ class Messager {
         [id]
       );
       console.log('letest_messaging_content', last_messages, last_posts)
-      const data = {
+      const data = [{
         event: "letest_messaging_content",
         status: 200,
-        posts: last_posts.rows,
-        messages: last_messages.rows
-      };
-      return [data];
+        [id]:[],
+        
+      }];
+      data[0][id].push(...last_messages.rows)
+      data[0][id].push(...last_posts.rows)
+      return data;
     } catch (error) {
       console.log("latest messaging content error:", error)
     }
