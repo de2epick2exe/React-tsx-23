@@ -282,25 +282,31 @@ class Messager {
   }
   async get_latest_messaging_content(req, res){
     try {
+      console.log(req, req.body)
+      console.log(req.body)
+
       const { id } = req.body;
+      
       const last_messages = await db.query(
         "SELECT DISTINCT ON (room_id) * FROM messages WHERE room_id IN (SELECT room_id FROM conversations WHERE user_id = $1) ORDER BY room_id, message_id DESC;",
         [id]
       );
+      /*
       const last_posts = await db.query(
         "SELECT DISTINCT ON id * FROM post WHERE channel_id IN ( SELECT channels.id FROM channels JOIN rooms ON channels.room_id = rooms.id WHERE rooms.id = $1 );",
         [id]
-      );
-      console.log('letest_messaging_content', last_messages, last_posts)
+      );*/
+      console.log('latest_messaging_content', last_messages.rows, /*last_posts.rows*/)
       const data = [{
-        event: "letest_messaging_content",
+        event: "get_latest_messaging",
         status: 200,
-        [id]:[],
-        
+        [id] : [],
+           
       }];
       data[0][id].push(...last_messages.rows)
-      data[0][id].push(...last_posts.rows)
+      ///data[0][id].push(...last_posts.rows)
       return data;
+      
     } catch (error) {
       console.log("latest messaging content error:", error)
     }

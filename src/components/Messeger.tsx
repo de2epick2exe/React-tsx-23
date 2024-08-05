@@ -75,12 +75,18 @@ const Messenger = () => {
 
   /// call users init data
   const get_users_rooms_data = async () => {
-    const message = {
+    const rooms_for = {
       rooms_for: data.id,
       event: "geting_rooms",
     };
+    dispatch(sendMessage(rooms_for));
+    const latest_messages ={
+      id : data.id,
+      event: "get_latest_messaging"
+    }
+    dispatch(sendMessage(latest_messages));
+    
 
-    dispatch(sendMessage(message));
   };
 
   const get_room_messages = (

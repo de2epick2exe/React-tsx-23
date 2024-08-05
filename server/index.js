@@ -210,8 +210,10 @@ wss.on("connection", (ws) => {
           console.log("getted rooms", parsedMessage.rooms_for);
           clients[clientId].send(JSON.stringify(rooms)); //JSON.stringify(rooms)
           break;
-        case "get_latest_messeging":
-            const lmsg = await Messager.get_latest_messaging_content(parsedMessage.id); /// change args in main messager
+        case "get_latest_messaging":
+            const lmsg = await Messager.get_latest_messaging_content({
+              body: { ...parsedMessage },
+            }); /// change args in main messager
             console.log("latest messaging ws event return for:", parsedMessage.id);
             clients[clientId].send(JSON.stringify(lmsg)); //JSON.stringify(rooms)
         break;
