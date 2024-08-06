@@ -61,13 +61,13 @@ export const connectToWebSocket = () => {
               dispatch(setRooms(message[0].rooms));
 
               break;
+              
             case "rooms_messages":
               console.log("WS_slice chats rooms_messages:");
               console.log(message[0]);
               //// ---------------------------------------------
-              /** TODO check if message == [] nothing to do*/
+              /// TODO check if message == [] nothing to do
               dispatch(setMessages(message[0]));
-
               break;
             case "connection_to_room":
               console.warn("WS_slice connected to room");
@@ -82,6 +82,7 @@ export const connectToWebSocket = () => {
             case "notifies":
               dispatch(setNotifies(message.notifies));
               break;
+              /*
             case "rooms_messages":
               console.log(
                 "caught rooms messages in ws slice: ",
@@ -89,7 +90,7 @@ export const connectToWebSocket = () => {
               );
               dispatch(setMessages(message.messages));
               break;
-
+            */
             case "get_friends":
               console.log("friends received");
               console.log(message[0].data[0]);
@@ -102,8 +103,8 @@ export const connectToWebSocket = () => {
               break;
             case "get_latest_messaging":
               console.log("latest messaging content received");
-              console.log(message[0].data[0]);
-              dispatch(setMessages(message[0]));              
+              console.log(message[0]);
+              dispatch(addMessage(message[0]));              
             break;
             case "recomended_users":
               console.log("recomends received");

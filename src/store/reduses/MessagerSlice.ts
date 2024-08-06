@@ -103,7 +103,9 @@ const messagerSlice = createSlice({
         state.messages[parseInt(roomID[0], 10)] = [];
       }
       state.messages[parseInt(roomID[0], 10)].push(msg[0]); // check if ?? works
-      console.log("Finaly MessagerSlice messages: ", state.messages);
+     
+     
+      console.log("Finaly MessagerSlice messages: ", JSON.stringify(state.messages));
     },
     setNotifies: (state, action: PayloadAction<Notify[] | null>) => {
       state.notifies = action.payload!;

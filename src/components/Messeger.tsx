@@ -80,14 +80,17 @@ const Messenger = () => {
       event: "geting_rooms",
     };
     dispatch(sendMessage(rooms_for));
+     
+
+  };
+  
+  useEffect(()=>{
     const latest_messages ={
       id : data.id,
       event: "get_latest_messaging"
     }
     dispatch(sendMessage(latest_messages));
-    
-
-  };
+  },[messager.rooms])
 
   const get_room_messages = (
     id: number | undefined,
