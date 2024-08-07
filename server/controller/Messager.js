@@ -299,12 +299,13 @@ class Messager {
       console.log('latest_messaging_content', last_messages.rows, /*last_posts.rows*/)
       const data = [{
         event: "get_latest_messaging",
-        status: 200,
-        [1] : [],
-           
+        status: 200,       
+       
       }];
-      data[0]['1'].push(...last_messages.rows)
-      console.log(data, id, id.toString())
+      last_messages.rows.forEach(room => {
+        data[0][room.room_id] = room
+      });
+      console.log(data)
       ///data[0][id].push(...last_posts.rows)
       return data;
       

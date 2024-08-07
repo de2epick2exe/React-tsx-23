@@ -104,8 +104,9 @@ export const connectToWebSocket = () => {
             case "get_latest_messaging":
               console.log("latest messaging content received");
               console.log(message[0]);
-              dispatch(addMessage(message[0]));              
-            break;
+              //@ts-ignore              
+              dispatch(addMessage(message[0]));            
+              break;
             case "recomended_users":
               console.log("recomends received");
               console.log(message[0].data);
@@ -145,7 +146,7 @@ export const connectToWebSocket = () => {
               break;
           }
         } catch (error) {
-          console.error("ws slice error parsing event:", error);
+          console.error("WS Slice error parsing event:", error);
         }
       };
 
