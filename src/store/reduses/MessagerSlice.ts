@@ -79,21 +79,30 @@ const messagerSlice = createSlice({
   initialState,
   reducers: {
     addMessage: (state, action: PayloadAction<Rooms_msgs>) => {
-      console.log('ws adding message :',action.payload)
-      try {
-        //@ts-ignore
-      action.payload.map(room => {      
-      
-        const roomID = Object.keys(room);
-        const msg = Object.values(room);
+      console.log('ws adding message :', typeof action.payload)
+      try {        
+        //@ts-ignore 
+        const roomID = Object.keys(action.payload);
+        const msg = Object.values(action.payload);
         console.log("ws adding message/'s: ",roomID, msg )
   
         if (!(roomID[0] in state.messages)) {
           state.messages[parseInt(roomID[0], 10)] = [];
         }
         //@ts-ignore
-        state.messages[parseInt(roomID[0], 10)][0].push(msg[0]);
-      });
+        roomID.forEach((room, index) => {
+          const parsedRoomID = parseInt(room, 10);
+          if(!parsedRoomID){
+            return
+          }
+          if (!(parsedRoomID in state.messages)) {
+            state.messages[parsedRoomID] = [];
+          }
+          //@ts-ignore
+          state.messages[parsedRoomID].push([msg[index]]);
+          console.log("add: ", parsedRoomID, ':', msg[index])
+        });
+              
       } catch (error) {
         console.error('Messager slice add message error: ', error)
       }
