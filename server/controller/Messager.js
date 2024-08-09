@@ -291,12 +291,14 @@ class Messager {
         "SELECT DISTINCT ON (room_id) * FROM messages WHERE room_id IN (SELECT room_id FROM conversations WHERE user_id = $1) ORDER BY room_id, message_id DESC;",
         [id]
       );
-      /*
+      
       const last_posts = await db.query(
-        "SELECT DISTINCT ON id * FROM post WHERE channel_id IN ( SELECT channels.id FROM channels JOIN rooms ON channels.room_id = rooms.id WHERE rooms.id = $1 );",
+        "SELECT DISTINCT ON (post.channel_id) post.*, channels.room_id FROM post RIGHT JOIN channels ON channels.id = post.channel_id WHERE channels.id IN ( SELECT channel_id FROM post WHERE channel_id IN ( SELECT channels.id FROM channels WHERE room_id IN ( SELECT room_id FROM conversations WHERE user_id = $1 ) ) )",
         [id] 
-      );*/
+      );
       console.log('latest_messaging_content', last_messages.rows, /*last_posts.rows*/)
+      console.log('latest_post_content', last_posts.rows)
+
       const data = [{
         event: "get_latest_messaging",
         status: 200,       
@@ -305,6 +307,9 @@ class Messager {
       last_messages.rows.forEach(room => {
         data[0][room.room_id] = room
       });
+      last_posts.rows.forEach(room=>{
+        data[0][room.room_id]= room
+      })
       console.log(data)
       ///data[0][id].push(...last_posts.rows)
       return data;
