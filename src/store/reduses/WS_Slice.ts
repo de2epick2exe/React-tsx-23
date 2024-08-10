@@ -67,7 +67,7 @@ export const connectToWebSocket = () => {
               console.log(message[0]);
               //// ---------------------------------------------
               /// TODO check if message == [] nothing to do
-              dispatch(setMessages(message[0]));
+              dispatch(addMessage(message[0]));
               break;
             case "connection_to_room":
               console.warn("WS_slice connected to room");
@@ -77,7 +77,7 @@ export const connectToWebSocket = () => {
               dispatch(setNotifies(message.notify || message.notifies));
               break;
             case "get_posts":
-              dispatch(setPosts(message.posts));
+              dispatch(addMessage(message.posts));
               break;
             case "notifies":
               dispatch(setNotifies(message.notifies));
