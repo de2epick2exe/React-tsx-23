@@ -3,8 +3,7 @@ import { RootState } from "../store";
 import {
   addMessage,  
   setMessages,
-  setNotifies,
-  setPosts,
+  setNotifies,  
   setRooms,
   deleteMessage,
   deletePost,
@@ -61,13 +60,14 @@ export const connectToWebSocket = () => {
               dispatch(setRooms(message[0].rooms));
 
               break;
-              
+               
             case "rooms_messages":
               console.log("WS_slice chats rooms_messages:");
               console.log(message[0]);
+              console.log('room type: ',message[0].type)
               //// ---------------------------------------------
-              /// TODO check if message == [] nothing to do
-              dispatch(addMessage(message[0]));
+              /// TODO check if message == [] nothing to do              
+              dispatch(setMessages(message[0]));
               break;
             case "connection_to_room":
               console.warn("WS_slice connected to room");
@@ -75,22 +75,10 @@ export const connectToWebSocket = () => {
               break;
             case "notify":
               dispatch(setNotifies(message.notify || message.notifies));
-              break;
-            case "get_posts":
-              dispatch(addMessage(message.posts));
-              break;
+              break;            
             case "notifies":
               dispatch(setNotifies(message.notifies));
               break;
-              /*
-            case "rooms_messages":
-              console.log(
-                "caught rooms messages in ws slice: ",
-                message.messages
-              );
-              dispatch(setMessages(message.messages));
-              break;
-            */
             case "get_friends":
               console.log("friends received");
               console.log(message[0].data[0]);

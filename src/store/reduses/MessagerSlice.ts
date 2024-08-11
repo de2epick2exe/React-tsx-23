@@ -123,7 +123,7 @@ const messagerSlice = createSlice({
       if (!(roomID[0] in state.messages)) {
         state.messages[parseInt(roomID[0], 10)] = [];
       }
-      state.messages[parseInt(roomID[0], 10)].push(msg[0]); // check if ?? works
+      state.messages[parseInt(roomID[0], 10)].unshift(msg[0]); // check if ?? works
      
      
       console.log("Finaly MessagerSlice messages: ", JSON.stringify(state.messages));
@@ -131,9 +131,7 @@ const messagerSlice = createSlice({
     setNotifies: (state, action: PayloadAction<Notify[] | null>) => {
       state.notifies = action.payload!;
     },
-    setPosts: (state, action: PayloadAction<Post[] | null>) => {
-      state.posts = action.payload!;
-    },  
+     
 
     setRooms: (state, action: PayloadAction<Room[] | null>) => {
       state.rooms = action.payload!;
@@ -195,8 +193,7 @@ export const {
   addMessage,
   setMessage,
   setMessages,  
-  setNotifies,
-  setPosts,
+  setNotifies,  
   setRooms,
   setCurrentRoom,
   setCurrentChannel,

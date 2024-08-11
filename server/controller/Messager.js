@@ -206,6 +206,7 @@ class Messager {
         id,
       ]);
       let res;
+      let type;
       console.log(room_type.rows[0].type);
       if (room_type.rows[0].type == "channel") {
         console.log("type channel");
@@ -213,15 +214,17 @@ class Messager {
           "SELECT * FROM post WHERE channel_id IN ( SELECT channels.id FROM channels JOIN rooms ON channels.room_id = rooms.id WHERE rooms.id = $1 );",
           [id]
         );
+        type= "channel"
       } else {
         console.log("type private");
         res = await db.query("SELECT * FROM messages WHERE room_id = $1", [id]);
+        type= "chat"
       }
       console.log(res.rows);
       const rooms_data = [
         {
           event: "rooms_messages",
-          [id]: [],
+          [id]: [],          
         },
       ];
       rooms_data[0][id].push(...res.rows);
@@ -263,6 +266,7 @@ class Messager {
       console.log(error);
     }
   }
+  /*
   async get_posts(req, res) {
     try {
       const { id } = req.body;
@@ -280,6 +284,7 @@ class Messager {
       console.log(error);
     }
   }
+    */
   async get_latest_messaging_content(req, res){
     try {
       console.log(req, req.body)
@@ -298,7 +303,7 @@ class Messager {
       );
       console.log('latest_messaging_content', last_messages.rows, /*last_posts.rows*/)
       console.log('latest_post_content', last_posts.rows)
-
+ 
       const data = [{
         event: "get_latest_messaging",
         status: 200,       
