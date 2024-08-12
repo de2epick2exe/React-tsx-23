@@ -1,22 +1,17 @@
 import { combineReducers ,configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 
 import userReducer from './reduses/UserSlice'
-import { PostApi } from "./service/PostService";
 import messagerReducer from "./reduses/MessagerSlice";
 import  WS_Slice from "./reduses/WS_Slice";
 const rootReducer = combineReducers({
     messagerReducer,
-    userReducer,
-    WS_Slice,
-    [PostApi.reducerPath]:PostApi.reducer
+    userReducer, 
+    WS_Slice,     
 })
 export const setupstore = () =>{
     return configureStore({
-        reducer: rootReducer,
-        middleware: (getDefaultMiddleware)=>
-        getDefaultMiddleware({
-            serializableCheck: false,
-        }).concat(PostApi.middleware)
+        reducer: rootReducer        
+        
     })
 }
 

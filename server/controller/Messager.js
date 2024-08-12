@@ -219,7 +219,7 @@ class Messager {
         console.log("type private");
         res = await db.query("SELECT * FROM messages WHERE room_id = $1", [id]);
         type= "chat"
-      }
+      } 
       console.log(res.rows);
       const rooms_data = [
         {

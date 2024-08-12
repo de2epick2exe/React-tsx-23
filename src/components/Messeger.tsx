@@ -477,11 +477,11 @@ const Messenger = () => {
         <GridItem pl="2" bg="#980000" area={"all-chats"} position="relative">
           <Flex flexDirection="row">
             <p>folders</p>
-            <InputGroup>
-              <InputLeftElement pointerEvents="none">
-                <SearchIcon color="gray.300" />
+            <InputGroup px='2'>
+              <InputLeftElement pointerEvents="none" >
+                <SearchIcon color="gray.300"   />
               </InputLeftElement>
-              <Input
+              <Input pl='5' m='0'
                 value={searched_channel}
                 onChange={(e) => search_channel(e.target.value)}
               />

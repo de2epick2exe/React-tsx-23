@@ -29,12 +29,7 @@ interface Notify {
   avatar: string;
 }
 
-interface Post {
-  title: string;
-  content: string;
-  media: any;
-  emotes: [];
-}
+
 interface Message {
   from_id: number;
   to_id: number;
@@ -56,8 +51,7 @@ messages: {
 interface MessagerState {
   messages: Rooms_msgs;
   message: any;
-  notifies: Notify[];
-  posts: Post[];
+  notifies: Notify[];  
   current_channel: Channel | null;
   current_room: Room | null;
   rooms: Room[];
@@ -66,8 +60,7 @@ interface MessagerState {
 const initialState: MessagerState = {
   messages: {},
   message: "",
-  notifies: [],
-  posts: [],
+  notifies: [],  
   current_channel: null,
   current_room: null,
   rooms: [],
