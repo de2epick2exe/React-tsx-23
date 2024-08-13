@@ -94,7 +94,11 @@ React.useEffect(() => {
 }, [ws.connected]);
 
 
-
+if(!ws.connected){
+  setTimeout(()=>{
+    dispatch(connectToWebSocket());
+  }, 3000)
+}
 
 /// global bug when click on somewhich button, calls notify
 
