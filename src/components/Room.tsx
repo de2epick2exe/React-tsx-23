@@ -319,6 +319,23 @@ const Room: React.FC<RoomProps> = ({
     return(<></>)
    }
    
+  const Follow_Component = ()=>{
+
+    if(messager.current_room.is_foolowed){
+      return(<>
+      <Button>UnFollow</Button>
+      </>)
+    }
+
+    return(
+      <>
+      <Button>Follow</Button>
+      
+      </>
+    )
+
+  }
+
     //@ts-ignore    
     console.log('user is admin ?', messager.current_channel?.admins.includes(data.id.toString()), data.id, messager.current_channel?.admins)
 

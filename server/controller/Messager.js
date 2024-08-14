@@ -266,25 +266,7 @@ class Messager {
       console.log(error);
     }
   }
-  /*
-  async get_posts(req, res) {
-    try {
-      const { id } = req.body;
-      const posts = await db.query(
-        "SELECT * FROM post WHERE channel_id IN ( SELECT channels.id FROM channels JOIN rooms ON channels.room_id = rooms.id WHERE rooms.id = $1 );",
-        [id]
-      );
-      const data = {
-        event: "get_posts",
-        status: 200,
-        posts: posts.rows,
-      };
-      return data;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-    */
+  
   async get_latest_messaging_content(req, res){
     try {
       console.log(req, req.body)
