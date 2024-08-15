@@ -319,22 +319,7 @@ const Room: React.FC<RoomProps> = ({
     return(<></>)
    }
    
-  const Follow_Component = ()=>{
-
-    if(messager.current_room.is_foolowed){
-      return(<>
-      <Button>UnFollow</Button>
-      </>)
-    }
-
-    return(
-      <>
-      <Button>Follow</Button>
-      
-      </>
-    )
-
-  }
+  
 
     //@ts-ignore    
     console.log('user is admin ?', messager.current_channel?.admins.includes(data.id.toString()), data.id, messager.current_channel?.admins)
@@ -501,6 +486,31 @@ const Room: React.FC<RoomProps> = ({
     return <></>;
   };
 
+  const Follow_Component = () =>{
+    if(room_type == 'channel'){
+     
+    if(messager.current_channel?.is_follow){
+      return(<>
+      <Button>UnFollow</Button>
+      </>)
+    }
+     //@ts-ignore
+     if (messager.current_channel?.admins.includes(data.id.toString())){
+      return(<></>)
+    }
+  
+    return(
+      <>
+      <Button>Follow</Button>
+      
+      </>
+    )
+    }
+    return(<></>)
+  }
+
+
+
   //// if no props
   if (room_id == undefined) {
     return <Center h={window.innerHeight / 1.13}>chs smn</Center>;
@@ -631,8 +641,8 @@ const Room: React.FC<RoomProps> = ({
                 </Flex>
               </Box>
               {Messaging_area}
-              
-            </Flex>
+            <Follow_Component/>
+            </Flex> 
           </Flex>
 
           {/*----------------- SIDE DRAWER--------------------------- */}

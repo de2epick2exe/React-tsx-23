@@ -21,7 +21,7 @@ interface Channel {
   status: boolean;
   followers: number;
   admins: [];
-
+  is_follow: boolean;
 }
 interface Notify {
   from: string;
