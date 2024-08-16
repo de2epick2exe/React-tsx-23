@@ -173,7 +173,7 @@ class Messager {
         "INSERT INTO conversations (user_id, room_id) VALUES ($1, $2)",
         [id, room_id]
       );
-
+ 
       const channel = await db.query(
         "INSERT INTO channels (title, admins, owner, avatars, description, room_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
         [title, [id], id, ["default.png"], desc, room_id]

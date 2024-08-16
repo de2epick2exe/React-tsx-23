@@ -487,11 +487,24 @@ const Room: React.FC<RoomProps> = ({
   };
 
   const Follow_Component = () =>{
+
+    const follow_switch = ()=>{
+      const msg = {
+        id: messager.current_channel?.id,        
+        user_id: data.id
+      }
+      dispatch(sendMessage(msg))
+
+
+    }
+
+
+
     if(room_type == 'channel'){
      
     if(messager.current_channel?.is_follow){
       return(<>
-      <Button>UnFollow</Button>
+      <Button onClick={follow_switch}>UnFollow</Button>
       </>)
     }
      //@ts-ignore
@@ -501,7 +514,7 @@ const Room: React.FC<RoomProps> = ({
   
     return(
       <>
-      <Button>Follow</Button>
+      <Button onClick={follow_switch}>Follow</Button>
       
       </>
     )
