@@ -306,11 +306,13 @@ class Messager {
     }
 
   }
-
+ 
 
   async follow_onChannel(req, res) {
     try {
       const { id, userid } = req.body;
+      const check = await db.query("SELECT * from channels_follows WHERE user_id = $1 AND id = $2",[userid, id])
+      if(check.rows.length == 0){
       const follow = await db.query("INSERT INTO channels_follows $1, $2", [
         id,
         userid,
@@ -321,6 +323,18 @@ class Messager {
         id_room: follow.rows[0],
       };
       return data;
+    }     
+      const unfollow = await db.query("DELETE FROM channels_follows WHERE id = $1, user_id = $2", [
+        id,
+        userid,
+      ]);
+      const data = {
+        status: 200,
+        event: "unfollow ",
+        id_room: unfollow .rows[0],
+      };
+      return data;
+    
     } catch (error) {
       console.log(error);
     }

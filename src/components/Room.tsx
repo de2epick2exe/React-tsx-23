@@ -510,7 +510,7 @@ const Room: React.FC<RoomProps> = ({
      //@ts-ignore
      if (messager.current_channel?.admins.includes(data.id.toString())){
       return(<></>)
-    }
+    } 
   
     return(
       <>
