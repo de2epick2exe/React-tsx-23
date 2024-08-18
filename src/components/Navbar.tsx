@@ -137,17 +137,17 @@ if(!ws.connected){
               </Button>
               {isAuth ? (
                 <>                
-                <Menu>
-                <MenuButton
+                <Menu >
+                <MenuButton 
                   as={Button}                 
                   cursor={'pointer'}
                   minW={0}>                  
                   <BellIcon/>
                 </MenuButton>
-                <MenuList alignItems={'center'}>
+                <MenuList zIndex={"docker"} alignItems={'center'}>
                   {arr_notify.map(element => (
                     <span key={element.id}>
-                    <MenuItem >{element.notification}<br/>{element.created_at}
+                    <MenuItem zIndex="1000" >{element.notification}<br/>{element.created_at}
                     <MenuDivider />
                     </MenuItem>
                     

@@ -596,6 +596,7 @@ const Room: React.FC<RoomProps> = ({
             position="relative"
             onClick={onProfileOpen}
             ref={profileRef}
+            zIndex='base'
           >
             <Flex justifyContent="space-between" padding="2">
               <Flex>

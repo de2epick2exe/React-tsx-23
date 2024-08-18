@@ -91,6 +91,7 @@ class Messager {
             id: channel.rows[0].id,
             username: channel.rows[0].title,
             admins: channel.rows[0].admins,
+            is_follow: true,
             type: "channel",
             rooms_id: r.room_id,
           };
@@ -339,11 +340,11 @@ class Messager {
       console.log(error);
     }
   }
-  async search_channel(title) {
+  async search_channel(title, id) {
     try {
       const search_res = await db.query(
         "SELECT * FROM channels WHERE title =$1",
-        [title]
+        [title, id]
       );
 
       if (!search_res || search_res.rows.length == 0) {
