@@ -17,6 +17,8 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  Grid,
+  GridItem,
 } from "@chakra-ui/react";
 import { Link, useParams } from "react-router-dom";
 import { user_profile } from "../unite/User_Functions";
@@ -159,6 +161,7 @@ const Profile = () => {
       */
   };
   if(profile_data?.status == 404){
+  {/**-------------------- if 404 ------------------------------- */}
     return(
     <>    not found
     </>
@@ -184,9 +187,9 @@ const Profile = () => {
             </Flex>
           </Box>
         </Box>
-      ) : (
-        <Box>
-          <Box m="5" border="2px solid red" width="13vw" padding="3">
+      ) : (        
+          <Grid templateColumns="repeat(3, 1fr)" gap='1' minH='92vh' >
+          <GridItem  m="5" border="2px solid red" width="13vw" padding="3" h='43%'>
             <Center>
               <Avatar
                 size="2xl"
@@ -205,6 +208,7 @@ const Profile = () => {
               <Button mt="2">Write message</Button>
               <Friend_button />
             </Flex>
+            {/**-------------------- Login Modal------------------------------- */}
             <Modal isOpen={isOpenLogin} onClose={onCloseLogin}>
               <ModalOverlay />
               <ModalContent>
@@ -222,8 +226,11 @@ const Profile = () => {
                 </ModalFooter>
               </ModalContent>
             </Modal>
-          </Box>
-        </Box>
+          </GridItem>
+          <GridItem  borderX='2px solid red'>feed</GridItem>
+          <GridItem>right bar</GridItem>
+          </Grid>
+        
       )}
     </Box>
   );
