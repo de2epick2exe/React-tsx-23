@@ -19,9 +19,13 @@ import {
   ModalCloseButton,
   Grid,
   GridItem,
+  InputRightElement,
+  Textarea,
+  InputGroup,
 } from "@chakra-ui/react";
 import { Link, useParams } from "react-router-dom";
 import { user_profile } from "../unite/User_Functions";
+import { ArrowRightIcon } from "@chakra-ui/icons";
 
 const Profile = () => {
   const data = useSelector((state: RootState) => state.userReducer);
@@ -227,7 +231,22 @@ const Profile = () => {
               </ModalContent>
             </Modal>
           </GridItem>
-          <GridItem  borderX='2px solid red'>feed</GridItem>
+          <GridItem  borderX='2px solid red'>
+
+          <InputGroup> 
+        <Textarea
+          resize="none"
+          
+        />
+         <InputRightElement>
+        <Button
+         
+        >
+          <ArrowRightIcon />
+        </Button>
+      </InputRightElement>
+    </InputGroup>
+          </GridItem>
           <GridItem>right bar</GridItem>
           </Grid>
         
