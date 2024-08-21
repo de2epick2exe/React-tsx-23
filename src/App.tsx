@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
-import { Box, Button, Flex } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, GridItem } from "@chakra-ui/react";
 import { sendMessage } from "./store/reduses/WS_Slice";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 
@@ -27,7 +27,8 @@ function App() {
       <div className="App page">
         {data.is_auth ? (
           <>
-            <Flex justifyContent={"space-between"}>
+            <Grid templateColumns="repeat(3, 1fr)" gap='1' h='92vh'>
+              <GridItem>
               <Box>
                 <p>user authed </p>
                 <p>Home page user : {" " + data.username + " "} </p>
@@ -35,11 +36,17 @@ function App() {
                 {" " + data.username + " "}
                 <Button onClick={checkws}>check</Button>
               </Box>
+              </GridItem>
+              <GridItem borderX='2px solid red'>
+                Feed
+              </GridItem>
+              <GridItem>
               <Box>
                 <Box border="1px solid grey">statistick</Box>
                 <Box> some streams</Box>
               </Box>
-            </Flex>
+              </GridItem>
+              </Grid>
           </>
         ) : (
           "user not auth"

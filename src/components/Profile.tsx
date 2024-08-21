@@ -33,7 +33,7 @@ const Profile = () => {
   const { id } = useParams<{ id?: string }>();
   const [profile_data, Set_Profile_data] = useState<any>();
   const [is_friend_status, set_Is_friend_status] = useState<any>();
-  const [isLoading, set_IsLoading] = useState(true)
+  const [isLoading, set_IsLoading] = useState(true);
   const {
     isOpen: isOpenLogin,
     onOpen: onOpenLogin,
@@ -138,7 +138,7 @@ const Profile = () => {
   }, [profile_data]);
 
   useEffect(() => {
-    profile_data?.status? set_IsLoading(false): set_IsLoading(true)
+    profile_data?.status ? set_IsLoading(false) : set_IsLoading(true);
   }, [is_friend_status]);
   const Friend_button = () => {
     if (is_friend_status == "friends_list") {
@@ -164,96 +164,104 @@ const Profile = () => {
       { matched_column: 'friends_list' }
       */
   };
-  if(profile_data?.status == 404){
-  {/**-------------------- if 404 ------------------------------- */}
-    return(
-    <>    not found
-    </>
-        )
-  }
-  else{
-  return (
-    <Box>
-      {data.id === (id ? parseFloat(id) : null) ? (
-        <Box>
-          <Box m="5" border="2px solid red" width="13vw" padding="3">
-            <Center>
-              <Avatar
-                size="2xl"
-                name={data.username ?? undefined}
-                src={data.photo}
-              />
-            </Center>
-
-            <Flex flexDir="column">
-              <Text as="b">{data.username}</Text>
-              <Text as="kbd">{data.role}</Text>
-            </Flex>
-          </Box>
-        </Box>
-      ) : (        
-          <Grid templateColumns="repeat(3, 1fr)" gap='1' minH='92vh' >
-          <GridItem  m="5" border="2px solid red" width="13vw" padding="3" h='43%'>
-            <Center>
-              <Avatar
-                size="2xl"
-                name={profile_data?.username}
-                src={
-                  profile_data?.avatar != null
-                    ? `http://localhost:8080/img/${profile_data?.avatar}`
-                    : `http://localhost:8080/img/default.jpg`
-                }
-              />
-            </Center>
-            <br />
-            <Flex flexDir="column">
-              <Text as="b">{profile_data?.username}</Text>
-              <Text as="kbd">{profile_data?.role}</Text>
-              <Button mt="2">Write message</Button>
-              <Friend_button />
-            </Flex>
-            {/**-------------------- Login Modal------------------------------- */}
-            <Modal isOpen={isOpenLogin} onClose={onCloseLogin}>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>You mus be logined</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                <Button variant="ghost" as={Link} to="/login">Login</Button>
-                </ModalBody>
-
-                <ModalFooter>
-                  <Button colorScheme="blue" mr={3} onClick={onCloseLogin}>
-                    Close
+  if (profile_data?.status == 404) {
+    {
+      /**-------------------- if 404 ------------------------------- */
+    }
+    return <> not found</>;
+  } else {
+    return (
+      <Box>
+        {data.id === (id ? parseFloat(id) : null) ? (
+          <Grid templateColumns="repeat(3, 1fr)" gap="1" minH="92vh">
+            <GridItem m="5" border="2px solid red" width="13vw" h='27%' padding="3">
+              <Center>
+                <Avatar
+                  size="2xl"
+                  name={data.username ?? undefined}
+                  src={data.photo}
+                />
+              </Center>
+              <Flex flexDir="column">
+                <Text as="b">{data.username}</Text>
+                <Text as="kbd">{data.role}</Text>
+              </Flex>
+            </GridItem>
+            <GridItem borderX="2px solid red">
+              <InputGroup m='3' w='auto'>
+                <Textarea resize="none" />
+                <InputRightElement>
+                  <Button>
+                    <ArrowRightIcon />
                   </Button>
-                  
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
-          </GridItem>
-          <GridItem  borderX='2px solid red'>
-
-          <InputGroup> 
-        <Textarea
-          resize="none"
-          
-        />
-         <InputRightElement>
-        <Button
-         
-        >
-          <ArrowRightIcon />
-        </Button>
-      </InputRightElement>
-    </InputGroup>
-          </GridItem>
-          <GridItem>right bar</GridItem>
+                </InputRightElement>
+              </InputGroup>
+            </GridItem>
+            <GridItem>right bar</GridItem>
           </Grid>
-        
-      )}
-    </Box>
-  );
-              }
+        ) : (
+          <Grid templateColumns="repeat(3, 1fr)" gap="1" minH="92vh">
+            <GridItem
+              m="5"
+              border="2px solid red"
+              width="13vw"
+              padding="3"
+              h="43%"
+            >
+              <Center>
+                <Avatar
+                  size="2xl"
+                  name={profile_data?.username}
+                  src={
+                    profile_data?.avatar != null
+                      ? `http://localhost:8080/img/${profile_data?.avatar}`
+                      : `http://localhost:8080/img/default.jpg`
+                  }
+                />
+              </Center>
+              <br />
+              <Flex flexDir="column">
+                <Text as="b">{profile_data?.username}</Text>
+                <Text as="kbd">{profile_data?.role}</Text>
+                <Button mt="2">Write message</Button>
+                <Friend_button />
+              </Flex>
+              {/**-------------------- Login Modal------------------------------- */}
+              <Modal isOpen={isOpenLogin} onClose={onCloseLogin}>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>You mus be logined</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <Button variant="ghost" as={Link} to="/login">
+                      Login
+                    </Button>
+                  </ModalBody>
+
+                  <ModalFooter>
+                    <Button colorScheme="blue" mr={3} onClick={onCloseLogin}>
+                      Close
+                    </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
+            </GridItem>
+            <GridItem borderX="2px solid red">
+              <InputGroup>
+                <Textarea resize="none" />
+                <InputRightElement>
+                  <Button>
+                    <ArrowRightIcon />
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+            </GridItem>
+            <GridItem>right bar</GridItem>
+          </Grid>
+        )}
+      </Box>
+    );
+  }
 };
 
 export default Profile;
