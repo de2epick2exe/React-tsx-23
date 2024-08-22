@@ -26,6 +26,7 @@ import {
 import { Link, useParams } from "react-router-dom";
 import { user_profile } from "../unite/User_Functions";
 import { ArrowRightIcon } from "@chakra-ui/icons";
+import { sendMessage } from "../store/reduses/WS_Slice";
 
 const Profile = () => {
   const data = useSelector((state: RootState) => state.userReducer);
@@ -34,6 +35,7 @@ const Profile = () => {
   const [profile_data, Set_Profile_data] = useState<any>();
   const [is_friend_status, set_Is_friend_status] = useState<any>();
   const [isLoading, set_IsLoading] = useState(true);
+  const [post_message, set_postMessage]= useState('')
   const {
     isOpen: isOpenLogin,
     onOpen: onOpenLogin,
@@ -164,6 +166,23 @@ const Profile = () => {
       { matched_column: 'friends_list' }
       */
   };
+
+const create_post =()=>{
+
+    const msg = {
+      post: post_message,
+      user_id: data.id 
+    }
+
+    dispatch(sendMessage(msg))
+
+}
+
+
+
+
+
+
   if (profile_data?.status == 404) {
     {
       /**-------------------- if 404 ------------------------------- */
@@ -189,9 +208,9 @@ const Profile = () => {
             </GridItem>
             <GridItem borderX="2px solid red">
               <InputGroup m='3' w='auto'>
-                <Textarea resize="none" />
+                <Textarea resize="none" value={post_message} onChange={(e)=>set_postMessage(e.target.value)} />
                 <InputRightElement>
-                  <Button>
+                  <Button onClick={sendMessage}>
                     <ArrowRightIcon />
                   </Button>
                 </InputRightElement>
