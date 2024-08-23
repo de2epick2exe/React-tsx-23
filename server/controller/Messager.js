@@ -267,6 +267,28 @@ class Messager {
       console.log(error);
     }
   }
+  async create_self_post (req, res){
+    console.log(req.body, req);
+      const { user_id, post, date, type } = req.body;
+
+    if(type == 'self'){
+      const content = db.query('INSERT INTO self_posts_closed VALUES $1, $2, $3 RETURNING *')
+      const data = {
+        status: 200,
+        post: content.rows
+      }
+      return [data]
+
+    }
+    const content = db.query('INSERT INTO self_posts_open VALUES $1, $2, $3 RETURNING *')
+    const data = {
+      status: 200,
+      post: content.rows
+    }
+    return [data]
+
+
+  }
   
   async get_latest_messaging_content(req, res){
     try {

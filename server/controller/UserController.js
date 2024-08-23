@@ -498,7 +498,7 @@ class UserController {
       return [{ event: "delete_friend", data: res.rows }];
     } catch (error) {
       console.log(error);
-
+      
       return { erro: error.message };
     }
   }

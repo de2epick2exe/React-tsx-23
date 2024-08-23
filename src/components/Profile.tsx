@@ -171,9 +171,10 @@ const create_post =()=>{
 
     const msg = {
       post: post_message,
-      user_id: data.id 
+      user_id: data.id, 
+      event: 'self_post_open'
     }
-
+    
     dispatch(sendMessage(msg))
 
 }
@@ -210,7 +211,7 @@ const create_post =()=>{
               <InputGroup m='3' w='auto'>
                 <Textarea resize="none" value={post_message} onChange={(e)=>set_postMessage(e.target.value)} />
                 <InputRightElement>
-                  <Button onClick={sendMessage}>
+                  <Button onClick={create_post}>
                     <ArrowRightIcon />
                   </Button>
                 </InputRightElement>
