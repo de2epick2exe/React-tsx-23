@@ -171,8 +171,9 @@ const create_post =()=>{
 
     const msg = {
       post: post_message,
-      user_id: data.id, 
-      event: 'self_post_open'
+      user_id: data.id,
+      type: "self", 
+      event: 'self_post'
     }
     
     dispatch(sendMessage(msg))

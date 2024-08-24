@@ -86,7 +86,7 @@ class Messager {
           );
           console.log("channel =", channel.rows);
           console.log("room id =", r.room_id);
- 
+
           const data = {
             id: channel.rows[0].id,
             username: channel.rows[0].title,
@@ -174,7 +174,7 @@ class Messager {
         "INSERT INTO conversations (user_id, room_id) VALUES ($1, $2)",
         [id, room_id]
       );
- 
+
       const channel = await db.query(
         "INSERT INTO channels (title, admins, owner, avatars, description, room_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
         [title, [id], id, ["default.png"], desc, room_id]
@@ -215,17 +215,17 @@ class Messager {
           "SELECT * FROM post WHERE channel_id IN ( SELECT channels.id FROM channels JOIN rooms ON channels.room_id = rooms.id WHERE rooms.id = $1 );",
           [id]
         );
-        type= "channel"
+        type = "channel";
       } else {
         console.log("type private");
         res = await db.query("SELECT * FROM messages WHERE room_id = $1", [id]);
-        type= "chat"
-      } 
+        type = "chat";
+      }
       console.log(res.rows);
       const rooms_data = [
         {
           event: "rooms_messages",
-          [id]: [],          
+          [id]: [],
         },
       ];
       rooms_data[0][id].push(...res.rows);
@@ -239,125 +239,131 @@ class Messager {
     try {
       console.log(req.body, req);
       const { room, message, user_id, date } = req.body;
-      const id = room
-      const content = message
-      console.log('types before check:',  typeof user_id)
+      const id = room;
+      const content = message;
+      console.log("types before check:", typeof user_id);
       const check = await db.query(
         "SELECT id  FROM channels  WHERE $1 = ANY(admins) AND room_id = $2 ",
         [user_id.toString(), id]
       );
-      console.log('check is:', check.rows, typeof user_id)
-      if(check){
-      const post = await db.query(
-        "INSERT INTO post (content, channel_id, user_id, date) VALUES ($1, $2, $3, $4) RETURNING *",
-        [content, check.rows[0].id, user_id, date]
-      );
-      const data = {
-        event: "message",
-        status: 200,
-        [id]: {...post.rows[0]},
-      };
-      return [data];
+      console.log("check is:", check.rows, typeof user_id);
+      if (check) {
+        const post = await db.query(
+          "INSERT INTO post (content, channel_id, user_id, date) VALUES ($1, $2, $3, $4) RETURNING *",
+          [content, check.rows[0].id, user_id, date]
+        );
+        const data = {
+          event: "message",
+          status: 200,
+          [id]: { ...post.rows[0] },
+        };
+        return [data];
       }
-      return[{
-        event: "create_post",
-        status: 404,        
-      }]
+      return [
+        {
+          event: "create_post",
+          status: 404,
+        },
+      ];
     } catch (error) {
       console.log(error);
     }
   }
-  async create_self_post (req, res){
+  async create_self_post(req, res) {
     console.log(req.body, req);
-      const { user_id, post, date, type } = req.body;
+    const { user_id, post, date, type } = req.body;
 
-    if(type == 'self'){
-      const content = db.query('INSERT INTO self_posts_closed VALUES $1, $2, $3 RETURNING *')
+    if (type == "self") {
+      const content = db.query(
+        "INSERT INTO self_posts_closed VALUES $1, $2, $3 RETURNING *"
+      );
       const data = {
         status: 200,
-        post: content.rows
-      }
-      return [data]
-
+        post: content.rows,
+      };
+      return [data];
     }
-    const content = db.query('INSERT INTO self_posts_open VALUES $1, $2, $3 RETURNING *')
+    const content = db.query(
+      "INSERT INTO self_posts_open VALUES $1, $2, $3 RETURNING *"
+    );
     const data = {
       status: 200,
-      post: content.rows
-    }
-    return [data]
-
-
+      post: content.rows,
+    };
+    return [data];
   }
-  
-  async get_latest_messaging_content(req, res){
+
+  async get_latest_messaging_content(req, res) {
     try {
-      console.log(req, req.body)
-      console.log(req.body)
+      console.log(req, req.body);
+      console.log(req.body);
 
       const { id } = req.body;
-      
+
       const last_messages = await db.query(
         "SELECT DISTINCT ON (room_id) * FROM messages WHERE room_id IN (SELECT room_id FROM conversations WHERE user_id = $1) ORDER BY room_id, message_id DESC;",
         [id]
       );
-      
+
       const last_posts = await db.query(
         "SELECT DISTINCT ON (post.channel_id) post.*, channels.room_id FROM post RIGHT JOIN channels ON channels.id = post.channel_id WHERE channels.id IN ( SELECT channel_id FROM post WHERE channel_id IN ( SELECT channels.id FROM channels WHERE room_id IN ( SELECT room_id FROM conversations WHERE user_id = $1 ) ) )",
-        [id] 
+        [id]
       );
-      console.log('latest_messaging_content', last_messages.rows, /*last_posts.rows*/)
-      console.log('latest_post_content', last_posts.rows)
- 
-      const data = [{
-        event: "get_latest_messaging",
-        status: 200,       
-       
-      }];
-      last_messages.rows.forEach(room => {
-        data[0][room.room_id] = room
+      console.log(
+        "latest_messaging_content",
+        last_messages.rows /*last_posts.rows*/
+      );
+      console.log("latest_post_content", last_posts.rows);
+
+      const data = [
+        {
+          event: "get_latest_messaging",
+          status: 200,
+        },
+      ];
+      last_messages.rows.forEach((room) => {
+        data[0][room.room_id] = room;
       });
-      last_posts.rows.forEach(room=>{
-        data[0][room.room_id]= room
-      })
-      console.log(data)
+      last_posts.rows.forEach((room) => {
+        data[0][room.room_id] = room;
+      });
+      console.log(data);
       ///data[0][id].push(...last_posts.rows)
       return data;
-      
     } catch (error) {
-      console.log("latest messaging content error:", error)
+      console.log("latest messaging content error:", error);
     }
-
   }
- 
 
   async follow_onChannel(req, res) {
     try {
       const { id, userid } = req.body;
-      const check = await db.query("SELECT * from channels_follows WHERE user_id = $1 AND id = $2",[userid, id])
-      if(check.rows.length == 0){
-      const follow = await db.query("INSERT INTO channels_follows $1, $2", [
-        id,
-        userid,
-      ]);
-      const data = {
-        status: 200,
-        event: "follow",
-        id_room: follow.rows[0],
-      };
-      return data;
-    }     
-      const unfollow = await db.query("DELETE FROM channels_follows WHERE id = $1, user_id = $2", [
-        id,
-        userid,
-      ]);
+      const check = await db.query(
+        "SELECT * from channels_follows WHERE user_id = $1 AND id = $2",
+        [userid, id]
+      );
+      if (check.rows.length == 0) {
+        const follow = await db.query("INSERT INTO channels_follows $1, $2", [
+          id,
+          userid,
+        ]);
+        const data = {
+          status: 200,
+          event: "follow",
+          id_room: follow.rows[0],
+        };
+        return data;
+      }
+      const unfollow = await db.query(
+        "DELETE FROM channels_follows WHERE id = $1, user_id = $2",
+        [id, userid]
+      );
       const data = {
         status: 200,
         event: "unfollow ",
-        id_room: unfollow .rows[0],
+        id_room: unfollow.rows[0],
       };
       return data;
-    
     } catch (error) {
       console.log(error);
     }
@@ -386,15 +392,15 @@ class Messager {
           data: [],
         },
       ];
-      for (const ent of search_res.rows) {     
-        console.log('entity in searching res:', ent)
+      for (const ent of search_res.rows) {
+        console.log("entity in searching res:", ent);
         data[0].data.push({
           id: ent.id,
           username: ent.title,
-          channel_name: ent.title, 
+          channel_name: ent.title,
           rooms_id: ent.room_id,
-          type: "channel",         
-          ...ent
+          type: "channel",
+          ...ent,
         });
       }
       return data;
