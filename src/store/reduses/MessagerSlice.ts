@@ -15,6 +15,23 @@ interface Room {
   type: string;
   rooms_id: number;
 }
+interface User_posts{
+  from_id: number;
+  to_id: number;
+  user_id: number;
+  date: Date;
+  content: any;
+  emotes: [];
+}
+
+interface Self_posts{
+  from_id: number;
+  to_id: number;
+  user_id: number;
+  date: Date;
+  content: any;
+  emotes: [];
+}
 interface Channel {
   id: number;
   channel_name: string;

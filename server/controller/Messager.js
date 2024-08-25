@@ -275,20 +275,22 @@ class Messager {
 
     if (type == "self") {
       const content = db.query(
-        "INSERT INTO self_posts_closed VALUES $1, $2, $3 RETURNING *"
-      );
+        "INSERT INTO self_posts_closed VALUES $1, $2, $3 RETURNING *",
+      [user_id, post, date]);
       const data = {
         status: 200,
         post: content.rows,
+        event: "self_posts"
       };
       return [data];
     }
     const content = db.query(
-      "INSERT INTO self_posts_open VALUES $1, $2, $3 RETURNING *"
-    );
+      "INSERT INTO self_posts_open VALUES $1, $2, $3 RETURNING *",
+    [user_id,post,date]);
     const data = {
       status: 200,
       post: content.rows,
+      event: "user_posts"
     };
     return [data];
   }
