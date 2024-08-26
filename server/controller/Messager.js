@@ -199,42 +199,7 @@ class Messager {
     }
   }
 
-  async rooms_messages(id) {
-    try {
-      //need to add limiter*
-      console.log("rooms_messages for id: ", id);
-      const room_type = await db.query("SELECT type from rooms where id = $1", [
-        id,
-      ]);
-      let res;
-      let type;
-      console.log(room_type.rows[0].type);
-      if (room_type.rows[0].type == "channel") {
-        console.log("type channel");
-        res = await db.query(
-          "SELECT * FROM post WHERE channel_id IN ( SELECT channels.id FROM channels JOIN rooms ON channels.room_id = rooms.id WHERE rooms.id = $1 );",
-          [id]
-        );
-        type = "channel";
-      } else {
-        console.log("type private");
-        res = await db.query("SELECT * FROM messages WHERE room_id = $1", [id]);
-        type = "chat";
-      }
-      console.log(res.rows);
-      const rooms_data = [
-        {
-          event: "rooms_messages",
-          [id]: [],
-        },
-      ];
-      rooms_data[0][id].push(...res.rows);
-      /// console.log("rooms messages",rooms_data[0], res.rows);
-      return rooms_data;
-    } catch (error) {
-      console.log("error getting rooms", error);
-    }
-  }
+  
   async create_post(req, res) {
     try {
       console.log(req.body, req);
@@ -274,7 +239,7 @@ class Messager {
     const { user_id, post, date, type } = req.body;
 
     if (type == "self") {
-      const content = db.query(
+      const content = await db.query(
         "INSERT INTO self_posts_closed VALUES $1, $2, $3 RETURNING *",
       [user_id, post, date]);
       const data = {
@@ -284,7 +249,7 @@ class Messager {
       };
       return [data];
     }
-    const content = db.query(
+    const content = await db.query(
       "INSERT INTO self_posts_open VALUES $1, $2, $3 RETURNING *",
     [user_id,post,date]);
     const data = {
@@ -293,6 +258,51 @@ class Messager {
       event: "user_posts"
     };
     return [data];
+  }
+  async get_rooms_messages(id) {
+    try {
+      //need to add limiter*
+      console.log("rooms_messages for id: ", id);
+      const room_type = await db.query("SELECT type from rooms where id = $1", [
+        id,
+      ]);
+      let res;
+      let type;
+      console.log(room_type.rows[0].type);
+      if (room_type.rows[0].type == "channel") {
+        console.log("type channel");
+        res = await db.query(
+          "SELECT * FROM post WHERE channel_id IN ( SELECT channels.id FROM channels JOIN rooms ON channels.room_id = rooms.id WHERE rooms.id = $1 );",
+          [id]
+        );
+        type = "channel";
+      } else {
+        console.log("type private");
+        res = await db.query("SELECT * FROM messages WHERE room_id = $1", [id]);
+        type = "chat";
+      }
+      console.log(res.rows);
+      const rooms_data = [
+        {
+          event: "rooms_messages",
+          [id]: [],
+        },
+      ];
+      rooms_data[0][id].push(...res.rows);
+      /// console.log("rooms messages",rooms_data[0], res.rows);
+      return rooms_data;
+    } catch (error) {
+      console.log("error getting rooms", error);
+    }
+  }
+  async get_profile_posts(req,res){
+    const {id} = req.body
+    const profile_post = await db.query('SELECT * FROM self_posts_open WHERE user_id = $1',[id])
+    return [{
+      event: "profile_posts",
+      data: profile_post.rows
+    }]
+
   }
 
   async get_latest_messaging_content(req, res) {
