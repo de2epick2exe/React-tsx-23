@@ -185,7 +185,12 @@ wss.on("connection", (ws) => {
           const msgs = await Messager.get_rooms_messages(parsedMessage.room_id); /// change args in main messager
           console.log(`sent messages for ${parsedMessage.room_id}: `, message);
           clients[clientId].send(JSON.stringify(msgs));
-          break;         
+          break;  
+        case "get_profile_posts":
+          const profile_posts = await Messager.get_profile_posts(parsedMessage.room_id); /// change args in main messager
+          console.log(`sent messages for ${parsedMessage.room_id}: `, message);
+          clients[clientId].send(JSON.stringify(profile_posts));
+          break;          
         case "get_recomended_users":
           const recomended_users = await UserController.get_recomended_users(
             parsedMessage.page,
