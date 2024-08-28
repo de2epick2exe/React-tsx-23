@@ -304,6 +304,16 @@ class Messager {
     }]
 
   }
+  async get_self_posts(req,res){
+    
+      const {id} = req.body
+      const closed_posts = await db.query('SELECT * FROM self_posts_closed WHERE user_id = $1',[id])
+      return [{
+        event: "self_closed_posts",
+        data: closed_posts.rows
+      }]
+  
+  }
 
   async get_latest_messaging_content(req, res) {
     try {
