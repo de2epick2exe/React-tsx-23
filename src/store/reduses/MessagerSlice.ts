@@ -15,18 +15,14 @@ interface Room {
   type: string;
   rooms_id: number;
 }
-interface User_posts{
-  from_id: number;
-  to_id: number;
+interface User_posts{ 
   user_id: number;
   date: Date;
   content: any;
   emotes: [];
 }
 
-interface Self_posts{
-  from_id: number;
-  to_id: number;
+interface Self_posts{  
   user_id: number;
   date: Date;
   content: any;
@@ -73,6 +69,7 @@ interface MessagerState {
   current_room: Room | null;
   rooms: Room[];
   searched_channel: Channel[];
+  user_posts: User_posts[]
 }
 const initialState: MessagerState = {
   messages: {},
@@ -81,7 +78,8 @@ const initialState: MessagerState = {
   current_channel: null,
   current_room: null,
   rooms: [],
-  searched_channel:[]
+  searched_channel:[],
+  user_posts:[]
 };
 
 const messagerSlice = createSlice({
@@ -141,8 +139,9 @@ const messagerSlice = createSlice({
     setNotifies: (state, action: PayloadAction<Notify[] | null>) => {
       state.notifies = action.payload!;
     },
-     
-
+    set_UserPosts: (state, action: PayloadAction<User_posts[] | null>) => {
+      state.user_posts = action.payload!;
+    },    
     setRooms: (state, action: PayloadAction<Room[] | null>) => {
       state.rooms = action.payload!;
     },
