@@ -69,7 +69,8 @@ interface MessagerState {
   current_room: Room | null;
   rooms: Room[];
   searched_channel: Channel[];
-  user_posts: User_posts[]
+  user_posts: User_posts[],
+  self_posts: Self_posts[]
 }
 const initialState: MessagerState = {
   messages: {},
@@ -79,7 +80,8 @@ const initialState: MessagerState = {
   current_room: null,
   rooms: [],
   searched_channel:[],
-  user_posts:[]
+  user_posts:[],
+  self_posts:[]
 };
 
 const messagerSlice = createSlice({
@@ -141,7 +143,10 @@ const messagerSlice = createSlice({
     },
     set_UserPosts: (state, action: PayloadAction<User_posts[] | null>) => {
       state.user_posts = action.payload!;
-    },    
+    },
+    set_SelfPosts: (state, action: PayloadAction<User_posts[] | null>) => {
+      state.self_posts = action.payload!;
+    },       
     setRooms: (state, action: PayloadAction<Room[] | null>) => {
       state.rooms = action.payload!;
     },
