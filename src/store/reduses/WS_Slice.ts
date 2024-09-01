@@ -9,7 +9,9 @@ import {
   deletePost,
   updateMessage,
   setSearchedChannel,
-  setCurrentChannel
+  setCurrentChannel,
+  set_SelfPosts,
+  set_UserPosts
 } from "./MessagerSlice";
 import { setFriends, setWaitingList, setRecomends } from "./UserSlice";
 
@@ -99,7 +101,13 @@ export const connectToWebSocket = () => {
               console.log("self_posts_closed");
               console.log(message[0]);
               //@ts-ignore              
-              dispatch(addMessage(message[0]));            
+              dispatch(set_SelfPosts(message[0]));            
+              break;
+            case "self_closed_posts":
+              console.log("self_posts_open");
+              console.log(message[0]);
+              //@ts-ignore              
+              dispatch(set_UserPosts(message[0]));            
               break;
             case "recomended_users":
               console.log("recomends received");

@@ -209,6 +209,8 @@ export const {
   setMessages,  
   setNotifies,  
   setRooms,
+  set_UserPosts,
+  set_SelfPosts,
   setCurrentRoom,
   setCurrentChannel,
   setSearchedChannel,
