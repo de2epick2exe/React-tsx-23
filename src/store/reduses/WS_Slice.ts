@@ -97,6 +97,12 @@ export const connectToWebSocket = () => {
               //@ts-ignore              
               dispatch(addMessage(message[0]));            
               break;
+            case "self_post":
+                console.log("self_posts_closed");
+                console.log(message[0]);
+                //@ts-ignore              
+                dispatch(set_SelfPosts(message[0]));            
+                break;  
             case "self_closed_posts":
               console.log("self_posts_closed");
               console.log(message[0]);

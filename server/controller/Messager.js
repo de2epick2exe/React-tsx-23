@@ -245,7 +245,7 @@ class Messager {
       const data = {
         status: 200,
         post: content.rows,
-        event: "self_posts"
+        event: "self_post"
       };
       return [data];
     }
@@ -255,7 +255,7 @@ class Messager {
     const data = {
       status: 200,
       post: content.rows,
-      event: "user_posts"
+      event: "user_post"
     };
     return [data];
   }

@@ -15,14 +15,14 @@ interface Room {
   type: string;
   rooms_id: number;
 }
-interface User_posts{ 
+interface User_post{ 
   user_id: number;
   date: Date;
   content: any;
   emotes: [];
 }
 
-interface Self_posts{  
+interface Self_post{  
   user_id: number;
   date: Date;
   content: any;
@@ -69,8 +69,8 @@ interface MessagerState {
   current_room: Room | null;
   rooms: Room[];
   searched_channel: Channel[];
-  user_posts: User_posts[],
-  self_posts: Self_posts[]
+  user_posts: User_post[],
+  self_posts: Self_post[]
 }
 const initialState: MessagerState = {
   messages: {},
@@ -118,6 +118,9 @@ const messagerSlice = createSlice({
       }
       
     },
+    addSelf_post: (state, action: PayloadAction<Self_post>) => {
+      state.self_posts.push(action.payload)
+    },
     setMessage: (state, action: PayloadAction<string | null>) => {
       state.message = action.payload;
     },
@@ -141,10 +144,10 @@ const messagerSlice = createSlice({
     setNotifies: (state, action: PayloadAction<Notify[] | null>) => {
       state.notifies = action.payload!;
     },
-    set_UserPosts: (state, action: PayloadAction<User_posts[] | null>) => {
+    set_UserPosts: (state, action: PayloadAction<User_post[] | null>) => {
       state.user_posts = action.payload!;
     },
-    set_SelfPosts: (state, action: PayloadAction<User_posts[] | null>) => {
+    set_SelfPosts: (state, action: PayloadAction<User_post[] | null>) => {
       state.self_posts = action.payload!;
     },       
     setRooms: (state, action: PayloadAction<Room[] | null>) => {
@@ -205,6 +208,7 @@ const messagerSlice = createSlice({
 }); 
 export const {
   addMessage,
+  addSelf_post,
   setMessage,
   setMessages,  
   setNotifies,  
