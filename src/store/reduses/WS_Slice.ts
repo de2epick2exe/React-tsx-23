@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import {
-  addMessage,  
+  addMessage,
   setMessages,
-  setNotifies,  
+  setNotifies,
   setRooms,
   deleteMessage,
   deletePost,
@@ -11,7 +11,8 @@ import {
   setSearchedChannel,
   setCurrentChannel,
   set_SelfPosts,
-  set_UserPosts
+  set_UserPosts,
+  addSelf_post,
 } from "./MessagerSlice";
 import { setFriends, setWaitingList, setRecomends } from "./UserSlice";
 
@@ -62,13 +63,13 @@ export const connectToWebSocket = () => {
               dispatch(setRooms(message[0].rooms));
 
               break;
-               
+
             case "rooms_messages":
               console.log("WS_slice chats rooms_messages:");
               console.log(message[0]);
-              console.log('room type: ',message[0].type)
+              console.log("room type: ", message[0].type);
               //// ---------------------------------------------
-              /// TODO check if message == [] nothing to do              
+              /// TODO check if message == [] nothing to do
               dispatch(setMessages(message[0]));
               break;
             case "connection_to_room":
@@ -77,7 +78,7 @@ export const connectToWebSocket = () => {
               break;
             case "notify":
               dispatch(setNotifies(message.notify || message.notifies));
-              break;            
+              break;
             case "notifies":
               dispatch(setNotifies(message.notifies));
               break;
@@ -94,26 +95,32 @@ export const connectToWebSocket = () => {
             case "get_latest_messaging":
               console.log("latest messaging content received");
               console.log(message[0]);
-              //@ts-ignore              
-              dispatch(addMessage(message[0]));            
+              //@ts-ignore
+              dispatch(addMessage(message[0]));
               break;
             case "self_post":
-                console.log("self_posts_closed");
-                console.log(message[0]);
-                //@ts-ignore              
-                dispatch(set_SelfPosts(message[0]));            
-                break;  
+              console.log("self_posts_closed");
+              console.log(message[0]);
+              //@ts-ignore
+              dispatch(addSelf_post(message[0]));
+              break;
+            case "self_openpost":
+              console.log("self_posts_closed");
+              console.log(message[0]);
+              //@ts-ignore
+              dispatch(ddUser_post(message[0]));
+              break;
             case "self_closed_posts":
               console.log("self_posts_closed");
               console.log(message[0]);
-              //@ts-ignore              
-              dispatch(set_SelfPosts(message[0]));            
+              //@ts-ignore
+              dispatch(set_SelfPosts(message[0]));
               break;
-            case "self_closed_posts":
+            case "self_open_posts":
               console.log("self_posts_open");
               console.log(message[0]);
-              //@ts-ignore              
-              dispatch(set_UserPosts(message[0]));            
+              //@ts-ignore
+              dispatch(set_UserPosts(message[0]));
               break;
             case "recomended_users":
               console.log("recomends received");
@@ -123,28 +130,28 @@ export const connectToWebSocket = () => {
             case "accept_friend":
               dispatch(setRecomends(message[0].rooms));
               break;
-            case 'update_post':
-            dispatch(updateMessage(message[0].message))  
-            break;  
+            case "update_post":
+              dispatch(updateMessage(message[0].message));
+              break;
             case "searched_channel":
-              console.log('searched channel is:',message[0] )
-              if(message[0].status == 404){
+              console.log("searched channel is:", message[0]);
+              if (message[0].status == 404) {
                 //@ts-ignore
-                dispatch(setSearchedChannel([{channel_name : ''}]))
+                dispatch(setSearchedChannel([{ channel_name: "" }]));
                 break;
               }
-              dispatch(setSearchedChannel(message[0].data))
+              dispatch(setSearchedChannel(message[0].data));
               break;
-            ///  
-            /// delete events  
+            ///
+            /// delete events
             ///
             case "delete_message":
-              console.log('deleted message event')
+              console.log("deleted message event");
               dispatch(deleteMessage(message[0].message));
               break;
             case "delete_post":
-              console.log('deleted post event')
-              dispatch(deletePost(message[0].post))
+              console.log("deleted post event");
+              dispatch(deletePost(message[0].post));
               break;
             case "delete_file":
               console.log("deleted file");

@@ -121,6 +121,9 @@ const messagerSlice = createSlice({
     addSelf_post: (state, action: PayloadAction<Self_post>) => {
       state.self_posts.push(action.payload)
     },
+    addUser_post: (state, action: PayloadAction<Self_post>) => {
+      state.user_posts.push(action.payload)
+    },
     setMessage: (state, action: PayloadAction<string | null>) => {
       state.message = action.payload;
     },
@@ -209,6 +212,7 @@ const messagerSlice = createSlice({
 export const {
   addMessage,
   addSelf_post,
+  addUser_post,
   setMessage,
   setMessages,  
   setNotifies,  
