@@ -50,6 +50,7 @@ const Profile = () => {
   };
   useEffect(() => {
     get_profile();
+    get_posts()
   }, []);
   const socket = useRef<WebSocket | undefined>();
   useEffect(() => {
@@ -181,7 +182,15 @@ const create_post =()=>{
 
 }
 
+const get_posts = ()=>{
+  const msg = {    
+    user_id: data.id,    
+    event: 'get_profile_posts'
+  }
+  
+  dispatch(sendMessage(msg))
 
+}
 
 
 
