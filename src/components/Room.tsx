@@ -331,7 +331,7 @@ const Room: React.FC<RoomProps> = ({
       }
     }
     const set_message = (e: any)=>{          
-      let msg = e.target.value      
+      const msg = e.target.value      
       setMessage(msg)     
     }
 

@@ -237,10 +237,10 @@ class Messager {
   async create_self_post(req, res) {
     console.log(req.body, req);
     const { user_id, post, date, type } = req.body;
-
-    if (type == "self") {
+    console.log('create post data: ', user_id, post, date, type)
+    if (type == "self_closed") {
       const content = await db.query(
-        "INSERT INTO self_posts_closed VALUES $1, $2, $3 RETURNING *",
+        "INSERT INTO self_posts_closed VALUES ($1, $2, $3) RETURNING *",
       [user_id, post, date]);
       const data = {
         status: 200,
@@ -250,7 +250,7 @@ class Messager {
       return [data];
     }
     const content = await db.query(
-      "INSERT INTO self_posts_open VALUES $1, $2, $3 RETURNING *",
+      "INSERT INTO self_posts_open(user_id, post, date) VALUES ($1, $2, $3) RETURNING *",
     [user_id,post,date]);
     const data = {
       status: 200,

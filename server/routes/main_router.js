@@ -8,4 +8,4 @@ router.use('/user', userRouter)
 router.use('/en', wordsRouter)
 router.use('/room', messagerRouter)
   
-module.exports = router
+module.exports = router 

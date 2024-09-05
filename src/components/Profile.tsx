@@ -169,15 +169,15 @@ const Profile = () => {
   };
 
 const create_post =()=>{
-
+    
     const msg = {
       post: post_message,
       user_id: data.id,
-      date : new Date,
+      date : new Date(),
       type: "self", 
-      event: 'self_post'
+      event: 'create_self_post'
     }
-    
+    console.log('create post data:', msg )
     dispatch(sendMessage(msg))
 
 }
