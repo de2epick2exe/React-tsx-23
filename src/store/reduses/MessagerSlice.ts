@@ -18,7 +18,7 @@ interface Room {
 interface User_post{ 
   user_id: number;
   date: Date;
-  content: any;
+  post: any;
   emotes: [];
 }
 
@@ -121,7 +121,7 @@ const messagerSlice = createSlice({
     addSelf_post: (state, action: PayloadAction<Self_post>) => {
       state.self_posts.push(action.payload)
     },
-    addUser_post: (state, action: PayloadAction<Self_post>) => {
+    addUser_post: (state, action: PayloadAction<User_post>) => {
       state.user_posts.push(action.payload)
     },
     setMessage: (state, action: PayloadAction<string | null>) => {
@@ -150,7 +150,7 @@ const messagerSlice = createSlice({
     set_UserPosts: (state, action: PayloadAction<User_post[] | null>) => {
       state.user_posts = action.payload!;
     },
-    set_SelfPosts: (state, action: PayloadAction<User_post[] | null>) => {
+    set_SelfPosts: (state, action: PayloadAction<Self_post[] | null>) => {
       state.self_posts = action.payload!;
     },       
     setRooms: (state, action: PayloadAction<Room[] | null>) => {

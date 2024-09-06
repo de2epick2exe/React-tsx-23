@@ -30,6 +30,7 @@ import { sendMessage } from "../store/reduses/WS_Slice";
 
 const Profile = () => {
   const data = useSelector((state: RootState) => state.userReducer);
+  const messager_store = useSelector((state: RootState) => state.messagerReducer);
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   const { id } = useParams<{ id?: string }>();
   const [profile_data, Set_Profile_data] = useState<any>();
@@ -192,7 +193,24 @@ const get_posts = ()=>{
 
 }
 
+const Posts_component = ()=>{
+  messager_store.user_posts.map((posts, index)=>{
+    <span key={index}>
+      <Text>{posts?.post}</Text>
+    </span>
 
+
+
+  })
+  return(
+    <>
+    
+    
+    </>
+  )
+
+
+}
 
 
   if (profile_data?.status == 404) {
