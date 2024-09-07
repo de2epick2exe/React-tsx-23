@@ -30,13 +30,15 @@ import { sendMessage } from "../store/reduses/WS_Slice";
 
 const Profile = () => {
   const data = useSelector((state: RootState) => state.userReducer);
-  const messager_store = useSelector((state: RootState) => state.messagerReducer);
+  const messager_store = useSelector(
+    (state: RootState) => state.messagerReducer
+  );
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   const { id } = useParams<{ id?: string }>();
   const [profile_data, Set_Profile_data] = useState<any>();
   const [is_friend_status, set_Is_friend_status] = useState<any>();
   const [isLoading, set_IsLoading] = useState(true);
-  const [post_message, set_postMessage]= useState('')
+  const [post_message, set_postMessage] = useState("");
   const {
     isOpen: isOpenLogin,
     onOpen: onOpenLogin,
@@ -51,7 +53,7 @@ const Profile = () => {
   };
   useEffect(() => {
     get_profile();
-    get_posts()
+    get_posts();
   }, []);
   const socket = useRef<WebSocket | undefined>();
   useEffect(() => {
@@ -169,49 +171,48 @@ const Profile = () => {
       */
   };
 
-const create_post =()=>{
-    
+  const create_post = () => {
     const msg = {
       post: post_message,
       user_id: data.id,
-      date : new Date(),
-      type: "self", 
-      event: 'create_self_post'
-    }
-    console.log('create post data:', msg )
-    dispatch(sendMessage(msg))
+      date: new Date(),
+      type: "self",
+      event: "create_self_post",
+    };
+    console.log("create post data:", msg);
+    dispatch(sendMessage(msg));
+  };
 
-}
+  const get_posts = () => {
+    const msg = {
+      user_id: data.id,
+      event: "get_profile_posts",
+    };
 
-const get_posts = ()=>{
-  const msg = {    
-    user_id: data.id,    
-    event: 'get_profile_posts'
-  }
-  
-  dispatch(sendMessage(msg))
+    dispatch(sendMessage(msg));
+  };
 
-}
+  const Posts_component = () => {
+    messager_store.user_posts.map((posts, index) => {
+      <span key={index}>
+        <Text>{posts?.post}</Text>
+      </span>;
+    });
+    return <></>;
+  };
 
-const Posts_component = ()=>{
-  messager_store.user_posts.map((posts, index)=>{
-    <span key={index}>
-      <Text>{posts?.post}</Text>
-    </span>
-
-
-
-  })
-  return(
-    <>
-    
-    
-    </>
-  )
-
-
-}
-
+  const User_info = () => {
+    if(data.id !== (id ? parseFloat(id) : null))
+      return(
+      <Flex flexDir="column">
+      <Text as="b">{profile_data?.username}</Text>
+      <Text as="kbd">{profile_data?.role}</Text>
+      <Button mt="2">Write message</Button>
+      <Friend_button />
+    </Flex>
+    )
+    return <></>;
+  };
 
   if (profile_data?.status == 404) {
     {
@@ -221,93 +222,60 @@ const Posts_component = ()=>{
   } else {
     return (
       <Box>
-        {data.id === (id ? parseFloat(id) : null) ? (
-          <Grid templateColumns="repeat(3, 1fr)" gap="1" minH="92vh">
-            <GridItem m="5" border="2px solid red" width="13vw" h='27%' padding="3">
-              <Center>
-                <Avatar
-                  size="2xl"
-                  name={data.username ?? undefined}
-                  src={data.photo}
-                />
-              </Center>
-              <Flex flexDir="column">
-                <Text as="b">{data.username}</Text>
-                <Text as="kbd">{data.role}</Text>
-              </Flex>
-            </GridItem>
-            <GridItem borderX="2px solid red">
-              <InputGroup m='3' w='auto'>
-                <Textarea resize="none" value={post_message} onChange={(e)=>set_postMessage(e.target.value)} />
-                <InputRightElement>
-                  <Button onClick={create_post}>
-                    <ArrowRightIcon />
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-            </GridItem>
-            <GridItem>right bar</GridItem>
-          </Grid>
-        ) : (
-          <Grid templateColumns="repeat(3, 1fr)" gap="1" minH="92vh">
-            <GridItem
-              m="5"
-              border="2px solid red"
-              width="13vw"
-              padding="3"
-              h="43%"
-            >
-              <Center>
-                <Avatar
-                  size="2xl"
-                  name={profile_data?.username}
-                  src={
-                    profile_data?.avatar != null
-                      ? `http://localhost:8080/img/${profile_data?.avatar}`
-                      : `http://localhost:8080/img/default.jpg`
-                  }
-                />
-              </Center>
-              <br />
-              <Flex flexDir="column">
-                <Text as="b">{profile_data?.username}</Text>
-                <Text as="kbd">{profile_data?.role}</Text>
-                <Button mt="2">Write message</Button>
-                <Friend_button />
-              </Flex>
-              {/**-------------------- Login Modal------------------------------- */}
-              <Modal isOpen={isOpenLogin} onClose={onCloseLogin}>
-                <ModalOverlay />
-                <ModalContent>
-                  <ModalHeader>You mus be logined</ModalHeader>
-                  <ModalCloseButton />
-                  <ModalBody>
-                    <Button variant="ghost" as={Link} to="/login">
-                      Login
-                    </Button>
-                  </ModalBody>
+        <Grid templateColumns="repeat(3, 1fr)" gap="1" minH="92vh">
+          <GridItem
+            m="5"
+            border="2px solid red"
+            width="13vw"
+            padding="3"
+            h="43%"
+          >
+            <Center>
+              <Avatar
+                size="2xl"
+                name={profile_data?.username}
+                src={
+                  profile_data?.avatar != null
+                    ? `http://localhost:8080/img/${profile_data?.avatar}`
+                    : `http://localhost:8080/img/default.jpg`
+                }
+              />
+            </Center>
+            <br />
 
-                  <ModalFooter>
-                    <Button colorScheme="blue" mr={3} onClick={onCloseLogin}>
-                      Close
-                    </Button>
-                  </ModalFooter>
-                </ModalContent>
-              </Modal>
-            </GridItem>
-            <GridItem borderX="2px solid red">
-              <InputGroup>
-                <Textarea resize="none" />
-                <InputRightElement>
-                  <Button>
-                    <ArrowRightIcon />
+            <User_info />
+            {/**-------------------- Login Modal------------------------------- */}
+            <Modal isOpen={isOpenLogin} onClose={onCloseLogin}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>You mus be logined</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  <Button variant="ghost" as={Link} to="/login">
+                    Login
                   </Button>
-                </InputRightElement>
-              </InputGroup>
-            </GridItem>
-            <GridItem>right bar</GridItem>
-          </Grid>
-        )}
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button colorScheme="blue" mr={3} onClick={onCloseLogin}>
+                    Close
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+          </GridItem>
+          <GridItem borderX="2px solid red">
+            <InputGroup>
+              <Textarea resize="none" />
+              <InputRightElement>
+                <Button>
+                  <ArrowRightIcon />
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+          </GridItem>
+          <GridItem>right bar</GridItem>
+        </Grid>
       </Box>
     );
   }
