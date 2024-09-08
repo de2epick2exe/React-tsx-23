@@ -57,7 +57,7 @@ const test_db_connection = async () => {
 };
 
 test_db_connection();
-
+ 
 class UserController {
   async registration(req, res) {
     const { email, username, password } = req.body;

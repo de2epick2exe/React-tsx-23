@@ -193,12 +193,15 @@ const Profile = () => {
   };
 
   const Posts_component = () => {
-    messager_store.user_posts.map((posts, index) => {
+    console.log('Profile posts:', messager_store.user_posts)
+
+
+    const posts = messager_store.user_posts.map((posts, index) => (
       <span key={index}>
         <Text>{posts?.post}</Text>
-      </span>;
-    });
-    return <></>;
+      </span>
+    ));
+    return <>{posts}</>;
   };
 
   const User_info = () => {
@@ -264,7 +267,10 @@ const Profile = () => {
               </ModalContent>
             </Modal>
           </GridItem>
+            {/**-------------------- Center column------------------------------- */}
           <GridItem borderX="2px solid red">
+                <Posts_component/>
+
             <InputGroup>
               <Textarea resize="none" />
               <InputRightElement>
@@ -274,6 +280,7 @@ const Profile = () => {
               </InputRightElement>
             </InputGroup>
           </GridItem>
+            {/**-------------------- Right column------------------------------- */}
           <GridItem>right bar</GridItem>
         </Grid>
       </Box>

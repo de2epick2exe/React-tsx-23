@@ -13,6 +13,7 @@ import {
   set_SelfPosts,
   set_UserPosts,
   addSelf_post,
+  addUser_post,
 } from "./MessagerSlice";
 import { setFriends, setWaitingList, setRecomends } from "./UserSlice";
 
@@ -108,7 +109,7 @@ export const connectToWebSocket = () => {
               console.log("self_posts_closed");
               console.log(message[0]);
               //@ts-ignore
-              dispatch(ddUser_post(message[0]));
+              dispatch(addUser_post(message[0]));
               break;
             case "self_closed_posts":
               console.log("self_posts_closed");
@@ -116,11 +117,11 @@ export const connectToWebSocket = () => {
               //@ts-ignore
               dispatch(set_SelfPosts(message[0]));
               break;
-            case "self_open_posts":
-              console.log("self_posts_open");
+            case "profile_posts":
+              console.log("self_posts_open", message[0]);
               console.log(message[0]);
               //@ts-ignore
-              dispatch(set_UserPosts(message[0]));
+              dispatch(set_UserPosts(message[0].data));
               break;
             case "recomended_users":
               console.log("recomends received");
