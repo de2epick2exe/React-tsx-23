@@ -55,93 +55,29 @@ const Profile = () => {
     get_profile();
     get_posts();
   }, []);
-  const socket = useRef<WebSocket | undefined>();
-  useEffect(() => {
-    socket.current = new WebSocket("ws://localhost:3033");
-    socket.current.onopen = () => {
-      console.log(data.username, "connected to ws");
-    };
-    socket.current.onmessage = (msg) => {
-      try {
-        const message = JSON.parse(msg.data);
-        console.log(message); // for in
-        switch (message.event) {
-          case "check_state":
-            //check if user in hidden list
-            console.log("RETURNS friends lis");
-            break;
-          case "check_user_status":
-            console.log("user status", message.data[0].matched_column);
-            set_Is_friend_status(message.data[0].matched_column);
-            break;
-          default:
-            break;
-        }
-      } catch (error) {
-        console.error("Error parsing JSON:", error);
-        console.warn(msg.data);
-        console.log(msg.data);
-      }
-    };
-    socket.current.onclose = () => {
-      console.log("connection closed");
-    };
-    socket.current.onerror = () => {
-      console.log("SOCKET error");
-    };
+  
+  
 
-    return () => {
-      if (socket.current) {
-        socket.current.close();
-      }
-    };
-  }, []);
-
-  const delete_friend = async () => {
-    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+  const delete_friend = async () => {    
       const message = {
         id: data.id,
         to_delete: profile_data?.id,
         event: "delete_friend",
       };
-      socket.current.send(JSON.stringify(message));
-    } else {
-      // Wait for the connection to open and then send the message
-      setTimeout(() => {
-        delete_friend();
-      }, 100); // You can adjust the timeout value if needed
-    }
+    dispatch(sendMessage(message))
+    
   };
 
-  const add_friend = async () => {
-    //add check if user authed
-    if (data.is_auth) {
-      if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+  const add_friend = async () => {   
         const message = {
           id: data.id,
           add_id: profile_data?.id,
           event: "add_friend",
         };
-        socket.current.send(JSON.stringify(message));
-      }
-    } else {
-      onOpenLogin();
-    }
+        dispatch(sendMessage(message))
   };
 
-  useEffect(() => {
-    if (socket.current && socket.current.readyState === WebSocket.OPEN) {
-      if (data.is_auth && id) {
-        socket.current.send(
-          JSON.stringify({
-            event: "check_status",
-            id: data.id,
-            cid: parseFloat(id),
-          })
-        );
-      }
-    }
-  }, [profile_data]);
+  
 
   useEffect(() => {
     profile_data?.status ? set_IsLoading(false) : set_IsLoading(true);
@@ -272,9 +208,9 @@ const Profile = () => {
                 <Posts_component/>
 
             <InputGroup>
-              <Textarea resize="none" />
+              <Textarea resize="none" onChange={(e)=> set_postMessage(e.target.value)} />
               <InputRightElement>
-                <Button>
+                <Button onClick={create_post}>
                   <ArrowRightIcon />
                 </Button>
               </InputRightElement>
