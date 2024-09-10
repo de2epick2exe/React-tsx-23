@@ -39,6 +39,7 @@ const Profile = () => {
   const [is_friend_status, set_Is_friend_status] = useState<any>();
   const [isLoading, set_IsLoading] = useState(true);
   const [post_message, set_postMessage] = useState("");
+  const [comment, setComment] = useState("")
   const {
     isOpen: isOpenLogin,
     onOpen: onOpenLogin,
@@ -130,12 +131,30 @@ const Profile = () => {
 
   const Posts_component = () => {
     console.log('Profile posts:', messager_store.user_posts)
-
-
     const posts = messager_store.user_posts.map((posts, index) => (
-      <span key={index}>
+      <Box key={index} 
+      border={'2px solid black'}
+      my='2'
+      px='2'
+      borderRadius='7px'
+      >
+        <Flex mt='1'>
+        <Avatar
+                size="sm"
+                name={profile_data?.username}
+                src={
+                  profile_data?.avatar != null
+                    ? `http://localhost:8080/img/${profile_data?.avatar}`
+                    : `http://localhost:8080/img/default.jpg`
+                }
+              />
+          <Text
+          ml='1'
+          >{profile_data?.username}</Text>
+        </Flex>
         <Text>{posts?.post}</Text>
-      </span>
+
+      </Box>
     ));
     return <>{posts}</>;
   };
@@ -150,7 +169,13 @@ const Profile = () => {
       <Friend_button />
     </Flex>
     )
-    return <></>;
+    return <>
+    <Flex flexDir="column">
+      <Text as="b">{profile_data?.username}</Text>
+      <Text as="kbd">{profile_data?.role}</Text> 
+    </Flex>
+    
+    </>;
   };
 
   if (profile_data?.status == 404) {
@@ -204,9 +229,7 @@ const Profile = () => {
             </Modal>
           </GridItem>
             {/**-------------------- Center column------------------------------- */}
-          <GridItem borderX="2px solid red">
-                <Posts_component/>
-
+          <GridItem borderX="2px solid red"> 
             <InputGroup>
               <Textarea resize="none" onChange={(e)=> set_postMessage(e.target.value)} />
               <InputRightElement>
@@ -215,6 +238,9 @@ const Profile = () => {
                 </Button>
               </InputRightElement>
             </InputGroup>
+
+            <Posts_component/>
+
           </GridItem>
             {/**-------------------- Right column------------------------------- */}
           <GridItem>right bar</GridItem>

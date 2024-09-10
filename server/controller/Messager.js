@@ -296,9 +296,9 @@ class Messager {
     }
   }
   async get_profile_posts(req,res){
-    const {id} = req.body
-    console.log('Profile posts for id:', id)
-    const profile_post = await db.query('SELECT * FROM self_posts_open WHERE user_id = $1',[id])
+    const {user_id} = req.body
+    console.log('Profile posts for id:', user_id,)
+    const profile_post = await db.query('SELECT * FROM self_posts_open WHERE user_id = $1',[user_id])
     console.log('Profile posts: ', profile_post.rows[0])
      
     return [{

@@ -297,30 +297,25 @@ const Room: React.FC<RoomProps> = ({
     );
   };
 
-  const Messaging_area = useMemo(() => {
-    
-
-  const Selecting_navigate = ()=>{
-    if (selected_id.length >= 1 && isSelecting) {
-     return (
-        <>
-          <Flex>
-            <CloseIcon
-              mr="2"
-              onClick={() => {
-                stop_selecting();
-              }}
-            />
-            <p>{selected_id.length} messages</p>
-          </Flex>
-        </>
-      );
-    }
-    return(<></>)
-   }
-   
-  
-
+  const Messaging_area = useMemo(() => { 
+      const Selecting_navigate = ()=>{
+        if (selected_id.length >= 1 && isSelecting) {
+        return (
+            <>
+              <Flex>
+                <CloseIcon
+                  mr="2"
+                  onClick={() => {
+                    stop_selecting();
+                  }}
+                />
+                <p>{selected_id.length} messages</p>
+              </Flex>
+            </>
+          );
+        }
+        return(<></>)
+      }
     //@ts-ignore    
     console.log('user is admin ?', messager.current_channel?.admins.includes(data.id.toString()), data.id, messager.current_channel?.admins)
 
@@ -334,8 +329,6 @@ const Room: React.FC<RoomProps> = ({
       const msg = e.target.value      
       setMessage(msg)     
     }
-
-
     return (
       <>
       <Selecting_navigate/>
@@ -359,9 +352,6 @@ const Room: React.FC<RoomProps> = ({
         </Button>
       </InputRightElement>
     </InputGroup>
-
-
-
       </>
     );
   },[selected_id, isSelecting, message, send, stop_selecting])
