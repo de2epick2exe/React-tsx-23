@@ -22,6 +22,7 @@ import {
   InputRightElement,
   Textarea,
   InputGroup,
+  Divider,
 } from "@chakra-ui/react";
 import { Link, useParams } from "react-router-dom";
 import { user_profile } from "../unite/User_Functions";
@@ -39,7 +40,7 @@ const Profile = () => {
   const [is_friend_status, set_Is_friend_status] = useState<any>();
   const [isLoading, set_IsLoading] = useState(true);
   const [post_message, set_postMessage] = useState("");
-  const [comment, setComment] = useState("")
+  
   const {
     isOpen: isOpenLogin,
     onOpen: onOpenLogin,
@@ -130,7 +131,13 @@ const Profile = () => {
   };
 
   const Posts_component = () => {
+    const [comment, setComment] = useState("")
     console.log('Profile posts:', messager_store.user_posts)
+
+    const inputComment = (e: any)=>{
+      e.preventDefault()
+      setComment(e.target.value)
+    }
     const posts = messager_store.user_posts.map((posts, index) => (
       <Box key={index} 
       border={'2px solid black'}
@@ -152,8 +159,19 @@ const Profile = () => {
           ml='1'
           >{profile_data?.username}</Text>
         </Flex>
-        <Text>{posts?.post}</Text>
-
+        <Text  borderBottom='2px solid red' my='2'>{posts?.post}</Text>
+        
+        <InputGroup mb='2'>
+              <Textarea resize="none" minH='4' maxH='10'
+              value={comment}
+              onChange={(e)=> inputComment(e)} />
+              <InputRightElement>
+                <Button >
+                  <ArrowRightIcon />
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+                   
       </Box>
     ));
     return <>{posts}</>;
@@ -183,7 +201,8 @@ const Profile = () => {
       /**-------------------- if 404 ------------------------------- */
     }
     return <> not found</>;
-  } else {
+  } //---------------------- main page ---------------------------------
+  else {
     return (
       <Box>
         <Grid templateColumns="repeat(3, 1fr)" gap="1" minH="92vh">
@@ -231,7 +250,7 @@ const Profile = () => {
             {/**-------------------- Center column------------------------------- */}
           <GridItem borderX="2px solid red"> 
             <InputGroup>
-              <Textarea resize="none" onChange={(e)=> set_postMessage(e.target.value)} />
+              <Textarea resize="none" value={post_message} onChange={(e)=> set_postMessage(e.target.value)} />
               <InputRightElement>
                 <Button onClick={create_post}>
                   <ArrowRightIcon />
