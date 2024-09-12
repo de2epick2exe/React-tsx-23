@@ -23,10 +23,15 @@ import {
   Textarea,
   InputGroup,
   Divider,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  IconButton,
 } from "@chakra-ui/react";
 import { Link, useParams } from "react-router-dom";
 import { user_profile } from "../unite/User_Functions";
-import { ArrowRightIcon } from "@chakra-ui/icons";
+import { ArrowRightIcon, DeleteIcon, EditIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { sendMessage } from "../store/reduses/WS_Slice";
 
 const Profile = () => {
@@ -141,11 +146,12 @@ const Profile = () => {
     const posts = messager_store.user_posts.map((posts, index) => (
       <Box key={index} 
       border={'2px solid black'}
-      my='2'
+      my='5'
       px='2'
       borderRadius='7px'
       >
-        <Flex mt='1'>
+        <Flex mt='1' justifyContent='space-between'>
+          <Flex>
         <Avatar
                 size="sm"
                 name={profile_data?.username}
@@ -158,6 +164,24 @@ const Profile = () => {
           <Text
           ml='1'
           >{profile_data?.username}</Text>
+          </Flex>
+          <Menu>
+  <MenuButton
+    as={IconButton}
+    aria-label='Options'
+    icon={<HamburgerIcon />}
+    variant='outline'
+  />
+  <MenuList>
+    <MenuItem icon={<EditIcon />} >
+      Edit
+    </MenuItem>
+    <MenuItem icon={<DeleteIcon/>}>
+      Delete
+    </MenuItem>    
+  </MenuList>
+</Menu>
+
         </Flex>
         <Text  borderBottom='2px solid red' my='2'>{posts?.post}</Text>
         

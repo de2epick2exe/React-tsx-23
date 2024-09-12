@@ -122,6 +122,7 @@ const messagerSlice = createSlice({
       state.self_posts.push(action.payload)
     },
     addUser_post: (state, action: PayloadAction<User_post>) => {
+      console.log('user_post WS FUNC', action.payload)
       state.user_posts.push(action.payload)
     },
     setMessage: (state, action: PayloadAction<string | null>) => {
