@@ -31,7 +31,12 @@ import {
 } from "@chakra-ui/react";
 import { Link, useParams } from "react-router-dom";
 import { user_profile } from "../unite/User_Functions";
-import { ArrowRightIcon, DeleteIcon, EditIcon, HamburgerIcon } from "@chakra-ui/icons";
+import {
+  ArrowRightIcon,
+  DeleteIcon,
+  EditIcon,
+  HamburgerIcon,
+} from "@chakra-ui/icons";
 import { sendMessage } from "../store/reduses/WS_Slice";
 
 const Profile = () => {
@@ -45,7 +50,7 @@ const Profile = () => {
   const [is_friend_status, set_Is_friend_status] = useState<any>();
   const [isLoading, set_IsLoading] = useState(true);
   const [post_message, set_postMessage] = useState("");
-  
+
   const {
     isOpen: isOpenLogin,
     onOpen: onOpenLogin,
@@ -62,29 +67,24 @@ const Profile = () => {
     get_profile();
     get_posts();
   }, []);
-  
-  
 
-  const delete_friend = async () => {    
-      const message = {
-        id: data.id,
-        to_delete: profile_data?.id,
-        event: "delete_friend",
-      };
-    dispatch(sendMessage(message))
-    
+  const delete_friend = async () => {
+    const message = {
+      id: data.id,
+      to_delete: profile_data?.id,
+      event: "delete_friend",
+    };
+    dispatch(sendMessage(message));
   };
 
-  const add_friend = async () => {   
-        const message = {
-          id: data.id,
-          add_id: profile_data?.id,
-          event: "add_friend",
-        };
-        dispatch(sendMessage(message))
+  const add_friend = async () => {
+    const message = {
+      id: data.id,
+      add_id: profile_data?.id,
+      event: "add_friend",
+    };
+    dispatch(sendMessage(message));
   };
-
-  
 
   useEffect(() => {
     profile_data?.status ? set_IsLoading(false) : set_IsLoading(true);
@@ -136,88 +136,99 @@ const Profile = () => {
   };
 
   const Posts_component = () => {
-    const [comment, setComment] = useState("")
-    console.log('Profile posts:', messager_store.user_posts)
+    const [comment, setComment] = useState("");
+    const [edit, setEditing] = useState("");
+    const [edit_index, setEdit_index] = useState<Number | null>();
+    console.log("Profile posts:", messager_store.user_posts);
 
-    const inputComment = (e: any)=>{
-      e.preventDefault()
-      setComment(e.target.value)
-    }
+    const inputComment = (e: any) => {
+      e.preventDefault();
+      setComment(e.target.value);
+    };
+
     const posts = messager_store.user_posts.map((posts, index) => (
-      <Box key={index} 
-      border={'2px solid black'}
-      my='5'
-      px='2'
-      borderRadius='7px'
+      <Box
+        key={index}
+        border={"2px solid black"}
+        my="5"
+        px="2"
+        borderRadius="7px"
       >
-        <Flex mt='1' justifyContent='space-between'>
+        <Flex mt="1" justifyContent="space-between">
           <Flex>
-        <Avatar
-                size="sm"
-                name={profile_data?.username}
-                src={
-                  profile_data?.avatar != null
-                    ? `http://localhost:8080/img/${profile_data?.avatar}`
-                    : `http://localhost:8080/img/default.jpg`
-                }
-              />
-          <Text
-          ml='1'
-          >{profile_data?.username}</Text>
+            <Avatar
+              size="sm"
+              name={profile_data?.username}
+              src={
+                profile_data?.avatar != null
+                  ? `http://localhost:8080/img/${profile_data?.avatar}`
+                  : `http://localhost:8080/img/default.jpg`
+              }
+            />
+            <Text ml="1">{profile_data?.username}</Text>
           </Flex>
           <Menu>
-  <MenuButton
-    as={IconButton}
-    aria-label='Options'
-    icon={<HamburgerIcon />}
-    variant='outline'
-  />
-  <MenuList>
-    <MenuItem icon={<EditIcon />} >
-      Edit
-    </MenuItem>
-    <MenuItem icon={<DeleteIcon/>}>
-      Delete
-    </MenuItem>    
-  </MenuList>
-</Menu>
-
+            <MenuButton
+              as={IconButton}
+              aria-label="Options"
+              icon={<HamburgerIcon />}
+              variant="outline"
+            />
+            <MenuList>
+              <MenuItem
+                icon={<EditIcon />}
+                onClick={(e) =>
+                  setEdit_index(edit_index === index ? null : index)
+                }
+              >
+                Edit
+              </MenuItem>
+              <MenuItem icon={<DeleteIcon />}>Delete</MenuItem>
+            </MenuList>
+          </Menu>
         </Flex>
-        <Text  borderBottom='2px solid red' my='2'>{posts?.post}</Text>
-        
-        <InputGroup mb='2'>
-              <Textarea resize="none" minH='4' maxH='10'
-              value={comment}
-              onChange={(e)=> inputComment(e)} />
-              <InputRightElement>
-                <Button >
-                  <ArrowRightIcon />
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-                   
+        <Text >{edit_index == index ? (<>edit</>) : (<></>) } </Text>
+        <Text borderBottom="2px solid red" my="2">
+          {posts?.post}
+        </Text>
+
+        <InputGroup mb="2">
+          <Textarea
+            resize="none"
+            minH="4"
+            maxH="10"
+            value={comment}
+            onChange={(e) => inputComment(e)}
+          />
+          <InputRightElement>
+            <Button>
+              <ArrowRightIcon />
+            </Button>
+          </InputRightElement>
+        </InputGroup>
       </Box>
     ));
     return <>{posts}</>;
   };
 
   const User_info = () => {
-    if(data.id !== (id ? parseFloat(id) : null))
-      return(
-      <Flex flexDir="column">
-      <Text as="b">{profile_data?.username}</Text>
-      <Text as="kbd">{profile_data?.role}</Text>
-      <Button mt="2">Write message</Button>
-      <Friend_button />
-    </Flex>
-    )
-    return <>
-    <Flex flexDir="column">
-      <Text as="b">{profile_data?.username}</Text>
-      <Text as="kbd">{profile_data?.role}</Text> 
-    </Flex>
-    
-    </>;
+    if (data.id !== (id ? parseFloat(id) : null))
+      return (
+        <Flex flexDir="column">
+          <Text as="b">{profile_data?.username}</Text>
+          <Text as="kbd">{profile_data?.role}</Text>
+          <Button mt="2">Write message</Button>
+          <Friend_button />
+        </Flex>
+      );
+    return (
+      <>
+        <Flex flexDir="column">
+          <Text as="b">{profile_data?.username}</Text>
+          <Text as="kbd">{profile_data?.role}</Text>
+        </Flex>
+      </>
+    );
   };
 
   if (profile_data?.status == 404) {
@@ -271,10 +282,14 @@ const Profile = () => {
               </ModalContent>
             </Modal>
           </GridItem>
-            {/**-------------------- Center column------------------------------- */}
-          <GridItem borderX="2px solid red"> 
-            <InputGroup>
-              <Textarea resize="none" value={post_message} onChange={(e)=> set_postMessage(e.target.value)} />
+          {/**-------------------- Center column------------------------------- */}
+          <GridItem borderX="2px solid red">
+            <InputGroup mt="2">
+              <Textarea
+                resize="none"
+                value={post_message}
+                onChange={(e) => set_postMessage(e.target.value)}
+              />
               <InputRightElement>
                 <Button onClick={create_post}>
                   <ArrowRightIcon />
@@ -282,10 +297,9 @@ const Profile = () => {
               </InputRightElement>
             </InputGroup>
 
-            <Posts_component/>
-
+            <Posts_component />
           </GridItem>
-            {/**-------------------- Right column------------------------------- */}
+          {/**-------------------- Right column------------------------------- */}
           <GridItem>right bar</GridItem>
         </Grid>
       </Box>
