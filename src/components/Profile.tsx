@@ -128,7 +128,7 @@ const Profile = () => {
 
   const get_posts = () => {
     const msg = {
-      user_id: data.id,
+      user_id: id,
       event: "get_profile_posts",
     };
 
@@ -167,27 +167,31 @@ const Profile = () => {
             />
             <Text ml="1">{profile_data?.username}</Text>
           </Flex>
-          <Menu>
-            <MenuButton
-              as={IconButton}
-              aria-label="Options"
-              icon={<HamburgerIcon />}
-              variant="outline"
-            />
-            <MenuList>
-              <MenuItem
-                icon={<EditIcon />}
-                onClick={(e) =>
-                  setEdit_index(edit_index === index ? null : index)
-                }
-              >
-                Edit
-              </MenuItem>
-              <MenuItem icon={<DeleteIcon />}>Delete</MenuItem>
-            </MenuList>
-          </Menu>
+          {data.id == (id ? parseFloat(id) : null) ? (
+            <Menu>
+              <MenuButton
+                as={IconButton}
+                aria-label="Options"
+                icon={<HamburgerIcon />}
+                variant="outline"
+              />
+              <MenuList>
+                <MenuItem
+                  icon={<EditIcon />}
+                  onClick={(e) =>
+                    setEdit_index(edit_index === index ? null : index)
+                  }
+                >
+                  Edit
+                </MenuItem>
+                <MenuItem icon={<DeleteIcon />}>Delete</MenuItem>
+              </MenuList>
+            </Menu>
+          ) : (
+            <></>
+          )}
         </Flex>
-        <Text >{edit_index == index ? (<>edit</>) : (<></>) } </Text>
+        <Text>{edit_index == index ? <>edit</> : <></>} </Text>
         <Text borderBottom="2px solid red" my="2">
           {posts?.post}
         </Text>
@@ -229,6 +233,28 @@ const Profile = () => {
         </Flex>
       </>
     );
+  };
+
+  const Posting_area = () => {
+    if (data.id == (id ? parseFloat(id) : null)) {
+      return (
+        <>
+          <InputGroup mt="2">
+            <Textarea
+              resize="none"
+              value={post_message}
+              onChange={(e) => set_postMessage(e.target.value)}
+            />
+            <InputRightElement>
+              <Button onClick={create_post}>
+                <ArrowRightIcon />
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </>
+      );
+    }
+    return <></>;
   };
 
   if (profile_data?.status == 404) {
@@ -284,19 +310,7 @@ const Profile = () => {
           </GridItem>
           {/**-------------------- Center column------------------------------- */}
           <GridItem borderX="2px solid red">
-            <InputGroup mt="2">
-              <Textarea
-                resize="none"
-                value={post_message}
-                onChange={(e) => set_postMessage(e.target.value)}
-              />
-              <InputRightElement>
-                <Button onClick={create_post}>
-                  <ArrowRightIcon />
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-
+            <Posting_area />
             <Posts_component />
           </GridItem>
           {/**-------------------- Right column------------------------------- */}
