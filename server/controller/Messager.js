@@ -496,6 +496,35 @@ class Messager {
       console.log(error);
     }
   }
+  async update_self_post(req, res){    
+    try {      
+      const { id, post, type } = req.body;
+      if(type == "open"){
+      const updated_post = await db.query(
+        "UPDATE self_posts_open SET content = $1 WHERE id = $2 RETURNING *",
+        [post, id]
+      );
+      const data = {
+        event: "update_open_post",
+        status: 200,
+        post: updated_post.rows[0],
+      };
+      return data;
+    }
+    const updated_post = await db.query(
+      "UPDATE self_posts_closed SET post = $1 WHERE id = $2 RETURNING *",
+      [post, id]
+    );
+    const data = {
+      event: "update_closed_post",
+      status: 200,
+      post: updated_post.rows[0],
+    };
+    return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async update_message(id, content) {
     try {
       // const { id, content } = req.body;
