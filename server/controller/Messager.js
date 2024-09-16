@@ -559,6 +559,35 @@ class Messager {
       console.log(error);
     }
   }
+  async delete_self_post(req, res) {
+    try {
+      const {id, type}= req.body
+      if(type == 'open'){
+        const post = await db.query(
+          "DELETE FROM self_posts_open WHERE id = $1 RETURNING id, content",
+          [id]
+        );
+        const data = {
+          event: "delete_self_post_open",
+          status: 200,
+          post: post.rows[0],
+        };
+        return [data];
+      }
+      const post = await db.query(
+        "DELETE FROM self_posts_closed WHERE id = $1 RETURNING id",
+        [id]
+      );
+      const data = {
+        event: "delete_self_post_closed",
+        status: 200,
+        post: post.rows[0],
+      };
+      return [data];
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async delete_message(id, date) {
     try {
       const post = await db.query(
