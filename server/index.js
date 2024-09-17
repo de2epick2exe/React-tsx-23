@@ -279,6 +279,30 @@ wss.on("connection", (ws) => {
             }
           }
           break;
+        case "update_self_post":    
+          for (const live_room of setted_rooms) {
+            if (live_room.clients.has(ws)) {
+              live_room.clients.forEach(async (client) => {
+                console.log("finded room for user(current ws)");
+                console.log(parsedMessage);
+                const update_msg = await Messager.update_message(
+                  {
+                    body: { ...parsedMessage },
+                  }
+                );
+                client.send(JSON.stringify(update_msg));
+                //client.send(message);
+                console.log(
+                  "Number of clients in room:",
+                  live_room.clients.size
+                );
+                console.log("event send message success");
+                console.log("message UPDATED in room");
+              });
+              break;
+            }
+          }
+          break;  
         //------- Delete commands ------
         case "delete_post":
           for (const live_room of setted_rooms) {
@@ -301,6 +325,29 @@ wss.on("connection", (ws) => {
           }
 
           break;
+
+        case "delete_self_post": 
+        for (const live_room of setted_rooms) {
+          if (live_room.clients.has(ws)) {
+            live_room.clients.forEach(async (client) => {
+              console.log("finded room for user(current ws)");
+              console.log(parsedMessage);
+              const del_post = await Messager.delete_self_post( {
+                body: { ...parsedMessage },
+              });
+              client.send(JSON.stringify(del_post));
+              //client.send(message);
+              console.log(
+                "Number of clients in room:",
+                live_room.clients.size
+              );
+              console.log("event send message success");
+              console.log("post DELETED in room");
+            });
+            break;
+          }
+        }
+        break
         case "delete_message":
           for (const live_room of setted_rooms) {
             if (live_room.clients.has(ws)) {
