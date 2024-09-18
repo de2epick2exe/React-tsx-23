@@ -16,6 +16,7 @@ interface Room {
   rooms_id: number;
 }
 interface User_post{ 
+  id: number;
   user_id: number;
   date: Date;
   post: any;
@@ -23,6 +24,7 @@ interface User_post{
 }
 
 interface Self_post{  
+  id:number;
   user_id: number;
   date: Date;
   content: any;
@@ -175,6 +177,7 @@ const messagerSlice = createSlice({
       state.searched_channel = action.payload;
       console.log('founded chan is: ', state.searched_channel )
     },
+    ///------------------------------modifiers-----------------------------------------
     updateMessage:(state, action:PayloadAction<Rooms_msgs>)=>{
       const roomID = Object.keys(action.payload);
       const msg = Object.values(action.payload);
@@ -186,7 +189,27 @@ const messagerSlice = createSlice({
       state.messages[roomID][0].roomMessages[messageIndex].content = msg;
     }
     },
-    ///deleters
+    updateUser_post:(state, action:PayloadAction<User_post>)=>{//Self_post
+      const index = action.payload.id
+      //@ts-ignore
+      const messageIndex = state.user_posts[index][0].findIndex(post => post.id === id);
+    
+    if (messageIndex !== -1) {
+      //@ts-ignore      
+      state.user_posts[index][0].content = action.payload.post;
+    }
+    },
+    updateSelf_post:(state, action:PayloadAction<Self_post>)=>{
+      const index = action.payload.id
+      //@ts-ignore
+      const messageIndex = state.self_posts[index][0].findIndex(post => post.id === id);
+    
+    if (messageIndex !== -1) {
+      //@ts-ignore      
+      state.self_posts[index][0].content = action.payload.post;
+    }
+    },
+    ///-----------------------------deleters-----------------------------------------
     deleteMessage:(state, action: PayloadAction<Rooms_msgs>) => {
       const roomID = Object.keys(action.payload);
       const msg = Object.values(action.payload);
