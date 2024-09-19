@@ -231,6 +231,29 @@ const messagerSlice = createSlice({
       console.log('after deleting post: ',state.message)
 
     },
+    delete_SelfPost:(state, action: PayloadAction<Self_post>) => {
+      const post_id = action.payload.id;      
+      /*
+      if (!(msg_id in state.self_posts)) {
+        state.messages[parseInt(msg_id, 10)] = [];
+      }*/
+
+      //@ts-ignore
+      state.self_posts.filter(post => post.id !== post_id);
+      console.log('after deleting post: ',state.self_posts)
+
+    },
+    delete_UserPost:(state, action: PayloadAction<User_post>) => {
+      const post_id = action.payload.id;      
+      /*
+      if (!(msg_id in state.self_posts)) {        
+        state.user_posts = [];
+      }*/
+      //@ts-ignore
+      state.user_posts.filter(post => post.id !== post_id);
+      console.log('after deleting post: ',state.user_posts)
+
+    },
   },
 }); 
 export const {
