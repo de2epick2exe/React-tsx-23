@@ -325,7 +325,6 @@ wss.on("connection", (ws) => {
           }
 
           break;
-
         case "delete_self_post": 
         for (const live_room of setted_rooms) {
           if (live_room.clients.has(ws)) {

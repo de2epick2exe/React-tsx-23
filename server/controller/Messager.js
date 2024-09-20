@@ -562,6 +562,7 @@ class Messager {
   async delete_self_post(req, res) {
     try {
       const {id, type}= req.body
+      console.log('delete self post', type, id)
       if(type == 'open'){
         const post = await db.query(
           "DELETE FROM self_posts_open WHERE id = $1 RETURNING id, content",

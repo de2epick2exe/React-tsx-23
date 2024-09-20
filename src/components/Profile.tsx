@@ -125,6 +125,15 @@ const Profile = () => {
     console.log("create post data:", msg);
     dispatch(sendMessage(msg));
   };
+  const delete_post = (id: any) => {
+    const msg = {
+      id: id,     
+      type: "open",
+      event: "delete_self_post",
+    };
+    console.log("delete post data:", msg);
+    dispatch(sendMessage(msg));
+  };
 
   const get_posts = () => {
     const msg = {
@@ -146,7 +155,7 @@ const Profile = () => {
       setComment(e.target.value);
     };
 
-    const posts = messager_store.user_posts.map((posts, index) => (
+    const posts = messager_store.user_posts.map((post, index) => (
       <Box
         key={index}
         border={"2px solid black"}
@@ -184,7 +193,7 @@ const Profile = () => {
                 >
                   Edit
                 </MenuItem>
-                <MenuItem icon={<DeleteIcon />}>Delete</MenuItem>
+                <MenuItem icon={<DeleteIcon />} onClick={(e)=>delete_post(post.id)}>Delete</MenuItem>
               </MenuList>
             </Menu>
           ) : (
@@ -193,7 +202,7 @@ const Profile = () => {
         </Flex>
         <Text>{edit_index == index ? <>edit</> : <></>} </Text>
         <Text borderBottom="2px solid red" my="2">
-          {posts?.post}
+          {post?.post}
         </Text>
 
         <InputGroup mb="2">
