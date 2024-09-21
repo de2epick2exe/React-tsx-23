@@ -31,6 +31,7 @@ const wss = new WebSocket.Server({ noServer: true });
 
 const clients = {};
 const setted_rooms = [];
+const users_rooms = [];
 wss.on("connection", (ws) => {
   console.log("user connected");
   const clientId = Date.now(); // neeed to Implement function to generate unique IDs
@@ -105,7 +106,39 @@ wss.on("connection", (ws) => {
             }
           }
           break;
-
+          case "connection_to_users_room":
+            //add here to create a room
+            const user_room = parsedMessage.room;
+            console.log(user_room); //--------------------
+            if (user_room) {
+              const exist_room = setted_rooms.find(
+                (room_id) => room_id.id === user_room
+              );
+              if (exist_room) {
+                console.log("find room id exist"); ///--------------------
+                exist_room.clients.add(ws);
+                console.log("Client connected to room"); //-----------------
+                clients[clientId].send(
+                  JSON.stringify([
+                    { event: "connection_to_room", connected_to: user_room },
+                  ])
+                );
+              } else {
+                const newRoom = {
+                  id: user_room,
+                  clients: new Set(),
+                };
+                newRoom.clients.add(ws);
+                users_rooms.push(newRoom);
+                console.log("Created new room + client joined to room");
+                clients[clientId].send(
+                  JSON.stringify([
+                    { event: "connection_to_room", connected_to: user_room },
+                  ])
+                );
+              }
+            }
+            break;
         case "add_friend":
           const add_res = await UserController.add_friend(
             parsedMessage.id,
@@ -325,7 +358,7 @@ wss.on("connection", (ws) => {
           }
 
           break;
-        case "delete_self_post": 
+        case "delete_self_post":         
         for (const live_room of setted_rooms) {
           if (live_room.clients.has(ws)) {
             live_room.clients.forEach(async (client) => {
@@ -387,7 +420,7 @@ wss.on("connection", (ws) => {
           break;
         default:
           console.log("Unknown event:", parsedMessage.event);
-      }
+      } 
     } catch (e) {
       console.error("error:____________________________");
       console.warn(e);
