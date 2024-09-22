@@ -64,6 +64,7 @@ const Profile = () => {
     }
   };
   useEffect(() => {
+    connect_to_user_room()
     get_profile();
     get_posts();
   }, []);
@@ -112,6 +113,15 @@ const Profile = () => {
       matched_column
       { matched_column: 'friends_list' }
       */
+  };
+
+  const connect_to_user_room = () => {
+    const msg = {      
+      room: id,
+      event: "connection_to_users_room",
+    };
+    console.log("create post data:", msg);
+    
   };
 
   const create_post = () => {
