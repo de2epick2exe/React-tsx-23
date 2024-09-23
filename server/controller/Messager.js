@@ -565,7 +565,7 @@ class Messager {
       console.log('delete self post', type, id)
       if(type == 'open'){
         const post = await db.query(
-          "DELETE FROM self_posts_open WHERE id = $1 RETURNING id, content",
+          "DELETE FROM self_posts_open WHERE id = $1 RETURNING id",
           [id]
         );
         const data = {

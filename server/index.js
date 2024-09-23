@@ -107,7 +107,7 @@ wss.on("connection", (ws) => {
           }
           break;
           case "connection_to_users_room":
-            //add here to create a room
+            console.log("connection to user room event ... ")
             const user_room = parsedMessage.room;
             console.log(user_room); //--------------------
             if (user_room) {
@@ -359,7 +359,7 @@ wss.on("connection", (ws) => {
 
           break;
         case "delete_self_post":         
-        for (const live_room of setted_rooms) {
+        for (const live_room of users_rooms) {
           if (live_room.clients.has(ws)) {
             live_room.clients.forEach(async (client) => {
               console.log("finded room for user(current ws)");

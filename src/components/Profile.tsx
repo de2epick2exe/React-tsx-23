@@ -120,7 +120,8 @@ const Profile = () => {
       room: id,
       event: "connection_to_users_room",
     };
-    console.log("create post data:", msg);
+    dispatch(sendMessage(msg))
+    console.log("connecting to room:", msg);
     
   };
 
@@ -305,7 +306,7 @@ const Profile = () => {
               />
             </Center>
             <br />
-
+              
             <User_info />
             {/**-------------------- Login Modal------------------------------- */}
             <Modal isOpen={isOpenLogin} onClose={onCloseLogin}>
