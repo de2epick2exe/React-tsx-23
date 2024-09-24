@@ -14,6 +14,8 @@ import {
   set_UserPosts,
   addSelf_post,
   addUser_post,
+  delete_UserPost,
+  delete_SelfPost,
 } from "./MessagerSlice";
 import { setFriends, setWaitingList, setRecomends } from "./UserSlice";
 
@@ -154,6 +156,14 @@ export const connectToWebSocket = () => {
               console.log("deleted post event");
               dispatch(deletePost(message[0].post));
               break;
+            case "delete_user_post":
+              console.log("deleted post event");
+              dispatch(delete_UserPost(message[0].post));
+              break;
+              case "delete_self_post":
+                console.log("deleted post event");
+                dispatch(delete_SelfPost(message[0].post));
+                break;
             case "delete_file":
               console.log("deleted file");
               break;

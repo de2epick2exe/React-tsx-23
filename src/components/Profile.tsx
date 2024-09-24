@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -255,18 +255,22 @@ const Profile = () => {
     );
   };
 
-  const Posting_area = () => {
+  const Posting_area = useMemo(() => {
     if (data.id == (id ? parseFloat(id) : null)) {
+      const inputPost = (e: any) => {
+        e.preventDefault();
+        set_postMessage(e.target.value);
+      };
       return (
         <>
           <InputGroup mt="2">
             <Textarea
               resize="none"
               value={post_message}
-              onChange={(e) => set_postMessage(e.target.value)}
+              onChange={(e) => inputPost(e)}
             />
             <InputRightElement>
-              <Button onClick={create_post}>
+              <Button onClick={(e)=>create_post}>
                 <ArrowRightIcon />
               </Button>
             </InputRightElement>
@@ -275,7 +279,7 @@ const Profile = () => {
       );
     }
     return <></>;
-  };
+  },[post_message, set_postMessage])
 
   if (profile_data?.status == 404) {
     {
@@ -330,7 +334,7 @@ const Profile = () => {
           </GridItem>
           {/**-------------------- Center column------------------------------- */}
           <GridItem borderX="2px solid red">
-            <Posting_area />
+            {Posting_area}
             <Posts_component />
           </GridItem>
           {/**-------------------- Right column------------------------------- */}

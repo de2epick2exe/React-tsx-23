@@ -271,6 +271,8 @@ export const {
   setSearchedChannel,
   deleteMessage, 
   deletePost,
+  delete_SelfPost,
+  delete_UserPost,
   updateMessage
 } = messagerSlice.actions;
 
