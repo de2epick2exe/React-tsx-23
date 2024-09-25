@@ -273,7 +273,9 @@ export const {
   deletePost,
   delete_SelfPost,
   delete_UserPost,
-  updateMessage
+  updateMessage,
+  updateSelf_post,
+  updateUser_post,
 } = messagerSlice.actions;
 
 export default messagerSlice.reducer;

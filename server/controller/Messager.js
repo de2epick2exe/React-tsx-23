@@ -505,7 +505,7 @@ class Messager {
         [post, id]
       );
       const data = {
-        event: "update_open_post",
+        event: "update_user_post",
         status: 200,
         post: updated_post.rows[0],
       };
@@ -516,7 +516,7 @@ class Messager {
       [post, id]
     );
     const data = {
-      event: "update_closed_post",
+      event: "update_self_post",
       status: 200,
       post: updated_post.rows[0],
     };

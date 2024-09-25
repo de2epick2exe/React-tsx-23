@@ -16,6 +16,8 @@ import {
   addUser_post,
   delete_UserPost,
   delete_SelfPost,
+  updateSelf_post,
+  updateUser_post,
 } from "./MessagerSlice";
 import { setFriends, setWaitingList, setRecomends } from "./UserSlice";
 
@@ -136,6 +138,12 @@ export const connectToWebSocket = () => {
             case "update_post":
               dispatch(updateMessage(message[0].message));
               break;
+            case "update_self_post":
+              dispatch(updateSelf_post(message[0].message));
+              break;
+            case "update_user_post":
+              dispatch(updateUser_post(message[0].message));
+              break;
             case "searched_channel":
               console.log("searched channel is:", message[0]);
               if (message[0].status == 404) {
@@ -160,10 +168,10 @@ export const connectToWebSocket = () => {
               console.log("deleted post event");
               dispatch(delete_UserPost(message[0].post));
               break;
-              case "delete_self_post":
-                console.log("deleted post event");
-                dispatch(delete_SelfPost(message[0].post));
-                break;
+            case "delete_self_post":
+              console.log("deleted post event");
+              dispatch(delete_SelfPost(message[0].post));
+              break;
             case "delete_file":
               console.log("deleted file");
               break;
