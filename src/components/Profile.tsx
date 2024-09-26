@@ -270,7 +270,7 @@ const Profile = () => {
               onChange={(e) => inputPost(e)}
             />
             <InputRightElement>
-              <Button onClick={(e)=>create_post}>
+              <Button onClick={(e)=>create_post()}>
                 <ArrowRightIcon />
               </Button>
             </InputRightElement>

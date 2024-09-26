@@ -208,6 +208,7 @@ const messagerSlice = createSlice({
       //@ts-ignore      
       state.self_posts[index][0].content = action.payload.post;
     }
+    
     },
     ///-----------------------------deleters-----------------------------------------
     deleteMessage:(state, action: PayloadAction<Rooms_msgs>) => {
@@ -239,18 +240,19 @@ const messagerSlice = createSlice({
       }*/
 
       //@ts-ignore
-      state.self_posts.filter(post => post.id !== post_id);
+      state.self_posts = state.self_posts.filter(post => post.id !== post_id);
       console.log('after deleting post: ',state.self_posts)
 
     },
     delete_UserPost:(state, action: PayloadAction<User_post>) => {
+      console.log(action.payload, '< value to delete')
       const post_id = action.payload.id;      
       /*
       if (!(msg_id in state.self_posts)) {        
         state.user_posts = [];
       }*/
       //@ts-ignore
-      state.user_posts.filter(post => post.id !== post_id);
+      state.user_posts = state.user_posts.filter(post => post.id !== post_id);
       console.log('after deleting post: ',state.user_posts)
 
     },

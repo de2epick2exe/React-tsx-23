@@ -569,7 +569,7 @@ class Messager {
           [id]
         );
         const data = {
-          event: "delete_self_post_open",
+          event: "delete_user_post",
           status: 200,
           post: post.rows[0],
         };
@@ -580,7 +580,7 @@ class Messager {
         [id]
       );
       const data = {
-        event: "delete_self_post_closed",
+        event: "delete_self_post",
         status: 200,
         post: post.rows[0],
       };
