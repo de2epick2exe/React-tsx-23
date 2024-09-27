@@ -41,6 +41,7 @@ import { sendMessage } from "../store/reduses/WS_Slice";
 
 const Profile = () => {
   const data = useSelector((state: RootState) => state.userReducer);
+  const ws = useSelector((state: RootState) => state.WS_Slice);
   const messager_store = useSelector(
     (state: RootState) => state.messagerReducer
   );
@@ -67,7 +68,7 @@ const Profile = () => {
     connect_to_user_room()
     get_profile();
     get_posts();
-  }, []);
+  }, [ws.connected]);
 
   const delete_friend = async () => {
     const message = {
@@ -117,7 +118,7 @@ const Profile = () => {
 
   const connect_to_user_room = () => {
     const msg = {      
-      room: id,
+      room: Number(id),
       event: "connection_to_users_room",
     };
     dispatch(sendMessage(msg))
@@ -135,6 +136,7 @@ const Profile = () => {
     };
     console.log("create post data:", msg);
     dispatch(sendMessage(msg));
+    set_postMessage('')
   };
   const delete_post = (id: any) => {
     const msg = {
@@ -157,10 +159,9 @@ const Profile = () => {
 
   const Posts_component = () => {
     const [comment, setComment] = useState("");
-    const [edit, setEditing] = useState("");
+    const [edit_post, setEdit_post] = useState("");
     const [edit_index, setEdit_index] = useState<Number | null>();
     console.log("Profile posts:", messager_store.user_posts);
-
     const inputComment = (e: any) => {
       e.preventDefault();
       setComment(e.target.value);
@@ -211,11 +212,14 @@ const Profile = () => {
             <></>
           )}
         </Flex>
-        <Text>{edit_index == index ? <>edit</> : <></>} </Text>
+        {edit_index == index ? <Textarea
+        value={post?.post}
+        onChange={(e)=>setEdit_post(e.target.value)}
+        /> : 
         <Text borderBottom="2px solid red" my="2">
           {post?.post}
         </Text>
-
+        }
         <InputGroup mb="2">
           <Textarea
             resize="none"
