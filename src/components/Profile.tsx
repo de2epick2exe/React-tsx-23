@@ -159,13 +159,29 @@ const Profile = () => {
 
   const Posts_component = () => {
     const [comment, setComment] = useState("");
-    const [edit_post, setEdit_post] = useState("");
+    const [edited_post, setEdited_post] = useState("");
     const [edit_index, setEdit_index] = useState<Number | null>();
     console.log("Profile posts:", messager_store.user_posts);
     const inputComment = (e: any) => {
       e.preventDefault();
       setComment(e.target.value);
     };
+    const send_edited = (post: any)=>{
+      const msg = {
+        id: post.id,
+        post: edited_post,
+        user_id: data.id,
+        date: new Date(),
+        type: "self",
+        event: "update_self_post",
+      };
+      console.log("update user post:", msg);
+      dispatch(sendMessage(msg));
+      set_postMessage('')
+
+    }
+
+
 
     const posts = messager_store.user_posts.map((post, index) => (
       <Box
@@ -212,10 +228,12 @@ const Profile = () => {
             <></>
           )}
         </Flex>
-        {edit_index == index ? <Textarea
+        {edit_index == index ? <Box><Textarea
         value={post?.post}
-        onChange={(e)=>setEdit_post(e.target.value)}
-        /> : 
+        onChange={(e)=>setEdited_post(e.target.value)}
+        />
+        <Button onClick={()=>send_edited(post)}>Confirm</Button>
+        </Box> : 
         <Text borderBottom="2px solid red" my="2">
           {post?.post}
         </Text>
