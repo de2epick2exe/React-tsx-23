@@ -65,6 +65,7 @@ const Messenger = () => {
 
   useEffect(() => {
     setRooms(messager.rooms);
+    get_self_posts()
   });
 
   useEffect(() => {
@@ -73,14 +74,23 @@ const Messenger = () => {
     }
   }, [messager.messages]);
 
+  const get_self_posts = () => {
+    const msg = {
+      user_id: data.id,
+      event: "get_self_posts",
+    };
+
+    dispatch(sendMessage(msg));
+  };
+
+
   /// call users init data
   const get_users_rooms_data = async () => {
     const rooms_for = {
       rooms_for: data.id,
       event: "geting_rooms",
     };
-    dispatch(sendMessage(rooms_for));
-     
+    dispatch(sendMessage(rooms_for));     
 
   };
   
