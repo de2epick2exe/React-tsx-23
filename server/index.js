@@ -313,12 +313,12 @@ wss.on("connection", (ws) => {
           }
           break;
         case "update_self_post":    
-          for (const live_room of setted_rooms) {
+          for (const live_room of users_rooms) {
             if (live_room.clients.has(ws)) {
               live_room.clients.forEach(async (client) => {
                 console.log("finded room for user(current ws)");
                 console.log(parsedMessage);
-                const update_msg = await Messager.update_message(
+                const update_msg = await Messager.update_self_post(
                   {
                     body: { ...parsedMessage },
                   }

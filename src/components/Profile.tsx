@@ -166,13 +166,17 @@ const Profile = () => {
       e.preventDefault();
       setComment(e.target.value);
     };
+    const turn_editing = (index: any, post: any) =>{
+      setEdit_index(index)
+      setEdited_post(post.post)
+    }
     const send_edited = (post: any)=>{
       const msg = {
         id: post.id,
         post: edited_post,
         user_id: data.id,
         date: new Date(),
-        type: "self",
+        type: "open",
         event: "update_self_post",
       };
       console.log("update user post:", msg);
@@ -216,7 +220,7 @@ const Profile = () => {
                 <MenuItem
                   icon={<EditIcon />}
                   onClick={(e) =>
-                    setEdit_index(edit_index === index ? null : index)
+                    turn_editing(edit_index === index ? null : index, post)
                   }
                 >
                   Edit
@@ -229,7 +233,7 @@ const Profile = () => {
           )}
         </Flex>
         {edit_index == index ? <Box><Textarea
-        value={post?.post}
+        value={edited_post}
         onChange={(e)=>setEdited_post(e.target.value)}
         />
         <Button onClick={()=>send_edited(post)}>Confirm</Button>

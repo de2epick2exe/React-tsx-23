@@ -501,7 +501,7 @@ class Messager {
       const { id, post, type } = req.body;
       if(type == "open"){
       const updated_post = await db.query(
-        "UPDATE self_posts_open SET content = $1 WHERE id = $2 RETURNING *",
+        "UPDATE self_posts_open SET post = $1 WHERE id = $2 RETURNING *",
         [post, id]
       );
       const data = {
