@@ -229,7 +229,9 @@ wss.on("connection", (ws) => {
           clients[clientId].send(JSON.stringify(profile_posts));
           break;
           case "get_self_posts":
-            const self_posts = await Messager.get_self_posts(parsedMessage.room_id); /// change args in main messager
+            const self_posts = await Messager.get_self_posts({
+              body: { ...parsedMessage },
+            }); /// change args in main messager
             console.log(`sent messages for ${parsedMessage.room_id}: `, message);
             clients[clientId].send(JSON.stringify(self_posts));
             break;             

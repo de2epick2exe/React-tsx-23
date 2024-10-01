@@ -155,6 +155,10 @@ const Room: React.FC<RoomProps> = ({
   const delete_message = () => {
     let msg_event;
     if (room_type == "private" || room_type == "chat") {
+      //@ts-ignore
+      if(selectedMessage.from_id !== data.id){
+        return
+      }
       msg_event = "delete_message";
     } else {
       msg_event = "delete_post";
@@ -566,6 +570,7 @@ const Room: React.FC<RoomProps> = ({
               >
                 <p>Copy</p>
               </Flex>
+              
               <Flex
                 cursor="pointer"
                 _hover={{ bg: "FireBrick", color: "white" }}

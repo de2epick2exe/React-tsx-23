@@ -66,7 +66,7 @@ const Messenger = () => {
   useEffect(() => {
     setRooms(messager.rooms);
     get_self_posts()
-  });
+  },[]);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -76,7 +76,7 @@ const Messenger = () => {
 
   const get_self_posts = () => {
     const msg = {
-      user_id: data.id,
+      id: data.id,
       event: "get_self_posts",
     };
 
