@@ -153,6 +153,9 @@ class Messager {
       console.log(error);
     }
   }
+
+
+
   /*
  
  |users|  <= |     channel_followers     |<=  |channels      |
@@ -315,6 +318,17 @@ class Messager {
         data: closed_posts.rows
       }]
   
+  }
+  async get_recomends(req,res){
+    try{
+    const recomends = await db.query('SELECT * FROM self_posts_open ')
+    return [{
+      event: "self_closed_posts",
+      data: recomends.rows
+    }]}
+    catch(e){
+      console.log('get recomends posts error', e.message)
+    }
   }
 
   async get_latest_messaging_content(req, res) {
