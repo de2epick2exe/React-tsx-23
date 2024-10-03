@@ -235,13 +235,21 @@ wss.on("connection", (ws) => {
             console.log(`sent messages for ${parsedMessage.room_id}: `, message);
             clients[clientId].send(JSON.stringify(self_posts));
             break;             
-        case "get_recomended_users":
+        case "get_recomends":
           const recomended_users = await UserController.get_recomended_users(
-            parsedMessage.page,
-            parsedMessage.limit
+            {
+              body: { ...parsedMessage },
+            }
           );
           clients[clientId].send(JSON.stringify(recomended_users));
           break;
+          case "get_recomended_users":
+            const recomends = await Messager.get_recomends(
+              parsedMessage.page,
+              parsedMessage.limit
+            );
+            clients[clientId].send(JSON.stringify(recomended_users));
+            break;
         case "get_friends":
           const friends_list = await UserController.get_friends(
             parsedMessage.id
