@@ -323,7 +323,7 @@ class Messager {
     try{
     const recomends = await db.query('SELECT * FROM self_posts_open ')
     return [{
-      event: "self_closed_posts",
+      event: "recomends_posts",
       data: recomends.rows
     }]}
     catch(e){

@@ -72,7 +72,8 @@ interface MessagerState {
   rooms: Room[];
   searched_channel: Channel[];
   user_posts: User_post[],
-  self_posts: Self_post[]
+  self_posts: Self_post[],
+  recomends: User_post[]
 }
 const initialState: MessagerState = {
   messages: {},
@@ -83,7 +84,8 @@ const initialState: MessagerState = {
   rooms: [],
   searched_channel:[],
   user_posts:[],
-  self_posts:[]
+  self_posts:[],
+  recomends: []
 };
 
 const messagerSlice = createSlice({
@@ -176,6 +178,16 @@ const messagerSlice = createSlice({
 
       state.searched_channel = action.payload;
       console.log('founded chan is: ', state.searched_channel )
+    },
+    setRecomendsPosts:(state, action: PayloadAction<User_post[] >) => {
+      console.log('ws RecomendsPosts func data:', action.payload)
+      state.searched_channel = []
+      //@ts-ignore
+      if(action.payload[0] == []){      
+        return
+      }
+      state.recomends = action.payload;
+      console.log('recomends posts is: ', state.searched_channel )
     },
     ///------------------------------modifiers-----------------------------------------
     updateMessage:(state, action:PayloadAction<Rooms_msgs>)=>{

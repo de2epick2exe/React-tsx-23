@@ -127,6 +127,12 @@ export const connectToWebSocket = () => {
               //@ts-ignore
               dispatch(set_UserPosts(message[0].data));
               break;
+            case "recomends_posts":
+              console.log("self_posts_open", message[0]);
+              console.log(message[0]);
+              //@ts-ignore
+              dispatch(set_UserPosts(message[0].data));
+            break;
             case "recomended_users":
               console.log("recomends received");
               console.log(message[0].data);
