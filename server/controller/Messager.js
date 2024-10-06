@@ -321,7 +321,8 @@ class Messager {
   }
   async get_recomends(req,res){
     try{
-    const recomends = await db.query('SELECT * FROM self_posts_open ')
+    const {offset, lim } = req.body;
+    const recomends = await db.query('SELECT self_posts_open.*, users.username, users.avatar FROM self_posts_open LEFT JOIN users ON self_posts_open.user_id = users.id OFFSET $1 LIMIT $2', [offset, lim])
     return [{
       event: "recomends_posts",
       data: recomends.rows
