@@ -11,6 +11,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Settings from "./components/Settings";
 import Contacts from "./components/Contacts";
+import Feed from "./components/Feed";
 
 const routes: RouteProps[] = [
   {
@@ -42,7 +43,7 @@ const routes: RouteProps[] = [
   { path: "/register", element: <Register /> },
   {path: '/settings', element:<Settings/>},
   {path: '/contacts', element:<Contacts/>},
-
+  {path:'/feed', element:<Feed/>},
   ///
 
   // Add more routes as needed

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { Box, Button, Flex, Grid, GridItem, IconButton, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, Grid, GridItem, IconButton, Menu, MenuButton, MenuItem, MenuList,Text } from "@chakra-ui/react";
 import { sendMessage } from "../store/reduses/WS_Slice";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { DeleteIcon, EditIcon, HamburgerIcon } from "@chakra-ui/icons";
@@ -40,7 +40,16 @@ function Feed() {
       >
         <Flex mt="1" justifyContent="space-between">
           <Flex>           
-            username
+          <Avatar
+              size="sm"
+              name={post?.username}
+              src={
+                post?.avatar != null
+                  ? `http://localhost:8080/img/${post?.avatar}`
+                  : `http://localhost:8080/img/default.jpg`
+              }
+            />
+            <Text ml="1">{post?.username}</Text>
           </Flex>          
             <Menu>
               <MenuButton
@@ -51,8 +60,7 @@ function Feed() {
               />
               <MenuList>
                 <MenuItem
-                  icon={<EditIcon />}
-                  
+                  icon={<EditIcon />}                  
                 >
                   Edit
                 </MenuItem>
@@ -80,7 +88,7 @@ function Feed() {
               </Box>
               </GridItem>
               <GridItem borderX='2px solid red'>
-                Feed
+              <Feed_Component/>
               </GridItem>
               <GridItem>
               <Box>
