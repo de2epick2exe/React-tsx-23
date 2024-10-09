@@ -18,6 +18,8 @@ interface Room {
 interface User_post{ 
   id: number;
   user_id: number;
+  username: string;
+  avatar:string,
   date: Date;
   post: any;
   emotes: [];
