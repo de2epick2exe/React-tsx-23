@@ -9,3 +9,8 @@ export interface User{
     is_auth: false;
     
 }
+export interface Friend {
+    id: number;
+    username: string;
+    rooms_id: number;
+  }
