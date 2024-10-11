@@ -237,6 +237,22 @@ class Messager {
       console.log(error);
     }
   }
+  async create_comment(req, res) {
+    console.log(req.body, req);
+    const { post_id, comment, date, type } = req.body;
+    console.log('create comment data: ', post_id, comment, date, type)
+    const content = await db.query(
+        "INSERT INTO comments VALUES ($1, $2, $3, $4) RETURNING *",
+      [type,comment, post_id, date]);
+      const data = {
+        status: 200,
+        comment: content.rows,
+        event: "create_comment"
+      };
+          
+    return [data];
+  }
+
   async create_self_post(req, res) {
     console.log(req.body, req);
     const { user_id, post, date, type } = req.body;
