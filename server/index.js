@@ -193,6 +193,12 @@ wss.on("connection", (ws) => {
           });
           clients[clientId].send(JSON.stringify(create_self_post));
           break;
+        case "create_comment":
+            const comment = await Messager.create_comment({
+              body: { ...parsedMessage },
+            });
+            clients[clientId].send(JSON.stringify(comment));
+            break;
         case "create_post":
           const create_post = await Messager.create_post({
             body: { ...parsedMessage },
