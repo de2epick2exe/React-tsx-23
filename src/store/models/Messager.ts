@@ -13,7 +13,17 @@ export interface Room {
     post: any;
     emotes: [];
   }
-  
+  export interface Comment{ 
+    id: number;
+    user_id: number;
+    username: string;
+    avatar:string,
+    date: Date;
+    comment: any;
+    emotes: [];
+    answers: Comment[]
+    count_of_answers: number;    
+  }
   export interface Self_post{  
     id:number;
     user_id: number;
