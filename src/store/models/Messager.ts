@@ -24,6 +24,10 @@ export interface Room {
     answers: Comment[]
     count_of_answers: number;    
   }
+  export interface Comments{
+    [index: number]: Comment[]
+  }
+
   export interface Self_post{  
     id:number;
     user_id: number;

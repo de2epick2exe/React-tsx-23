@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
+import { Comments } from "../models/Messager";
 /* db`s tabs:
 |users| <= | conversations| <= |rooms| <= |messages|
 |id   |    |uid    room_id|    | id  |    | room_id|  
@@ -75,7 +76,8 @@ interface MessagerState {
   searched_channel: Channel[];
   user_posts: User_post[],
   self_posts: Self_post[],
-  recomends: User_post[]
+  recomends: User_post[],
+  comments:Comments
 }
 const initialState: MessagerState = {
   messages: {},
@@ -87,7 +89,8 @@ const initialState: MessagerState = {
   searched_channel:[],
   user_posts:[],
   self_posts:[],
-  recomends: []
+  recomends: [],
+  comments:[]
 };
 
 const messagerSlice = createSlice({
@@ -131,6 +134,7 @@ const messagerSlice = createSlice({
       console.log('user_post WS FUNC', action.payload)
       state.user_posts.push(action.payload)
     },
+    ///-------------------setters-----------------------------------
     setMessage: (state, action: PayloadAction<string | null>) => {
       state.message = action.payload;
     },
@@ -190,6 +194,17 @@ const messagerSlice = createSlice({
       }
       state.recomends = action.payload;
       console.log('recomends posts is: ', state.searched_channel )
+    },
+    setComments:(state, action:PayloadAction<Rooms_msgs>)=>{
+      const indexes = Object.keys(action.payload);
+      const comments = Object.values(action.payload);
+      //@ts-ignore
+      const messageIndex = state.comments[indexes][0].findIndex(message => message.message_id === message_id);
+    
+    if (messageIndex !== -1) {
+      //@ts-ignore      
+      state.messages[parseInt(indexes[0], 10)].shift(comments[0]);     
+    }
     },
     ///------------------------------modifiers-----------------------------------------
     updateMessage:(state, action:PayloadAction<Rooms_msgs>)=>{
@@ -292,6 +307,7 @@ export const {
   updateMessage,
   updateSelf_post,
   updateUser_post,
+  setComments,
 } = messagerSlice.actions;
 
 export default messagerSlice.reducer;
