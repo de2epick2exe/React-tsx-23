@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { Comments } from "../models/Messager";
+import { Channel, Comments, Notify, Room, Rooms_msgs, Self_post, User_post } from "../models/Messager";
 /* db`s tabs:
 |users| <= | conversations| <= |rooms| <= |messages|
 |id   |    |uid    room_id|    | id  |    | room_id|  
@@ -9,57 +9,7 @@ interface MessagerState {
     rooms: any;
     room_error: string| null;
   }
-*/
-interface Room {
-  id: number;
-  username: string;
-  type: string;
-  rooms_id: number;
-}
-interface User_post{ 
-  id: number;
-  user_id: number;
-  username: string;
-  avatar:string,
-  date: Date;
-  post: any;
-  emotes: [];
-}
 
-interface Self_post{  
-  id:number;
-  user_id: number;
-  date: Date;
-  content: any;
-  emotes: [];
-}
-interface Channel {
-  id: number;
-  channel_name: string;
-  status: boolean;
-  followers: number;
-  admins: [];
-  is_follow: boolean;
-}
-interface Notify {
-  from: string;
-  message: string;
-  avatar: string;
-}
-
-
-interface Message {
-  from_id: number;
-  to_id: number;
-  user_id: number;
-  date: Date;
-  content: any;
-  emotes: [];
-}
-interface Rooms_msgs {
-  [roomid: number]: Message[];
-}
-/*
 messages: {
   room_id : [messages array], 
   room_id2: [messages array],  
@@ -76,8 +26,7 @@ interface MessagerState {
   searched_channel: Channel[];
   user_posts: User_post[],
   self_posts: Self_post[],
-  recomends: User_post[],
-  comments:Comments
+  recomends: User_post[],  
 }
 const initialState: MessagerState = {
   messages: {},
@@ -89,8 +38,7 @@ const initialState: MessagerState = {
   searched_channel:[],
   user_posts:[],
   self_posts:[],
-  recomends: [],
-  comments:[]
+  recomends: [],  
 };
 
 const messagerSlice = createSlice({
@@ -195,15 +143,19 @@ const messagerSlice = createSlice({
       state.recomends = action.payload;
       console.log('recomends posts is: ', state.searched_channel )
     },
-    setComments:(state, action:PayloadAction<Rooms_msgs>)=>{
-      const indexes = Object.keys(action.payload);
-      const comments = Object.values(action.payload);
+    setComments:(state, action:PayloadAction<User_post[]>)=>{
+            
       //@ts-ignore
-      const messageIndex = state.comments[indexes][0].findIndex(message => message.message_id === message_id);
+      const messageIndex = state.user_posts[indexes][0].findIndex(message => message.message_id === message_id);
     
     if (messageIndex !== -1) {
       //@ts-ignore      
-      state.messages[parseInt(indexes[0], 10)].shift(comments[0]);     
+      action.payload.forEach(post_id =>{
+      state.user_posts[0].findIndex((post : any, index: any)  =>
+      post_id === post.id ?  
+      state.user_posts[index].shift(post_id.comments));      
+      })
+           
     }
     },
     ///------------------------------modifiers-----------------------------------------

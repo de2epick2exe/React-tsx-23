@@ -12,6 +12,7 @@ export interface Room {
     date: Date;
     post: any;
     emotes: [];
+    comments:Comment[]
   }
   export interface Comment{ 
     id: number;
