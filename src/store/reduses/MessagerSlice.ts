@@ -82,6 +82,19 @@ const messagerSlice = createSlice({
       console.log('user_post WS FUNC', action.payload)
       state.user_posts.push(action.payload)
     },
+    addComment:(state, action:PayloadAction<User_post>)=>{
+            
+      //@ts-ignore
+      const post_index = state.user_posts[indexes][0].findIndex(post => post.id === action.payload.id);
+    
+    if (post_index !== -1) {
+      //@ts-ignore      
+      
+      state.user_posts[post_index].shift(action.payload.comments[0]);      
+    }
+           
+    
+    },
     ///-------------------setters-----------------------------------
     setMessage: (state, action: PayloadAction<string | null>) => {
       state.message = action.payload;
@@ -243,23 +256,24 @@ export const {
   addMessage,
   addSelf_post,
   addUser_post,
+  addComment,
   setMessage,
   setMessages,  
   setNotifies,  
   setRooms,
   set_UserPosts,
   set_SelfPosts,
+  setComments,
   setCurrentRoom,
   setCurrentChannel,
-  setSearchedChannel,
-  deleteMessage, 
-  deletePost,
-  delete_SelfPost,
-  delete_UserPost,
+  setSearchedChannel,  
   updateMessage,
   updateSelf_post,
   updateUser_post,
-  setComments,
+  deleteMessage, 
+  deletePost,
+  delete_SelfPost,
+  delete_UserPost,  
 } = messagerSlice.actions;
 
 export default messagerSlice.reducer;
