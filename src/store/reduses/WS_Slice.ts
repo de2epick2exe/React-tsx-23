@@ -18,6 +18,7 @@ import {
   delete_SelfPost,
   updateSelf_post,
   updateUser_post,
+  addComment,
 } from "./MessagerSlice";
 import { setFriends, setWaitingList, setRecomends } from "./UserSlice";
 
@@ -133,6 +134,9 @@ export const connectToWebSocket = () => {
               //@ts-ignore
               dispatch(set_UserPosts(message[0].data));
             break;
+            case "create_comment":
+              dispatch(addComment(message[0]))
+              break;
             case "recomended_users":
               console.log("recomends received");
               console.log(message[0].data);
