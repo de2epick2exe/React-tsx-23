@@ -2,13 +2,20 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
-import { Box, Button, Flex, Grid, GridItem, IconButton, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, GridItem,Text, IconButton, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { sendMessage } from "./store/reduses/WS_Slice";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { DeleteIcon, EditIcon, HamburgerIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
 
 function App() {
   const data = useSelector((state: RootState) => state.userReducer);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (data.is_auth) {
+      navigate("/feed");
+    }
+  }, [data.is_auth, navigate]);
   const ws = useSelector((state: RootState) => state.WS_Slice);
   const messager = useSelector((state: RootState) => state.messagerReducer);
 
@@ -24,11 +31,7 @@ function App() {
   return (
     <>
       <div className="App page">
-        {data.is_auth ? (
-                   ''
-        ) : (
-          "user not auth"
-        )}
+        <Text></Text>
       </div>
     </>
   );

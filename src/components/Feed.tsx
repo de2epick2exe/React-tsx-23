@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "./App.css";
+import "../App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { Avatar, Box, Button, Flex, Grid, GridItem, IconButton, Menu, MenuButton, MenuItem, MenuList,Text } from "@chakra-ui/react";
@@ -27,10 +27,8 @@ function Feed() {
   };
 
   const Feed_Component = ()=>{
-
-
-    return messager.recomends.map((post, index)=>(
-    <>
+    return <>{messager.recomends.map((post, index)=>(
+    
     <Box
         key={index}
         border={"2px solid black"}
@@ -68,8 +66,8 @@ function Feed() {
               </MenuList>
             </Menu>
         </Flex></Box>       
-    </>
-    ))}
+    
+    ))}</>}
 
 
   return (

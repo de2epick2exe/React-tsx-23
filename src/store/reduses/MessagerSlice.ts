@@ -164,9 +164,10 @@ const messagerSlice = createSlice({
     if (messageIndex !== -1) {
       //@ts-ignore      
       action.payload.forEach(post_id =>{
+        //@ts-ignore
       state.user_posts[0].findIndex((post : any, index: any)  =>
-      post_id === post.id ?  
-      state.user_posts[index].shift(post_id.comments));      
+      post_id === post.id ?  //@ts-ignore
+      state.user_posts[index].shift(post_id.comments) : "");      
       })
            
     }
