@@ -556,6 +556,24 @@ class Messager {
       console.log(error);
     }
   }
+  async update_comment(req, res){    
+    try {      
+      const { id, post, type } = req.body;      
+      const updated_post = await db.query(
+        "UPDATE comments SET post = $1 WHERE id = $2 RETURNING *",
+        [post, id]
+      );
+      const data = {
+        event: "update_user_comment",
+        status: 200,
+        post: updated_post.rows[0],
+      };
+      return data;
+   
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async update_message(id, content) {
     try {
       // const { id, content } = req.body;
