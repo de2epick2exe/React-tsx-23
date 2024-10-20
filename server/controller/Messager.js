@@ -638,6 +638,24 @@ class Messager {
       console.log(error);
     }
   }
+  async delete_comment(req, res) {
+    try {
+      const {id, type}= req.body
+      console.log('delete comment', type, id)      
+        const post = await db.query(
+          "DELETE FROM comments WHERE id = $1 RETURNING id",
+          [id]
+        );
+        const data = {
+          event: "delete_comment",
+          status: 200,
+          post: post.rows[0],
+        };
+        return [data];      
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async delete_message(id, date) {
     try {
       const post = await db.query(
