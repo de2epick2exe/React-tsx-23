@@ -328,6 +328,31 @@ wss.on("connection", (ws) => {
             }
           }
           break;
+          
+          case "update_message":
+            const updated_comment = await Messager.update_comment(
+              {
+                body: { ...parsedMessage },
+              }
+            );
+            for (const live_room of setted_rooms) {
+              if (live_room.clients.has(ws)) {
+                live_room.clients.forEach(async (client) => {
+                  console.log("finded room for user(current ws)");
+                  console.log(parsedMessage);
+                  client.send(JSON.stringify(updated_comment));
+                  //client.send(message);
+                  console.log(
+                    "Number of clients in room:",
+                    live_room.clients.size
+                  );
+                  console.log("event send message success");
+                  console.log("message UPDATED in room");
+                });
+                break;
+              }
+            }
+            break;  
         case "update_self_post":    
           for (const live_room of users_rooms) {
             if (live_room.clients.has(ws)) {
