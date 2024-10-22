@@ -420,7 +420,29 @@ wss.on("connection", (ws) => {
             break;
           }
         }
-        break
+        break;
+        case "delete_comment":         
+        for (const live_room of users_rooms) {
+          if (live_room.clients.has(ws)) {
+            live_room.clients.forEach(async (client) => {
+              console.log("finded room for user(current ws)");
+              console.log(parsedMessage);
+              const del_comment = await Messager.delete_comment( {
+                body: { ...parsedMessage },
+              });
+              client.send(JSON.stringify(del_comment));
+              //client.send(message);
+              console.log(
+                "Number of clients in room:",
+                live_room.clients.size
+              );
+              console.log("event send message success");
+              console.log("comment DELETED in room");
+            });
+            break;
+          }
+        }
+        break;
         case "delete_message":
           for (const live_room of setted_rooms) {
             if (live_room.clients.has(ws)) {
