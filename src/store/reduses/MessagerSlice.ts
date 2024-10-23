@@ -194,6 +194,19 @@ const messagerSlice = createSlice({
       state.user_posts[index][0].content = action.payload.post;
     }
     },
+    updateUser_comment:(state, action:PayloadAction<User_post>)=>{//Self_post
+      const index = action.payload.id
+      //@ts-ignore
+      const messageIndex = state.user_posts[index][0].findIndex(post => post.id === id);
+      //@ts-ignore  
+      const commentIndex = state.user_posts[messageIndex][0].comments.findIndex(comment => comment.id === id);
+    if (messageIndex !== -1) {
+      //@ts-ignore      
+      state.user_posts[messageIndex][0].comments[commentIndex].comment = action.payload.comments[0].comment;
+
+      //state.user_posts[index][0].comments = action.payload.post;
+    }
+    },
     updateSelf_post:(state, action:PayloadAction<Self_post>)=>{
       const index = action.payload.id
       //@ts-ignore
@@ -271,6 +284,7 @@ export const {
   updateMessage,
   updateSelf_post,
   updateUser_post,
+  updateUser_comment,
   deleteMessage, 
   deletePost,
   delete_SelfPost,
