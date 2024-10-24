@@ -167,7 +167,7 @@ export const connectToWebSocket = () => {
               }
               dispatch(setSearchedChannel(message[0].data));
               break;
-            ///
+            /// 
             /// delete events
             ///
             case "delete_message":
