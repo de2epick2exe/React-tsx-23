@@ -19,6 +19,7 @@ import {
   updateSelf_post,
   updateUser_post,
   addComment,
+  updateUser_comment,
 } from "./MessagerSlice";
 import { setFriends, setWaitingList, setRecomends } from "./UserSlice";
 
@@ -133,9 +134,9 @@ export const connectToWebSocket = () => {
               console.log(message[0]);
               //@ts-ignore
               dispatch(set_UserPosts(message[0].data));
-            break;
+              break;
             case "create_comment":
-              dispatch(addComment(message[0]))
+              dispatch(addComment(message[0]));
               break;
             case "recomended_users":
               console.log("recomends received");
@@ -154,6 +155,9 @@ export const connectToWebSocket = () => {
             case "update_user_post":
               dispatch(updateUser_post(message[0].message));
               break;
+            case "update_user_comment":
+              dispatch(updateUser_comment(message[0].message));
+              break;              
             case "searched_channel":
               console.log("searched channel is:", message[0]);
               if (message[0].status == 404) {
