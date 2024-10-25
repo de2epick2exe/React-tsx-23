@@ -252,6 +252,23 @@ const messagerSlice = createSlice({
       console.log('after deleting post: ',state.self_posts)
 
     },
+    delete_userComment:(state, action: PayloadAction<User_post>) => {
+      const post_id = action.payload.id;
+      const comment_id = action.payload.comments[0].id      
+      /*
+      if (!(msg_id in state.self_posts)) {
+        state.messages[parseInt(msg_id, 10)] = [];
+      }*/
+
+      //@ts-ignore
+      state.user_posts = state.user_posts.map((post)=>{
+        if(post.id == post_id){
+          post.comments.filter(comment => comment.id !== comment_id);
+        }
+      })
+      console.log('after deleting comment: ',state.user_posts)
+
+    },
     delete_UserPost:(state, action: PayloadAction<User_post>) => {
       console.log(action.payload, '< value to delete')
       const post_id = action.payload.id;      
@@ -289,6 +306,7 @@ export const {
   deletePost,
   delete_SelfPost,
   delete_UserPost,  
+  delete_userComment,
 } = messagerSlice.actions;
 
 export default messagerSlice.reducer;
