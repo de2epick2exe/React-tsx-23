@@ -142,7 +142,7 @@ export const UserSlice = createSlice({
       saveUserState(state);
     }
     },
-    setRecomends: (state, action: PayloadAction<Friend[] | null>) => {
+    setRecomends_Users: (state, action: PayloadAction<Friend[] | null>) => {
       console.log("recomends USERSLICE: ", action.payload);
       console.log(state.recomends_list)
       if (action.payload?.length !== 0){
@@ -183,7 +183,7 @@ export const {
   setError,
   setFriends,
   setWaitingList,
-  setRecomends,
+  setRecomends_Users,
   logout,
 } = UserSlice.actions;
 

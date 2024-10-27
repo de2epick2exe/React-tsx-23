@@ -154,8 +154,6 @@ class Messager {
     }
   }
 
-
-
   /*
  
  |users|  <= |     channel_followers     |<=  |channels      |
@@ -201,8 +199,6 @@ class Messager {
       console.log(error);
     }
   }
-
-  
   async create_post(req, res) {
     try {
       console.log(req.body, req);
@@ -240,41 +236,43 @@ class Messager {
   async create_comment(req, res) {
     console.log(req.body, req);
     const { post_id, comment, date, type } = req.body;
-    console.log('create comment data: ', post_id, comment, date, type)
+    console.log("create comment data: ", post_id, comment, date, type);
     const content = await db.query(
-        "INSERT INTO comments VALUES ($1, $2, $3, $4) RETURNING *",
-      [type,comment, post_id, date]);
-      const data = {
-        status: 200,
-        comment: content.rows,
-        event: "create_comment"
-      };
-          
+      "INSERT INTO comments VALUES ($1, $2, $3, $4) RETURNING *",
+      [type, comment, post_id, date]
+    );
+    const data = {
+      status: 200,
+      comment: content.rows,
+      event: "create_comment",
+    };
+
     return [data];
   }
-
   async create_self_post(req, res) {
     console.log(req.body, req);
     const { user_id, post, date, type } = req.body;
-    console.log('create post data: ', user_id, post, date, type)
+    console.log("create post data: ", user_id, post, date, type);
     if (type == "self_closed") {
       const content = await db.query(
         "INSERT INTO self_posts_closed VALUES ($1, $2, $3) RETURNING *",
-      [user_id, post, date]);
+        [user_id, post, date]
+      );
       const data = {
         status: 200,
         post: content.rows,
-        event: "self_post"
+        event: "self_post",
       };
       return [data];
     }
     const content = await db.query(
       "INSERT INTO self_posts_open(user_id, post, date) VALUES ($1, $2, $3) RETURNING *",
-    [user_id,post,date]);
+      [user_id, post, date]
+    );
     const data = {
       status: 200,
       post: content.rows,
-      event: "user_post"
+      event: "user_post",
     };
     return [data];
   }
@@ -314,37 +312,51 @@ class Messager {
       console.log("error getting rooms", error);
     }
   }
-  async get_profile_posts(req,res){
-    const {user_id} = req.body
-    console.log('Profile posts for id:', user_id,)
-    const profile_post = await db.query('SELECT self_posts_open.*, users.username, users.avatar FROM self_posts_open LEFT JOIN users ON self_posts_open.user_id = users.id WHERE user_id = $1',[user_id])
-    console.log('Profile posts: ', profile_post.rows[0])
-     
-    return [{
-      event: "profile_posts",
-      data: profile_post.rows
-    }]
+  async get_profile_posts(req, res) {
+    const { user_id } = req.body;
+    console.log("Profile posts for id:", user_id);
+    const profile_post = await db.query(
+      "SELECT self_posts_open.*, users.username, users.avatar FROM self_posts_open LEFT JOIN users ON self_posts_open.user_id = users.id WHERE user_id = $1",
+      [user_id]
+    );
+    console.log("Profile posts: ", profile_post.rows[0]);
 
+    return [
+      {
+        event: "profile_posts",
+        data: profile_post.rows,
+      },
+    ];
   }
-  async get_self_posts(req,res){    
-      const {id} = req.body
-      const closed_posts = await db.query('SELECT * FROM self_posts_closed WHERE user_id = $1',[id])
-      return [{
+  async get_self_posts(req, res) {
+    const { id } = req.body;
+    const closed_posts = await db.query(
+      "SELECT * FROM self_posts_closed WHERE user_id = $1",
+      [id]
+    );
+    return [
+      {
         event: "self_closed_posts",
-        data: closed_posts.rows
-      }]
-  
+        data: closed_posts.rows,
+      },
+    ];
   }
-  async get_recomends(req,res){
-    try{
-    const {offset, lim } = req.body;
-    const recomends = await db.query('SELECT self_posts_open.*, users.username, users.avatar FROM self_posts_open LEFT JOIN users ON self_posts_open.user_id = users.id OFFSET $1 LIMIT $2', [offset, lim])
-    return [{
-      event: "recomends_posts",
-      data: recomends.rows
-    }]}
-    catch(e){
-      console.log('get recomends posts error', e.message)
+  async get_recomends(req, res) {
+    try {
+      const { offset, lim } = req.body;
+      console.log('get recomentds')
+      const recomends = await db.query(
+        "SELECT self_posts_open.*, users.username, users.avatar FROM self_posts_open LEFT JOIN users ON self_posts_open.user_id = users.id OFFSET $1 LIMIT $2",
+        [offset, lim]
+      );
+      return [
+        {
+          event: "recomends_posts",
+          data: recomends.rows
+        },
+      ];
+    } catch (e) {
+      console.log("get recomends posts error", e.message);
     }
   }
 
@@ -527,38 +539,38 @@ class Messager {
       console.log(error);
     }
   }
-  async update_self_post(req, res){    
-    try {      
+  async update_self_post(req, res) {
+    try {
       const { id, post, type } = req.body;
-      if(type == "open"){
+      if (type == "open") {
+        const updated_post = await db.query(
+          "UPDATE self_posts_open SET post = $1 WHERE id = $2 RETURNING *",
+          [post, id]
+        );
+        const data = {
+          event: "update_user_post",
+          status: 200,
+          post: updated_post.rows[0],
+        };
+        return data;
+      }
       const updated_post = await db.query(
-        "UPDATE self_posts_open SET post = $1 WHERE id = $2 RETURNING *",
+        "UPDATE self_posts_closed SET post = $1 WHERE id = $2 RETURNING *",
         [post, id]
       );
       const data = {
-        event: "update_user_post",
+        event: "update_self_post",
         status: 200,
         post: updated_post.rows[0],
       };
       return data;
-    }
-    const updated_post = await db.query(
-      "UPDATE self_posts_closed SET post = $1 WHERE id = $2 RETURNING *",
-      [post, id]
-    );
-    const data = {
-      event: "update_self_post",
-      status: 200,
-      post: updated_post.rows[0],
-    };
-    return data;
     } catch (error) {
       console.log(error);
     }
   }
-  async update_comment(req, res){    
-    try {      
-      const { id, post, type } = req.body;      
+  async update_comment(req, res) {
+    try {
+      const { id, post, type } = req.body;
       const updated_post = await db.query(
         "UPDATE comments SET post = $1 WHERE id = $2 RETURNING *",
         [post, id]
@@ -569,7 +581,6 @@ class Messager {
         post: updated_post.rows[0],
       };
       return data;
-   
     } catch (error) {
       console.log(error);
     }
@@ -610,9 +621,9 @@ class Messager {
   }
   async delete_self_post(req, res) {
     try {
-      const {id, type}= req.body
-      console.log('delete self post', type, id)
-      if(type == 'open'){
+      const { id, type } = req.body;
+      console.log("delete self post", type, id);
+      if (type == "open") {
         const post = await db.query(
           "DELETE FROM self_posts_open WHERE id = $1 RETURNING id",
           [id]
@@ -640,18 +651,18 @@ class Messager {
   }
   async delete_comment(req, res) {
     try {
-      const {id, type}= req.body
-      console.log('delete comment', type, id)      
-        const post = await db.query(
-          "DELETE FROM comments WHERE id = $1 RETURNING id",
-          [id]
-        );
-        const data = {
-          event: "delete_comment",
-          status: 200,
-          post: post.rows[0],
-        };
-        return [data];      
+      const { id, type } = req.body;
+      console.log("delete comment", type, id);
+      const post = await db.query(
+        "DELETE FROM comments WHERE id = $1 RETURNING id",
+        [id]
+      );
+      const data = {
+        event: "delete_comment",
+        status: 200,
+        post: post.rows[0],
+      };
+      return [data];
     } catch (error) {
       console.log(error);
     }

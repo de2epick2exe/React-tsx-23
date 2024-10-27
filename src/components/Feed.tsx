@@ -17,6 +17,7 @@ function Feed() {
     try {
       console.log("WEBSOCKET MAIN STATE IS:", ws.connected);
       dispatch(sendMessage({ event: "get_notify", id: data.id }))
+      dispatch(sendMessage({event: "get_recomends", offset: 1, lim: 5 }))
     } catch (error) {
       console.log("app tsx ws error");
     }

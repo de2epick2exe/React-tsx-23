@@ -153,7 +153,7 @@ const messagerSlice = createSlice({
       if(action.payload[0] == []){      
         return
       }
-      state.recomends = action.payload;
+      state.recomends = action.payload!;
       console.log('recomends posts is: ', state.searched_channel )
     },
     setComments:(state, action:PayloadAction<User_post[]>)=>{
@@ -297,7 +297,8 @@ export const {
   setComments,
   setCurrentRoom,
   setCurrentChannel,
-  setSearchedChannel,  
+  setSearchedChannel,
+  setRecomendsPosts,  
   updateMessage,
   updateSelf_post,
   updateUser_post,

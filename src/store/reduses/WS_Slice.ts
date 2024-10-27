@@ -21,8 +21,9 @@ import {
   addComment,
   updateUser_comment,
   delete_userComment,
+  setRecomendsPosts,
 } from "./MessagerSlice";
-import { setFriends, setWaitingList, setRecomends } from "./UserSlice";
+import { setFriends, setRecomends_Users, setWaitingList, } from "./UserSlice";
 
 interface WS {
   socket: WebSocket | null;
@@ -131,10 +132,10 @@ export const connectToWebSocket = () => {
               dispatch(set_UserPosts(message[0].data));
               break;
             case "recomends_posts":
-              console.log("self_posts_open", message[0]);
-              console.log(message[0]);
+              console.log("recomends posts: ", message[0]);
+              console.log(message[0].data);
               //@ts-ignore
-              dispatch(set_UserPosts(message[0].data));
+              dispatch(setRecomendsPosts(message[0].data));
               break;
             case "create_comment":
               dispatch(addComment(message[0]));
@@ -142,10 +143,10 @@ export const connectToWebSocket = () => {
             case "recomended_users":
               console.log("recomends received");
               console.log(message[0].data);
-              dispatch(setRecomends(message[0].data));
+              dispatch(setRecomends_Users(message[0].data));
               break;
             case "accept_friend":
-              dispatch(setRecomends(message[0].rooms));
+              dispatch(setRecomends_Users(message[0].rooms));
               break;
             case "update_post":
               dispatch(updateMessage(message[0].message));
