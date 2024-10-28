@@ -48,7 +48,10 @@ function Feed() {
                   : `http://localhost:8080/img/default.jpg`
               }
             />
+            <Flex flexDir={"column"}>
             <Text ml="1">{post?.username}</Text>
+            <Text ml="1">{post?.post}</Text>
+            </Flex>
           </Flex>          
             <Menu>
               <MenuButton
@@ -66,7 +69,13 @@ function Feed() {
                 <MenuItem icon={<DeleteIcon />} >Delete</MenuItem>
               </MenuList>
             </Menu>
-        </Flex></Box>       
+        </Flex>
+        <Box>
+          {post.comments?.map((comment)=>(
+            <>comment</>
+          ))}
+        </Box>
+      </Box>       
     
     ))}</>}
 
