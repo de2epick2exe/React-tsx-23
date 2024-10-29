@@ -315,9 +315,25 @@ class Messager {
   async get_profile_posts(req, res) {
     const { user_id } = req.body;
     console.log("Profile posts for id:", user_id);
-    const profile_post = await db.query(
+    const profile_posts = await db.query(
       "SELECT self_posts_open.*, users.username, users.avatar FROM self_posts_open LEFT JOIN users ON self_posts_open.user_id = users.id WHERE user_id = $1",
       [user_id]
+    );
+    console.log("Profile posts: ", profile_posts.rows[0]);
+
+    return [
+      {
+        event: "profile_posts",
+        data: profile_posts.rows,
+      },
+    ];
+  }
+  async get_profile_post(req, res) {
+    const { id } = req.body;
+    console.log("Profile posts for id:", user_id);
+    const profile_post = await db.query(
+      "SELECT self_posts_open.*, users.username, users.avatar FROM self_posts_open LEFT JOIN users ON self_posts_open.user_id = users.id WHERE id = $1",
+      [id]
     );
     console.log("Profile posts: ", profile_post.rows[0]);
 
@@ -344,7 +360,7 @@ class Messager {
   async get_recomends(req, res) {
     try {
       const { offset, lim } = req.body;
-      console.log('get recomentds')
+      console.log("get recomentds");
       const recomends = await db.query(
         "SELECT self_posts_open.*, users.username, users.avatar FROM self_posts_open LEFT JOIN users ON self_posts_open.user_id = users.id OFFSET $1 LIMIT $2",
         [offset, lim]
@@ -352,7 +368,7 @@ class Messager {
       return [
         {
           event: "recomends_posts",
-          data: recomends.rows
+          data: recomends.rows,
         },
       ];
     } catch (e) {
