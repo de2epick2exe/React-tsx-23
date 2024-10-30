@@ -12,6 +12,7 @@ import Register from "./components/Register";
 import Settings from "./components/Settings";
 import Contacts from "./components/Contacts";
 import Feed from "./components/Feed";
+import { Post_page } from "./components/Post_page";
 
 const routes: RouteProps[] = [
   {
@@ -37,6 +38,10 @@ const routes: RouteProps[] = [
   {
     path: "/profile/:id",
     element: <Profile />,
+  },
+  {
+    path: "/post/:id",
+    element: <Post_page />,
   },
   { path: "/admin", element: <Admin /> },
   { path: "/login", element: <Login /> },
