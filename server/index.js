@@ -281,7 +281,13 @@ wss.on("connection", (ws) => {
           );
           clients[clientId].send(JSON.stringify(lmsg)); //JSON.stringify(rooms)
           break;
-
+        case "get_user_post":
+          const post = await Messager.get_profile_post({
+            body: { ...parsedMessage },
+          }); /// change args in main messager
+          console.log("get post: ", parsedMessage.post);
+          clients[clientId].send(JSON.stringify(post)); //JSON.stringify(rooms)
+        break;
         //-----------------------modifying-------------------------------
         case "update_post":
           const update_post = await Messager.update_post(
