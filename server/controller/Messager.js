@@ -330,17 +330,19 @@ class Messager {
   }
   async get_profile_post(req, res) {
     const { id } = req.body;
-    console.log("Profile posts for id:", user_id);
+    console.log("Profile post  id:",id);
     const profile_post = await db.query(
       "SELECT self_posts_open.*, users.username, users.avatar FROM self_posts_open LEFT JOIN users ON self_posts_open.user_id = users.id WHERE id = $1",
       [id]
     );
+    const comments = await db.query("SELECT * FROM comments WHERE user_id = $1",[profile_post.rows[0].id])
     console.log("Profile posts: ", profile_post.rows[0]);
 
     return [
       {
         event: "profile_posts",
-        data: profile_post.rows,
+        data: [[profile_post.rows], [comments.rows]],
+        
       },
     ];
   }
