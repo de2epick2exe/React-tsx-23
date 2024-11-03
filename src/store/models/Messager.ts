@@ -14,6 +14,17 @@ export interface Room {
     emotes: [];
     comments:Comment[];
   }
+  export const default_userPost: User_post = {
+    id:0,
+    user_id: 0,
+    username: '',
+    avatar:'',
+    date: new Date(),
+    post:'',
+    emotes: [],
+    comments:[],
+
+  }
   export interface Comment{ 
     id: number;
     user_id: number;
