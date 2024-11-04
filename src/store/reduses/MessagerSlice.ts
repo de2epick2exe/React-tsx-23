@@ -136,6 +136,9 @@ const messagerSlice = createSlice({
     setCurrentChannel: (state, action: PayloadAction<Channel | null>) => {
       state.current_channel = action.payload;
     },
+    setCurrentPost:(state, action:PayloadAction<User_post>)=>{
+      state.current_userPost = action.payload 
+    },
     setSearchedChannel:(state, action: PayloadAction<Channel[] >) => {
       console.log('ws searched func data:', action.payload)
       state.searched_channel = []
