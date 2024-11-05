@@ -22,8 +22,9 @@ import {
   updateUser_comment,
   delete_userComment,
   setRecomendsPosts,
+  setCurrentPost,
 } from "./MessagerSlice";
-import { setFriends, setRecomends_Users, setWaitingList, } from "./UserSlice";
+import { setFriends, setRecomends_Users, setWaitingList } from "./UserSlice";
 
 interface WS {
   socket: WebSocket | null;
@@ -131,6 +132,12 @@ export const connectToWebSocket = () => {
               //@ts-ignore
               dispatch(set_UserPosts(message[0].data));
               break;
+            case "profile_post":
+              console.log("set profile post", message[0]);
+              console.log(message[0]);
+              //@ts-ignore
+              dispatch(setCurrentPost(message[0].data));
+              break;
             case "recomends_posts":
               console.log("recomends posts: ", message[0]);
               console.log(message[0].data);
@@ -159,7 +166,7 @@ export const connectToWebSocket = () => {
               break;
             case "update_user_comment":
               dispatch(updateUser_comment(message[0].message));
-              break;              
+              break;
             case "searched_channel":
               console.log("searched channel is:", message[0]);
               if (message[0].status == 404) {
@@ -169,7 +176,7 @@ export const connectToWebSocket = () => {
               }
               dispatch(setSearchedChannel(message[0].data));
               break;
-            /// 
+            ///
             /// delete events
             ///
             case "delete_message":
@@ -191,7 +198,7 @@ export const connectToWebSocket = () => {
             case "delete_comment":
               console.log("deleted post event");
               dispatch(delete_userComment(message[0].post));
-            break;
+              break;
             case "delete_file":
               console.log("deleted file");
               break;

@@ -340,8 +340,10 @@ class Messager {
 
     return [
       {
-        event: "profile_posts",
-        data: [[profile_post.rows], [comments.rows]],
+        event: "profile_post",
+        data: [{
+          ...profile_post.rows,
+          comments:[comments.rows]}],
         
       },
     ];
