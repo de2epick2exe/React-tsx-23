@@ -136,7 +136,8 @@ export const connectToWebSocket = () => {
               console.log("set profile post", message[0]);
               console.log(message[0]);
               //@ts-ignore
-              dispatch(setCurrentPost(message[0].data));
+              dispatch(setCurrentPost(message[0].data[0]));
+              console.log("set profile post 2", message[0].data[0])
               break;
             case "recomends_posts":
               console.log("recomends posts: ", message[0]);

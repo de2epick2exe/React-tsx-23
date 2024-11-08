@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { Link, useParams } from "react-router-dom";
 import { sendMessage } from "../store/reduses/WS_Slice";
-import { Avatar, Flex, Grid, GridItem, Text } from "@chakra-ui/react";
+import { Avatar, Box, Divider, Flex, Grid, GridItem, Text } from "@chakra-ui/react";
 export const Post_page = () => {
   const data = useSelector((state: RootState) => state.userReducer);
   const ws = useSelector((state: RootState) => state.WS_Slice);
@@ -19,13 +19,14 @@ export const Post_page = () => {
 
   return (
     <>
-      <Grid>
+      <Grid templateColumns="repeat(3, 1fr)" gap="1" h="92vh" >
         <GridItem></GridItem>
-        <GridItem>
-          <Flex>
-            <Avatar
+        <Grid borderX={'1px solid red '}   >
+          <Flex bg={'black'} mx={'5'} flexDir={"column"} >
+            <Flex my={'2'}>
+            <Avatar mx={'5'}
               size="sm"
-              name={messager_store.current_userPost?.username}
+              name={messager_store.current_userPost?.username} 
               src={
                 messager_store.current_userPost?.avatar != null
                   ? `http://localhost:8080/img/${messager_store.current_userPost?.avatar}`
@@ -36,9 +37,12 @@ export const Post_page = () => {
               <Text ml="1">{messager_store.current_userPost?.username}</Text>
               <Text ml="1">{messager_store.current_userPost?.post}</Text>
             </Flex>
+            </Flex>
+            <Box border={'1px solid red'}/>
+            
           </Flex>
-        </GridItem>
-        <GridItem></GridItem>
+        </Grid>
+        <Grid></Grid>
       </Grid>
     </>
   );

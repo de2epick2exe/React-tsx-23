@@ -339,16 +339,17 @@ class Messager {
       "SELECT * FROM comments WHERE post_id = $1",
       [profile_post.rows[0].id]
     );
-    
-    console.log("Profile posts: ", profile_post.rows[0]);
-    console.log("Profile comments: ", comments.rows[0]);
-
+        
+    console.log("Profile all data:",{
+      ...profile_post.rows,
+      comments: [comments.rows],
+    },)
     return [
       {
         event: "profile_post",
         data: [
           {
-            ...profile_post.rows,
+            ...profile_post.rows[0],
             comments: [comments.rows],
           },
         ],
