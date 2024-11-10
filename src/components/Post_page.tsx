@@ -7,12 +7,17 @@ import { sendMessage } from "../store/reduses/WS_Slice";
 import {
   Avatar,
   Box,
+  Button,
   Divider,
   Flex,
   Grid,
   GridItem,
+  InputGroup,
+  InputRightElement,
   Text,
+  Textarea,
 } from "@chakra-ui/react";
+import { ArrowRightIcon } from "@chakra-ui/icons";
 export const Post_page = () => {
   const data = useSelector((state: RootState) => state.userReducer);
   const ws = useSelector((state: RootState) => state.WS_Slice);
@@ -21,21 +26,21 @@ export const Post_page = () => {
   );
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   const { id } = useParams<{ id?: string }>();
-  const [comment, setComment] = useState("")
-
+  const [comment, setComment] = useState("");
 
   useEffect(() => {
     dispatch(sendMessage({ event: "get_user_post", id: id }));
   }, [ws.connected]);
 
   const send_comment = () => {
-    dispatch(sendMessage({
-      event: "comment",
-      date: new Date(),
-      comment: comment,
-      post_id: id
-    }))
-
+    dispatch(
+      sendMessage({
+        event: "comment",
+        date: new Date(),
+        comment: comment,
+        post_id: id,
+      })
+    );
   };
 
   return (
@@ -67,6 +72,22 @@ export const Post_page = () => {
                   <Text>{post.comment}</Text>
                 </span>
               ))}
+            </Box>
+            <Box>
+              <InputGroup mb="2">
+                <Textarea
+                  resize="none"
+                  minH="4"
+                  maxH="10"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                />
+                <InputRightElement>
+                  <Button>
+                    <ArrowRightIcon onClick={send_comment} />
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
             </Box>
           </Flex>
         </Grid>
