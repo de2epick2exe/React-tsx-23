@@ -35,12 +35,14 @@ export const Post_page = () => {
   const send_comment = () => {
     dispatch(
       sendMessage({
-        event: "comment",
+        event: "create_comment",
         date: new Date(),
+        type: "profile",
         comment: comment,
         post_id: id,
       })
     );
+    setComment("");
   };
 
   return (
@@ -51,7 +53,7 @@ export const Post_page = () => {
           <Flex bg={"black"} mx={"5"} flexDir={"column"}>
             <Flex my={"2"}>
               <Avatar
-                mx={"5"}
+                mx={"2"}
                 size="sm"
                 name={messager_store.current_userPost?.username}
                 src={
@@ -62,18 +64,19 @@ export const Post_page = () => {
               />
               <Flex flexDir={"column"}>
                 <Text ml="1">{messager_store.current_userPost?.username}</Text>
-                <Text ml="1">{messager_store.current_userPost?.post}</Text>
               </Flex>
             </Flex>
+            <Box my={"2"}>
+              <Text ml="1">{messager_store.current_userPost?.post}</Text>
+            </Box>
+
             <Box border={"1px solid red"} />
             <Box>
-              {messager_store.current_userPost.comments.map((post) => (
-                <span key={post.id}>
-                  <Text>{post.comment}</Text>
-                </span>
+              {messager_store.current_userPost.comments.flat().map((post) => (
+                <Text key={post.id}>{post.comment}</Text>
               ))}
             </Box>
-            <Box>
+            <Box mt={"2"}>
               <InputGroup mb="2">
                 <Textarea
                   resize="none"

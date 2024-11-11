@@ -238,7 +238,7 @@ class Messager {
     const { post_id, comment, date, type } = req.body;
     console.log("create comment data: ", post_id, comment, date, type);
     const content = await db.query(
-      "INSERT INTO comments VALUES ($1, $2, $3, $4) RETURNING *",
+      "INSERT INTO comments(type, comment, post_id, date) VALUES ($1, $2, $3, $4) RETURNING *",
       [type, comment, post_id, date]
     );
     const data = {
@@ -339,11 +339,12 @@ class Messager {
       "SELECT * FROM comments WHERE post_id = $1",
       [profile_post.rows[0].id]
     );
-        
-    console.log("Profile all data:",{
+    console.log("comments:", comments.rows)
+
+    console.log("Profile all data:", {
       ...profile_post.rows,
       comments: [comments.rows],
-    },)
+    });
     return [
       {
         event: "profile_post",
