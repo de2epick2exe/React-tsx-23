@@ -65,7 +65,7 @@ const Profile = () => {
     }
   };
   useEffect(() => {
-    connect_to_user_room()
+    connect_to_user_room();
     get_profile();
     get_posts();
   }, [ws.connected]);
@@ -117,13 +117,12 @@ const Profile = () => {
   };
 
   const connect_to_user_room = () => {
-    const msg = {      
+    const msg = {
       room: Number(id),
       event: "connection_to_users_room",
     };
-    dispatch(sendMessage(msg))
+    dispatch(sendMessage(msg));
     console.log("connecting to room:", msg);
-    
   };
 
   const create_post = () => {
@@ -136,11 +135,11 @@ const Profile = () => {
     };
     console.log("create post data:", msg);
     dispatch(sendMessage(msg));
-    set_postMessage('')
+    set_postMessage("");
   };
   const delete_post = (id: any) => {
     const msg = {
-      id: id,     
+      id: id,
       type: "open",
       event: "delete_self_post",
     };
@@ -166,11 +165,11 @@ const Profile = () => {
       e.preventDefault();
       setComment(e.target.value);
     };
-    const turn_editing = (index: any, post: any) =>{
-      setEdit_index(index)
-      setEdited_post(post.post)
-    }
-    const send_edited = (post: any)=>{
+    const turn_editing = (index: any, post: any) => {
+      setEdit_index(index);
+      setEdited_post(post.post);
+    };
+    const send_edited = (post: any) => {
       const msg = {
         id: post.id,
         post: edited_post,
@@ -181,11 +180,8 @@ const Profile = () => {
       };
       console.log("update user post:", msg);
       dispatch(sendMessage(msg));
-      set_postMessage('')
-
-    }
-
-
+      set_postMessage("");
+    };
 
     const posts = messager_store.user_posts.map((post, index) => (
       <Box
@@ -225,23 +221,31 @@ const Profile = () => {
                 >
                   Edit
                 </MenuItem>
-                <MenuItem icon={<DeleteIcon />} onClick={(e)=>delete_post(post.id)}>Delete</MenuItem>
+                <MenuItem
+                  icon={<DeleteIcon />}
+                  onClick={(e) => delete_post(post.id)}
+                >
+                  Delete
+                </MenuItem>
               </MenuList>
             </Menu>
           ) : (
             <></>
           )}
         </Flex>
-        {edit_index == index ? <Box><Textarea
-        value={edited_post}
-        onChange={(e)=>setEdited_post(e.target.value)}
-        />
-        <Button onClick={()=>send_edited(post)}>Confirm</Button>
-        </Box> : 
-        <Text borderBottom="2px solid red" my="2">
-          {post?.post}
-        </Text>
-        }
+        {edit_index == index ? (
+          <Box>
+            <Textarea
+              value={edited_post}
+              onChange={(e) => setEdited_post(e.target.value)}
+            />
+            <Button onClick={() => send_edited(post)}>Confirm</Button>
+          </Box>
+        ) : (
+          <Text borderBottom="2px solid red" my="2">
+            {post?.post}
+          </Text>
+        )}
         <InputGroup mb="2">
           <Textarea
             resize="none"
@@ -296,7 +300,7 @@ const Profile = () => {
               onChange={(e) => inputPost(e)}
             />
             <InputRightElement>
-              <Button onClick={(e)=>create_post()}>
+              <Button onClick={(e) => create_post()}>
                 <ArrowRightIcon />
               </Button>
             </InputRightElement>
@@ -305,7 +309,7 @@ const Profile = () => {
       );
     }
     return <></>;
-  },[post_message, set_postMessage])
+  }, [post_message, set_postMessage]);
 
   if (profile_data?.status == 404) {
     {
@@ -336,7 +340,7 @@ const Profile = () => {
               />
             </Center>
             <br />
-              
+
             <User_info />
             {/**-------------------- Login Modal------------------------------- */}
             <Modal isOpen={isOpenLogin} onClose={onCloseLogin}>

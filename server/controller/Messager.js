@@ -235,11 +235,11 @@ class Messager {
   }
   async create_comment(req, res) {
     console.log(req.body, req);
-    const { post_id, comment, date, type } = req.body;
+    const { post_id, comment, date, type, user_id } = req.body;
     console.log("create comment data: ", post_id, comment, date, type);
     const content = await db.query(
-      "INSERT INTO comments(type, comment, post_id, date) VALUES ($1, $2, $3, $4) RETURNING *",
-      [type, comment, post_id, date]
+      "INSERT INTO comments(type, comment, post_id, date, user_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [type, comment, post_id, date, user_id]
     );
     const data = {
       status: 200,
@@ -336,7 +336,7 @@ class Messager {
       [id]
     );
     const comments = await db.query(
-      "SELECT * FROM comments WHERE post_id = $1",
+      "SELECT comments.*, users.avatar, users.username FROM comments RIGHT JOIN users ON comments.user_id = users.id WHERE post_id = $1",
       [profile_post.rows[0].id]
     );
     console.log("comments:", comments.rows)

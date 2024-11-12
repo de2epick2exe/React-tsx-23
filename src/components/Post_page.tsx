@@ -40,6 +40,7 @@ export const Post_page = () => {
         type: "profile",
         comment: comment,
         post_id: id,
+        user_id: data.id,
       })
     );
     setComment("");
@@ -71,9 +72,24 @@ export const Post_page = () => {
             </Box>
 
             <Box border={"1px solid red"} />
-            <Box>
+            <Box mt={"2"}>
               {messager_store.current_userPost.comments.flat().map((post) => (
-                <Text key={post.id}>{post.comment}</Text>
+                <span>
+                  <Flex key={post.id} direction={"row"}>
+                    <Avatar
+                      mx={"2"}
+                      size="sm"
+                      name={post?.username}
+                      src={
+                        messager_store.current_userPost?.avatar != null
+                          ? `http://localhost:8080/img/${post?.avatar}`
+                          : `http://localhost:8080/img/default.jpg`
+                      }
+                    />
+                    <Text>{post.username}</Text>
+                  </Flex>
+                  <Text ml={'1'}>{post.comment}</Text>
+                </span>
               ))}
             </Box>
             <Box mt={"2"}>
