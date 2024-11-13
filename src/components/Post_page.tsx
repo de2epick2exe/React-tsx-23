@@ -14,10 +14,14 @@ import {
   GridItem,
   InputGroup,
   InputRightElement,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Text,
   Textarea,
 } from "@chakra-ui/react";
-import { ArrowRightIcon } from "@chakra-ui/icons";
+import { ArrowRightIcon, ChevronDownIcon } from "@chakra-ui/icons";
 export const Post_page = () => {
   const data = useSelector((state: RootState) => state.userReducer);
   const ws = useSelector((state: RootState) => state.WS_Slice);
@@ -40,6 +44,17 @@ export const Post_page = () => {
         type: "profile",
         comment: comment,
         post_id: id,
+        user_id: data.id,
+      })
+    );
+    setComment("");
+  };
+  const delete_comment = (id: number) => {
+    dispatch(
+      sendMessage({
+        event: "delete_comment",
+        type: "profile",
+        id: id,
         user_id: data.id,
       })
     );
@@ -76,19 +91,27 @@ export const Post_page = () => {
               {messager_store.current_userPost.comments.flat().map((post) => (
                 <span>
                   <Flex key={post.id} direction={"row"}>
-                    <Avatar
-                      mx={"2"}
-                      size="sm"
-                      name={post?.username}
-                      src={
-                        messager_store.current_userPost?.avatar != null
-                          ? `http://localhost:8080/img/${post?.avatar}`
-                          : `http://localhost:8080/img/default.jpg`
-                      }
-                    />
-                    <Text>{post.username}</Text>
+                    <Box>
+                      <Avatar
+                        mx={"2"}
+                        size="sm"
+                        name={post?.username}
+                        src={
+                          messager_store.current_userPost?.avatar != null
+                            ? `http://localhost:8080/img/${post?.avatar}`
+                            : `http://localhost:8080/img/default.jpg`
+                        }
+                      />
+                      <Text>{post.username}</Text>
+                    </Box>
+                    <Menu>
+                      <MenuButton as={Button} rightIcon={<ChevronDownIcon />}/>                        
+                      <MenuList>
+                        <MenuItem onClick={()=>delete_comment(post.id)}>Delete</MenuItem>                        
+                      </MenuList>
+                    </Menu>
                   </Flex>
-                  <Text ml={'1'}>{post.comment}</Text>
+                  <Text ml={"1"}>{post.comment}</Text>
                 </span>
               ))}
             </Box>
