@@ -61,6 +61,44 @@ export const Post_page = () => {
     setComment("");
   };
 
+  const Comments_component = () =>{
+    const formatDate = (p_date: Date)=>{
+      const date = new Date(p_date)
+      const time = date.toLocaleTimeString([],{hour: '2-digit', minute:'2-digit'})
+      const dayMonth = date.toLocaleDateString([],{day:'numeric', month:'short'}) 
+      return `${time} ${dayMonth}`
+    }
+
+
+    return messager_store.current_userPost.comments.flat().map((post) => (
+      <span>
+        <Flex key={post.id} px={"2"} direction={"row"} justifyContent={'space-between'}>
+          <Flex>
+            <Avatar                        
+              size="sm"
+              name={post?.username}
+              src={
+                messager_store.current_userPost?.avatar != null
+                  ? `http://localhost:8080/img/${post?.avatar}`
+                  : `http://localhost:8080/img/default.jpg`
+              }
+            />
+            <Text ml={"2"}>{post.username}</Text> 
+            {formatDate(post.date)}
+            </Flex>                   
+          <Menu>
+            <MenuButton as={Button} rightIcon={<ChevronDownIcon />}/>                        
+            <MenuList>
+              <MenuItem onClick={()=>delete_comment(post.id)}>Delete</MenuItem>                        
+            </MenuList>
+          </Menu>
+        </Flex>
+        <Text ml={"2"}>{post.comment}</Text>
+      </span>
+    ))
+
+  }
+
   return (
     <>
       <Grid templateColumns="repeat(3, 1fr)" gap="1" h="92vh">
@@ -87,36 +125,8 @@ export const Post_page = () => {
             </Box>
 
             <Box border={"1px solid red"} />
-            <Box mt={"2"}>
-              {messager_store.current_userPost.comments.flat().map((post) => (
-                <span>
-                  <Flex key={post.id} direction={"row"}>
-                    <Box>
-                      <Avatar
-                        mx={"2"}
-                        size="sm"
-                        name={post?.username}
-                        src={
-                          messager_store.current_userPost?.avatar != null
-                            ? `http://localhost:8080/img/${post?.avatar}`
-                            : `http://localhost:8080/img/default.jpg`
-                        }
-                      />
-                      <Text>{post.username}</Text>
-                    </Box>
-                    <Menu>
-                      <MenuButton as={Button} rightIcon={<ChevronDownIcon />}/>                        
-                      <MenuList>
-                        <MenuItem onClick={()=>delete_comment(post.id)}>Delete</MenuItem>                        
-                      </MenuList>
-                    </Menu>
-                  </Flex>
-                  <Text ml={"1"}>{post.comment}</Text>
-                </span>
-              ))}
-            </Box>
-            <Box mt={"2"}>
-              <InputGroup mb="2">
+            <Box mt={"2"} >
+              <InputGroup mb="2" px={'2'}>
                 <Textarea
                   resize="none"
                   minH="4"
@@ -131,6 +141,10 @@ export const Post_page = () => {
                 </InputRightElement>
               </InputGroup>
             </Box>
+            <Box mt={"2"}>
+              {Comments_component()}
+            </Box>
+            
           </Flex>
         </Grid>
         <Grid></Grid>
