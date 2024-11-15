@@ -45,16 +45,21 @@ function Feed() {
     return (
       <>
         {messager.recomends.map((post, index) => (
-          <Box
-            key={index}
-            border={"2px solid black"}
-            my="5"
-            px="2"
-            borderRadius="7px"
-          >
-            <Flex mt="1" justifyContent="space-between">
-              <Flex onClick={() => navigate(`/post/${post.id}`)}>
+          <Box key={index} border={"2px solid black"} my="5" borderRadius="7px">
+            <Flex
+              p={"1"}
+              justifyContent="space-between"
+              onClick={() => navigate(`/post/${post.id}`)}
+              cursor={"pointer"}
+              
+            >
+              <Flex p={"1"}>
                 <Avatar
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/profile/${post.user_id}`);
+                  }}
+                  cursor={"pointer"}
                   size="sm"
                   name={post?.username}
                   src={
@@ -64,8 +69,18 @@ function Feed() {
                   }
                 />
                 <Flex flexDir={"column"}>
-                  <Text>{post.id}</Text>
-                  <Text ml="1">{post?.username}</Text>
+                  <Text
+                    ml="1"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/profile/${post.user_id}`);
+                    }}
+                    cursor={"pointer"}                    
+                    _hover={{ textDecoration: "underline" }}
+                    display={"block"}
+                  >
+                    {post?.username}
+                  </Text>
                   <Text ml="1">{post?.post}</Text>
                 </Flex>
               </Flex>
@@ -75,10 +90,27 @@ function Feed() {
                   aria-label="Options"
                   icon={<HamburgerIcon />}
                   variant="outline"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
                 />
                 <MenuList>
-                  <MenuItem icon={<EditIcon />}>Edit</MenuItem>
-                  <MenuItem icon={<DeleteIcon />}>Delete</MenuItem>
+                  <MenuItem
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    icon={<EditIcon />}
+                  >
+                    Edit
+                  </MenuItem>
+                  <MenuItem
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    icon={<DeleteIcon />}
+                  >
+                    Delete
+                  </MenuItem>
                 </MenuList>
               </Menu>
             </Flex>
