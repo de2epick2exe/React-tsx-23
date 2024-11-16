@@ -77,7 +77,9 @@ const Admin = () => {
   const [total_users, setTotal_users] = useState<{ USERS_TOTAL: number[] }[]>(
     []
   );
-  const [notify_value, setNotifyValue] = useState("");
+  const [all_notify_value, setAll_NotifyValue] = useState("");
+  const [user_notify, setUser_notify] = useState<{user_id: number, notify: string}>();
+
   const [users_per_day, setUsers_per_day] = useState<
     { USERS_PER_DAY: any[] }[]
   >([]);
@@ -131,11 +133,11 @@ const Admin = () => {
     await unBan_user(id);
   };
   const global_notify = async () => {
-    await notify_all(notify_value);
+    await notify_all(all_notify_value);
   };
   const target_notify = async () => {
     // await notify_user(notify_id, notify_value);
-    console.log("notifyed", notify_id, "val", notify_value);
+    console.log("notifyed", notify_id, "val", all_notify_value);
   };
   const search = async () => {
     const res = await user_profile(searced_user);
@@ -259,7 +261,7 @@ users sort change or add more sorts
                               <PopoverBody>
                                 <Textarea
                                   onChange={(e) =>
-                                    setNotifyValue(e.target.value)
+                                    setUser_notify({user_id: user.id, notify: e.target.value})
                                   }
                                 />
                               </PopoverBody>
@@ -304,7 +306,7 @@ users sort change or add more sorts
               {searced_user?.username == undefined ? (
                 <ModalHeader>
                   <Center>
-                    <CiWarning style={{ color: 'red', height: '30px' }} />
+                    <CiWarning style={{ color: "red", height: "30px" }} />
                   </Center>
                 </ModalHeader>
               ) : (
@@ -410,8 +412,8 @@ users sort change or add more sorts
           <Input
             htmlSize={15}
             width="auto"
-            value={notify_value}
-            onChange={(e) => setNotifyValue(e.target.value)}
+            value={all_notify_value}
+            onChange={(e) => setAll_NotifyValue(e.target.value)}
           />
           <Button ml="2" onClick={global_notify}>
             notify all users

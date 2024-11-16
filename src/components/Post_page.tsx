@@ -70,7 +70,7 @@ export const Post_page = () => {
     }
 
 
-    return messager_store.current_userPost.comments.flat().map((post) => (
+    return messager_store.current_userPost.comments.flat().reverse().map((post) => (
       <span>
         <Flex key={post.id} px={"2"} direction={"row"} justifyContent={'space-between'}>
           <Flex>
