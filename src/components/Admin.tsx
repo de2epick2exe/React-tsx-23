@@ -194,7 +194,7 @@ users sort change or add more sorts
                 <Tbody>
                   {users.map((user) => (
                     <Tr key={user.id}>
-                      <Th>{user.id}</Th>
+                      <Th _hover={{ textDecoration: "underline" }} >{user.id}</Th>
                       <Th
                         cursor="pointer"
                         onClick={() => {

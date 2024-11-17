@@ -316,7 +316,7 @@ class Messager {
     const { user_id } = req.body;
     console.log("Profile posts for id:", user_id);
     const profile_posts = await db.query(
-      "SELECT self_posts_open.*, users.username, users.avatar FROM self_posts_open LEFT JOIN users ON self_posts_open.user_id = users.id WHERE user_id = $1",
+      `SELECT self_posts_open.*, users.username, users.avatar, COALESCE( (SELECT json_agg(json_build_object( 'id', comments.id, 'type', comments.type, 'comment',comments.comment, 'date', comments.date, 'user_id', comments.user_id, 'avatar', comments_users.avatar, 'username', comments_users.username )) FROM comments LEFT JOIN users AS comments_users ON comments.user_id = comments_users.id WHERE comments.post_id = self_posts_open.id ),'[]'::json )AS comments FROM self_posts_open LEFT JOIN users on self_posts_open.user_id = users.id WHERE self_posts_open.user_id = $1`,
       [user_id]
     );
     console.log("Profile posts: ", profile_posts.rows[0]);
