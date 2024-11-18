@@ -181,8 +181,10 @@ const Profile = () => {
       console.log("update user post:", msg);
       dispatch(sendMessage(msg));
       set_postMessage("");
-    };
 
+    };
+    
+    
     const posts = messager_store.user_posts.map((post, index) => (
       <Box
         key={index}
@@ -235,7 +237,7 @@ const Profile = () => {
         </Flex>
         {edit_index == index ? (
           <Box>
-            <Textarea
+            <Textarea 
               value={edited_post}
               onChange={(e) => setEdited_post(e.target.value)}
             />
@@ -246,7 +248,15 @@ const Profile = () => {
             {post?.post}
           </Text>
         )}
-        <InputGroup mb="2">
+        
+          <Flex direction={'column'}>
+            {post.comments.flat().map((cmt) => (
+              <span key={cmt.id}>
+                <Text>{cmt.username}</Text>
+                <Text>{cmt.comment}</Text>
+              </span>
+            ))}
+          <InputGroup mb="2" >
           <Textarea
             resize="none"
             minH="4"
@@ -259,10 +269,11 @@ const Profile = () => {
               <ArrowRightIcon />
             </Button>
           </InputRightElement>
-        </InputGroup>
+          </InputGroup>
+        </Flex>        
       </Box>
     ));
-    return <>{posts}</>;
+    return <Box >{posts}</Box>;
   };
 
   const User_info = () => {
