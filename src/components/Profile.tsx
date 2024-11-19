@@ -33,6 +33,7 @@ import { Link, useParams } from "react-router-dom";
 import { user_profile } from "../unite/User_Functions";
 import {
   ArrowRightIcon,
+  ChevronDownIcon,
   DeleteIcon,
   EditIcon,
   HamburgerIcon,
@@ -181,10 +182,33 @@ const Profile = () => {
       console.log("update user post:", msg);
       dispatch(sendMessage(msg));
       set_postMessage("");
-
     };
-    
-    
+    const formatDate = (p_date: Date) => {
+      const date = new Date(p_date);
+      const time = date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      const dayMonth = date.toLocaleDateString([], {
+        day: "numeric",
+        month: "short",
+      });
+      return `${time} ${dayMonth}`;
+    };
+    const delete_comment = (id: number) => {
+      dispatch(
+        sendMessage({
+          event: "delete_comment",
+          type: "profile",
+          id: id,
+          user_id: data.id,
+        })
+      );
+      setComment("");
+    };
+
+    // TODO
+    // create a funcs file
     const posts = messager_store.user_posts.map((post, index) => (
       <Box
         key={index}
@@ -237,7 +261,7 @@ const Profile = () => {
         </Flex>
         {edit_index == index ? (
           <Box>
-            <Textarea 
+            <Textarea
               value={edited_post}
               onChange={(e) => setEdited_post(e.target.value)}
             />
@@ -248,32 +272,51 @@ const Profile = () => {
             {post?.post}
           </Text>
         )}
-        
-          <Flex direction={'column'}>
-            {post.comments.flat().map((cmt) => (
-              <span key={cmt.id}>
-                <Text>{cmt.username}</Text>
-                <Text>{cmt.comment}</Text>
-              </span>
-            ))}
-          <InputGroup mb="2" >
-          <Textarea
-            resize="none"
-            minH="4"
-            maxH="10"
-            value={comment}
-            onChange={(e) => inputComment(e)}
-          />
-          <InputRightElement>
-            <Button>
-              <ArrowRightIcon />
-            </Button>
-          </InputRightElement>
+
+        <Flex direction={"column"}>
+          {post.comments.flat().map((cmt) => (
+            <span key={cmt.id}>
+              <Flex>
+                <Avatar
+                  size="sm"
+                  name={post?.username}
+                  src={
+                    cmt?.avatar != null
+                      ? `http://localhost:8080/img/${cmt?.avatar}`
+                      : `http://localhost:8080/img/default.jpg`
+                  }
+                />
+                <Text ml={"2"}>{cmt.username}</Text>
+                {formatDate(cmt.date)}
+              </Flex>
+              <Menu>
+                <MenuButton as={Button} rightIcon={<ChevronDownIcon />} />
+                <MenuList>
+                  <MenuItem onClick={() => delete_comment(cmt.id)}>
+                    Delete
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </span>
+          ))}
+          <InputGroup mb="2">
+            <Textarea
+              resize="none"
+              minH="4"
+              maxH="10"
+              value={comment}
+              onChange={(e) => inputComment(e)}
+            />
+            <InputRightElement>
+              <Button>
+                <ArrowRightIcon />
+              </Button>
+            </InputRightElement>
           </InputGroup>
-        </Flex>        
+        </Flex>
       </Box>
     ));
-    return <Box >{posts}</Box>;
+    return <Box>{posts}</Box>;
   };
 
   const User_info = () => {
