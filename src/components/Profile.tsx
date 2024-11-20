@@ -276,27 +276,32 @@ const Profile = () => {
         <Flex direction={"column"}>
           {post.comments.flat().map((cmt) => (
             <span key={cmt.id}>
-              <Flex>
-                <Avatar
-                  size="sm"
-                  name={post?.username}
-                  src={
-                    cmt?.avatar != null
-                      ? `http://localhost:8080/img/${cmt?.avatar}`
-                      : `http://localhost:8080/img/default.jpg`
-                  }
-                />
-                <Text ml={"2"}>{cmt.username}</Text>
-                {formatDate(cmt.date)}
-              </Flex>
-              <Menu>
-                <MenuButton as={Button} rightIcon={<ChevronDownIcon />} />
-                <MenuList>
-                  <MenuItem onClick={() => delete_comment(cmt.id)}>
-                    Delete
-                  </MenuItem>
-                </MenuList>
-              </Menu>
+              <Box p={"1"}>
+                <Flex direction={"row"} justifyContent={"space-between"}>
+                  <Flex>
+                    <Avatar
+                      size="sm"
+                      name={cmt?.username}
+                      src={
+                        cmt?.avatar != null
+                          ? `http://localhost:8080/img/${cmt?.avatar}`
+                          : `http://localhost:8080/img/default.jpg`
+                      }
+                    />
+                    <Text ml={"2"}>{cmt.username}</Text>
+                    <Text>{formatDate(cmt.date)}</Text>
+                  </Flex>
+                  <Menu>
+                    <MenuButton as={Button} rightIcon={<ChevronDownIcon />} />
+                    <MenuList>
+                      <MenuItem onClick={() => delete_comment(cmt.id)}>
+                        Delete
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                </Flex>
+                <Text ml={"1"}>{cmt.comment}</Text>
+              </Box>
             </span>
           ))}
           <InputGroup mb="2">
