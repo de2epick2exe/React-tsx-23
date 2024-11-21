@@ -115,9 +115,13 @@ function Feed() {
               </Menu>
             </Flex>
             <Box>
-              {post.comments?.map((comment) => (
-                <>comment</>
-              ))}
+             <Text p={'2'}>
+              {post.comments?.length === 0 ? (
+              <Text>No comments yet</Text>
+            ) : (
+              <Text>Comments {post.comments?.length}</Text>
+            )}
+              </Text> 
             </Box>
           </Box>
         ))}

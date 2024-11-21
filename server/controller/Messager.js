@@ -375,7 +375,7 @@ class Messager {
       const { offset, lim } = req.body;
       console.log("get recomentds");
       const recomends = await db.query(
-        "SELECT self_posts_open.*, users.username, users.avatar FROM self_posts_open LEFT JOIN users ON self_posts_open.user_id = users.id OFFSET $1 LIMIT $2",
+      `SELECT self_posts_open.*, users.username, users.avatar, COALESCE( (SELECT json_agg(json_build_object( 'id', comments.id, 'type', comments.type, 'comment',comments.comment, 'date', comments.date, 'user_id', comments.user_id, 'avatar', comments_users.avatar, 'username', comments_users.username )) FROM comments LEFT JOIN users AS comments_users ON comments.user_id = comments_users.id WHERE comments.post_id = self_posts_open.id ),'[]'::json )AS comments FROM self_posts_open LEFT JOIN users on self_posts_open.user_id = users.id OFFSET $1 LIMIT $2`,
         [offset, lim]
       );
       return [
