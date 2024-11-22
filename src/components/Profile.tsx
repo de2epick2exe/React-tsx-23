@@ -39,6 +39,8 @@ import {
   HamburgerIcon,
 } from "@chakra-ui/icons";
 import { sendMessage } from "../store/reduses/WS_Slice";
+import { useNavigate } from "react-router-dom";
+
 
 const Profile = () => {
   const data = useSelector((state: RootState) => state.userReducer);
@@ -47,6 +49,7 @@ const Profile = () => {
     (state: RootState) => state.messagerReducer
   );
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
+  const navigate = useNavigate()
   const { id } = useParams<{ id?: string }>();
   const [profile_data, Set_Profile_data] = useState<any>();
   const [is_friend_status, set_Is_friend_status] = useState<any>();
@@ -69,7 +72,7 @@ const Profile = () => {
     connect_to_user_room();
     get_profile();
     get_posts();
-  }, [ws.connected]);
+  }, [ws.connected && id]);
 
   const delete_friend = async () => {
     const message = {
@@ -288,8 +291,13 @@ const Profile = () => {
                           : `http://localhost:8080/img/default.jpg`
                       }
                     />
-                    <Text ml={"2"}>{cmt.username}</Text>
-                    <Text>{formatDate(cmt.date)}</Text>
+                    <Text ml={"2"} 
+                    _hover={{textDecoration: 'underline'}}
+                    cursor={'pointer'}
+                    onClick={(e)=>navigate(`/profile/${cmt.user_id}`)}
+                    >
+                      {cmt.username} </Text>
+                    <Text> {formatDate(cmt.date)}</Text>
                   </Flex>
                   <Menu>
                     <MenuButton as={Button} rightIcon={<ChevronDownIcon />} />
