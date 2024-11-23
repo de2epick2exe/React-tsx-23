@@ -425,6 +425,12 @@ wss.on("connection", (ws) => {
           }
           break;
         case "delete_comment":
+          const del_comment = await Messager.delete_comment({
+            body: { ...parsedMessage },
+          });
+          clients[clientId].send(JSON.stringify(del_comment));
+          
+          /*
           for (const live_room of users_rooms) {
             if (live_room.clients.has(ws)) {
               live_room.clients.forEach(async (client) => {
@@ -444,7 +450,7 @@ wss.on("connection", (ws) => {
               });
               break;
             }
-          }
+          }*/
           break;
         case "delete_message":
           for (const live_room of setted_rooms) {

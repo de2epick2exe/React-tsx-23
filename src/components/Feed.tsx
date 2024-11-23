@@ -51,7 +51,6 @@ function Feed() {
               justifyContent="space-between"
               onClick={() => navigate(`/post/${post.id}`)}
               cursor={"pointer"}
-              
             >
               <Flex p={"1"}>
                 <Avatar
@@ -75,7 +74,7 @@ function Feed() {
                       e.stopPropagation();
                       navigate(`/profile/${post.user_id}`);
                     }}
-                    cursor={"pointer"}                    
+                    cursor={"pointer"}
                     _hover={{ textDecoration: "underline" }}
                     display={"block"}
                   >
@@ -115,13 +114,13 @@ function Feed() {
               </Menu>
             </Flex>
             <Box>
-             <Text p={'2'}>
-              {post.comments?.length === 0 ? (
-              <Text>No comments yet</Text>
-            ) : (
-              <Text>Comments {post.comments?.length}</Text>
-            )}
-              </Text> 
+              <Text p={"2"}>
+                {post.comments?.length === 0 ? (
+                  <Text>No comments yet</Text>
+                ) : (
+                  <Text>Comments {post.comments?.length}</Text>
+                )}
+              </Text>
             </Box>
           </Box>
         ))}

@@ -85,12 +85,11 @@ const messagerSlice = createSlice({
       state.user_posts.push(action.payload)
     },
     addComment:(state, action:PayloadAction<User_post>)=>{
-            
+      console.log(action.payload)
       //@ts-ignore
-      const post_index = state.user_posts[indexes][0].findIndex(post => post.id === action.payload.id);
-    
-    if (post_index !== -1) {
-      //@ts-ignore      
+      const post_index = state.user_posts[0].findIndex(post => post.id == action.payload.post_id);
+      console.log(post_index)
+    if (post_index !== -1) {      //@ts-ignore      
       
       state.user_posts[post_index].shift(action.payload.comments[0]);      
     }

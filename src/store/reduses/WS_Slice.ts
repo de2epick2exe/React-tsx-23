@@ -146,7 +146,7 @@ export const connectToWebSocket = () => {
               dispatch(setRecomendsPosts(message[0].data));
               break;
             case "create_comment":
-              dispatch(addComment(message[0]));
+              dispatch(addComment(message[0].comment[0]));
               break;
             case "recomended_users":
               console.log("recomends received");
