@@ -504,23 +504,6 @@ wss.on("connection", (ws) => {
   });
 });
 
-const brodcastMessage = (message) => {
-  wss.clients.forEach((client) => {
-    client.send(JSON.stringify(message));
-  });
-};
-
-function broadcast_room(message, roomID) {
-  for (const room_d of setted_rooms) {
-    if (room_d.id === roomID) {
-      room_d.clients.forEach((client) => {
-        client.send(message);
-        console.log(message);
-      });
-      break; // Stop broadcasting to other rooms
-    }
-  }
-}
 
 /*
  const setted_rooms = [];

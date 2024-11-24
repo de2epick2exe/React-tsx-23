@@ -1,24 +1,7 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { auth_login, register, set_online } from "../../unite/User_Functions";
-interface Friend {
-  id: number;
-  username: string;
-  rooms_id: number;
-}
-interface UserState {
-  id: number | null;
-  username: string | null;
-  email: string | null;
-  token: string | null;
-  is_auth: boolean;
-  role: string | null;
-  /// find securiry ways to load default img
-  photo: string;
-  error: string | null;
-  friends: Friend[];
-  waiting_list: Friend[];
-  recomends_list: Friend[];
-}
+import { Friend, UserState } from "../models/User";
+
 
 const update_online = async (id: number) => {
   await set_online(id);
