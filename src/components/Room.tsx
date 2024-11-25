@@ -105,19 +105,18 @@ const Room: React.FC<RoomProps> = ({
     );
     if (room_type == "private" || room_type == "chat") {
       if (isEditing) {
-        msg_event = "update_message";        
-          setMessage(""); // need to fix
-          const msg = {
-            //@ts-ignore
-            message_id: selectedMessage.message_id,
-            room: room_id,
-            content: message,
-            date: new Date(),
-            event: msg_event,
-          };
-          dispatch(sendMessage(msg));
-          return;
-        
+        msg_event = "update_message";
+        setMessage(""); // need to fix
+        const msg = {
+          //@ts-ignore
+          message_id: selectedMessage.message_id,
+          room: room_id,
+          content: message,
+          date: new Date(),
+          event: msg_event,
+        };
+        dispatch(sendMessage(msg));
+        return;
       } else {
         msg_event = "message";
       }
@@ -156,8 +155,8 @@ const Room: React.FC<RoomProps> = ({
     let msg_event;
     if (room_type == "private" || room_type == "chat") {
       //@ts-ignore
-      if(selectedMessage.from_id !== data.id){
-        return
+      if (selectedMessage.from_id !== data.id) {
+        return;
       }
       msg_event = "delete_message";
     } else {
@@ -171,7 +170,6 @@ const Room: React.FC<RoomProps> = ({
     };
     dispatch(sendMessage(msg)); // sends 2x times
   };
-  
 
   const call_message_menu = (e: any, msg: any) => {
     e.preventDefault();
@@ -301,64 +299,70 @@ const Room: React.FC<RoomProps> = ({
     );
   };
 
-  const Messaging_area = useMemo(() => { 
-      const Selecting_navigate = ()=>{
-        if (selected_id.length >= 1 && isSelecting) {
+  const Messaging_area = useMemo(() => {
+    const Selecting_navigate = () => {
+      if (selected_id.length >= 1 && isSelecting) {
         return (
-            <>
-              <Flex>
-                <CloseIcon
-                  mr="2"
-                  onClick={() => {
-                    stop_selecting();
-                  }}
-                />
-                <p>{selected_id.length} messages</p>
-              </Flex>
-            </>
-          );
-        }
-        return(<></>)
+          <>
+            <Flex>
+              <CloseIcon
+                mr="2"
+                onClick={() => {
+                  stop_selecting();
+                }}
+              />
+              <p>{selected_id.length} messages</p>
+            </Flex>
+          </>
+        );
       }
-    //@ts-ignore    
-    console.log('user is admin ?', messager.current_channel?.admins.includes(data.id.toString()), data.id, messager.current_channel?.admins)
+      return <></>;
+    };
 
-    if(room_type == 'channel'){
+    console.log(
+      "user is admin ?",
       //@ts-ignore
-      if (!messager.current_channel?.admins.includes(data.id.toString())){
-        return(<></>)
+      messager.current_channel?.admins.includes(data.id.toString()),
+      data.id,
+      messager.current_channel?.admins
+    );
+
+    if (room_type == "channel") {
+      //@ts-ignore
+      if (!messager.current_channel?.admins.includes(data.id.toString())) {
+        return <></>;
       }
     }
-    const set_message = (e: any)=>{          
-      const msg = e.target.value      
-      setMessage(msg)     
-    }
+    const set_message = (e: any) => {
+      const msg = e.target.value;
+      setMessage(msg);
+    };
     return (
       <>
-      <Selecting_navigate/>
-      <InputGroup> 
-        <Textarea
-          resize="none"
-          onChange={(e) => set_message(e)}
-          value={message} 
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              send();
-            }
-          }}
-        />
-         <InputRightElement>
-        <Button
-          onClick={(e) => send()}
-          disabled={message.trim().length <= 0}
-        >
-          <ArrowRightIcon />
-        </Button>
-      </InputRightElement>
-    </InputGroup>
+        <Selecting_navigate />
+        <InputGroup>
+          <Textarea
+            resize="none"
+            onChange={(e) => set_message(e)}
+            value={message}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                send();
+              }
+            }}
+          />
+          <InputRightElement>
+            <Button
+              onClick={(e) => send()}
+              disabled={message.trim().length <= 0}
+            >
+              <ArrowRightIcon />
+            </Button>
+          </InputRightElement>
+        </InputGroup>
       </>
     );
-  },[selected_id, isSelecting, message, send, stop_selecting])
+  }, [selected_id, isSelecting, message, send, stop_selecting]);
 
   const MessagesComponent = () => {
     console.log("MessagesComponent:", room_id);
@@ -417,7 +421,7 @@ const Room: React.FC<RoomProps> = ({
         //@ts-ignore
         messager.messages[room_id][0]?.map((msg) => console.log(msg[0]));
         return (
-          <>            
+          <>
             {/* @ts-ignore*/}
             {messager.messages[room_id][0]?.map((msg) => (
               <span
@@ -480,43 +484,46 @@ const Room: React.FC<RoomProps> = ({
     return <></>;
   };
 
-  const Follow_Component = () =>{
-
-    const follow_switch = ()=>{
-      const msg = {
-        id: messager.current_channel?.id,        
-        user_id: data.id
+  const Follow_Component = () => {
+    const follow_switch = () => {
+      if (messager.current_channel?.is_follow) {
+        const msg = {
+          event: "unfollow",
+          id: messager.current_channel?.id,
+          user_id: data.id,
+        };
+        dispatch(sendMessage(msg));
       }
-      dispatch(sendMessage(msg))
 
+      const msg = {
+        event: "follow",
+        id: messager.current_channel?.id,
+        user_id: data.id,
+      };
+      dispatch(sendMessage(msg));
+    };
 
+    if (room_type == "channel") {
+      if (messager.current_channel?.is_follow) {
+        return (
+          <>
+            <Button onClick={follow_switch}>UnFollow</Button>
+          </>
+        );
+      }
+      //@ts-ignore
+      if (messager.current_channel?.admins.includes(data.id.toString())) {
+        return <></>;
+      }
+
+      return (
+        <>
+          <Button onClick={follow_switch}>Follow</Button>
+        </>
+      );
     }
-
-
-
-    if(room_type == 'channel'){
-     
-    if(messager.current_channel?.is_follow){
-      return(<>
-      <Button onClick={follow_switch}>UnFollow</Button>
-      </>)
-    }
-     //@ts-ignore
-     if (messager.current_channel?.admins.includes(data.id.toString())){
-      return(<></>)
-    } 
-  
-    return(
-      <>
-      <Button onClick={follow_switch}>Follow</Button>
-      
-      </>
-    )
-    }
-    return(<></>)
-  }
-
-
+    return <></>;
+  };
 
   //// if no props
   if (room_id == undefined) {
@@ -570,7 +577,7 @@ const Room: React.FC<RoomProps> = ({
               >
                 <p>Copy</p>
               </Flex>
-              
+
               <Flex
                 cursor="pointer"
                 _hover={{ bg: "FireBrick", color: "white" }}
@@ -591,7 +598,7 @@ const Room: React.FC<RoomProps> = ({
             position="relative"
             onClick={onProfileOpen}
             ref={profileRef}
-            zIndex='base'
+            zIndex="base"
           >
             <Flex justifyContent="space-between" padding="2">
               <Flex>
@@ -650,8 +657,8 @@ const Room: React.FC<RoomProps> = ({
                 </Flex>
               </Box>
               {Messaging_area}
-            <Follow_Component/>
-            </Flex> 
+              <Follow_Component />
+            </Flex>
           </Flex>
 
           {/*----------------- SIDE DRAWER--------------------------- */}

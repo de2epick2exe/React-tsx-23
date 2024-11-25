@@ -468,7 +468,7 @@ class Messager {
     try {
       const search_res = await db.query(
         "SELECT * FROM channels WHERE title =$1",
-        [title, id]
+        [title]
       );
 
       if (!search_res || search_res.rows.length == 0) {

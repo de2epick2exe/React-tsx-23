@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import axios from "axios"
-import { User } from "../models/User"
 import { AppDispatch } from "../store"
 import { UserSlice } from "./UserSlice"
 
@@ -43,7 +42,7 @@ export const fetchUsers= () =>async(dispatch: AppDispatch)=>{
     } catch (e : any) {
         dispatch(UserSlice.actions.usersFetchingError(e.message))
     }
-}*/
+}
 export const fetchUsers = createAsyncThunk(
     'user/fetchAll',
     async(_, thunkAPI)=>{
@@ -56,3 +55,4 @@ export const fetchUsers = createAsyncThunk(
 
     }
 )
+    */

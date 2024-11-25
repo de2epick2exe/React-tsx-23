@@ -33,40 +33,7 @@ const Contacts = () => {
 
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   useEffect(() => {
-    /*
-             const message = JSON.parse(event.data);
-        console.log(message);
-        console.log(message.data);
-        switch (message.event) {
-          case "get_friends":
-            console.log("RETURNS friends lis");
-            setFriends(message.data);
-            setIsLoadedFriends(true);
-            break;
-          case "get_waiting_list":
-            setWaiting_accept(message.data);
-            setIsLoadedWaiting(true);
-            break;
-          case "accept_friend":
-            const timed_wl = waiting_accept.filter(
-              (value: any) => value.id !== message[0].data[0].accepted_id
-            );
-            setFriends([...friends, message[0].data]);
-            setWaiting_accept(timed_wl);
-            break;
-          case "recomended_users":
-            //@ts-ignore
-            setRecomended_users(message.data);
-            console.log(message.data);
-            console.log(recomended_users);
-            recomended_users.map((user) => {
-              console.log(user);
-              console.log(user);
-            });
-            setIsLoadedRecomended(true);
-
-    */
-
+    
     if (socket.connected) {
       get_friends();
       get_recomended();
