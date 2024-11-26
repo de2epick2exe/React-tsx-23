@@ -485,19 +485,10 @@ const Room: React.FC<RoomProps> = ({
   };
 
   const Follow_Component = () => {
-    const follow_switch = () => {
-      if (messager.current_channel?.is_follow) {
-        const msg = {
-          event: "unfollow",
-          id: messager.current_channel?.id,
-          user_id: data.id,
-        };
-        dispatch(sendMessage(msg));
-      }
-
+    const follow_switch = () => {      
       const msg = {
-        event: "follow",
-        id: messager.current_channel?.id,
+        event: "follow_onChannel",
+        channel_id: messager.current_channel?.id,
         user_id: data.id,
       };
       dispatch(sendMessage(msg));
