@@ -464,11 +464,13 @@ class Messager {
       console.log(error);
     }
   }
-  async search_channel(title, id) {
+  async search_channel(req, res) {
+    const {title, user_id} = req.body
+    console.log(title, user_id)
     try {
       const search_res = await db.query(
-        "SELECT * FROM channels WHERE title =$1",
-        [title]
+        "select channels.*, CASE WHEN channels_followers.follower_id IS NOT NULL THEN true ELSE false END AS isfollowed from channels LEFT join channels_followers on channels.id = channels_followers.channel_id AND channels_followers.follower_id = $1  where channels.title = $2", 
+        [user_id, title]
       );
 
       if (!search_res || search_res.rows.length == 0) {

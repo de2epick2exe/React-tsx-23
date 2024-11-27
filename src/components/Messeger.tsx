@@ -126,17 +126,18 @@ const Messenger = () => {
     get_users_rooms_data();
   }, [ws.connected]);
 
-  const search_channel = (data: any) => {
-    console.log("searched data lenght", data.length, data.length == 0);
-    if (data.length == 0) {
+  const search_channel = (title: any) => {
+    console.log("searched data lenght", title.length, title.length == 0);
+    if (title.length == 0) {
       setIsSearching(false);
       setSearched_channel("");
       return;
     }
     setIsSearching(true);
-    setSearched_channel(data);
+    setSearched_channel(title);
     const msg = {
-      channel_name: data,
+      title: title,
+      user_id: data.id,
       event: "search_channel",
     };
     dispatch(sendMessage(msg));
