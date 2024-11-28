@@ -438,11 +438,22 @@ class Messager {
         "SELECT * from channels_followers WHERE follower_id = $1 AND channel_id = $2",
         [user_id, channel_id]
       );
+      console.log("event",check.rows.length == 0? "follow": "unfollow" )
       if (check.rows.length == 0) {
+        const room = await db.query(
+          "INSERT INTO rooms (type) VALUES ($1) RETURNING id",
+          ["channel"]
+        );
+        const room_id = room.rows[0].id;
+        const room_conversation = await db.query(
+          "INSERT INTO conversations (user_id, room_id) VALUES ($1, $2)",
+          [user_id, room_id]
+        );
         const follow = await db.query("INSERT INTO channels_followers (follower_id, channel_id) VALUES ($1, $2)", [
           user_id,
           channel_id,
         ]);
+        
         const data = {
           status: 200,
           event: "follow",
