@@ -488,6 +488,7 @@ const Room: React.FC<RoomProps> = ({
     const follow_switch = () => {      
       const msg = {
         event: "follow_onChannel",
+        room_id: messager.current_channel?.room_id,
         channel_id: messager.current_channel?.id,
         user_id: data.id,
       };

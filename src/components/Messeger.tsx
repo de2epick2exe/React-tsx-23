@@ -43,7 +43,7 @@ import { SlArrowLeftCircle, SlArrowRightCircle } from "react-icons/sl";
 interface room_user {
   id: number;
   username: string;
-  rooms_id: number;
+  room_id: number;
 }
 
 const Messenger = () => {
@@ -459,7 +459,7 @@ const Messenger = () => {
               >
                 <Flex flexDirection="column">
                   <Box>{r.username}</Box>
-                  <Latest_message room_name={r.username} room_id={r.rooms_id} />
+                  <Latest_message room_name={r.username} room_id={r.room_id} />
                 </Flex>
               </Box>
             </span>
@@ -567,7 +567,7 @@ const Messenger = () => {
 
         <GridItem bg="black" area={"chat"}>
           <Room
-            room_id={messager?.current_room?.rooms_id}
+            room_id={messager?.current_room?.room_id}
             room_name={messager?.current_room?.username}
             room_type={messager?.current_room?.type}
             onConnectToRoom={get_room_messages}

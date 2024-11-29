@@ -93,7 +93,7 @@ class Messager {
             admins: channel.rows[0].admins,
             is_follow: true,
             type: "channel",
-            rooms_id: r.room_id,
+            room_id: r.room_id,
           };
 
           rooms_data[0].rooms.push(data);
@@ -433,18 +433,14 @@ class Messager {
 
   async follow_onChannel(req, res) {
     try {
-      const { channel_id, user_id } = req.body;
+      const { channel_id, user_id, room_id } = req.body;
       const check = await db.query(
         "SELECT * from channels_followers WHERE follower_id = $1 AND channel_id = $2",
         [user_id, channel_id]
       );
       console.log("event",check.rows.length == 0? "follow": "unfollow" )
-      if (check.rows.length == 0) {
-        const room = await db.query(
-          "INSERT INTO rooms (type) VALUES ($1) RETURNING id",
-          ["channel"]
-        );
-        const room_id = room.rows[0].id;
+      if (check.rows.length == 0) {        
+        
         const room_conversation = await db.query(
           "INSERT INTO conversations (user_id, room_id) VALUES ($1, $2)",
           [user_id, room_id]
@@ -461,6 +457,10 @@ class Messager {
         };
         return data;
       }
+      const del_room_conversation = await db.query(
+        "DELETE FROM conversations WHERE user_id = $1 AND room_id = $2",
+        [user_id, room_id]
+      );
       const unfollow = await db.query(
         "DELETE FROM channels_followers WHERE follower_id = $1 AND channel_id = $2",
         [user_id, channel_id]

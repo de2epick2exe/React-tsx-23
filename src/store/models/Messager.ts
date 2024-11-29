@@ -2,7 +2,7 @@ export interface Room {
     id: number;
     username: string;
     type: string;
-    rooms_id: number;
+    room_id: number;
   }
   export interface User_post{ 
     id: number;
@@ -52,6 +52,7 @@ export interface Room {
     channel_name: string;
     status: boolean;
     followers: number;
+    room_id: number;
     admins: [];
     is_follow: boolean;
   }
