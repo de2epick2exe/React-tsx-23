@@ -4,6 +4,21 @@ export interface Room {
     type: string;
     room_id: number;
   }
+
+export interface MessagerState {
+  messages: Rooms_msgs;
+  message: any;
+  notifies: Notify[];  
+  current_channel: Channel | null;
+  current_room: Room | null;
+  rooms: Room[];
+  searched_channel: Channel[];
+  user_posts: User_post[],
+  current_userPost: User_post,
+  self_posts: Self_post[],
+  recomends: User_post[],  
+}
+
   export interface User_post{ 
     id: number;
     user_id: number;

@@ -145,7 +145,7 @@ const Messenger = () => {
 
   const setRoomdata = (r: any) => {
     setRoomState(undefined);
-    setRoomState(r?.rooms_id);
+    setRoomState(r?.room_id);
     setSelected_room(r?.username);
     dispatch(setCurrentRoom(r));
     console.log("setting current room : ", r, r.type == "channel");

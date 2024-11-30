@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { Channel, Comments, default_userPost, Notify, Room, Rooms_msgs, Self_post, User_post } from "../models/Messager";
+import { Channel, Comments, default_userPost, MessagerState, Notify, Room, Rooms_msgs, Self_post, User_post } from "../models/Messager";
 /* db`s tabs:
 |users| <= | conversations| <= |rooms| <= |messages|
 |id   |    |uid    room_id|    | id  |    | room_id|  
@@ -16,19 +16,7 @@ messages: {
 }
  
 */
-interface MessagerState {
-  messages: Rooms_msgs;
-  message: any;
-  notifies: Notify[];  
-  current_channel: Channel | null;
-  current_room: Room | null;
-  rooms: Room[];
-  searched_channel: Channel[];
-  user_posts: User_post[],
-  current_userPost: User_post,
-  self_posts: Self_post[],
-  recomends: User_post[],  
-}
+
 const initialState: MessagerState = {
   messages: {},
   message: "",

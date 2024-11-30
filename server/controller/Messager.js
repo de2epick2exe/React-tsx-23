@@ -75,7 +75,7 @@ class Messager {
             id: user.rows[0].id,
             username: user.rows[0].username,
             type: "private",
-            rooms_id: r.room_id,
+            room_id: r.room_id,
           };
 
           rooms_data[0].rooms.push(data);
