@@ -199,6 +199,38 @@ class Messager {
       console.log(error);
     }
   }
+
+  async create_chat(req, res) {
+    try {
+      console.log(req.body);
+      const { user_id } = req.body;
+
+      const room = await db.query(
+        "INSERT INTO rooms (type) VALUES ($1) RETURNING id",
+        ["chat"]
+      );
+      const room_id = room.rows[0].id;
+      const room_u1 = await db.query(
+        "INSERT INTO conversations (user_id, room_id) VALUES ($1, $2) RETURNING room_id",
+        [user_id, room_id]
+      );
+
+
+      const data = {
+        event: "create_chat",
+        status: 200,
+        room: "created",
+        id_room: channel.rows[0],
+      };
+      return JSON.stringify(data);
+
+
+
+    } catch (error) {
+      console.log("create chat error", error)
+    }
+  }
+
   async create_post(req, res) {
     try {
       console.log(req.body, req);
@@ -339,7 +371,7 @@ class Messager {
       "SELECT comments.*, users.avatar, users.username FROM comments RIGHT JOIN users ON comments.user_id = users.id WHERE post_id = $1",
       [profile_post.rows[0].id]
     );
-    console.log("comments:", comments.rows)
+    console.log("comments:", comments.rows);
 
     console.log("Profile all data:", {
       ...profile_post.rows,
@@ -375,7 +407,7 @@ class Messager {
       const { offset, lim } = req.body;
       console.log("get recomentds");
       const recomends = await db.query(
-      `SELECT self_posts_open.*, users.username, users.avatar, COALESCE( (SELECT json_agg(json_build_object( 'id', comments.id, 'type', comments.type, 'comment',comments.comment, 'date', comments.date, 'user_id', comments.user_id, 'avatar', comments_users.avatar, 'username', comments_users.username )) FROM comments LEFT JOIN users AS comments_users ON comments.user_id = comments_users.id WHERE comments.post_id = self_posts_open.id ),'[]'::json )AS comments FROM self_posts_open LEFT JOIN users on self_posts_open.user_id = users.id OFFSET $1 LIMIT $2`,
+        `SELECT self_posts_open.*, users.username, users.avatar, COALESCE( (SELECT json_agg(json_build_object( 'id', comments.id, 'type', comments.type, 'comment',comments.comment, 'date', comments.date, 'user_id', comments.user_id, 'avatar', comments_users.avatar, 'username', comments_users.username )) FROM comments LEFT JOIN users AS comments_users ON comments.user_id = comments_users.id WHERE comments.post_id = self_posts_open.id ),'[]'::json )AS comments FROM self_posts_open LEFT JOIN users on self_posts_open.user_id = users.id OFFSET $1 LIMIT $2`,
         [offset, lim]
       );
       return [
@@ -438,18 +470,17 @@ class Messager {
         "SELECT * from channels_followers WHERE follower_id = $1 AND channel_id = $2",
         [user_id, channel_id]
       );
-      console.log("event",check.rows.length == 0? "follow": "unfollow" )
-      if (check.rows.length == 0) {        
-        
+      console.log("event", check.rows.length == 0 ? "follow" : "unfollow");
+      if (check.rows.length == 0) {
         const room_conversation = await db.query(
           "INSERT INTO conversations (user_id, room_id) VALUES ($1, $2)",
           [user_id, room_id]
         );
-        const follow = await db.query("INSERT INTO channels_followers (follower_id, channel_id) VALUES ($1, $2)", [
-          user_id,
-          channel_id,
-        ]);
-        
+        const follow = await db.query(
+          "INSERT INTO channels_followers (follower_id, channel_id) VALUES ($1, $2)",
+          [user_id, channel_id]
+        );
+
         const data = {
           status: 200,
           event: "follow",
@@ -476,11 +507,11 @@ class Messager {
     }
   }
   async search_channel(req, res) {
-    const {title, user_id} = req.body
-    console.log(title, user_id)
+    const { title, user_id } = req.body;
+    console.log(title, user_id);
     try {
       const search_res = await db.query(
-        "select channels.*, CASE WHEN channels_followers.follower_id IS NOT NULL THEN true ELSE false END AS isfollowed from channels LEFT join channels_followers on channels.id = channels_followers.channel_id AND channels_followers.follower_id = $1  where channels.title = $2", 
+        "select channels.*, CASE WHEN channels_followers.follower_id IS NOT NULL THEN true ELSE false END AS isfollowed from channels LEFT join channels_followers on channels.id = channels_followers.channel_id AND channels_followers.follower_id = $1  where channels.title = $2",
         [user_id, title]
       );
 
