@@ -239,6 +239,18 @@ const Messenger = () => {
       console.log("created channel", channelName, channelDesc);
     };
 
+    const createChat = () => {
+      const message_data = {
+        event: "create_chat",
+        body: {
+          user_id: data.id,          
+        },
+      };
+      dispatch(sendMessage(message_data));
+      console.log("created chat", channelName, channelDesc);
+    };
+
+
     if (turnOnNChn) {
       return (
         <>
