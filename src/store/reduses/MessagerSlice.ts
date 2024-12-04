@@ -68,6 +68,9 @@ const messagerSlice = createSlice({
     addSelf_post: (state, action: PayloadAction<Self_post>) => {
       state.self_posts.push(action.payload)
     },
+    add_Room: (state, action: PayloadAction<Room>) => {
+      state.rooms.push(action.payload)
+    },
     addUser_post: (state, action: PayloadAction<User_post>) => {
       console.log('user_post WS FUNC', action.payload)
       state.user_posts.push(action.payload)

@@ -148,6 +148,9 @@ export const connectToWebSocket = () => {
             case "create_comment":
               dispatch(addComment(message[0].comment[0]));
               break;
+            case "crete_chat":
+              dispatch()
+              break;
             case "recomended_users":
               console.log("recomends received");
               console.log(message[0].data);
