@@ -215,7 +215,6 @@ class Messager {
         [user_id, room_id]
       );
 
-
       const data = {
         event: "create_chat",
         status: 200,
@@ -223,11 +222,8 @@ class Messager {
         id_room: channel.rows[0],
       };
       return JSON.stringify(data);
-
-
-
     } catch (error) {
-      console.log("create chat error", error)
+      console.log("create chat error", error);
     }
   }
 
@@ -675,7 +671,28 @@ class Messager {
       console.log(error);
     }
   }
+  async delete_chat(req, res) {
+    try {
+      console.log(req.body);
+      const { room_id } = req.body;
 
+      const room_users = await db.query(
+        "DELETE FROM conversations WHERE room_id = $1",
+        [room_id]
+      );
+
+      const room = await db.query("DELETE FROM rooms WHERE id = $1", [room_id]);
+      const data = {
+        event: "delete_chat",
+        status: 200,
+        room: "deleted",
+        room_id: room_id,
+      };
+      return JSON.stringify(data);
+    } catch (error) {
+      console.log("create chat error", error);
+    }
+  }
   async delete_post(id, date) {
     try {
       const post = await db.query(
