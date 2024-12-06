@@ -453,6 +453,10 @@ wss.on("connection", (ws) => {
             }
           }*/
           break;
+        case "create_chat":
+            const delete_chat = await Messager.delete_chat({body: {...parsedMessage}});
+            clients[clientId].send(JSON.stringify(delete_chat));
+        break;
         case "delete_message":
           for (const live_room of setted_rooms) {
             if (live_room.clients.has(ws)) {
