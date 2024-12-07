@@ -591,6 +591,23 @@ class Messager {
     }
   }
 
+  async updateChat_users(req, res) {
+    try {
+      const { room_id, user_id } = req.body;
+      const new_user = await db.query(
+        "INSERT INTO conversations (user_id, room_id) VALUES ($1, $2) RETURNING user_id",
+        [user_id, room_id]
+      );
+      const data = {
+        event: "updateChat_users",
+        status: 200,
+        user: new_user.rows[0],
+      };
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async update_post(req, res) {
     try {
       const { id, content } = req.body;

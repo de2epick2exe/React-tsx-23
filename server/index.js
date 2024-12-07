@@ -453,7 +453,7 @@ wss.on("connection", (ws) => {
             }
           }*/
           break;
-        case "create_chat":
+        case "delete_chat":
             const delete_chat = await Messager.delete_chat({body: {...parsedMessage}});
             clients[clientId].send(JSON.stringify(delete_chat));
         break;
