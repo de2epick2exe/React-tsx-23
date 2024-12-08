@@ -290,6 +290,26 @@ wss.on("connection", (ws) => {
           clients[clientId].send(JSON.stringify(post)); //JSON.stringify(rooms)
         break;
         //-----------------------modifying-------------------------------
+        case "updateChat_users":
+          const updated_chat = await Messager.updateChat_users({body:{...parsedMessage}});
+          for (const live_room of setted_rooms) {
+            if (live_room.clients.has(ws)) {
+              live_room.clients.forEach(async (client) => {
+                console.log("finded room for user(current ws)");
+                console.log(parsedMessage);
+                client.send(JSON.stringify(updated_chat));
+                //client.send(message);
+                console.log(
+                  "Number of clients in room:",
+                  live_room.clients.size
+                );
+                console.log("event send message success");
+                console.log("New chat users UPDATED in CHANNEL room");
+              });
+              break;
+            }
+          }
+          break;
         case "update_post":
           const update_post = await Messager.update_post(
             parsedMessage.id,
