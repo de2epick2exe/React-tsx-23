@@ -283,6 +283,7 @@ export const {
   addSelf_post,
   addUser_post,
   addComment,
+  add_Room,
   setMessage,
   setMessages,  
   setNotifies,  

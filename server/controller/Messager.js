@@ -218,8 +218,8 @@ class Messager {
       const data = {
         event: "create_chat",
         status: 200,
-        room: "created",
-        id_room: channel.rows[0],
+        room: {room_id: room_id },
+        user_id: user_id
       };
       return JSON.stringify(data);
     } catch (error) {

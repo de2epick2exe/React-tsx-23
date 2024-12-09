@@ -23,6 +23,7 @@ import {
   delete_userComment,
   setRecomendsPosts,
   setCurrentPost,
+  add_Room,
 } from "./MessagerSlice";
 import { setFriends, setRecomends_Users, setWaitingList } from "./UserSlice";
 
@@ -149,7 +150,7 @@ export const connectToWebSocket = () => {
               dispatch(addComment(message[0].comment[0]));
               break;
             case "crete_chat":
-              dispatch()
+              dispatch(add_Room(message[0]))
               break;
             case "recomended_users":
               console.log("recomends received");
