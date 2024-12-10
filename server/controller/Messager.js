@@ -593,7 +593,8 @@ class Messager {
 
   async updateChat_users(req, res) {
     try {
-      const { room_id, user_id } = req.body;
+      const { room_id, user_id, type } = req.body;
+      if(type == "add"){
       const new_user = await db.query(
         "INSERT INTO conversations (user_id, room_id) VALUES ($1, $2) RETURNING user_id",
         [user_id, room_id]
@@ -601,9 +602,24 @@ class Messager {
       const data = {
         event: "updateChat_users",
         status: 200,
+        type:"add_user",
         user: new_user.rows[0],
       };
       return data;
+    }
+    else{
+      const new_user = await db.query(
+        "DELETE FROM conversations WHERE user_id = $1 and room_id = $2",
+        [user_id, room_id]
+      );
+      const data = {
+        event: "updateChat_users",
+        status: 200,
+        type:"delete_user",
+        user: new_user.rows[0],
+      };
+      return data;
+    }
     } catch (error) {
       console.log(error);
     }
