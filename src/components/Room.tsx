@@ -70,7 +70,7 @@ const Room: React.FC<RoomProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
   const [selected_id, setSelected_id] = useState<number[]>([]);
-  const [add_user_id, setAdd_user_id] = useState<number>();
+  const [newuser_id, setNewuser_id] = useState<number>();
   const [scrolling_selectingON, setScrolling_selectingON] = useState(false);
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   console.log("connected to room type:", room_type);
@@ -174,8 +174,19 @@ const Room: React.FC<RoomProps> = ({
   const add_user = () => {        
     
     const msg = {
-      user: add_user_id,
-      room_id: room_id,    
+      user: newuser_id,
+      room_id: room_id, 
+      type: "add",   
+      event: "updateChat_users",
+    };
+    dispatch(sendMessage(msg)); // sends 2x times
+  };
+  const delete_user = () => {        
+    
+    const msg = {
+      user: newuser_id,
+      room_id: room_id,
+      type: "delete",    
       event: "updateChat_users",
     };
     dispatch(sendMessage(msg)); // sends 2x times
