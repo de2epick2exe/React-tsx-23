@@ -356,7 +356,13 @@ wss.on("connection", (ws) => {
             }
           }
           break;
-
+          case "accept_friend":
+          const acc_friend = await UserController.accept_friend({
+            body: { ...parsedMessage },
+          }); /// change args in main messager
+          console.log(`sent messages for ${parsedMessage.room_id}: `, message);
+          clients[clientId].send(JSON.stringify(acc_friend));
+          break;
         case "update_comment":
           const updated_comment = await Messager.update_comment({
             body: { ...parsedMessage },

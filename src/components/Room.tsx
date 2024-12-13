@@ -70,7 +70,7 @@ const Room: React.FC<RoomProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
   const [selected_id, setSelected_id] = useState<number[]>([]);
-  const [newuser_id, setNewuser_id] = useState<number>();
+  const [user_for_event, setUser_for_event] = useState<number>();
   const [scrolling_selectingON, setScrolling_selectingON] = useState(false);
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   console.log("connected to room type:", room_type);
@@ -171,25 +171,29 @@ const Room: React.FC<RoomProps> = ({
     };
     dispatch(sendMessage(msg)); // sends 2x times
   };
-  const add_user = () => {        
-    
+  const user_event = (event: string) => {        
+    if(event == 'add'){
     const msg = {
-      user: newuser_id,
+      user: user_for_event,
       room_id: room_id, 
       type: "add",   
       event: "updateChat_users",
     };
     dispatch(sendMessage(msg)); // sends 2x times
+    }
+    else{
+      const msg = {
+        user: user_for_event,
+        room_id: room_id,
+        type: "delete",    
+        event: "updateChat_users",
+      };
+      dispatch(sendMessage(msg)); // sends 2x times
+    }
   };
   const delete_user = () => {        
     
-    const msg = {
-      user: newuser_id,
-      room_id: room_id,
-      type: "delete",    
-      event: "updateChat_users",
-    };
-    dispatch(sendMessage(msg)); // sends 2x times
+    
   };
 
   const call_message_menu = (e: any, msg: any) => {

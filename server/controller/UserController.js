@@ -470,20 +470,21 @@ class UserController {
     }
   }
 
-  async accept_friend(id, accepted_id) {
+  async accept_friend(req, res) {
     try {
+      const {id, accept_id} = req.body
       const res = await db.query(
         "UPDATE public.friends SET waiting_accept = array_remove(waiting_accept, $2), friends_list = friends_list || ARRAY[$2] WHERE user_id = $1",
-        [id, accepted_id]
+        [id, accept_id]
       );
   
       await db.query(
         "UPDATE public.friends SET friends_list = friends_list || ARRAY[$1] WHERE user_id = $2",
-        [id, accepted_id]
+        [id, accept_id]
       );
-      const create_room = await Messager_Controller.create_private_room({body:{id_1: id, id_2: accepted_id}})
+      const create_room = await Messager_Controller.create_private_room({body:{id_1: id, id_2: accept_id}})
   
-      return [{ event: "accept_friend", data: res.rows, accepted_id: accepted_id }];
+      return [{ event: "accept_friend", data: res.rows, accept_id: accept_id }];
     } catch (error) {
       console.log(error);
     }

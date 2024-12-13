@@ -340,6 +340,7 @@ const Messenger = () => {
                 <Checkbox />
               </Box>
             ))}
+            <Button onClick={(e)=>console.log("FRIENDS LIST",data.friends)}/>
           </Flex>
           <Box>
             <Input />
