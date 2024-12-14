@@ -169,13 +169,16 @@ wss.on("connection", (ws) => {
           clients[clientId].send(JSON.stringify(check_stat));
           break;
         case "follow_onChannel":
-          const follow_onChan = await Messager.follow_onChannel({body: {...parsedMessage}})
-            
+          const follow_onChan = await Messager.follow_onChannel({
+            body: { ...parsedMessage },
+          });
+
           clients[clientId].send(JSON.stringify(follow_onChan));
           break;
         case "search_channel":
-          const search_Chan = await Messager.search_channel({body:{...parsedMessage}}
-          );
+          const search_Chan = await Messager.search_channel({
+            body: { ...parsedMessage },
+          });
           clients[clientId].send(JSON.stringify(search_Chan));
           break;
         //----------------------creating events-----------------------------------
@@ -185,7 +188,9 @@ wss.on("connection", (ws) => {
           clients[clientId].send(JSON.stringify(create_channel));
           break;
         case "create_chat":
-          const create_chat = await Messager.create_chat({body: {...parsedMessage}});
+          const create_chat = await Messager.create_chat({
+            body: { ...parsedMessage },
+          });
           clients[clientId].send(JSON.stringify(create_chat));
           break;
         case "create_self_post":
@@ -243,7 +248,7 @@ wss.on("connection", (ws) => {
           clients[clientId].send(JSON.stringify(self_posts));
           break;
         case "get_recomends":
-          const recomends= await Messager.get_recomends({
+          const recomends = await Messager.get_recomends({
             body: { ...parsedMessage },
           });
           clients[clientId].send(JSON.stringify(recomends));
@@ -288,10 +293,12 @@ wss.on("connection", (ws) => {
           }); /// change args in main messager
           console.log("get post: ", parsedMessage.post);
           clients[clientId].send(JSON.stringify(post)); //JSON.stringify(rooms)
-        break;
+          break;
         //-----------------------modifying-------------------------------
         case "updateChat_users":
-          const updated_chat = await Messager.updateChat_users({body:{...parsedMessage}});
+          const updated_chat = await Messager.updateChat_users({
+            body: { ...parsedMessage },
+          });
           for (const live_room of setted_rooms) {
             if (live_room.clients.has(ws)) {
               live_room.clients.forEach(async (client) => {
@@ -356,7 +363,7 @@ wss.on("connection", (ws) => {
             }
           }
           break;
-          case "accept_friend":
+        case "accept_friend":
           const acc_friend = await UserController.accept_friend({
             body: { ...parsedMessage },
           }); /// change args in main messager
@@ -456,7 +463,7 @@ wss.on("connection", (ws) => {
             body: { ...parsedMessage },
           });
           clients[clientId].send(JSON.stringify(del_comment));
-          
+
           /*
           for (const live_room of users_rooms) {
             if (live_room.clients.has(ws)) {
@@ -480,9 +487,11 @@ wss.on("connection", (ws) => {
           }*/
           break;
         case "delete_chat":
-            const delete_chat = await Messager.delete_chat({body: {...parsedMessage}});
-            clients[clientId].send(JSON.stringify(delete_chat));
-        break;
+          const delete_chat = await Messager.delete_chat({
+            body: { ...parsedMessage },
+          });
+          clients[clientId].send(JSON.stringify(delete_chat));
+          break;
         case "delete_message":
           for (const live_room of setted_rooms) {
             if (live_room.clients.has(ws)) {
@@ -534,7 +543,6 @@ wss.on("connection", (ws) => {
     console.log("WebSocket connection closed.");
   });
 });
-
 
 /*
  const setted_rooms = [];

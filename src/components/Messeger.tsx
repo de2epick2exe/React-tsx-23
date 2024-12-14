@@ -39,6 +39,7 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 import { SlArrowLeftCircle, SlArrowRightCircle } from "react-icons/sl";
+import { Friend } from "../store/models/User";
 
 interface room_user {
   id: number;
@@ -56,7 +57,7 @@ const Messenger = () => {
   const [searched_channel, setSearched_channel] = useState("");
   const [message_State, setMesage_state] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-
+  const [selected_friends, setSelected_friends] = useState<number[]>([])
   const data = useSelector((state: RootState) => state.userReducer);
   const messager = useSelector((state: RootState) => state.messagerReducer);
   const ws = useSelector((state: RootState) => state.WS_Slice);
@@ -244,6 +245,7 @@ const Messenger = () => {
         event: "create_chat",
         body: {
           user_id: data.id,          
+          friends_list: selected_friends
         },
       };
       dispatch(sendMessage(message_data));
@@ -317,6 +319,7 @@ const Messenger = () => {
     }
     if (turnOnNG) {
       console.log("data friends list:", data.friends);
+      
       return (
         <>
           <Flex direction="row" alignItems="center">
@@ -334,12 +337,13 @@ const Messenger = () => {
               icon={<SlArrowLeftCircle />}
             />
             <GridItem>Add user</GridItem>
-            {data.friends?.map((frd) => (
-              <Box key={frd?.id}>
-                <span>{frd?.username}</span>
-                <Checkbox />
+            {data.friends?.map((frd : Friend) => (
+              <Box key={frd?.id}>                
+                  <Box onClick={()=>setSelected_friends([...selected_friends, frd?.id])}>{frd?.username}</Box>
+                  <Checkbox />
               </Box>
             ))}
+            <Button onClick={()=>createChat()}>Create chat</Button>
             <Button onClick={(e)=>console.log("FRIENDS LIST",data.friends)}/>
           </Flex>
           <Box>
