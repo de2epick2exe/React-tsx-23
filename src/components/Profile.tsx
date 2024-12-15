@@ -170,8 +170,10 @@ const Profile = () => {
       setComment(e.target.value);
     };
     const turn_editing = (index: any, post: any) => {
+      if(data.id == post.user_id){
       setEdit_index(index);
       setEdited_post(post.post);
+      }
     };
     const send_edited = (post: any) => {
       const msg = {

@@ -203,13 +203,21 @@ class Messager {
   async create_chat(req, res) {
     try {
       console.log(req.body);
-      const { user_id } = req.body;
+      const { user_id, friends_list } = req.body;
 
       const room = await db.query(
         "INSERT INTO rooms (type) VALUES ($1) RETURNING id",
         ["chat"]
       );
       const room_id = room.rows[0].id;
+
+      /*
+      const room_u1 = await db.query(
+        "INSERT INTO conversations (user_id, room_id) SELECT unnest($1::int[]), $2 RETURNING room_id;",
+        [friend_list, room_id]
+      );
+            
+      */
       const room_u1 = await db.query(
         "INSERT INTO conversations (user_id, room_id) VALUES ($1, $2) RETURNING room_id",
         [user_id, room_id]
