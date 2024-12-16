@@ -423,11 +423,11 @@ const Room: React.FC<RoomProps> = ({
                     : "black",
                 }}
               >
-                <Flex justify="flex-end">
+                <Flex justify="flex-start">
                   <p
-                    className="bubble right"
+                    className="bubble left"
                     style={{
-                      backgroundColor: "red",
+                      backgroundColor: "brown",
                       marginLeft: "10vw",
                       borderRadius: "2px",
                       marginTop: "10px",
@@ -445,6 +445,7 @@ const Room: React.FC<RoomProps> = ({
         console.log("chat messages arr");
         //@ts-ignore
         messager.messages[room_id][0]?.map((msg) => console.log(msg[0]));
+        console.log('is in admins: ', messager.current_channel?.admins.some(id=> id == data.id))
         return (
           <>
             {/* @ts-ignore*/}
@@ -469,7 +470,7 @@ const Room: React.FC<RoomProps> = ({
                     : "black",
                 }}
               >
-                {msg.from_id == data.id ? (
+                {msg.from_id == data.id  ? (
                   <Flex justify="flex-end">
                     <p
                       className="bubble right"

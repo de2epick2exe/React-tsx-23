@@ -33,7 +33,6 @@ const Contacts = () => {
 
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   useEffect(() => {
-    
     if (socket.connected) {
       get_friends();
       get_recomended();
@@ -181,18 +180,18 @@ const Contacts = () => {
     };
 
     const Waiting_list = () => {
-      console.log('waitnig list is: ', /*(data.waiting_list[1] !==undefined),*/ data.waiting_list )
-                  
-      if (        
-        Array.isArray(data.waiting_list) &&
-        data.waiting_list.length !== 0
-      ) {
+      console.log(
+        "waitnig list is: ",
+        /*(data.waiting_list[1] !==undefined),*/ data.waiting_list
+      );
+
+      if (Array.isArray(data.waiting_list) && data.waiting_list.length !== 0) {
         return (
           <>
             {data.waiting_list.map((usr) => (
               <Box key={usr?.id}>
                 <span>{usr?.username}</span>
-                <Button onClick={()=> accept_friend(usr.id) }>Accept</Button>
+                <Button onClick={() => accept_friend(usr.id)}>Accept</Button>
                 <Button onClick={() => delete_friend(usr.id)}>Reject</Button>
               </Box>
             ))}
@@ -211,30 +210,33 @@ const Contacts = () => {
       if (data.recomends_list?.length !== 0) {
         return (
           <>
-          <Flex flexDirection='column' >
-            
-            {
-              // @ts-ignore
-              data.recomends_list?.map((user) => (
-                //@ts-ignore
-                <span key={user?.id}>
-                  <Flex justifyContent='space-between' w='full'>
-                  <p>
-                    {
-                      //@ts-ignore
-                      user?.username
-                    }
-                  </p>
-                  {
+            <Flex flexDirection="column">
+              {
+                // @ts-ignore
+                data.recomends_list?.map((user) => {
+                 return user.id !== data.id ? (
                     //@ts-ignore
-                    <Button onClick={() => add_friend(user?.id)}>
-                      Add to friends
-                    </Button>
-                  }
-                  </Flex>
-                </span>
-              ))
-            }
+                    <span key={user?.id}>
+                      <Flex justifyContent="space-between" w="full">
+                        <p>
+                          {
+                            //@ts-ignore
+                            user?.username
+                          }
+                        </p>
+                        {
+                          //@ts-ignore
+                          <Button onClick={() => add_friend(user?.id)}>
+                            Add to friends
+                          </Button>
+                        }
+                      </Flex>
+                    </span>
+                  ) : (
+                    <></>
+                  );
+                })
+              }
             </Flex>
           </>
         );
