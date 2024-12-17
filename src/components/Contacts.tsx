@@ -157,6 +157,7 @@ const Contacts = () => {
 
   const Users_Tabs = () => {
     const Friends_list = () => {
+      console.log('Friends list', data.friends)
       if (data && Array.isArray(data.friends) && data.friends.length !== 0) {
         return (
           <Box>

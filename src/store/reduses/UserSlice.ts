@@ -104,12 +104,13 @@ export const UserSlice = createSlice({
       console.log("friends USERSLICE: ", action.payload);
       
       action.payload?.map((user) => {
-        if(state.friends.some(u=> u.id === user.id)){
+        console.log("friends list user: ", user);
+        if(!state.friends.some(u=> u.id === user.id)){
+          console.log("friends list push: ", user);
           state.friends.push(user);
-
         }        
       });
-
+      console.log("friends FIN STATE: ", state.friends[0]);
       saveUserState(state);
     },
     setWaitingList: (state, action: PayloadAction<Friend[] | null>) => {

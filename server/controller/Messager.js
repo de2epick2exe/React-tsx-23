@@ -127,7 +127,7 @@ class Messager {
       const { id_1, id_2 } = req.body;
       const room = await db.query(
         "INSERT INTO rooms (type) VALUES ($1) RETURNING id",
-        ["PRIVATE"]
+        ["private messages"]
       );
       const room_id = room.rows[0].id;
 
