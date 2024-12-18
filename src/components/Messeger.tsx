@@ -19,6 +19,7 @@ import {
   Checkbox,
   InputLeftElement,
   Divider,
+  Avatar,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { ThunkDispatch } from "@reduxjs/toolkit";
@@ -57,7 +58,7 @@ const Messenger = () => {
   const [searched_channel, setSearched_channel] = useState("");
   const [message_State, setMesage_state] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const [selected_friends, setSelected_friends] = useState<number[]>([])
+  const [selected_friends, setSelected_friends] = useState<number[]>([]);
   const data = useSelector((state: RootState) => state.userReducer);
   const messager = useSelector((state: RootState) => state.messagerReducer);
   const ws = useSelector((state: RootState) => state.WS_Slice);
@@ -66,8 +67,8 @@ const Messenger = () => {
 
   useEffect(() => {
     setRooms(messager.rooms);
-    get_self_posts()
-  },[]);
+    get_self_posts();
+  }, []);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -84,24 +85,22 @@ const Messenger = () => {
     dispatch(sendMessage(msg));
   };
 
-
   /// call users init data
   const get_users_rooms_data = async () => {
     const rooms_for = {
       rooms_for: data.id,
       event: "geting_rooms",
     };
-    dispatch(sendMessage(rooms_for));     
-
+    dispatch(sendMessage(rooms_for));
   };
-  
-  useEffect(()=>{
-    const latest_messages ={
-      id : data.id,
-      event: "get_latest_messaging"
-    }
+
+  useEffect(() => {
+    const latest_messages = {
+      id: data.id,
+      event: "get_latest_messaging",
+    };
     dispatch(sendMessage(latest_messages));
-  },[messager.rooms])
+  }, [messager.rooms]);
 
   const get_room_messages = (
     id: number | undefined,
@@ -227,6 +226,8 @@ const Messenger = () => {
     };
 
     const createChannel = () => {
+      
+
       const message_data = {
         event: "create_channel",
         body: {
@@ -244,14 +245,13 @@ const Messenger = () => {
       const message_data = {
         event: "create_chat",
         body: {
-          user_id: data.id,          
-          friends_list: selected_friends
+          user_id: data.id,
+          friends_list: selected_friends,
         },
       };
       dispatch(sendMessage(message_data));
       console.log("created chat", channelName, channelDesc);
     };
-
 
     if (turnOnNChn) {
       return (
@@ -322,33 +322,50 @@ const Messenger = () => {
       
       return (
         <>
-          <Flex direction="row" alignItems="center">
-            <Input type="file" display="none" />
-            <IconButton
-              onClick={() => {
-                turnNg();
-              }}
-              variant="outline"
-              colorScheme="teal"
-              textColor="black"
-              aria-label=""
-              fontSize="20px"
-              mr="2"
-              icon={<SlArrowLeftCircle />}
-            />
-            <GridItem>Add user</GridItem>
-            {data.friends?.map((frd : Friend) => (
-              <Box key={frd?.id}>                
-                  <Box onClick={()=>setSelected_friends([...selected_friends, frd?.id])}>{frd?.username}</Box>
-                  <Checkbox />
-              </Box>
-            ))}
-            <Button onClick={()=>createChat()}>Create chat</Button>
-            <Button onClick={(e)=>console.log("FRIENDS LIST",data.friends)}/>
+          <Flex direction="column">
+            <Flex>
+              <Input type="file" display="none" />
+              <IconButton
+                onClick={() => {
+                  turnNg();
+                }}
+                variant="outline"
+                colorScheme="teal"
+                textColor="black"
+                aria-label=""
+                fontSize="20px"
+                mr="2"
+                icon={<SlArrowLeftCircle />}
+              />
+
+              <GridItem>Add user</GridItem>
+            </Flex>
+            <Box mt='2'>
+              <Input />
+            </Box>
+            <Flex direction="column" minH="10vh">
+              <Flex direction="column" mt="2">
+                {data.friends?.map((frd: Friend) => (
+                  <Flex key={frd?.id} cursor='pointer'onClick={() => setSelected_friends((prev) => prev.includes(frd.id) ? prev.filter((id) => id !== frd.id) : [...selected_friends, frd.id])}>
+                    <Checkbox isChecked={selected_friends.some((id) => id === frd.id)} />
+                    <Flex alignItems="center">
+                      <Avatar mx="2" size="md" name={frd.username} />
+                      <Box
+                        onClick={() =>
+                          setSelected_friends([...selected_friends, frd?.id])
+                        }
+                      >
+                        {frd?.username}
+                      </Box>
+                    </Flex>
+                  </Flex>
+                ))}
+              </Flex>
+              <Button mt="3" onClick={() => createChat()}>
+                Create chat
+              </Button>
+            </Flex>
           </Flex>
-          <Box>
-            <Input />
-          </Box>
         </>
       );
     }
@@ -385,26 +402,25 @@ const Messenger = () => {
     }) => {
       console.log("latest message id:", room_id, "room name:", room_name);
       console.log("latest message is:", messager.messages);
-         // @ts-ignore        
+      // @ts-ignore
       if (room_id && messager.messages && messager.messages[room_id]) {
-         // @ts-ignore 
+        // @ts-ignore
         if (messager.messages[room_id] !== undefined) {
-          let last_msg 
+          let last_msg;
           try {
-         // @ts-ignore 
-            last_msg = messager.messages[room_id][0]?.[messager.messages[room_id][0]?.length - 1].content 
+            // @ts-ignore
+            last_msg = messager.messages[room_id][0]?.[messager.messages[room_id][0]?.length - 1].content;
           } catch (error) {
-            last_msg = ''
+            last_msg = "";
           }
-          console.log("last msg:", last_msg);          
-            return (
-              <Box>
-                {room_name}: {last_msg}
-              </Box>
-            );
-          
+          console.log("last msg:", last_msg);
+          return (
+            <Box>
+              {room_name}: {last_msg}
+            </Box>
+          );
         }
-      }      
+      }
       return <> </>;
     };
 
@@ -430,7 +446,7 @@ const Messenger = () => {
                   my="2"
                   py="3"
                   onClick={(e) => setRoomdata(channel)}
-                  _hover={{ bg: "#CD5C5C"}}
+                  _hover={{ bg: "#CD5C5C" }}
                 >
                   <span>{channel?.channel_name}</span>
                 </Box>
@@ -472,7 +488,7 @@ const Messenger = () => {
                 my="2"
                 py="3"
                 onClick={(e) => setRoomdata(r)}
-                _hover={{ bg: "#CD5C5C"}}
+                _hover={{ bg: "#CD5C5C" }}
               >
                 <Flex flexDirection="column">
                   <Box>{r.username}</Box>
@@ -505,11 +521,13 @@ const Messenger = () => {
         <GridItem pl="2" bg="#980000" area={"all-chats"} position="relative">
           <Flex flexDirection="row">
             <p>folders</p>
-            <InputGroup px='2'>
-              <InputLeftElement pointerEvents="none" >
-                <SearchIcon color="gray.300"   />
+            <InputGroup px="2">
+              <InputLeftElement pointerEvents="none">
+                <SearchIcon color="gray.300" />
               </InputLeftElement>
-              <Input pl='5' m='0'
+              <Input
+                pl="5"
+                m="0"
                 value={searched_channel}
                 onChange={(e) => search_channel(e.target.value)}
               />
