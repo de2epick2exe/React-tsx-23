@@ -97,8 +97,7 @@ class Messager {
           };
 
           rooms_data[0].rooms.push(data);
-        } else {
-          continue;
+        } else {          
           const user = await db.query(
             "WITH subquery AS ( SELECT user_id FROM conversations WHERE room_id = $1 AND user_id != $2 ) SELECT id, username, avatar FROM users WHERE id IN (SELECT user_id FROM subquery)",
             [r.room_id, id]
@@ -202,7 +201,7 @@ class Messager {
 
   async create_chat(req, res) {
     try {
-      console.log(req.body);
+      console.log("create chat body:",req.body);
       const { user_id, friends_list } = req.body;
 
       const room = await db.query(
@@ -210,23 +209,24 @@ class Messager {
         ["chat"]
       );
       const room_id = room.rows[0].id;
-
-      /*
-      const room_u1 = await db.query(
+      console.log('chat room id', room_id, friends_list, user_id) 
+      const room_users = await db.query(
         "INSERT INTO conversations (user_id, room_id) SELECT unnest($1::int[]), $2 RETURNING room_id;",
-        [friend_list, room_id]
+        [[...friends_list, user_id], room_id]
       );
+      console.log('chat room id', room_users.rows[0])
             
-      */
+      /*
       const room_u1 = await db.query(
         "INSERT INTO conversations (user_id, room_id) VALUES ($1, $2) RETURNING room_id",
         [user_id, room_id]
       );
+      */
 
       const data = {
         event: "create_chat",
         status: 200,
-        room: {room_id: room_id },
+        room: {room_id: room_users.rows[0] },
         user_id: user_id
       };
       return JSON.stringify(data);

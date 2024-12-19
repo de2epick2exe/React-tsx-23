@@ -243,11 +243,9 @@ const Messenger = () => {
 
     const createChat = () => {
       const message_data = {
-        event: "create_chat",
-        body: {
+          event: "create_chat",       
           user_id: data.id,
-          friends_list: selected_friends,
-        },
+          friends_list: selected_friends,       
       };
       dispatch(sendMessage(message_data));
       console.log("created chat", channelName, channelDesc);
