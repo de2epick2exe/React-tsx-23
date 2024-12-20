@@ -98,16 +98,19 @@ class Messager {
 
           rooms_data[0].rooms.push(data);
         } else {          
-          const user = await db.query(
-            "WITH subquery AS ( SELECT user_id FROM conversations WHERE room_id = $1 AND user_id != $2 ) SELECT id, username, avatar FROM users WHERE id IN (SELECT user_id FROM subquery)",
-            [r.room_id, id]
+          const chat = await db.query(
+            "SELECT id, title, avatars, roles FROM chats WHERE room_id =$1",
+            [r.room_id]
           );
-          console.log(user);
+          console.log("channel =", chat.rows);
+          console.log("room id =", r.room_id);
+
           const data = {
-            id: user.rows[0].id,
-            username: user.rows[0].username,
+            id: chat.rows[0].id,
+            username: chat.rows[0].title,
+            admins: chat.rows[0].admins,            
             type: "chat",
-            rooms_id: r.room_id,
+            room_id: r.room_id,
           };
 
           rooms_data[0].rooms.push(data);
