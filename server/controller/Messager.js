@@ -211,8 +211,13 @@ class Messager {
         "INSERT INTO rooms (type) VALUES ($1) RETURNING id",
         ["chat"]
       );
+      
       const room_id = room.rows[0].id;
       console.log('chat room id', room_id, friends_list, user_id) 
+      const channel = await db.query(
+        "INSERT INTO channels (title, roles, owner, avatars, room_id) VALUES ((SELECT string_agg(username, ',') FROM users WHERE id = ANY($1::int[])), $2, $3, $4, $5) RETURNING id",
+        [[...friends_list, user_id] [user_id], user_id, ["default.png"], room_id]
+      );
       const room_users = await db.query(
         "INSERT INTO conversations (user_id, room_id) SELECT unnest($1::int[]), $2 RETURNING room_id;",
         [[...friends_list, user_id], room_id]
@@ -734,7 +739,7 @@ class Messager {
       };
       return JSON.stringify(data);
     } catch (error) {
-      console.log("create chat error", error);
+      console.log("delete chat error", error);
     }
   }
   async delete_post(id, date) {
