@@ -274,7 +274,7 @@ class Messager {
         },
       ];
     } catch (error) {
-      console.log(error);
+      console.log("crete post error:",error);
     }
   }
   async create_comment(req, res) {
@@ -444,7 +444,7 @@ class Messager {
         "SELECT DISTINCT ON (room_id) * FROM messages WHERE room_id IN (SELECT room_id FROM conversations WHERE user_id = $1) ORDER BY room_id, message_id DESC;",
         [id]
       );
-
+    
       const last_posts = await db.query(
         "SELECT DISTINCT ON (post.channel_id) post.*, channels.room_id FROM post RIGHT JOIN channels ON channels.id = post.channel_id WHERE channels.id IN ( SELECT channel_id FROM post WHERE channel_id IN ( SELECT channels.id FROM channels WHERE room_id IN ( SELECT room_id FROM conversations WHERE user_id = $1 ) ) )",
         [id]
@@ -515,7 +515,7 @@ class Messager {
       };
       return data;
     } catch (error) {
-      console.log(error);
+      console.log("follow on channel error: ",error);
     }
   }
   async search_channel(req, res) {
@@ -637,7 +637,7 @@ class Messager {
       return data;
     }
     } catch (error) {
-      console.log(error);
+      console.log("update users in chat error: ",error);
     }
   }
   async update_post(req, res) {
@@ -654,7 +654,7 @@ class Messager {
       };
       return data;
     } catch (error) {
-      console.log(error);
+      console.log("update post error: ",error);
     }
   }
   async update_self_post(req, res) {
@@ -683,7 +683,7 @@ class Messager {
       };
       return data;
     } catch (error) {
-      console.log(error);
+      console.log("update user post error: ",error);
     }
   }
   async update_comment(req, res) {
@@ -700,7 +700,7 @@ class Messager {
       };
       return data;
     } catch (error) {
-      console.log(error);
+      console.log("update comment error: ",error);
     }
   }
   async update_message(id, content) {
@@ -717,7 +717,7 @@ class Messager {
       };
       return [data];
     } catch (error) {
-      console.log(error);
+      console.log("update message error: ",error);
     }
   }
   async delete_chat(req, res) {
@@ -755,7 +755,7 @@ class Messager {
       };
       return [data];
     } catch (error) {
-      console.log(error);
+      console.log("delete post error: ",error);
     }
   }
   async delete_self_post(req, res) {
@@ -785,7 +785,7 @@ class Messager {
       };
       return [data];
     } catch (error) {
-      console.log(error);
+      console.log("delete self post error: ",error);
     }
   }
   async delete_comment(req, res) {
@@ -803,7 +803,7 @@ class Messager {
       };
       return [data];
     } catch (error) {
-      console.log(error);
+      console.log("delete comment error: ",error);
     }
   }
   async delete_message(id, date) {
@@ -819,7 +819,7 @@ class Messager {
       };
       return [data];
     } catch (error) {
-      console.log(error);
+      console.log("delete message error: ",error);
     }
   }
 
