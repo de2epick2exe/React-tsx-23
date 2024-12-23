@@ -214,9 +214,10 @@ class Messager {
       
       const room_id = room.rows[0].id;
       console.log('chat room id', room_id, friends_list, user_id) 
-      const channel = await db.query(
-        "INSERT INTO channels (title, roles, owner, avatars, room_id) VALUES ((SELECT string_agg(username, ',') FROM users WHERE id = ANY($1::int[])), $2, $3, $4, $5) RETURNING id",
-        [[...friends_list, user_id] [user_id], user_id, ["default.png"], room_id]
+      console.log('create chat data: ', [...friends_list, user_id], [user_id], user_id, ["default.png"], room_id)
+      const chat = await db.query(
+        "INSERT INTO chats (title, roles, owner, avatars, room_id) VALUES ((SELECT string_agg(username, ',') FROM users WHERE id = ANY($1::int[])), $2, $3, $4, $5) RETURNING id",
+        [[...friends_list, user_id], [user_id], user_id, ["default.png"], room_id]
       );
       const room_users = await db.query(
         "INSERT INTO conversations (user_id, room_id) SELECT unnest($1::int[]), $2 RETURNING room_id;",
