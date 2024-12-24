@@ -38,9 +38,9 @@ import {
   CloseIcon,
 } from "@chakra-ui/icons";
 import { FaReplyAll } from "react-icons/fa";
-
 import { useNavigate } from "react-router-dom";
 import { sendMessage } from "../store/reduses/WS_Slice";
+import { Message } from "../store/models/Messager";
 
 interface RoomProps {
   room_name: string | undefined;
@@ -71,7 +71,7 @@ const Room: React.FC<RoomProps> = ({
   const [isSelecting, setIsSelecting] = useState(false);
   const [selected_id, setSelected_id] = useState<number[]>([]);
   const [user_for_event, setUser_for_event] = useState<number>();
-  const [scrolling_selectingON, setScrolling_selectingON] = useState(false);
+  const [scrolling_selectingON, setScrolling_selectingON] = useState(false);  
   const dispatch: ThunkDispatch<any, any, any> = useDispatch();
   console.log("connected to room type:", room_type);
   const {
@@ -139,9 +139,37 @@ const Room: React.FC<RoomProps> = ({
         msg_event = "create_post";
       }
     }
+    if(is_reply_on){      
+        setMessage(""); // need to fix
+        const msg = {
+          //@ts-ignore
+          message_id: selectedMessage.message_id,
+          from_id: data.id,
+          //@ts-ignore
+          to_id: selectedMessage.user_id,
+          room: room_id,
+          content: message,
+          date: new Date(),
+          event: "message",
+        };
+        dispatch(sendMessage(msg));
+    }
+    if(room_type == 'chat'){
+      setMessage(""); // need to fix
+      const msg = {
+        from_id: data.id,
+        user_id: data.id,
+        username: data.username,
+        room: room_id,
+        message: message,
+        date: new Date(),
+        event: msg_event,
+      };
+      dispatch(sendMessage(msg)); // sends 2x times
+    }
     setMessage(""); // need to fix
     const msg = {
-      from_id: data.id,
+      from_id: data.id,      
       user_id: data.id,
       username: data.username,
       room: room_id,
