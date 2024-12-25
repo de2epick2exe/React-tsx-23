@@ -347,12 +347,7 @@ class UserController {
     }
   }
 
-  /////-------------------------------------------------------------------------
-  async set_status_online(req, res) {
-    const { id } = req.body;
-    const response = await redis.set(id, "online");
-    res.json("ok");
-  }
+  
 
   async get_status_online(req, res) {
     try {
@@ -405,7 +400,12 @@ class UserController {
       res.json({ message: "access denied" });
     }
   }
-
+  /////-------------------------------------------------------------------------
+  async set_status_online(req, res) {
+    const { id } = req.body;
+    const response = await redis.set(id, "online");
+    res.json("ok");
+  }
   async update_avatar(req, res) {
     try {
       const { filename, id } = req.body;

@@ -6,15 +6,16 @@ export interface Room {
   }
 
 export interface MessagerState {
-  messages: Rooms_msgs;
-  message: any;
-  notifies: Notify[];  
-  current_channel: Channel | null;
-  current_room: Room | null;
-  rooms: Room[];
-  searched_channel: Channel[];
-  user_posts: User_post[],
+  messages: Rooms_msgs,
+  message: any,
+  notifies: Notify[],  
+  current_channel: Channel | null,
+  current_room: Room | null,
   current_userPost: User_post,
+  current_chat:Chat,
+  rooms: Room[],
+  searched_channel: Channel[],
+  user_posts: User_post[],  
   self_posts: Self_post[],
   recomends: User_post[],  
 }
@@ -71,6 +72,15 @@ export interface MessagerState {
     admins: [];
     is_follow: boolean;
   }
+  export interface Chat {
+    id: number;
+    channel_name: string;
+    status: boolean;
+    users: number;
+    room_id: number;
+    roles: [];    
+  }
+  
   export interface Notify {
     from: string;
     message: string;
