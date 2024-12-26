@@ -41,6 +41,15 @@ export interface MessagerState {
     comments:[],
 
   }
+  export const default_chat: Chat = {
+    id: 0,
+    channel_name: '',
+    status: false,
+    users: [],
+    room_id: 0,
+    roles: [],   
+
+  }
   export interface Comment{ 
     id: number;
     user_id: number;
@@ -76,7 +85,7 @@ export interface MessagerState {
     id: number;
     channel_name: string;
     status: boolean;
-    users: number;
+    users: [];
     room_id: number;
     roles: [];    
   }

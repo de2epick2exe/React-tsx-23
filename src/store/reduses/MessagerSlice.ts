@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { Channel, Comments, default_userPost, MessagerState, Notify, Room, Rooms_msgs, Self_post, User_post } from "../models/Messager";
+import { Channel, Chat, Comments, default_chat, default_userPost, MessagerState, Notify, Room, Rooms_msgs, Self_post, User_post } from "../models/Messager";
 /* db`s tabs:
 |users| <= | conversations| <= |rooms| <= |messages|
 |id   |    |uid    room_id|    | id  |    | room_id|  
@@ -22,6 +22,7 @@ const initialState: MessagerState = {
   message: "",
   notifies: [],  
   current_channel: null,
+  current_chat: default_chat,
   current_room: null,
   rooms: [],
   searched_channel:[],
@@ -125,6 +126,9 @@ const messagerSlice = createSlice({
     },
     setCurrentChannel: (state, action: PayloadAction<Channel | null>) => {
       state.current_channel = action.payload;
+    },
+    setCurrentChat: (state, action: PayloadAction<Chat>) => {
+      state.current_chat = action.payload;
     },
     setCurrentPost:(state, action:PayloadAction<User_post>)=>{
       state.current_userPost = action.payload 
@@ -293,6 +297,7 @@ export const {
   setComments,
   setCurrentRoom,
   setCurrentChannel,
+  setCurrentChat,
   setSearchedChannel,
   setRecomendsPosts,
   setCurrentPost,  
