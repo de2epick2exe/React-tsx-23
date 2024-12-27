@@ -29,6 +29,7 @@ import { RiImageAddLine } from "react-icons/ri";
 import {
   addMessage,
   setCurrentChannel,
+  setCurrentChat,
   setCurrentRoom,
   setMessages,
 } from "../store/reduses/MessagerSlice";
@@ -151,6 +152,9 @@ const Messenger = () => {
     console.log("setting current room : ", r, r.type == "channel");
     if (r.type == "channel") {
       dispatch(setCurrentChannel(r));
+    }
+    if (r.type == "chat") {
+      dispatch(setCurrentChat(r));
     }
   };
   /// need to fix bottom white line
