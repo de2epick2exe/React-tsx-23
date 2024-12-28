@@ -280,6 +280,18 @@ const messagerSlice = createSlice({
       console.log('after deleting post: ',state.user_posts)
 
     },
+    delete_chatUser:(state, action: PayloadAction<Chat>) => {
+      console.log(action.payload, '< value to delete')
+      const user = action.payload.users;      
+      /*
+      if (!(msg_id in state.self_posts)) {        
+        state.user_posts = [];
+      }*/
+      //@ts-ignore
+      state.current_chat.users = state.current_chat.users.filter(usr => usr.id !== user[0]);
+      console.log('after deleting post: ',state.user_posts)
+
+    },
   },
 }); 
 export const {
@@ -310,6 +322,7 @@ export const {
   delete_SelfPost,
   delete_UserPost,  
   delete_userComment,
+  delete_chatUser,
 } = messagerSlice.actions;
 
 export default messagerSlice.reducer;

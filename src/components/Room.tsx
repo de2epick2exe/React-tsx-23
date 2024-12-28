@@ -219,10 +219,7 @@ const Room: React.FC<RoomProps> = ({
       dispatch(sendMessage(msg)); // sends 2x times
     }
   };
-  const delete_user = () => {        
-    
-    
-  };
+  
 
   const call_message_menu = (e: any, msg: any) => {
     e.preventDefault();
