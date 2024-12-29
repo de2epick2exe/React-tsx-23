@@ -24,6 +24,7 @@ import {
   setRecomendsPosts,
   setCurrentPost,
   add_Room,
+  delete_chatUser,
 } from "./MessagerSlice";
 import { setFriends, setRecomends_Users, setWaitingList } from "./UserSlice";
 
@@ -195,6 +196,10 @@ export const connectToWebSocket = () => {
             case "delete_user_post":
               console.log("deleted post event");
               dispatch(delete_UserPost(message[0].post));
+              break;
+            case "delete_user_post":
+              console.log("deleted post event");
+              dispatch(delete_chatUser(message[0]));
               break;
             case "delete_self_post":
               console.log("deleted post event");
