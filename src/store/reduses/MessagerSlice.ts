@@ -88,6 +88,20 @@ const messagerSlice = createSlice({
            
     
     },
+    addChat_user: (state, action: PayloadAction<User>) => { //TODO: add user interface
+      console.log('ws adding user :', typeof action.payload)
+      try {        
+        //@ts-ignore 
+        const user = action.payload.users[0];   
+
+        //@ts-ignore        
+        state.current_chat.users.push(user);         
+          
+      } catch (error) {
+        console.error('Messager slice add chat user error: ', error)
+      }
+      
+    },
     ///-------------------setters-----------------------------------
     setMessage: (state, action: PayloadAction<string | null>) => {
       state.message = action.payload;
