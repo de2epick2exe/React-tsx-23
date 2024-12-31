@@ -25,6 +25,7 @@ import {
   setCurrentPost,
   add_Room,
   delete_chatUser,
+  addChat_user,
 } from "./MessagerSlice";
 import { setFriends, setRecomends_Users, setWaitingList } from "./UserSlice";
 
@@ -94,6 +95,9 @@ export const connectToWebSocket = () => {
             case "notifies":
               dispatch(setNotifies(message.notifies));
               break;
+            case "add_chat_user":
+              dispatch(addChat_user(message[0]));
+              break;
             case "get_friends":
               console.log("friends received");
               console.log(message[0].data[0]);
@@ -139,7 +143,7 @@ export const connectToWebSocket = () => {
               console.log(message[0]);
               //@ts-ignore
               dispatch(setCurrentPost(message[0].data[0]));
-              console.log("set profile post 2", message[0].data[0])
+              console.log("set profile post 2", message[0].data[0]);
               break;
             case "recomends_posts":
               console.log("recomends posts: ", message[0]);
@@ -151,7 +155,7 @@ export const connectToWebSocket = () => {
               dispatch(addComment(message[0].comment[0]));
               break;
             case "crete_chat":
-              dispatch(add_Room(message[0]))
+              dispatch(add_Room(message[0]));
               break;
             case "recomended_users":
               console.log("recomends received");

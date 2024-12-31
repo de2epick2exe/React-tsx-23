@@ -314,6 +314,7 @@ export const {
   addUser_post,
   addComment,
   add_Room,
+  addChat_user,
   setMessage,
   setMessages,  
   setNotifies,  

@@ -619,7 +619,7 @@ class Messager {
       const data = {
         event: "updateChat_users",
         status: 200,
-        type:"add_user",
+        type:"add_chat_user",
         user: new_user.rows[0],
       };
       return data;
@@ -630,7 +630,7 @@ class Messager {
         [user_id, room_id]
       );
       const data = {
-        event: "updateChat_users",
+        event: "delete_chat_user",
         status: 200,
         type:"delete_user",
         user: new_user.rows[0],
