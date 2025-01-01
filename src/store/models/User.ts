@@ -5,6 +5,12 @@ export interface Friend {
     username: string;
     rooms_id: number;
   }
+  export interface Chat_User {
+    id: number;
+    username: string;
+    avatar: string;
+       
+  }
 export interface UserState {
     id: number | null;
     username: string | null;

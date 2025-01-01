@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { Channel, Chat, Comments, default_chat, default_userPost, MessagerState, Notify, Room, Rooms_msgs, Self_post, User_post } from "../models/Messager";
+import { Chat_User } from "../models/User";
 /* db`s tabs:
 |users| <= | conversations| <= |rooms| <= |messages|
 |id   |    |uid    room_id|    | id  |    | room_id|  
@@ -88,7 +89,7 @@ const messagerSlice = createSlice({
            
     
     },
-    addChat_user: (state, action: PayloadAction<User>) => { //TODO: add user interface
+    addChat_user: (state, action: PayloadAction<Chat_User>) => { //TODO: add user interface
       console.log('ws adding user :', typeof action.payload)
       try {        
         //@ts-ignore 
